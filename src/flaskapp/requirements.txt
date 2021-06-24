@@ -1,0 +1,13 @@
+wtforms
+pillow
+flask
+itsdangerous
+python-dotenv
+email_validator
+flask-bcrypt
+flask-login
+flask-mail
+flask-paginate
+flask_sqlalchemy
+flask_wtf
+python-dotenv
