@@ -1,14 +1,15 @@
-const http = require('http');
+// create an express app
+const express = require("express")
+const app = express()
 
-const hostname = 'https://uconnect-project.herokuapp.com/';
-const port = 3000;
+// use the express-static middleware
+app.use(express.static("public"))
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Welcome to MeetUT');
-});
+// define the first route
+app.get("/", function (req, res) {
+    res.send("<h1>Welcome MeetUT</h1>")
+})
 
-server.listen(port, hostname, () => {
-
-});
+// start the server listening for requests
+app.listen(process.env.PORT || 3000,
+    () => console.log("Server is running..."));
