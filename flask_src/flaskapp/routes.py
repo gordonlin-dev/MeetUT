@@ -2,6 +2,7 @@ import secrets
 import os
 from flask import render_template, flash, redirect, url_for, redirect, request, abort, jsonify
 from flaskapp import app
+from flaskapp.models import User
 
 
 @app.route('/')

@@ -19,7 +19,6 @@ db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'  # set the redirect route for login required routes
-# login_manager.login_message_category = 'info'  # auto blue flash notification
 login_manager.login_message = ""  # Don't show a message
 
 bcrypt = Bcrypt(app)

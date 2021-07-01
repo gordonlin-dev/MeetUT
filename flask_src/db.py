@@ -1,5 +1,4 @@
 import os
-
 from flaskapp import db
 
 # Resets and creates a fresh DB
