@@ -1,3 +1,4 @@
+
 wtforms
 pillow
 flask
@@ -11,3 +12,4 @@ flask-paginate
 flask_sqlalchemy
 flask_wtf
 python-dotenv
+gunicorn
