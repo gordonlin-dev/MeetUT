@@ -1,7 +1,7 @@
 import secrets
 import os
 from flask import render_template, flash, redirect, url_for, redirect, request, abort
-import app
+from flaskapp import app
 
 
 @app.route('/')
