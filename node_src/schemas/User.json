@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "",
+  "title": "User",
+  "description": "This document records the details of an user",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The email used to sign up for the account",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name of the user",
+      "type": "string"
+    },
+    "matches": {
+      "description": "Users that matched with this user",
+      "type": "array",
+      "userId": {
+        "description": "UserId of the matched user",
+        "type": "string"
+      }
+    },
+    "likedBy": {
+      "description": "Users that liked this user",
+      "type": "array",
+      "userId": {
+        "description": "UserId of the user that liked this user",
+        "type": "string"
+      }
+    },
+    "profile": {
+      "description": "Profile of this user determined by their answers to the questionnaire",
+      "type": "object"
+    },
+    "messages": {
+      "description": "messages between two users"
+    }
+  }
+}
