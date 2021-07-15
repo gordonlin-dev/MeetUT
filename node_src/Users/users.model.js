@@ -7,6 +7,7 @@ const userSchema = new Schema({
     //id is email
     _id : String,
     password : String,
+    //
 })
 
 userSchema.virtual('email').get(function (){
