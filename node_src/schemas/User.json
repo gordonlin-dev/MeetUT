@@ -6,7 +6,7 @@
   "type": "object",
   "properties": {
     "id": {
-      "description": "The email used to sign up for the account",
+      "description": "The email used to sign up for the account or unique identifier",
       "type": "string"
     },
     "name": {
@@ -22,8 +22,8 @@
       }
     },
     "likedBy": {
-      "description": "Users that liked this user",
-      "type": "array",
+      "description": "Users that liked this user (change to dictionary)",
+      "type": "",
       "userId": {
         "description": "UserId of the user that liked this user",
         "type": "string"
