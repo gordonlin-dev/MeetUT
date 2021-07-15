@@ -5,7 +5,7 @@ const connect = () => {
     mongoose.connect(uri).then(() => {
 
     }).catch(err => {
-
+        console.log(err)
     })
 }
 
