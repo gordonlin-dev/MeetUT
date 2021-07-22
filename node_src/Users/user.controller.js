@@ -2,7 +2,6 @@ const crypto = require('crypto')
 const UserModel = require('./users.model')
 
 exports.createUser = (req, res) => {
-    console.log(req)
     let salt = crypto.randomBytes(16).toString('base64')
     //TODO: Check and validate req.body.password.
     let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
