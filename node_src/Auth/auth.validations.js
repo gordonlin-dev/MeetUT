@@ -20,7 +20,7 @@ exports.passwordMatch = (req, res, next) =>{
 
 exports.jwtValid = (req, res, next) => {
     try{
-        let authorization = req.headers['authorization'].split(' ')
+        let authorization = req.headers['Authorization'].split(' ')
         req.jwt = jwt.verify(authorization[1], jwtSecret)
         return next()
     }catch (err){
