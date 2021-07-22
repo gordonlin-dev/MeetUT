@@ -2,6 +2,7 @@ const UserModel = require('../Users/users.model')
 const crypto = require('crypto')
 
 exports.passwordMatch = async (req, res, next) =>{
+    console.log(req)
     const user = await UserModel.findById(req.body.email)
     //TODO: null check
     let salt, passwordHash = user[0].password.split('$')
