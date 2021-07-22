@@ -16,7 +16,7 @@ const HomeScreen = props => {
                 method : 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + jwt
+                    'authorization': 'Bearer ' + jwt
                 },
             });
             const responseJson = await response.json();
