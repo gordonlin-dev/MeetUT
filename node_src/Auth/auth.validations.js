@@ -7,8 +7,9 @@ exports.passwordMatch = (req, res, next) =>{
         (user) => {
             //TODO: null check
             console.log(user)
-            let salt, passwordHash = user.password.split('$')
-            const hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
+            let parts = user.password.split('$')
+            let salt = parts[0]
+            let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
             if (passwordHash === hash){
                 return next()
             }
