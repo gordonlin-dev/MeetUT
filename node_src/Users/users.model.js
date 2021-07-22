@@ -7,6 +7,7 @@ const userSchema = new Schema({
     //id is email
     _id : String,
     password : String,
+    //
 })
 
 userSchema.virtual('email').get(function (){
@@ -24,6 +25,14 @@ userSchema.findById = function(cb){
 const User = mongoose.model('User', userSchema)
 
 exports.findById = (id) => {
+    return User.findById(id).then((result) => {
+        result = result.toJSON()
+        delete result.__v
+        return result
+    })
+}
+
+exports.getUserInfoById = (id) => {
     return User.findById(id).then((result) => {
         result = result.toJSON()
         delete result.password
