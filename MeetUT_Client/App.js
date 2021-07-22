@@ -1,5 +1,6 @@
 import React from 'react';
 import type {Node} from 'react';
+
 import {
   Image,
   SafeAreaView,
@@ -36,10 +37,11 @@ const App: () => Node = () => {
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    flex: 1,
   };
 
   return (
-    <SafeAreaView style={styles.landingPage}>
+    <SafeAreaView style={backgroundStyle}>
       <LandingPage />
     </SafeAreaView>
   );
