@@ -24,6 +24,6 @@ exports.jwtValid = (req, res, next) => {
         req.jwt = jwt.verify(authorization[1], jwtSecret)
         return next()
     }catch (err){
-        return res.status(401).send
+        return res.status(401).send()
     }
 }
