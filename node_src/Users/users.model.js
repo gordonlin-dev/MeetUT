@@ -27,7 +27,6 @@ const User = mongoose.model('User', userSchema)
 exports.findById = (id) => {
     return User.findById(id).then((result) => {
         result = result.toJSON()
-        delete result.password
         delete result.__v
         return result
     })
