@@ -21,7 +21,7 @@ exports.createUser = (req, res) => {
 }
 
 exports.getById = (req, res) => {
-    UserModel.findById(req.params.userId).then((result) => {
+    UserModel.getUserInfoById(req.params.userId).then((result) => {
         res.status(200).send(result)
     })
 }

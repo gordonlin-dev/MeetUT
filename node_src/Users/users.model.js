@@ -32,6 +32,15 @@ exports.findById = (id) => {
     })
 }
 
+exports.getUserInfoById = (id) => {
+    return User.findById(id).then((result) => {
+        result = result.toJSON()
+        delete result.password
+        delete result.__v
+        return result
+    })
+}
+
 exports.createUser = (data) => {
     const user = new User(data)
     return user.save()
