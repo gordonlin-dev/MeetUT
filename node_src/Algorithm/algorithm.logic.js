@@ -38,9 +38,8 @@ exports.calculate = (req, res) => {
 
     let toSqrt = sum(toSum)
     let result = Math.sqrt(toSqrt)
-    console.log(result)
-    res.status(302).json({result:result})
-    // res.status(201).send({result:result})
+    // console.log(result)
+    res.status(201).json({result:result})
 }
 
 sum = (toSum) => {
