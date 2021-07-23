@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 
 const UserRouter = require('./Users/routes.config')
 const AuthRouter = require('./Auth/routes.config')
+const AlgorithmRouter = require('./Algorithm/routes.config')
 
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -22,6 +23,7 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json())
 UserRouter.routesConfig(app)
 AuthRouter.routesConfig(app)
+AlgorithmRouter.routesConfig(app)
 
 // start the server listening for requests
 app.listen(process.env.PORT || 3000,
