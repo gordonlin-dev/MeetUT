@@ -8,6 +8,7 @@ const server = app.listen(process.env.PORT || 3000,
 
 const io = socket(server);
 
-io.on('connection', function(){
+io.on('connection', function(socket){
     console.log('made socket connection');
+    socket.emit('connection', null);
 });
