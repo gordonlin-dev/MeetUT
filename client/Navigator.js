@@ -3,6 +3,7 @@ import LandingScreen from './screen/Landing';
 import LoginScreen from "./screen/Login";
 import SignupScreen from "./screen/SIgnup";
 import HomeScreen from "./screen/Home";
+import ChatScreen from "./screen/Chat";
 import {createAppContainer} from "react-navigation";
 
 const Navigator = createStackNavigator({
@@ -28,7 +29,13 @@ const Navigator = createStackNavigator({
         screen:HomeScreen,
         navigationOptions:{
             title:"",
-            headerShown: false
+            headerShown: false,
+        }
+    },
+    Chat:{
+        screen:ChatScreen,
+        navigationOptions:{
+            title:""
         }
     }
 });

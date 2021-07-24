@@ -46,6 +46,11 @@ const HomeScreen = props => {
             <View>
                 <Text>Email: {email}</Text>
             </View>
+            <Button title={'Chat'} onPress={ () => {
+                props.navigation.navigate({
+                    routeName:'Chat'
+                })
+            }}/>
         </SafeAreaView>
     )
 }
