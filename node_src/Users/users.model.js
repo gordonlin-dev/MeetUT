@@ -18,6 +18,7 @@ userSchema.set('toJSON', {
     virtuals : true
 })
 
+
 userSchema.findById = function(cb){
     return this.model('Users').find({id: this.id}, cb)
 }
@@ -28,11 +29,12 @@ exports.findById = (id) => {
     return User.findById(id).then((result) => {
         if (result.isArchived) {
             return "User not found"
-        }
+        }else {
         result = result.toJSON()
         delete result.password
         delete result.__v
         return result
+        }
     })
 }
 
@@ -51,7 +53,12 @@ exports.updatePassword = (data, id) => {
 
 exports.deleteUser = (id) => {
     return User.findById(id).then((result) => {
-        result.isArchived = true
-        return result.save()
+        if (result == "User not found") {
+            return result
+        }
+        else {
+            result.isArchived = true
+            return result.save()
+        }
     })
 }

@@ -12,8 +12,14 @@ exports.createUser = (req, res) => {
 }
 
 exports.getById = (req, res) => {
-    UserModel.findById(req.params.userId).then((result) => {
-        res.status(200).send(result)
+    new Promise((resolve, reject) => {
+        UserModel.findById(req.params.userId).then((result) => {
+            if (result == "User not found") {
+                reject(res.status(202).send(result))
+            }else {
+                resolve(res.status(200).send(result))
+            }
+        })
     })
 }
 
@@ -27,7 +33,13 @@ exports.updatePassword = (req, res) => {
 }
 
 exports.deleteUser = (req, res) => {
-    UserModel.deleteUser(req.param.userId).then((result) => {
-        res.status(200).send()
+    new Promise((resolve, reject) => {
+        UserModel.deleteUser(req.params.userId).then((result) => {
+            if (result == false) {
+                reject(res.status(202).send(result))
+            }else {
+                resolve(res.status(200).send())
+            }
+        })
     })
 }
