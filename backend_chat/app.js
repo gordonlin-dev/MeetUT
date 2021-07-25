@@ -13,8 +13,7 @@ io.on('connection', function(socket){
     socket.emit('connection', null);
 });
 
-io.on('message', function(data){
-    console.log(1)
+io.socket.on('message', function(data){
     console.log(data)
     io.socket.send(data)
 })

@@ -4,20 +4,16 @@ import socketClient  from "socket.io-client";
 import { GiftedChat } from 'react-native-gifted-chat';
 const secureStore = require('../../SecureStore')
 
+const socket = socketClient("https://meet-ut-3.herokuapp.com/");
 const ChatScreen = props => {
     const [messages, setMessages] = useState([]);
-    const socket = socketClient("https://meet-ut-3.herokuapp.com/");
-    socket.on('connection', () => {
-        console.log(`connected`)
-    });
 
     const sendMessage = (message) => {
-        socket.send(JSON.stringify({
-            message: message
-        }));
+        socket.emit('message', message)
     }
 
     const onSend = useCallback((message = []) => {
+        console.log(message)
         sendMessage(message);
         setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
     }, [])
