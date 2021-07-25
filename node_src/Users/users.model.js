@@ -7,6 +7,7 @@ const userSchema = new Schema({
     //id is email
     _id : String,
     password : String,
+    isArchived : Boolean
 })
 
 userSchema.virtual('email').get(function (){
@@ -25,6 +26,9 @@ const User = mongoose.model('User', userSchema)
 
 exports.findById = (id) => {
     return User.findById(id).then((result) => {
+        if (result.isArchived) {
+            return "User not found"
+        }
         result = result.toJSON()
         delete result.password
         delete result.__v
@@ -34,5 +38,20 @@ exports.findById = (id) => {
 
 exports.createUser = (data) => {
     const user = new User(data)
+    user.isArchived = false
     return user.save()
+}
+
+exports.updatePassword = (data, id) => {
+    return User.findById(id).then((result) => {
+        result.password = data
+        return result.save()
+    })
+}
+
+exports.deleteUser = (id) => {
+    return User.findById(id).then((result) => {
+        result.isArchived = true
+        return result.save()
+    })
 }

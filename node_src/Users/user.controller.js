@@ -16,3 +16,18 @@ exports.getById = (req, res) => {
         res.status(200).send(result)
     })
 }
+
+exports.updatePassword = (req, res) => {
+    let salt = crypto.randomBytes(16).toString('base64')
+    let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
+    req.body.password = salt + "$" + hash
+    UserModel.updatePassword(req.body.password, req.params.userId).then((result) => {
+        res.status(200).send()
+    })
+}
+
+exports.deleteUser = (req, res) => {
+    UserModel.deleteUser(req.param.userId).then((result) => {
+        res.status(200).send()
+    })
+}
