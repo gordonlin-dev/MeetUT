@@ -4,7 +4,7 @@ import socketClient  from "socket.io-client";
 import { GiftedChat } from 'react-native-gifted-chat';
 const secureStore = require('../../SecureStore')
 
-const socket = socketClient("https://meet-ut-3.herokuapp.com/");
+let socket;
 const ChatScreen = props => {
     const [messages, setMessages] = useState([]);
 
@@ -12,9 +12,6 @@ const ChatScreen = props => {
         socket.emit('message', message)
     }
 
-    socket.on('message', (message) =>{
-        setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
-    })
     const onSend = useCallback((message = []) => {
         console.log(message)
         sendMessage(message);
@@ -22,8 +19,18 @@ const ChatScreen = props => {
     }, [])
 
     useEffect(() => {
-
+        console.log('connect')
+        socket = socketClient("https://meet-ut-3.herokuapp.com/")
+        socket.on('message', (message) =>{
+            console.log(message)
+            //setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
+        })
     }, []);
+
+    useEffect( () => () => {
+        console.log('disconnect')
+        socket.disconnect()
+    }, [] );
 
     return (
         <GiftedChat
