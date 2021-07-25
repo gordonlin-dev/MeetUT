@@ -12,6 +12,9 @@ const ChatScreen = props => {
         socket.emit('message', message)
     }
 
+    socket.on('message', (message) =>{
+        setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
+    })
     const onSend = useCallback((message = []) => {
         console.log(message)
         sendMessage(message);
