@@ -12,7 +12,9 @@ const ChatScreen = props => {
     });
 
     const sendMessage = (message) => {
-        socket.send(message)
+        socket.send(JSON.stringify({
+            message: message
+        }));
     }
 
     const onSend = useCallback((message = []) => {

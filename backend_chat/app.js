@@ -14,6 +14,7 @@ io.on('connection', function(socket){
 });
 
 io.on('message', function(data){
+    console.log(1)
     console.log(data)
     io.socket.send(data)
 })
