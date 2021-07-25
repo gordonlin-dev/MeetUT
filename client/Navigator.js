@@ -3,7 +3,7 @@ import LandingScreen from './screen/Landing';
 import LoginScreen from "./screen/Login";
 import SignupScreen from "./screen/SIgnup";
 import HomeScreen from "./screen/Home";
-import ChatScreen from "./screen/Chat";
+import ChatScreen from "./screen/Chat/Chat";
 import {createAppContainer} from "react-navigation";
 
 const Navigator = createStackNavigator({

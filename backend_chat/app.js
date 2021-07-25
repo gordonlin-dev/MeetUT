@@ -12,3 +12,8 @@ io.on('connection', function(socket){
     console.log('made socket connection');
     socket.emit('connection', null);
 });
+
+io.on('message', function(data){
+    console.log(data)
+    io.socket.send(data)
+})
