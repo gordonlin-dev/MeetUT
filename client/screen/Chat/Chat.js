@@ -6,6 +6,7 @@ const secureStore = require('../../SecureStore')
 
 let socket;
 const ChatScreen = props => {
+    const id = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
     const [messages, setMessages] = useState([]);
 
     const sendMessage = (message) => {
@@ -13,7 +14,6 @@ const ChatScreen = props => {
     }
 
     const onSend = useCallback((message = []) => {
-        console.log(message)
         sendMessage(message);
         setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
     }, [])
@@ -21,9 +21,8 @@ const ChatScreen = props => {
     useEffect(() => {
         console.log('connect')
         socket = socketClient("https://meet-ut-3.herokuapp.com/")
-        socket.on('message', (message) =>{
-            console.log(message)
-            //setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
+        socket.on('broadcast', (message) =>{
+            setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
         })
     }, []);
 

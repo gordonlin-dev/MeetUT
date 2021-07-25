@@ -13,6 +13,6 @@ io.on('connection', async (socket) => {
     socket.emit('connection', null);
     socket.on('message', (data) => {
         console.log(data)
-        socket.broadcast.emit('message', data)
+        socket.broadcast.emit('broadcast', data)
     })
 });
