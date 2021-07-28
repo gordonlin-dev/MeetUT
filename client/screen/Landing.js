@@ -31,6 +31,13 @@ const LandingScreen = props => {
                         })
                     }}/>
                 </View>
+                <View style={styles.button}>
+                    <Button title={'Home'} onPress={() => {
+                        props.navigation.navigate({
+                            routeName: 'Home'
+                        })
+                    }}/>
+                </View>
             </View>
         </View>
     );

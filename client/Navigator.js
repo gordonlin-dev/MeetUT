@@ -2,7 +2,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 import LandingScreen from './screen/Landing';
 import LoginScreen from "./screen/Login";
 import SignupScreen from "./screen/SIgnup";
-import HomeScreen from "./screen/Home";
+import HomeScreen from "./screen/Home/Home";
 import ChatScreen from "./screen/Chat/Chat";
 import {createAppContainer} from "react-navigation";
 
