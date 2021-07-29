@@ -66,6 +66,12 @@ exports.deleteUser = (id) => {
 
 exports.getAllUsers = () => {
     return User.find({}).then((result) =>{
+        for (const item in result) {
+            const user = result[item].toJSON()
+            delete user.password
+            delete user.__v
+            result[item] = user
+        }
         return result
     })
 }
