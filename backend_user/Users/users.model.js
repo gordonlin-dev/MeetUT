@@ -65,5 +65,5 @@ exports.deleteUser = (id) => {
 }
 
 exports.getAllUsers = () => {
-    return User.find()
+    return User.find().exec()
 }
