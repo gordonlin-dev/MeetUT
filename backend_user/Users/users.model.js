@@ -64,6 +64,6 @@ exports.deleteUser = (id) => {
     })
 }
 
-exports.getAllUsers = () => {
-    return User.find().exec()
+exports.getAllUsers = async () => {
+    return await User.find().exec()
 }
