@@ -1,5 +1,7 @@
 const UserModel = require('../Users/users.model')
 
 exports.getMatchList = (req,res) =>{
-    res.status(200).send(UserModel.getAllUsers())
+    const users = UserModel.getAllUsers()
+    console.log(users)
+    res.status(200).send(users)
 }
