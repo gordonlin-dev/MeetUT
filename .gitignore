@@ -1,3 +1,4 @@
 .idea
 **/.env
 **/memory.db
+.DS_Store

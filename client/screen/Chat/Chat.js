@@ -22,6 +22,7 @@ const ChatScreen = props => {
         console.log('connect')
         socket = socketClient("https://meet-ut-3.herokuapp.com/")
         socket.on('broadcast', (message) =>{
+            message[0].user._id = 2
             setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
         })
     }, []);

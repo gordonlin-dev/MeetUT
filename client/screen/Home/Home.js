@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, StyleSheet, Button, Image, Dimensions, SafeAreaView} from 'react-native'
-const secureStore = require('../SecureStore')
+import ProfileCard from "./ProfileCard";
+
+const secureStore = require('../../SecureStore')
 
 const HomeScreen = props => {
     const [email, setEmail] = useState("");
@@ -29,30 +31,41 @@ const HomeScreen = props => {
         }
     }
     useEffect(() => {
-        loadData();
+        //loadData();
     }, []);
 
     return(
-        <SafeAreaView>
-            <View>
-                <Text>Home page</Text>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.empty}>
+                <ProfileCard style={styles.empty} firstName={'Bob'} lastName={'Benson'}/>
+                <View style={styles.buttonContainer}>
+                    <Button title={'Pass'} onPress={() => {}}/>
+                    <Button title={'Like'} onPress={() => {}}/>
+                </View>
             </View>
-            <View>
-                <Text>First name: {firstName}</Text>
-            </View>
-            <View>
-                <Text>Last name: {lastName}</Text>
-            </View>
-            <View>
-                <Text>Email: {email}</Text>
-            </View>
-            <Button title={'Chat'} onPress={ () => {
-                props.navigation.navigate({
-                    routeName:'Chat'
-                })
-            }}/>
         </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+    container:{
+        flex:1,
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
+
+    buttonContainer:{
+        flex:1,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+    button:{
+
+    },
+    empty:{
+        flex:1
+    }
+});
+
 
 export default HomeScreen;
