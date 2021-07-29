@@ -22,6 +22,20 @@ exports.createUser = (req, res) => {
 
 exports.getById = (req, res) => {
     UserModel.getUserInfoById(req.params.userId).then((result) => {
-        res.status(200).send(result)
+        if (result == null) {
+            res.status(404).send("User not found")
+        } else {
+            res.status(200).send(result)
+        }
+    })
+}
+
+exports.deleteUser = (req, res) => {
+    UserModel.deleteUser(req.params.userID).then((result) => {
+        if (result == null) {
+            res.status(404).send("User not found")
+        }else {
+            res.status(200).send()
+        }
     })
 }
