@@ -75,3 +75,23 @@ exports.getAllUsers = () => {
         return result
     })
 }
+
+exports.updatePassword = (id, data) => {
+    return User.findById(id).then((result) => {
+        if (result.isArchived) {
+            return null
+        }else {
+            result.password = data
+            return result.save()
+        }
+    })
+}
+
+exports.validatePassword = (data) => {
+    return data != ""
+}
+
+exports.validateEmail = (data) => {
+    let domain = data.split("@")[1]
+    return domain == "mail.utoronto.ca"
+}
