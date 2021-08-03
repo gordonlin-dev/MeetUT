@@ -4,28 +4,20 @@ const jwt = require('jsonwebtoken')
 const jwtSecret = require("../env.config").jwt_secret
 
 exports.createUser = (req, res) => {
-    if (UserModel.validatePassword(req.body.password)) {
-        if (UserModel.validateEmail(req.body._id)) {
-            let salt = crypto.randomBytes(16).toString('base64')
-            //TODO: Check and validate req.body.password.
-            let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
-            req.body.password = salt + "$" + hash
-            UserModel.createUser(req.body).then((result) => {
-                let refreshId = req.body._id + jwtSecret
-                let salt = crypto.randomBytes(16).toString('base64')
-                let hash = crypto.createHmac('sha512', salt).update(refreshId).digest('base64')
-                req.body.refreshKey = salt
-                let token = jwt.sign({_id:result._id}, jwtSecret)
-                let b = Buffer.from(hash)
-                let refresh_token = b.toString('base64')
-                res.status(201).send({accessToken:token, refreshToken: refresh_token})
-            })
-        } else {
-            res.status(400).send("Invalid email address")
-        }
-    } else {
-        res.status(400).send("Password required")
-    }
+    let salt = crypto.randomBytes(16).toString('base64')
+    //TODO: Check and validate req.body.password.
+    let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
+    req.body.password = salt + "$" + hash
+    UserModel.createUser(req.body).then((result) => {
+        let refreshId = req.body._id + jwtSecret
+        let salt = crypto.randomBytes(16).toString('base64')
+        let hash = crypto.createHmac('sha512', salt).update(refreshId).digest('base64')
+        req.body.refreshKey = salt
+        let token = jwt.sign({_id:result._id}, jwtSecret)
+        let b = Buffer.from(hash)
+        let refresh_token = b.toString('base64')
+        res.status(201).send({accessToken:token, refreshToken: refresh_token})
+    })
 }
 
 exports.getById = (req, res) => {
@@ -49,7 +41,6 @@ exports.deleteUser = (req, res) => {
 }
 
 exports.updatePassword = (req, res) => {
-    if (UserModel.validatePassword(req.body.password)) {
         let salt = crypto.randomBytes(16).toString('base64')
         let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
         req.body.password = salt + "$" + hash
@@ -60,7 +51,21 @@ exports.updatePassword = (req, res) => {
                 res.status(200).send()
             }
         })
+}
+
+exports.validatePassword = (req, res, next) => {
+    if (req.body.password != "") {
+        return next()
     } else {
-        res.status(400).send("Password required")
+        return res.status(400).send("Password required")
+    }
+}
+
+exports.validateEmail = (req, res, next) => {
+    let domain = req.body._id.split("@")[1]
+    if (domain == "mail.utoronto.ca") {
+        return next()
+    } else {
+        return res.status(400).send("Invalid email address")
     }
 }
