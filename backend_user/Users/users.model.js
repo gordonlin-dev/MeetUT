@@ -86,12 +86,3 @@ exports.updatePassword = (id, data) => {
         }
     })
 }
-
-exports.validatePassword = (data) => {
-    return data != ""
-}
-
-exports.validateEmail = (data) => {
-    let domain = data.split("@")[1]
-    return domain == "mail.utoronto.ca"
-}
