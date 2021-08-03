@@ -75,3 +75,14 @@ exports.getAllUsers = () => {
         return result
     })
 }
+
+exports.updatePassword = (id, data) => {
+    return User.findById(id).then((result) => {
+        if (result.isArchived) {
+            return null
+        }else {
+            result.password = data
+            return result.save()
+        }
+    })
+}

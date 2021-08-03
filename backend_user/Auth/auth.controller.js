@@ -26,3 +26,7 @@ exports.refresh = (req, res) => {
         res.status(500).send()
     }
 }
+
+exports.validateJWT = (req, res) => {
+    res.status(200).send()
+}
