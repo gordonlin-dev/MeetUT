@@ -96,6 +96,7 @@ exports.getChatRoomById = async (userID, chatRoomID) => {
         delete messages[i].sender
         messages[i].user = {"_id": senderID}
     }
+    delete room.messages
     room.messages = messages
     console.log(room)
     return room
