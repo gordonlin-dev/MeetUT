@@ -93,8 +93,11 @@ exports.getChatRoomById = async (userID, chatRoomID) => {
     let messages = room.messages
     for (let i = 0; i < messages.length; i++){
         const senderID = messages[i].sender === userID ? 1 : 2
-        delete messages[i].sender
-        messages[i].user = {"_id": senderID}
+        let messageCopy = messages[i]
+        delete messageCopy.sender
+        messageCopy.user = {"_id": senderID}
+        console.log(messageCopy)
+        messages[i] = messageCopy
     }
     console.log(messages)
     delete room.messages
