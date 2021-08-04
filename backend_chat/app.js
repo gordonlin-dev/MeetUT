@@ -2,7 +2,7 @@ const express = require("express");
 const socket = require('socket.io');
 const bodyParser = require('body-parser')
 const ChatRouter = require('./routes.config')
-const ChatController = require('./chat.controller')
+const ChatModel = require('./chat.model')
 const app = express();
 
 app.use(bodyParser.json())
@@ -18,7 +18,7 @@ io.on('connection', async (socket) => {
         socket.join(data)
     })
     socket.on('message', (data) => {
-        ChatController.addMessage(data.userID, data.roomID, data.chatMessage)
+        ChatModel.addMessage(data.roomID, data.chatMessage)
         socket.in(data.roomID).emit('broadcast', data.chatMessage)
     })
 });
