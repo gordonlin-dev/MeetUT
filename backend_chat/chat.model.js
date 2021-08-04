@@ -97,6 +97,7 @@ exports.getChatRoomById = async (userID, chatRoomID) => {
         messages[i].user = {"_id": senderID}
     }
     room.messages = messages
+    console.log(room)
     return room
 }
 
