@@ -101,5 +101,6 @@ exports.addMessage = async (userID, roomID, message) => {
         let user = await User.findById(room.participants[i])
         const index = user.chatRooms.findIndex((room) => {return room._id === roomID})
         user.chatRooms[index] = user.chatRooms[index].messages.push(message)
+        await user.save()
     }
 }
