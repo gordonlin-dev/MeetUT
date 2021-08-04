@@ -1,11 +1,15 @@
 const express = require("express");
 const socket = require('socket.io');
+const bodyParser = require('body-parser')
+const ChatRouter = require('./routes.config')
 
 const app = express();
 
-const server = app.listen(process.env.PORT || 3000,
-    () => console.log("Server is running..."));
+app.use(bodyParser.json())
 
+const server = app.listen(process.env.PORT || 4000,
+    () => console.log("Server is running..."));
+ChatRouter.routesConfig(app)
 const io = socket(server);
 
 io.on('connection', async (socket) => {
