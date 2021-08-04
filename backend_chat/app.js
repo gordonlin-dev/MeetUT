@@ -18,7 +18,7 @@ io.on('connection', async (socket) => {
         socket.join(data)
     })
     socket.on('message', (data) => {
-        ChatModel.addMessage(data.roomID, data.chatMessage)
+        ChatModel.addMessage(data.userID, data.roomID, data.chatMessage)
         socket.in(data.roomID).emit('broadcast', data.chatMessage)
     })
 });
