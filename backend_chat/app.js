@@ -14,6 +14,10 @@ const io = socket(server);
 
 io.on('connection', async (socket) => {
     socket.emit('connection', null);
+    socket.on('joinRoom', (data) => {
+        console.log(data)
+        socket.join(data)
+    })
     socket.on('message', (data) => {
         socket.broadcast.emit('broadcast', data)
     })

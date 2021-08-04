@@ -35,7 +35,12 @@ const ChatListScreen = props => {
         <SafeAreaView>
             <View>
                 <FlatList data={chatList}
-                          renderItem={({item}) => <Button title={item.participants[0]} onPress={() => {}}/>}
+                          renderItem={({item}) => <Button title={item.participants[0]} onPress={() => {
+                              props.navigation.navigate({
+                                  routeName: 'Chat',
+                                  params: item._id
+                              })
+                          }}/>}
                           keyExtractor={(item, _id) => _id.toString()}
                 />
             </View>

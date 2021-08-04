@@ -1,14 +1,13 @@
 import React, {useState, useEffect, useCallback} from 'react'
+import {View, Text, StyleSheet, Button, Image, Dimensions, SafeAreaView} from 'react-native'
 import socketClient  from "socket.io-client";
 import { GiftedChat } from 'react-native-gifted-chat';
 const secureStore = require('../../SecureStore')
 
 let socket;
 const ChatScreen = props => {
-
+    const id = Math.floor(Math.random() * (100 - 1 + 1)) + 1;
     const [messages, setMessages] = useState([]);
-    //const {chatID} = props.navigation.navigate.route.params;
-    const chatID = props.navigation.state.params;
 
     const sendMessage = (message) => {
         socket.emit('message', message)
@@ -16,21 +15,12 @@ const ChatScreen = props => {
 
     const onSend = useCallback((message = []) => {
         sendMessage(message);
-        console.log(message)
         setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
     }, [])
 
-    const getMessages = async () => {
-
-    }
-
     useEffect(() => {
-        console.log(chatID)
         console.log('connect')
         socket = socketClient("https://meet-ut-3.herokuapp.com/")
-        socket.on('connection', () => {
-            socket.emit('joinRoom', chatID)
-        })
         socket.on('broadcast', (message) =>{
             message[0].user._id = 2
             setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
