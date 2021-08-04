@@ -5,6 +5,7 @@ import SignupScreen from "./screen/SIgnup";
 import HomeScreen from "./screen/Home/Home";
 import ChatScreen from "./screen/Chat/Chat";
 import {createAppContainer} from "react-navigation";
+import ChatListScreen from "./screen/Chat/ChatList";
 
 const Navigator = createStackNavigator({
     Landing: {
@@ -34,6 +35,12 @@ const Navigator = createStackNavigator({
     },
     Chat:{
         screen:ChatScreen,
+        navigationOptions:{
+            title:""
+        }
+    },
+    ChatList:{
+        screen: ChatListScreen,
         navigationOptions:{
             title:""
         }

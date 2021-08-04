@@ -6,7 +6,8 @@ const secureStore = require('../../SecureStore')
 const ChatListScreen = props => {
     const loadChat = async () => {
         try {
-            const url = 'https://meet-ut-3.herokuapp.com/chat'
+            let url = 'https://meet-ut-3.herokuapp.com/chat'
+            url = url + "/" + "bob@bob.com"
             const response = await fetch(url, {
                 method : 'GET',
                 headers: {
@@ -17,11 +18,11 @@ const ChatListScreen = props => {
             const responseJson = await response.json();
             console.log(responseJson)
         }catch (e) {
-
+            console.log(e)
         }
     }
-    useEffect(async () => {
-        await loadChat()
+    useEffect( () => {
+        loadChat()
     }, []);
 
     return(
@@ -30,3 +31,5 @@ const ChatListScreen = props => {
         </SafeAreaView>
     )
 }
+
+export default ChatListScreen

@@ -38,6 +38,13 @@ const LandingScreen = props => {
                         })
                     }}/>
                 </View>
+                <View style={styles.button}>
+                    <Button title={'Chat List'} onPress={() => {
+                        props.navigation.navigate({
+                            routeName: 'ChatList'
+                        })
+                    }}/>
+                </View>
             </View>
         </View>
     );

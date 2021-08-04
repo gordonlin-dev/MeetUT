@@ -7,6 +7,6 @@ exports.createChat = async (req, res)=>{
 }
 
 exports.getChatRooms = async (req, res) => {
-    const chatRooms = await ChatModel.getChatRooms(req.body.userID)
+    const chatRooms = await ChatModel.getChatRooms(req.params.userID)
     res.status(200).send(chatRooms)
 }
