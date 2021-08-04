@@ -11,7 +11,7 @@ const ChatScreen = props => {
     const chatID = props.navigation.state.params;
 
     const sendMessage = (message) => {
-        socket.emit('message', message)
+        socket.emit('message', {roomID: chatID, chatMessage:message})
     }
 
     const onSend = useCallback((message = []) => {

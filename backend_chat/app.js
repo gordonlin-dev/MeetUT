@@ -15,10 +15,11 @@ const io = socket(server);
 io.on('connection', async (socket) => {
     socket.emit('connection', null);
     socket.on('joinRoom', (data) => {
-        console.log(data)
         socket.join(data)
     })
     socket.on('message', (data) => {
-        socket.broadcast.emit('broadcast', data)
+        console.log(data)
+        io.in(data.roomID).emit('broadcast', data.chatMessage)
+        //socket.broadcast.emit('broadcast', data)
     })
 });
