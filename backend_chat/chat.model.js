@@ -89,13 +89,14 @@ exports.getChatRooms = async (userID) => {
 
 exports.getChatRoomById = async (userID, chatRoomID) => {
     let user = await User.findById(userID)
-    const room = user.chatRooms.find((room) => {return room._id === chatRoomID})
+    let room = user.chatRooms.find((room) => {return room._id === chatRoomID})
     let messages = room.messages
     for (let i = 0; i < messages.length; i++){
         const senderID = messages[i].sender === userID ? 1 : 2
         delete messages[i].sender
         messages[i].user = {"_id": senderID}
     }
+    room.messages = messages
     return room
 }
 

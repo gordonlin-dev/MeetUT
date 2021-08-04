@@ -23,7 +23,7 @@ const ChatScreen = props => {
         try{
             let url = 'https://meet-ut-3.herokuapp.com/chat'
             url = url + "/" + "bob@bob.com"
-            url = url + "/chat/" + roomID
+            url = url + "/room/" + roomID
             const response = await fetch(url, {
                 method : 'GET',
                 headers: {
@@ -43,6 +43,7 @@ const ChatScreen = props => {
     useEffect(() => {
         socket = socketClient("https://meet-ut-3.herokuapp.com/")
         socket.on('connection', () => {
+            getMessages()
             socket.emit('joinRoom', roomID)
         })
         socket.on('broadcast', (message) =>{
