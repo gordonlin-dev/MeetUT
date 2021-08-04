@@ -80,7 +80,7 @@ exports.createChatRoom = async (participants) => {
 exports.getChatRooms = async (userID) => {
     let user = await User.findById(userID)
     for (let i = 0; i < user.chatRooms.length; i++){
-        user.chatRooms[i].participants = user.chatRooms[i].participants.filter((value) => {return value === userID})
+        user.chatRooms[i].participants = user.chatRooms[i].participants.filter((value) => {return value !== userID})
     }
     return user.chatRooms
 }
