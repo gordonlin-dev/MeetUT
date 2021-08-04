@@ -30,7 +30,6 @@ const Navigator = createStackNavigator({
         screen:HomeScreen,
         navigationOptions:{
             title:"",
-            headerShown: false,
         }
     },
     Chat:{

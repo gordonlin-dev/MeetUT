@@ -78,6 +78,7 @@ exports.createChatRoom = async (participants) => {
 }
 
 exports.getChatRooms = async (userID) => {
-    const user = await User.findById(userID)
+    let user = await User.findById(userID)
+    user.chatRooms.participants = user.chatRooms.participants.filter((value) => {return value === userID})
     return user.chatRooms
 }

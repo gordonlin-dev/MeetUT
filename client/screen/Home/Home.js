@@ -45,10 +45,10 @@ const HomeScreen = props => {
             });
             const responseJson = await response.json();
             setUsers(responseJson)
-            setFirstName(users[curUser].firstName)
-            setLastName(users[curUser].lastName)
-        }catch (e) {
 
+
+        }catch (e) {
+            console.log(e)
         }
     }
 
@@ -86,6 +86,13 @@ const HomeScreen = props => {
         loadUser()
     }, []);
 
+    useEffect(() => {
+        //loadData();
+        if(users.length > 0){
+            setFirstName(users[curUser].firstName)
+            setLastName(users[curUser].lastName)
+        }
+    }, [users]);
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.empty}>

@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, StyleSheet, Button, Image, Dimensions, SafeAreaView} from 'react-native'
+import {View, Text, StyleSheet, Button, Image, Dimensions, SafeAreaView, FlatList} from 'react-native'
 
 const secureStore = require('../../SecureStore')
 
 const ChatListScreen = props => {
+    const [chatList, setChatList] = useState([])
+
     const loadChat = async () => {
         try {
             let url = 'https://meet-ut-3.herokuapp.com/chat'
@@ -16,7 +18,7 @@ const ChatListScreen = props => {
                 },
             });
             const responseJson = await response.json();
-            console.log(responseJson)
+            setChatList(responseJson)
         }catch (e) {
             console.log(e)
         }
@@ -25,9 +27,18 @@ const ChatListScreen = props => {
         loadChat()
     }, []);
 
+    useEffect( () => {
+
+    }, [chatList])
+
     return(
         <SafeAreaView>
-            <Text>ABC</Text>
+            <View>
+                <FlatList data={chatList}
+                          renderItem={({item}) => <Button title={item.participants[0]} onPress={() => {}}/>}
+                          keyExtractor={(item, _id) => _id.toString()}
+                />
+            </View>
         </SafeAreaView>
     )
 }
