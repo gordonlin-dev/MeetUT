@@ -7,8 +7,12 @@ const userSchema = new Schema({
         _id : String,
         participants: [String],
         messages : [{
-            senderId : String,
-            content : String
+            _id: String,
+            createdAt: String,
+            text: String,
+            user: {
+                _id: String
+            }
         }]
     }]
 })

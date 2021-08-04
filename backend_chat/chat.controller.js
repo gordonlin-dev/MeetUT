@@ -17,6 +17,9 @@ exports.getChatRoom = async (req, res) => {
 }
 
 exports.addMessage = async (req, res) => {
-    const room = await ChatModel.addMessage(req.body.userID, req.body.roomID, req.body.message)
-    return res.status(200).send(room)
+    const room = await ChatModel.getChatRoomById(req.body.roomID)
+    for(let i = 0; i < room.participants.length; i ++){
+        await ChatModel.addMessage(room.participants[i], req.body.roomID, req.body.message)
+    }
+    return res.status(200).send()
 }

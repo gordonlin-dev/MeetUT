@@ -8,10 +8,10 @@ const ChatScreen = props => {
 
     const [messages, setMessages] = useState([]);
     //const {chatID} = props.navigation.navigate.route.params;
-    const chatID = props.navigation.state.params;
+    const roomID = props.navigation.state.params;
 
     const sendMessage = (message) => {
-        socket.emit('message', {roomID: chatID, chatMessage:message})
+        socket.emit('message', {userID: "bob@bob.com",roomID: roomID, chatMessage:message})
     }
 
     const onSend = useCallback((message = []) => {
@@ -21,15 +21,30 @@ const ChatScreen = props => {
     }, [])
 
     const getMessages = async () => {
+        try{
+            let url = 'https://meet-ut-3.herokuapp.com/chat'
+            url = url + "/" + "bob@bob.com"
+            url = url + "/chat/" + roomID
+            const response = await fetch(url, {
+                method : 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    //'authorization': 'Bearer ' + jwt
+                },
+            });
+            const responseJson = await response.json();
+            const messages = responseJson.messages
+            setMessages(previousMessages => GiftedChat.append(previousMessages, messages, false))
 
+        }catch (e) {
+            console.log(e)
+        }
     }
 
     useEffect(() => {
-        console.log(chatID)
-        console.log('connect')
         socket = socketClient("https://meet-ut-3.herokuapp.com/")
         socket.on('connection', () => {
-            socket.emit('joinRoom', chatID)
+            socket.emit('joinRoom', roomID)
         })
         socket.on('broadcast', (message) =>{
             message[0].user._id = 2
