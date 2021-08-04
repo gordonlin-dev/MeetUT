@@ -10,9 +10,7 @@ const userSchema = new Schema({
             _id: String,
             createdAt: String,
             text: String,
-            user: {
-                _id: String
-            }
+            sender: String
         }]
     }]
 })
