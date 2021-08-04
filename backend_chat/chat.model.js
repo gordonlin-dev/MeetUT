@@ -96,7 +96,7 @@ exports.getChatRoomById = async (userID, chatRoomID) => {
 }
 
 exports.addMessage = async (roomID, message) => {
-    const room = await ChatModel.getChatRoomById(roomID)
+    const room = await this.getChatRoomById(roomID)
     for(let i = 0; i < room.participants.length; i ++){
         let user = await User.findById(room.participants[i])
         const index = user.chatRooms.findIndex((room) => {return room._id === roomID})
