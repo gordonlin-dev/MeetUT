@@ -19,7 +19,7 @@ io.on('connection', async (socket) => {
     })
     socket.on('message', (data) => {
         console.log(data)
-        io.in(data.roomID).emit('broadcast', data.chatMessage)
+        socket.in(data.roomID).emit('broadcast', data.chatMessage)
         //socket.broadcast.emit('broadcast', data)
     })
 });
