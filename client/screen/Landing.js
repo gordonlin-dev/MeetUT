@@ -2,41 +2,49 @@ import React from 'react'
 import {View, Text, StyleSheet, Button, Image, Dimensions} from 'react-native'
 
 const logo = require('../assets/logo.png');
+const secureStore = require('../SecureStore')
 
 const {height, width} = Dimensions.get('window');
 
 const LandingScreen = props => {
-    return(
-        <View style={styles.container}>
-            <Image source={logo} style={styles.logo}/>
-            <View style={styles.buttonContainer}>
-                <View style={styles.button}>
-                    <Button title={'Log in'} onPress={() => {
-                        props.navigation.navigate({
-                            routeName : 'Login'
-                        })
-                    }}/>
-                </View>
-                <View style={styles.button}>
-                    <Button title={'Sign up'} onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'Signup'
-                        })
-                    }}/>
-                </View>
-                <View style={styles.button}>
-                    <Button title={'Chat'} onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'Chat'
-                        })
-                    }}/>
-                </View>
-                <View style={styles.button}>
-                    <Button title={'Home'} onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'Home'
-                        })
-                    }}/>
+    const jwt = secureStore.GetValue('JWT')
+    if (validateJWT(jwt)) {
+        return props.navigation.navigate({
+            routeName : 'Home'
+        })
+    } else{
+        return(
+            <View style={styles.container}>
+                <Image source={logo} style={styles.logo}/>
+                <View style={styles.buttonContainer}>
+                    <View style={styles.button}>
+                        <Button title={'Log in'} onPress={() => {
+                            props.navigation.navigate({
+                                routeName : 'Login'
+                            })
+                        }}/>
+                    </View>
+                    <View style={styles.button}>
+                        <Button title={'Sign up'} onPress={() => {
+                            props.navigation.navigate({
+                                routeName: 'Signup'
+                            })
+                        }}/>
+                    </View>
+                    <View style={styles.button}>
+                        <Button title={'Chat'} onPress={() => {
+                            props.navigation.navigate({
+                                routeName: 'Chat'
+                            })
+                        }}/>
+                    </View>
+                    <View style={styles.button}>
+                        <Button title={'Home'} onPress={() => {
+                            props.navigation.navigate({
+                                routeName: 'Home'
+                            })
+                        }}/>
+                    </View>
                 </View>
                 <View style={styles.button}>
                     <Button title={'Chat List'} onPress={() => {
@@ -46,8 +54,8 @@ const LandingScreen = props => {
                     }}/>
                 </View>
             </View>
-        </View>
-    );
+        );
+    }
 };
 
 const styles = StyleSheet.create({
@@ -74,5 +82,24 @@ const styles = StyleSheet.create({
         flex:1
     }
 });
+
+const validateJWT = async(jwt) => {
+
+    try {
+        const url = 'https://meet-ut-2.herokuapp.com/auth/validateJWT';
+
+        const response = await fetch(url, {
+            method : 'PUT',
+            headers: {
+                'authorization': jwt
+            }
+        });
+        
+        return response.ok
+
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export default LandingScreen;
