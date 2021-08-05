@@ -6,8 +6,22 @@ import HomeScreen from "./screen/Home/Home";
 import ChatScreen from "./screen/Chat/Chat";
 import {createAppContainer} from "react-navigation";
 import ChatListScreen from "./screen/Chat/ChatList";
+import Splash from './screen/Splash';
+import Authentication from './screen/Authentication';
 
 const Navigator = createStackNavigator({
+    Splash: {
+        screen:Splash,
+        navigationOptions:{
+            title:""
+        }
+    },
+    Authentication: {
+        screen:Authentication,
+        navigationOptions:{
+            title:""
+        }
+    },
     Landing: {
         screen:LandingScreen,
         navigationOptions:{

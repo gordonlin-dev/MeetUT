@@ -1,8 +1,14 @@
 import React, {useState} from 'react'
-import {View, Text, StyleSheet, TextInput, Dimensions, Button, ScrollView} from 'react-native'
+import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity} from 'react-native'
 const secureStore = require('../SecureStore')
 
+const image = { uri: "https://cdn.discordapp.com/attachments/865226240779878400/865235199167299624/blue-pink-halftone-background_53876-99004.jpg" };
+
 const {height, width} = Dimensions.get('window');
+const buttonClickedHandler = () => {
+    console.log('You have been clicked a button!');
+    // do something
+  };
 const loginSubmit = async (email, password, props) => {
     try {
         const url = 'https://meet-ut-2.herokuapp.com/auth';
@@ -30,58 +36,85 @@ const loginSubmit = async (email, password, props) => {
 const LoginScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
-    return(
-        <ScrollView>
-            <View style={styles.container}>
-                <Text style={styles.header}>Log in</Text>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.inputTitle}>Email</Text>
-                    <TextInput style={styles.input}
-                               onChangeText={onChangeEmail}
-                               value={email}
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.inputTitle}>Password</Text>
-                    <TextInput style={styles.input}
-                               secureTextEntry={true}
-                               onChangeText={onChangePassword}
-                               value={password}
-                    />
-                </View>
-                <Button title={'submit'} onPress={() => {
-                    loginSubmit(email, password, props)
-                }}/>
-            </View>
-        </ScrollView>
-    );
+    return (
+        <View style={styles.bg}>
+          <ImageBackground source={image} resizeMode="cover" style={styles.image} >
+          <View>
+              <Text style={styles.header} >
+                  Login
+              </Text>
+
+          <TextInput
+              style={styles.Input}
+              onChangeText={onChangeEmail}
+              value={email}
+              placeholder="email"
+              keyboardType="numeric"
+            />
+            <TextInput
+              style={styles.Input}
+              onChangeText={onChangePassword}
+              value={password}
+              secureTextEntry={true}
+              placeholder="password"
+              keyboardType="numeric"
+            />
+          <TouchableOpacity
+              onPress={() => {
+                loginSubmit(email, password, props)
+            }}
+              style={styles.Button}>
+              <Text>Login</Text>
+            </TouchableOpacity>
+          </View>
+        <View>
+          <TouchableOpacity
+              onPress={buttonClickedHandler}
+              style={styles.Button}>
+              <Text>Reset Password</Text>
+            </TouchableOpacity>
+          </View>
+            
+          </ImageBackground>
+      
+        </View>
+          
+          
+        );
 };
 
 const styles = StyleSheet.create({
-    container:{
-        justifyContent:"center",
-        alignItems: 'center',
-        flex:1
+    bg: {
+      flex: 1,
     },
-    header:{
-        fontSize:75,
-        height: height * 0.2,
-        marginBottom: height * 0.05
+    image: {
+      flex: 1,
+      justifyContent: "center"
     },
-    inputContainer:{
-        height:height * 0.1,
-        width: width * 0.9,
-        flexDirection:'row',
-        alignItems: 'flex-start'
+    Input: {
+      marginTop: height * 0.03,
+      marginLeft: width * 0.15,
+      height: height * 0.06,
+      width: width * 0.7,
+      borderRadius: 5,
+      borderWidth: 2,
+      padding: 10,
+      borderColor: "white"
     },
-    inputTitle:{
-        flex:2
+    Button: {
+      width: width * 0.6,
+      height: height * 0.06,
+      marginTop: height * 0.03,
+      marginLeft: width * 0.2,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 15,
+      backgroundColor: 'white',
     },
-    input:{
-        flex:7,
-        borderBottomWidth:2,
-        borderBottomColor:'black'
+    header: {
+      fontSize:30,
+      marginLeft: width * 0.38,
     }
-});
+  });
 
 export default LoginScreen;
