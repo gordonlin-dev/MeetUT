@@ -12,8 +12,7 @@ exports.like = (req, res) => {
     const likedUser = req.body.likedUser
     const url = 'https://meet-ut-3.herokuapp.com/chat/create'
     axios.post(url, {
-        user1: curUser,
-        user2: likedUser
+        participants: [curUser, likedUser]
     }).then(
         resp => {
             res.status(200).send()
