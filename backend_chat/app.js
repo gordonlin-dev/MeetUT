@@ -17,10 +17,8 @@ io.on('connection', async (socket) => {
     socket.on('joinRoom', (data) => {
         socket.join(data)
     })
-    socket.on('message', (data) => {
-        console.log(data.chatMessage)
-        const message_copy = data.chatMessage
-        ChatModel.addMessage(data.userID, data.roomID, message_copy)
+    socket.on('message', async (data) => {
+        await ChatModel.addMessage(data.userID, data.roomID, data.chatMessage)
         socket.in(data.roomID).emit('broadcast', data.chatMessage)
     })
 });

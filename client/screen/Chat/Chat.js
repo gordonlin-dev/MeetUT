@@ -12,6 +12,7 @@ const ChatScreen = props => {
 
     const sendMessage = async (message) => {
         const userID = await secureStore.GetValue('UserId');
+        console.log(message)
         socket.emit('message', {userID: userID, roomID: roomID, chatMessage:message})
     }
 
