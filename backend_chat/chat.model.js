@@ -102,7 +102,6 @@ exports.getChatRoomById = async (userID, chatRoomID) => {
                 _id : senderID
             }
         }
-        console.log(messageCopy)
         messages[i] = messageCopy
     }
     delete room.messages

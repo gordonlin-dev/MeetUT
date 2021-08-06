@@ -10,19 +10,21 @@ const ChatScreen = props => {
     //const {chatID} = props.navigation.navigate.route.params;
     const roomID = props.navigation.state.params;
 
-    const sendMessage = (message) => {
-        socket.emit('message', {userID:"bob@bob.com", roomID: roomID, chatMessage:message})
+    const sendMessage = async (message) => {
+        const userID = await secureStore.GetValue('UserId');
+        socket.emit('message', {userID: userID, roomID: roomID, chatMessage:message})
     }
 
-    const onSend = useCallback((message = []) => {
-        sendMessage(message);
+    const onSend = useCallback(async (message = []) => {
+        await sendMessage(message);
         setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
     }, [])
 
     const getMessages = async () => {
         try{
+            const userID = await secureStore.GetValue('UserId');
             let url = 'https://meet-ut-3.herokuapp.com/chat'
-            url = url + "/" + "bob@bob.com"
+            url = url + "/" + userID
             url = url + "/room/" + roomID
             const response = await fetch(url, {
                 method : 'GET',
@@ -47,6 +49,7 @@ const ChatScreen = props => {
             socket.emit('joinRoom', roomID)
         })
         socket.on('broadcast', (message) =>{
+            console.log(message)
             message[0].user._id = 2
             setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
         })
