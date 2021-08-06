@@ -10,8 +10,7 @@ exports.getMatchList = (req,res) =>{
 exports.like = (req, res) => {
     const curUser = 'Test@test.com'
     const likedUser = req.body.likedUser
-    //const url = 'https://meet-ut-3.herokuapp.com/chat/create'
-    const url = 'http://localhost:4000/chat/create'
+    const url = 'https://meet-ut-3.herokuapp.com/chat/create'
     axios.post(url, {
         user1: curUser,
         user2: likedUser

@@ -62,7 +62,7 @@ const HomeScreen = props => {
         try{
             const jwt = await secureStore.GetValue('JWT');
             //const userId = await secureStore.GetValue('UserId');
-            //const url = 'https://meet-ut-2.herokuapp.com/users/' + userId;
+            const url = 'https://meet-ut-2.herokuapp.com/match/like';
             const response = await fetch(url, {
                 method : 'POST',
                 headers: {
