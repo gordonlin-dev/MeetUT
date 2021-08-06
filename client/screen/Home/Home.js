@@ -100,6 +100,11 @@ const HomeScreen = props => {
                 <View style={styles.buttonContainer}>
                     <Button title={'Pass'} onPress={() => {nextUser()}}/>
                     <Button title={'Like'} onPress={() => {sendLike()}}/>
+                    <Button title={'Chat list'} onPress={() => {
+                        props.navigation.navigate({
+                            routeName: 'ChatList'
+                        })
+                    }}/>
                 </View>
             </View>
         </SafeAreaView>

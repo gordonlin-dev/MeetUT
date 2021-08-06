@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {View, Text, StyleSheet, Button, Image, Dimensions} from 'react-native'
 
 const logo = require('../assets/logo.png');
@@ -8,54 +8,57 @@ const {height, width} = Dimensions.get('window');
 
 const LandingScreen = props => {
     const jwt = secureStore.GetValue('JWT')
-    if (validateJWT(jwt)) {
-        return props.navigation.navigate({
-            routeName : 'Home'
-        })
-    } else{
-        return(
-            <View style={styles.container}>
-                <Image source={logo} style={styles.logo}/>
-                <View style={styles.buttonContainer}>
-                    <View style={styles.button}>
-                        <Button title={'Log in'} onPress={() => {
-                            props.navigation.navigate({
-                                routeName : 'Login'
-                            })
-                        }}/>
-                    </View>
-                    <View style={styles.button}>
-                        <Button title={'Sign up'} onPress={() => {
-                            props.navigation.navigate({
-                                routeName: 'Signup'
-                            })
-                        }}/>
-                    </View>
-                    <View style={styles.button}>
-                        <Button title={'Chat'} onPress={() => {
-                            props.navigation.navigate({
-                                routeName: 'Chat'
-                            })
-                        }}/>
-                    </View>
-                    <View style={styles.button}>
-                        <Button title={'Home'} onPress={() => {
-                            props.navigation.navigate({
-                                routeName: 'Home'
-                            })
-                        }}/>
-                    </View>
+
+    useEffect(() => {
+        if(validateJWT(jwt)){
+            props.navigation.navigate({
+                routeName : 'Home'
+            })
+        }
+    }, []);
+
+    return(
+        <View style={styles.container}>
+            <Image source={logo} style={styles.logo}/>
+            <View style={styles.buttonContainer}>
+                <View style={styles.button}>
+                    <Button title={'Log in'} onPress={() => {
+                        props.navigation.navigate({
+                            routeName : 'Login'
+                        })
+                    }}/>
                 </View>
                 <View style={styles.button}>
-                    <Button title={'Chat List'} onPress={() => {
+                    <Button title={'Sign up'} onPress={() => {
                         props.navigation.navigate({
-                            routeName: 'ChatList'
+                            routeName: 'Signup'
+                        })
+                    }}/>
+                </View>
+                <View style={styles.button}>
+                    <Button title={'Chat'} onPress={() => {
+                        props.navigation.navigate({
+                            routeName: 'Chat'
+                        })
+                    }}/>
+                </View>
+                <View style={styles.button}>
+                    <Button title={'Home'} onPress={() => {
+                        props.navigation.navigate({
+                            routeName: 'Home'
                         })
                     }}/>
                 </View>
             </View>
-        );
-    }
+            <View style={styles.button}>
+                <Button title={'Chat List'} onPress={() => {
+                    props.navigation.navigate({
+                        routeName: 'ChatList'
+                    })
+                }}/>
+            </View>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -94,7 +97,7 @@ const validateJWT = async(jwt) => {
                 'authorization': jwt
             }
         });
-        
+
         return response.ok
 
     } catch (error) {
