@@ -1,7 +1,8 @@
 import React from 'react'
-import {View, Text, StyleSheet, Button, Image, Dimensions} from 'react-native'
+import {View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, ImageBackground} from 'react-native'
 
-const logo = require('../assets/logo.png');
+const logo = require('../assets/Logo-Transparent.png');
+const image =  require('../assets/bg.png');
 const secureStore = require('../SecureStore')
 
 const {height, width} = Dimensions.get('window');
@@ -14,38 +15,37 @@ const LandingScreen = props => {
         })
     } else{
         return(
-            <View style={styles.container}>
-                <Image source={logo} style={styles.logo}/>
-                <View style={styles.buttonContainer}>
-                    <View style={styles.button}>
-                        <Button title={'Log in'} onPress={() => {
-                            props.navigation.navigate({
-                                routeName : 'Login'
-                            })
-                        }}/>
-                    </View>
-                    <View style={styles.button}>
-                        <Button title={'Sign up'} onPress={() => {
-                            props.navigation.navigate({
-                                routeName: 'Signup'
-                            })
-                        }}/>
-                    </View>
-                    <View style={styles.button}>
+            <View style={styles.bg}>
+      <ImageBackground source={image} resizeMode="cover" style={styles.image} >
+      <Image source={logo} style={styles.logo}/>
+                <View>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('Login')}
+                >
+                    <Text style={styles.text}>Login</Text>
+                </TouchableOpacity>
+                </View>
+                <View>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => navigation.navigate('Signup')}
+                >
+                <Text style={styles.text}>Register</Text>
+                </TouchableOpacity>
+                </View>
+                <View style={styles.button}>
                         <Button title={'Chat'} onPress={() => {
                             props.navigation.navigate({
                                 routeName: 'Chat'
                             })
                         }}/>
-                    </View>
-                    <View style={styles.button}>
                         <Button title={'Home'} onPress={() => {
                             props.navigation.navigate({
                                 routeName: 'Home'
                             })
                         }}/>
                     </View>
-                </View>
                 <View style={styles.button}>
                     <Button title={'Chat List'} onPress={() => {
                         props.navigation.navigate({
@@ -53,33 +53,55 @@ const LandingScreen = props => {
                         })
                     }}/>
                 </View>
-            </View>
+        
+      </ImageBackground>
+  
+    </View>
+    
         );
     }
 };
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        flexDirection: 'column',
-        justifyContent: 'space-between'
-    },
-    logo: {
-        flex:3,
-        width: null,
-        height: null,
-        marginBottom: height * 0.1,
-    },
     buttonContainer:{
         flex:1,
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
-    button:{
-
-    },
     empty:{
         flex:1
+    },
+
+    bg: {
+        flex: 1,
+    },
+    image: {
+        flex: 1,
+        justifyContent: "center"
+    },
+    container: {
+        paddingTop: 100,
+        paddingBottom: 45,
+        paddingLeft: 100,
+    },
+    logo: {
+        marginTop: height * 0.05,
+        marginLeft: width * 0.355,
+        width: 100,
+        height: 95,
+    },
+    button: {
+      width: width * 0.6,
+      height: height * 0.06,
+      marginTop: height * 0.03,
+      marginLeft: width * 0.2,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 15,
+      backgroundColor: 'white',
+    },
+    text: {
+        color: "#0748BB"
     }
 });
 

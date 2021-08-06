@@ -1,7 +1,7 @@
 import React from "react";
 import { ImageBackground, StyleSheet, Button, View } from "react-native";
 
-const image = { uri: "https://cdn.discordapp.com/attachments/865226240779878400/869986919868678164/MeetUT_Splash.png" };
+const image = require("../assets/Splash.png");
 
 function Splash({ navigation }) {
   return (
@@ -10,7 +10,7 @@ function Splash({ navigation }) {
     <Button success transparent style={styles.button}
         title=""
         color="#ffffff00"
-        onPress={() => navigation.navigate('Authentication')}
+        onPress={() => navigation.navigate('Landing')}
       />
     </ImageBackground>
     

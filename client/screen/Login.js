@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity} from 'react-native'
 const secureStore = require('../SecureStore')
 
-const image = { uri: "https://cdn.discordapp.com/attachments/865226240779878400/865235199167299624/blue-pink-halftone-background_53876-99004.jpg" };
+const image =  require('../assets/bg.png');
 
 const {height, width} = Dimensions.get('window');
 const buttonClickedHandler = () => {
@@ -49,7 +49,6 @@ const LoginScreen = props => {
               onChangeText={onChangeEmail}
               value={email}
               placeholder="email"
-              keyboardType="numeric"
             />
             <TextInput
               style={styles.Input}
@@ -57,7 +56,6 @@ const LoginScreen = props => {
               value={password}
               secureTextEntry={true}
               placeholder="password"
-              keyboardType="numeric"
             />
           <TouchableOpacity
               onPress={() => {

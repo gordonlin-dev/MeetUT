@@ -3,7 +3,7 @@ import React from 'react';
 import { ImageBackground, Dimensions, View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 
 const {height, width} = Dimensions.get('window');
-const image = { uri: "https://cdn.discordapp.com/attachments/865226240779878400/865235199167299624/blue-pink-halftone-background_53876-99004.jpg" };
+const image =  require('../assets/bg.png');
 function Authentication({ navigation }) {
   return (
     <View style={styles.bg}>

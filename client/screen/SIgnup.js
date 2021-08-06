@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground} from 'react-native'
 const {height, width} = Dimensions.get('window');
 const secureStore = require('../SecureStore')
-const image = { uri: "https://cdn.discordapp.com/attachments/865226240779878400/865235199167299624/blue-pink-halftone-background_53876-99004.jpg" };
+const image =  require('../assets/bg.png');
 const signupSubmit = async (firstName, lastName, email, password, props) => {
     try {
         const url = 'https://meet-ut-2.herokuapp.com/users/create';
@@ -61,7 +61,6 @@ const SignupScreen = props => {
               onChangeText={onChangeEmail}
               value={email}
               placeholder="email"
-              keyboardType="numeric"
             />
             <TextInput
               style={styles.Input}
@@ -69,7 +68,6 @@ const SignupScreen = props => {
               value={password}
               secureTextEntry={true}
               placeholder="password"
-              keyboardType="numeric"
             />
             
         <TextInput
@@ -78,7 +76,6 @@ const SignupScreen = props => {
               value={confirm}
               secureTextEntry={true}
               placeholder="confirm password"
-              keyboardType="numeric"
             />
           </View>
         <View>
