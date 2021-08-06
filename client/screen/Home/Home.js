@@ -53,14 +53,13 @@ const HomeScreen = props => {
         }
     }
 
-    const nextUser = () => {
-        setCurUser(curUser + 1)
-        setFirstName(users[curUser].firstName)
-        setLastName(users[curUser].lastName)
+    const nextUser = async () => {
+        await setCurUser(curUser + 1)
     }
 
     const sendLike = async () => {
         try{
+            console.log(users[curUser])
             const jwt = await secureStore.GetValue('JWT');
             const userId = await secureStore.GetValue('UserId');
             const url = 'https://meet-ut-2.herokuapp.com/match/like';
@@ -76,7 +75,7 @@ const HomeScreen = props => {
                 })
             });
             const responseJson = await response.json();
-            nextUser();
+            await nextUser();
 
         }catch (e){
             console.log(e)
@@ -94,14 +93,15 @@ const HomeScreen = props => {
             setFirstName(users[curUser].firstName)
             setLastName(users[curUser].lastName)
         }
-    }, [users]);
+    }, [users, curUser]);
+
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.empty}>
                 <ProfileCard style={styles.empty} firstName={firstName} lastName={lastName}/>
                 <View style={styles.buttonContainer}>
-                    <Button title={'Pass'} onPress={() => {nextUser()}}/>
-                    <Button title={'Like'} onPress={() => {sendLike()}}/>
+                    <Button title={'Pass'} onPress={async () => {await nextUser()}}/>
+                    <Button title={'Like'} onPress={async () => {await sendLike()}}/>
                     <Button title={'Chat list'} onPress={() => {
                         props.navigation.navigate({
                             routeName: 'ChatList'
