@@ -3,6 +3,7 @@ const axios = require('axios')
 
 exports.getMatchList = (req,res) =>{
     UserModel.getAllUsers().then((result) => {
+        result = result.filter((user) => user !== req.params.userID)
         res.status(200).send(result)
     })
 }

@@ -35,7 +35,8 @@ const HomeScreen = props => {
 
     const loadUser = async () => {
         try{
-            const url = 'https://meet-ut-2.herokuapp.com/match'
+            const userID = await secureStore.GetValue('UserId');
+            const url = 'https://meet-ut-2.herokuapp.com/match' + '/' + userID
             const response = await fetch(url, {
                 method : 'GET',
                 headers: {
