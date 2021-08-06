@@ -8,17 +8,12 @@ exports.getMatchList = (req,res) =>{
     })
 }
 
-exports.like = (req, res) => {
+exports.like = async (req, res) => {
     const curUser = req.body.curUser
     const likedUser = req.body.likedUser
     const url = 'https://meet-ut-3.herokuapp.com/chat/create'
-    axios.post(url, {
+    const response = await axios.post(url, {
         participants: [curUser, likedUser]
-    }).then(
-        resp => {
-            res.status(200).send()
-        }
-    ).catch(error => {
-        console.error(error)
     })
+    res.status(200).send()
 }

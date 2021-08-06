@@ -79,7 +79,7 @@ const HomeScreen = props => {
             nextUser();
 
         }catch (e){
-
+            console.log(e)
         }
     }
 
