@@ -61,7 +61,7 @@ const HomeScreen = props => {
     const sendLike = async () => {
         try{
             const jwt = await secureStore.GetValue('JWT');
-            //const userId = await secureStore.GetValue('UserId');
+            const userId = await secureStore.GetValue('UserId');
             const url = 'https://meet-ut-2.herokuapp.com/match/like';
             const response = await fetch(url, {
                 method : 'POST',
@@ -70,6 +70,7 @@ const HomeScreen = props => {
                     //'authorization': 'Bearer ' + jwt
                 },
                 body: JSON.stringify({
+                    curUser: userId,
                     likedUser: users[curUser].email
                 })
             });
