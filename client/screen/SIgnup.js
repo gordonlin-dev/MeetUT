@@ -81,7 +81,7 @@ const SignupScreen = props => {
         <View>
           <TouchableOpacity
               onPress={() => {
-                signupSubmit(firstname, lastname, email, password, props)
+                signupSubmit(firstName, lastName, email, password, props)
             }}
               style={styles.Button}>
               <Text>Sign Up</Text>

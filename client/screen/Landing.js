@@ -7,7 +7,7 @@ const secureStore = require('../SecureStore')
 
 const {height, width} = Dimensions.get('window');
 
-const LandingScreen = props => {
+const LandingScreen = (props) => {
     const jwt = secureStore.GetValue('JWT')
 
     const validateJWT = async(jwt) => {
@@ -40,19 +40,15 @@ const LandingScreen = props => {
         <View style={styles.bg}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <Image source={logo} style={styles.logo}/>
-                <View>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => navigation.navigate('Login')}>
-                        <Text style={styles.text}>Login</Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => navigation.navigate('Signup')}>
-                        <Text style={styles.text}>Register</Text>
-                    </TouchableOpacity>
+                <View style={styles.button}>
+                <Button title={'Log in'} onPress={() => {
+                            props.navigation.navigate({routeName: 'Login'})
+                        }}/>
+                    </View>
+                    <View style={styles.button}>
+                        <Button title={'Sign up'} onPress={() => {
+                            props.navigation.navigate({routeName: 'Signup'})
+                        }}/>
                 </View>
             </ImageBackground>
         </View>
