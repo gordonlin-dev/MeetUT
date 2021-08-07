@@ -33,7 +33,7 @@ const signupSubmit = async (firstName, lastName, email, password, props) => {
 const SignupScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
-    const [confirm, onChangeNumber] = React.useState(null);
+    const [confirm, onChangeNumber] = useState("");
     const [firstName, onChangeFirstName] = useState("");
     const [lastName, onChangeLastName] = useState("");
 
@@ -69,7 +69,7 @@ const SignupScreen = props => {
               secureTextEntry={true}
               placeholder="password"
             />
-            
+
         <TextInput
               style={styles.Input}
               onChangeText={onChangeNumber}
@@ -87,12 +87,12 @@ const SignupScreen = props => {
               <Text>Sign Up</Text>
             </TouchableOpacity>
           </View>
-            
+
           </ImageBackground>
-      
+
         </View>
-          
-          
+
+
         );
 };
 
