@@ -80,7 +80,8 @@ exports.createChatRoom = async (participants) => {
 }
 
 exports.getChatRooms = async (userID) => {
-    let user = await User.findById(userID)
+    let user = await this.findOrCreateUsers([userID])
+    user = user[0]
     for (let i = 0; i < user.chatRooms.length; i++){
         user.chatRooms[i].participants = user.chatRooms[i].participants.filter((value) => {return value !== userID})
     }
@@ -101,24 +102,27 @@ exports.getChatRoomById = async (userID, chatRoomID) => {
                 _id : senderID
             }
         }
-        console.log(messageCopy)
         messages[i] = messageCopy
     }
-    console.log(messages)
     delete room.messages
     room.messages = messages
-    console.log(room)
     return room
 }
 
 exports.addMessage = async (userID, roomID, message) => {
-    delete message[0].user
-    message[0].sender = userID
+
+    let newMessage = {
+        text : message[0].text,
+        createdAt : message[0].createAt,
+        _id : message[0]._id,
+        sender: userID
+    }
+
     const room = await this.getChatRoomById(userID, roomID)
     for(let i = 0; i < room.participants.length; i ++){
         let user = await User.findById(room.participants[i])
         const index = user.chatRooms.findIndex((room) => {return room._id === roomID})
-        user.chatRooms[index].messages.push(message[0])
+        user.chatRooms[index].messages.push(newMessage)
         await user.save()
     }
 }

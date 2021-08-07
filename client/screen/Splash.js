@@ -5,16 +5,10 @@ const image = require("../assets/Splash.png");
 
 function Splash({ navigation }) {
   return (
-    <View style={styles.bg}>
-    <ImageBackground source={image} resizeMode="cover" style={styles.image} >
-    <Button success transparent style={styles.button}
-        title=""
-        color="#ffffff00"
-        onPress={() => navigation.navigate('Landing')}
-      />
-    </ImageBackground>
-    
-  </View>
+      <View style={styles.bg} onTouchStart={() => {navigation.navigate('Landing')}}>
+        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        </ImageBackground>
+      </View>
   );
 }
 const styles = StyleSheet.create({

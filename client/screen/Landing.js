@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, ImageBackground} from 'react-native'
 
 const logo = require('../assets/Logo-Transparent.png');
@@ -9,58 +9,55 @@ const {height, width} = Dimensions.get('window');
 
 const LandingScreen = props => {
     const jwt = secureStore.GetValue('JWT')
-    if (validateJWT(jwt)) {
-        return props.navigation.navigate({
-            routeName : 'Home'
-        })
-    } else{
-        return(
-            <View style={styles.bg}>
-      <ImageBackground source={image} resizeMode="cover" style={styles.image} >
-      <Image source={logo} style={styles.logo}/>
-                <View>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => navigation.navigate('Login')}
-                >
-                    <Text style={styles.text}>Login</Text>
-                </TouchableOpacity>
-                </View>
-                <View>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => navigation.navigate('Signup')}
-                >
-                <Text style={styles.text}>Register</Text>
-                </TouchableOpacity>
-                </View>
-                <View style={styles.button}>
-                        <Button title={'Chat'} onPress={() => {
-                            props.navigation.navigate({
-                                routeName: 'Chat'
-                            })
-                        }}/>
-                        <Button title={'Home'} onPress={() => {
-                            props.navigation.navigate({
-                                routeName: 'Home'
-                            })
-                        }}/>
-                    </View>
-                <View style={styles.button}>
-                    <Button title={'Chat List'} onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'ChatList'
-                        })
-                    }}/>
-                </View>
-        
-      </ImageBackground>
-  
-    </View>
-    
-        );
+
+    const validateJWT = async(jwt) => {
+
+        try {
+            const url = 'https://meet-ut-2.herokuapp.com/auth/validateJWT';
+
+            const response = await fetch(url, {
+                method : 'PUT',
+                headers: {
+                    'authorization': jwt
+                }
+            });
+
+            return response.ok
+
+        } catch (error) {
+            console.log(error)
+        }
     }
-};
+
+    useEffect(() => {
+        if (validateJWT(jwt)) {
+            props.navigation.navigate({
+                routeName: 'Home'
+            })
+        }
+    }, []);
+    return (
+        <View style={styles.bg}>
+            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                <Image source={logo} style={styles.logo}/>
+                <View>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => navigation.navigate('Login')}>
+                        <Text style={styles.text}>Login</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => navigation.navigate('Signup')}>
+                        <Text style={styles.text}>Register</Text>
+                    </TouchableOpacity>
+                </View>
+            </ImageBackground>
+        </View>
+    )
+}
 
 const styles = StyleSheet.create({
     buttonContainer:{
@@ -104,24 +101,5 @@ const styles = StyleSheet.create({
         color: "#0748BB"
     }
 });
-
-const validateJWT = async(jwt) => {
-
-    try {
-        const url = 'https://meet-ut-2.herokuapp.com/auth/validateJWT';
-
-        const response = await fetch(url, {
-            method : 'PUT',
-            headers: {
-                'authorization': jwt
-            }
-        });
-        
-        return response.ok
-
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 export default LandingScreen;
