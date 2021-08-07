@@ -41,7 +41,7 @@ const SignupScreen = props => {
         <View style={styles.bg}>
           <ImageBackground source={image} resizeMode="cover" style={styles.image} >
           <Text style={styles.header} >
-                  Login
+                  Sign Up
               </Text>
           <View>
           <TextInput
@@ -49,18 +49,21 @@ const SignupScreen = props => {
               onChangeText={onChangeFirstName}
               value={firstName}
               placeholder="first name"
+              placeholderTextColor="white"
             />
             <TextInput
               style={styles.Input}
               onChangeText={onChangeLastName}
               value={lastName}
               placeholder="last name"
+              placeholderTextColor="white"
             />
           <TextInput
               style={styles.Input}
               onChangeText={onChangeEmail}
               value={email}
               placeholder="email"
+              placeholderTextColor="white"
             />
             <TextInput
               style={styles.Input}
@@ -68,6 +71,7 @@ const SignupScreen = props => {
               value={password}
               secureTextEntry={true}
               placeholder="password"
+              placeholderTextColor="white"
             />
             
         <TextInput
@@ -76,6 +80,7 @@ const SignupScreen = props => {
               value={confirm}
               secureTextEntry={true}
               placeholder="confirm password"
+              placeholderTextColor="white"
             />
           </View>
         <View>
@@ -112,7 +117,8 @@ const styles = StyleSheet.create({
       borderRadius: 5,
       borderWidth: 2,
       padding: 10,
-      borderColor: "white"
+      borderColor: "white",
+      color: "white"
     },
     Button: {
       width: width * 0.6,
