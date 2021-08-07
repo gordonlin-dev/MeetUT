@@ -49,6 +49,7 @@ const LoginScreen = props => {
               onChangeText={onChangeEmail}
               value={email}
               placeholder="email"
+              placeholderTextColor="white"
             />
             <TextInput
               style={styles.Input}
@@ -56,6 +57,7 @@ const LoginScreen = props => {
               value={password}
               secureTextEntry={true}
               placeholder="password"
+              placeholderTextColor="white"
             />
           <TouchableOpacity
               onPress={() => {
@@ -97,7 +99,8 @@ const styles = StyleSheet.create({
       borderRadius: 5,
       borderWidth: 2,
       padding: 10,
-      borderColor: "white"
+      borderColor: "white",
+      color: "white"
     },
     Button: {
       width: width * 0.6,
