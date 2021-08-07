@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
-import {View, Text, StyleSheet, Dimensions, Button, TextInput, ScrollView} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground} from 'react-native'
 const {height, width} = Dimensions.get('window');
 const secureStore = require('../SecureStore')
-
+const image =  require('../assets/bg.png');
 const signupSubmit = async (firstName, lastName, email, password, props) => {
     try {
         const url = 'https://meet-ut-2.herokuapp.com/users/create';
@@ -33,75 +33,101 @@ const signupSubmit = async (firstName, lastName, email, password, props) => {
 const SignupScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
+    const [confirm, onChangeNumber] = React.useState(null);
     const [firstName, onChangeFirstName] = useState("");
     const [lastName, onChangeLastName] = useState("");
 
-    return(
-        <ScrollView>
-            <View style={styles.container}>
-                <Text style={styles.header}>Sign up</Text>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.inputTitle}>First name</Text>
-                    <TextInput style={styles.input}
-                               onChangeText={onChangeFirstName}
-                               value={firstName}
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.inputTitle}>Last name</Text>
-                    <TextInput style={styles.input}
-                               onChangeText={onChangeLastName}
-                               value={lastName}
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.inputTitle}>Email</Text>
-                    <TextInput style={styles.input}
-                               onChangeText={onChangeEmail}
-                               value={email}
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.inputTitle}>Password</Text>
-                    <TextInput style={styles.input}
-                               secureTextEntry={true}
-                               onChangeText={onChangePassword}
-                               value={password}
-                    />
-                </View>
-                <Button title={'submit'} onPress={ () => {
-                    signupSubmit(firstName,lastName,email,password, props)
-                }}/>
-            </View>
-        </ScrollView>
-    );
+    return (
+        <View style={styles.bg}>
+          <ImageBackground source={image} resizeMode="cover" style={styles.image} >
+          <Text style={styles.header} >
+                  Login
+              </Text>
+          <View>
+          <TextInput
+              style={styles.Input}
+              onChangeText={onChangeFirstName}
+              value={firstName}
+              placeholder="first name"
+            />
+            <TextInput
+              style={styles.Input}
+              onChangeText={onChangeLastName}
+              value={lastName}
+              placeholder="last name"
+            />
+          <TextInput
+              style={styles.Input}
+              onChangeText={onChangeEmail}
+              value={email}
+              placeholder="email"
+            />
+            <TextInput
+              style={styles.Input}
+              onChangeText={onChangePassword}
+              value={password}
+              secureTextEntry={true}
+              placeholder="password"
+            />
+            
+        <TextInput
+              style={styles.Input}
+              onChangeText={onChangeNumber}
+              value={confirm}
+              secureTextEntry={true}
+              placeholder="confirm password"
+            />
+          </View>
+        <View>
+          <TouchableOpacity
+              onPress={() => {
+                signupSubmit(firstname, lastname, email, password, props)
+            }}
+              style={styles.Button}>
+              <Text>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+            
+          </ImageBackground>
+      
+        </View>
+          
+          
+        );
 };
 
 const styles = StyleSheet.create({
-    container:{
-        justifyContent:"center",
-        alignItems: 'center',
-        flex:1
+    bg: {
+      flex: 1,
     },
-    header:{
-        fontSize:75,
-        height: height * 0.2,
-        marginBottom: height * 0.05
+    image: {
+      flex: 1,
+      justifyContent: "center"
     },
-    inputContainer:{
-        height:height * 0.1,
-        width: width * 0.9,
-        flexDirection:'row',
-        alignItems: 'flex-start'
+    Input: {
+      marginTop: height * 0.03,
+      marginLeft: width * 0.15,
+      height: height * 0.06,
+      width: width * 0.7,
+      borderRadius: 5,
+      borderWidth: 2,
+      padding: 10,
+      borderColor: "white"
     },
-    inputTitle:{
-        flex:2
+    Button: {
+      width: width * 0.6,
+      height: height * 0.06,
+      marginTop: height * 0.03,
+      marginLeft: width * 0.2,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 15,
+      backgroundColor: 'white',
     },
-    input:{
-        flex:7,
-        borderBottomWidth:2,
-        borderBottomColor:'black'
+    header: {
+      fontSize:30,
+      marginLeft: width * 0.38,
     }
-});
+  });
 
 export default SignupScreen;
