@@ -1,12 +1,8 @@
 import React, {useState} from 'react'
 import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity} from 'react-native'
-import * as Font from 'expo-font';
 const secureStore = require('../SecureStore')
 
 const image =  require('../assets/bg.png');
-const customFonts = {
-  'timeburner': require('../assets/fonts/timeburner_regular.ttf'),
-};
 const {height, width} = Dimensions.get('window');
 const buttonClickedHandler = () => {
     console.log('You have been clicked a button!');
@@ -39,8 +35,6 @@ const loginSubmit = async (email, password, props) => {
 const LoginScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
-
-    Font.loadAsync(customFonts);
 
     return (
         <View style={styles.bg}>

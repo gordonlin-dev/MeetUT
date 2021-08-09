@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, StyleSheet, Button, Image, Dimensions, SafeAreaView} from 'react-native'
+import {View, Text, StyleSheet, Button, ScrollView, Dimensions, SafeAreaView} from 'react-native'
 import ProfileCard from "./ProfileCard";
 
 const secureStore = require('../../SecureStore')
-
+const {height, width} = Dimensions.get('window');
 const HomeScreen = props => {
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -100,14 +100,24 @@ const HomeScreen = props => {
             <View style={styles.empty}>
                 <ProfileCard style={styles.empty} firstName={firstName} lastName={lastName}/>
                 <View style={styles.buttonContainer}>
-                    <Button title={'Pass'} onPress={async () => {await nextUser()}}/>
-                    <Button title={'Like'} onPress={async () => {await sendLike()}}/>
-                    <Button title={'Chat list'} onPress={() => {
+                    <Button title={'  Pass  '} onPress={async () => {await nextUser()}}/>
+                    <Button title={'  Like  '} onPress={async () => {await sendLike()}}/>
+                </View>
+                <View style={styles.footer}>
+                <View style={styles.footerButton}>
+                <Button title={'Setting'} onPress={() => {
+                    }}/>
+                    <Button title={'Home'} onPress={() => {
+                    }}/>
+                <Button title={'Chat list'} onPress={() => {
                         props.navigation.navigate({
                             routeName: 'ChatList'
                         })
                     }}/>
+                    
                 </View>
+                
+            </View>
             </View>
         </SafeAreaView>
     )
@@ -121,16 +131,24 @@ const styles = StyleSheet.create({
     },
 
     buttonContainer:{
-        flex:1,
         flexDirection: 'row',
         justifyContent: 'space-around',
-    },
-    button:{
-
+        marginBottom: height * 0.036
     },
     empty:{
         flex:1
-    }
+    },
+    footer: {
+        justifyContent: 'space-around',
+        alignItems: 'stretch',
+        backgroundColor: '#3590F2',
+        height: height * 0.1,
+    },
+    footerButton:{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: height * 0.005
+    },
 });
 
 

@@ -1,12 +1,8 @@
 import React, {useState} from 'react'
-import * as Font from 'expo-font';
 import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground} from 'react-native'
 const {height, width} = Dimensions.get('window');
 const secureStore = require('../SecureStore')
 const image =  require('../assets/bg.png');
-const customFonts = {
-  'timeburner': require('../assets/fonts/timeburner_regular.ttf'),
-};
 const signupSubmit = async (firstName, lastName, email, password, props) => {
     try {
         const url = 'https://meet-ut-2.herokuapp.com/users/create';
@@ -34,7 +30,7 @@ const signupSubmit = async (firstName, lastName, email, password, props) => {
     }
 }
 
-Font.loadAsync(customFonts);
+
 const SignupScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
