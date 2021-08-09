@@ -17,13 +17,6 @@ const Navigator = createStackNavigator({
             headerShown: false
         }
     },
-    Landing: {
-        screen:LandingScreen,
-        navigationOptions:{
-            title:"",
-            headerShown: false
-        }
-    },
     Login: {
         screen: LoginScreen,
         navigationOptions:{
