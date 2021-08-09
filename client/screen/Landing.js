@@ -7,7 +7,7 @@ const secureStore = require('../SecureStore')
 
 const {height, width} = Dimensions.get('window');
 
-const LandingScreen = (props) => {
+const LandingScreen = props => {
     const jwt = secureStore.GetValue('JWT')
 
     const validateJWT = async(jwt) => {
