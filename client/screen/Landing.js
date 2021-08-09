@@ -41,18 +41,18 @@ const LandingScreen = props => {
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <Image source={logo} style={styles.logo}/>
                 <View>
-                <TouchableOpacity style={styles.button}  onPress={() => {
-                            props.navigation.navigate({routeName: 'Login'})
-                        }}>
-                        <Text>Login</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View>
-                        <TouchableOpacity style={styles.button} onPress={() => {
-                            props.navigation.navigate({routeName: 'Signup'})
-                        }}>
-                        <Text>Sign Up</Text>
-                        </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => props.navigation.navigate('Login')}>
+                        <Text style={styles.text}>Login</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => props.navigation.navigate('Signup')}>
+                        <Text style={styles.text}>Register</Text>
+                    </TouchableOpacity>
                 </View>
             </ImageBackground>
         </View>
