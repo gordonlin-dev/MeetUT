@@ -69,3 +69,13 @@ exports.validateEmail = (req, res, next) => {
         return res.status(400).send("Invalid email address")
     }
 }
+
+exports.confrimPassword = (req, res, next) => {
+    let password = req.body.password
+    let confirm = req.body.confirm
+    if (password == confirm) {
+        return next()
+    } else {
+        return res.status(400).send("Password not confirmed")
+    }
+}

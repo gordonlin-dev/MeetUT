@@ -15,7 +15,8 @@ const signupSubmit = async (firstName, lastName, email, password, props) => {
                 firstName: firstName,
                 lastName: lastName,
                 _id: email,
-                password: password
+                password: password,
+                confirm: comfirm
             })
         });
         const responseJson = await response.json();
