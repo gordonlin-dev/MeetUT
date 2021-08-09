@@ -1,9 +1,12 @@
 import React, {useState} from 'react'
 import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity} from 'react-native'
+import * as Font from 'expo-font';
 const secureStore = require('../SecureStore')
 
 const image =  require('../assets/bg.png');
-
+const customFonts = {
+  'timeburner': require('../assets/fonts/timeburner_regular.ttf'),
+};
 const {height, width} = Dimensions.get('window');
 const buttonClickedHandler = () => {
     console.log('You have been clicked a button!');
@@ -36,6 +39,9 @@ const loginSubmit = async (email, password, props) => {
 const LoginScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
+
+    Font.loadAsync(customFonts);
+
     return (
         <View style={styles.bg}>
           <ImageBackground source={image} resizeMode="cover" style={styles.image} >
@@ -64,14 +70,14 @@ const LoginScreen = props => {
                 loginSubmit(email, password, props)
             }}
               style={styles.Button}>
-              <Text>Login</Text>
+              <Text style={styles.font}>Login</Text>
             </TouchableOpacity>
           </View>
         <View>
           <TouchableOpacity
               onPress={buttonClickedHandler}
               style={styles.Button}>
-              <Text>Reset Password</Text>
+              <Text style={styles.font}>Reset Password</Text>
             </TouchableOpacity>
           </View>
             
@@ -105,7 +111,7 @@ const styles = StyleSheet.create({
     Button: {
       width: width * 0.6,
       height: height * 0.06,
-      marginTop: height * 0.03,
+      marginTop: height * 0.04,
       marginLeft: width * 0.2,
       justifyContent: 'center',
       alignItems: 'center',
@@ -113,8 +119,16 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
     },
     header: {
-      fontSize:30,
-      marginLeft: width * 0.38,
+      fontSize:50,
+      marginLeft: width * 0.34,
+      color: "white",
+      fontFamily: 'timeburner',
+    },
+    font: {
+      fontFamily: 'timeburner',
+      fontSize:18,
+      color: "#0E0EA1",
+      fontWeight: "500"
     }
   });
 

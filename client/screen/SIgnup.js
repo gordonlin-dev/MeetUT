@@ -1,8 +1,12 @@
 import React, {useState} from 'react'
+import * as Font from 'expo-font';
 import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground} from 'react-native'
 const {height, width} = Dimensions.get('window');
 const secureStore = require('../SecureStore')
 const image =  require('../assets/bg.png');
+const customFonts = {
+  'timeburner': require('../assets/fonts/timeburner_regular.ttf'),
+};
 const signupSubmit = async (firstName, lastName, email, password, props) => {
     try {
         const url = 'https://meet-ut-2.herokuapp.com/users/create';
@@ -30,6 +34,7 @@ const signupSubmit = async (firstName, lastName, email, password, props) => {
     }
 }
 
+Font.loadAsync(customFonts);
 const SignupScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
@@ -89,7 +94,7 @@ const SignupScreen = props => {
                 signupSubmit(firstName, lastName, email, password, props)
             }}
               style={styles.Button}>
-              <Text>Sign Up</Text>
+              <Text style={styles.font}>Sign Up</Text>
             </TouchableOpacity>
           </View>
             
@@ -131,8 +136,16 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
     },
     header: {
-      fontSize:30,
-      marginLeft: width * 0.38,
+      fontSize:50,
+      marginLeft: width * 0.27,
+      color: "white",
+      fontFamily: 'timeburner',
+    },
+    font: {
+      fontFamily: 'timeburner',
+      fontSize:18,
+      color: "#0E0EA1",
+      fontWeight: "500"
     }
   });
 
