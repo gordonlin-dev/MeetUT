@@ -1,11 +1,12 @@
 import React from "react";
-import { ImageBackground, StyleSheet, Button, View } from "react-native";
+import { ImageBackground, StyleSheet, View } from "react-native";
 
 const image = require("../assets/Splash.png");
 
 function Splash({ navigation }) {
+  setTimeout(() => {navigation.navigate('Landing')}, 4000);
   return (
-      <View style={styles.bg} onTouchStart={() => {navigation.navigate('Landing')}}>
+      <View style={styles.bg}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         </ImageBackground>
       </View>

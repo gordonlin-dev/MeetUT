@@ -13,13 +13,15 @@ const Navigator = createStackNavigator({
     Splash: {
         screen:Splash,
         navigationOptions:{
-            title:""
+            title:"",
+            headerShown: false
         }
     },
     Landing: {
         screen:LandingScreen,
         navigationOptions:{
-            title:""
+            title:"",
+            headerShown: false
         }
     },
     Login: {
