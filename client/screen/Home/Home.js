@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, StyleSheet, Button, ScrollView, Dimensions, SafeAreaView} from 'react-native'
 import ProfileCard from "./ProfileCard";
+import Swiper from 'react-native-swiper'
 
 const secureStore = require('../../SecureStore')
 const {height, width} = Dimensions.get('window');
@@ -99,10 +100,6 @@ const HomeScreen = props => {
         <SafeAreaView style={styles.container}>
             <View style={styles.empty}>
                 <ProfileCard style={styles.empty} firstName={firstName} lastName={lastName}/>
-                <View style={styles.buttonContainer}>
-                    <Button title={'  Pass  '} onPress={async () => {await nextUser()}}/>
-                    <Button title={'  Like  '} onPress={async () => {await sendLike()}}/>
-                </View>
                 <View style={styles.footer}>
                 <View style={styles.footerButton}>
                 <Button title={'Setting'} onPress={() => {
@@ -136,10 +133,11 @@ const styles = StyleSheet.create({
     buttonContainer:{
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginBottom: height * 0.036
+        marginTop: height * 0.02,
+        marginBottom: height * 0.02
     },
     empty:{
-        flex:1
+        flex:1,
     },
     footer: {
         justifyContent: 'space-around',
@@ -152,6 +150,18 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         marginTop: height * 0.005
     },
+    wrapper: {},
+    slide: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#9DD6EB'
+    },
+    text: {
+        color: '#fff',
+        fontSize: 30,
+        fontWeight: 'bold'
+    }
 });
 
 
