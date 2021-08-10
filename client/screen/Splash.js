@@ -22,19 +22,22 @@ const Splash = props => {
                   'authorization': jwt
               }
           });
-
-          return response.ok
+          return response.status === 200
 
       } catch (error) {
           console.log(error)
       }
   }
   useEffect(() => {
-        if (validateJWT(jwt)) {
-            setTimeout(() => {props.navigation.navigate('Home')}, 2000);
-        } else {
-            setTimeout(() => {props.navigation.navigate('Landing')}, 2000);
-        }
+      validateJWT(jwt).then(
+          (result) => {
+              if(result){
+                  setTimeout(() => {props.navigation.navigate('Home')}, 2000);
+              } else {
+                  setTimeout(() => {props.navigation.navigate('Landing')}, 2000);
+              }
+          }
+      )
     }, []);
     return (<View style={styles.bg}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
