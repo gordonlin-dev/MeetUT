@@ -5,6 +5,9 @@ const secureStore = require('../SecureStore')
 const image =  require('../assets/bg.png');
 const signupSubmit = async (firstName, lastName, email, password, props) => {
     try {
+        props.navigation.navigate({
+            routeName: 'Home'
+        })
         const url = 'https://meet-ut-2.herokuapp.com/users/create';
         const response = await fetch(url, {
             method : 'POST',
@@ -22,9 +25,6 @@ const signupSubmit = async (firstName, lastName, email, password, props) => {
         await secureStore.Save('UserId', email);
         await secureStore.Save('JWT',responseJson.accessToken);
         await secureStore.Save('RefreshToken', responseJson.refreshToken)
-        props.navigation.navigate({
-            routeName: 'Home'
-        })
     }catch (error){
         console.log(error)
     }
