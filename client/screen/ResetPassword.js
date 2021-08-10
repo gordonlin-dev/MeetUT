@@ -3,29 +3,33 @@ import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBa
 const {height, width} = Dimensions.get('window');
 const secureStore = require('../SecureStore')
 const image =  require('../assets/bg.png');
-const signupSubmit = async (firstName, lastName, email, password, comfirm, props) => {
+const resetSubmit = async (email, password, comfirm, props) => {
     try {
-        const url = 'https://meet-ut-2.herokuapp.com/users/create';
+        // const url = 'https://meet-ut-2.herokuapp.com/users/' + email + '/updatePassword'
+        const url = 'http://localhost:3000/users/' + email + '/updatePasword'
+        console.log(email)
+        console.log(url)
         const response = await fetch(url, {
-            method : 'POST',
+            method : 'PUT',
+            params: {
+              userID: email
+            },
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                firstName: firstName,
-                lastName: lastName,
                 _id: email,
                 password: password,
                 confirm: comfirm
             })
         });
-        const responseJson = await response.json();
-        await secureStore.Save('UserId', email);
-        await secureStore.Save('JWT',responseJson.accessToken);
-        await secureStore.Save('RefreshToken', responseJson.refreshToken)
-        props.navigation.navigate({
-            routeName: 'Home'
-        })
+        console.log('response status ' + response.status)
+        // console.log(response.text())
+        if (response.ok) {
+          props.navigation.navigate({
+              routeName: 'Login'
+          })
+        }
     }catch (error){
         console.log(error)
     }
@@ -35,28 +39,14 @@ const SignupScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
     const [confirm, onChangeNumber] = useState("");
-    const [firstName, onChangeFirstName] = useState("");
-    const [lastName, onChangeLastName] = useState("");
 
     return (
         <View style={styles.bg}>
           <ImageBackground source={image} resizeMode="cover" style={styles.image} >
           <Text style={styles.header} >
-                  Login
+                  Reset
               </Text>
           <View>
-          <TextInput
-              style={styles.Input}
-              onChangeText={onChangeFirstName}
-              value={firstName}
-              placeholder="first name"
-            />
-            <TextInput
-              style={styles.Input}
-              onChangeText={onChangeLastName}
-              value={lastName}
-              placeholder="last name"
-            />
           <TextInput
               style={styles.Input}
               onChangeText={onChangeEmail}
@@ -82,10 +72,10 @@ const SignupScreen = props => {
         <View>
           <TouchableOpacity
               onPress={() => {
-                signupSubmit(firstName, lastName, email, password, confirm, props)
+                resetSubmit(email, password, confirm, props)
             }}
               style={styles.Button}>
-              <Text>Sign Up</Text>
+              <Text>Reset Password</Text>
             </TouchableOpacity>
           </View>
 

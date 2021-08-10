@@ -5,10 +5,6 @@ const secureStore = require('../SecureStore')
 const image =  require('../assets/bg.png');
 
 const {height, width} = Dimensions.get('window');
-const buttonClickedHandler = () => {
-    console.log('You have been clicked a button!');
-    // do something
-  };
 const loginSubmit = async (email, password, props) => {
     try {
         const url = 'https://meet-ut-2.herokuapp.com/auth';
@@ -67,7 +63,10 @@ const LoginScreen = props => {
           </View>
         <View>
           <TouchableOpacity
-              onPress={buttonClickedHandler}
+              onPress={() => {
+                props.navigation.navigate('ResetPassword');
+                // do something
+              }}
               style={styles.Button}>
               <Text>Reset Password</Text>
             </TouchableOpacity>
