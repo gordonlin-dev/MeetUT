@@ -1,35 +1,43 @@
 import React, {useState} from 'react'
-import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground, Alert } from 'react-native'
 const {height, width} = Dimensions.get('window');
 const secureStore = require('../SecureStore')
 const image =  require('../assets/bg.png');
-const signupSubmit = async (firstName, lastName, email, password, props) => {
+const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
+  const emailRegex = /\S+@mail.utoronto.ca/;
+  if (password != confirm) {
+    Alert.alert("The password and confirm password do not match");
+  } else if (!emailRegex.test(email)) {
+    Alert.alert("Please enter an email ends with mail.utoronto.ca")
+  } else {
     try {
-        const url = 'https://meet-ut-2.herokuapp.com/users/create';
-        const response = await fetch(url, {
-            method : 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                firstName: firstName,
-                lastName: lastName,
-                _id: email,
-                password: password,
-                confirm: comfirm
-            })
-        });
-        const responseJson = await response.json();
-        await secureStore.Save('UserId', email);
-        await secureStore.Save('JWT',responseJson.accessToken);
-        await secureStore.Save('RefreshToken', responseJson.refreshToken)
-        props.navigation.navigate({
-            routeName: 'Home'
-        })
+      const url = 'https://meet-ut-2.herokuapp.com/users/create';
+      const response = await fetch(url, {
+          method : 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              firstName: firstName,
+              lastName: lastName,
+              _id: email,
+              password: password,
+              confirm: comfirm
+          })
+      });
+      const responseJson = await response.json();
+      await secureStore.Save('UserId', email);
+      await secureStore.Save('JWT',responseJson.accessToken);
+      await secureStore.Save('RefreshToken', responseJson.refreshToken)
+      props.navigation.navigate({
+          routeName: 'Home'
+      })
     }catch (error){
-        console.log(error)
+      console.log(error)
     }
+  }
 }
+    
 
 const SignupScreen = props => {
     const [email, onChangeEmail] = useState("");
@@ -82,7 +90,7 @@ const SignupScreen = props => {
         <View>
           <TouchableOpacity
               onPress={() => {
-                signupSubmit(firstname, lastname, email, password, props)
+                signupSubmit(firstName, lastName, email, password, confirm, props)
             }}
               style={styles.Button}>
               <Text>Sign Up</Text>

@@ -1,5 +1,6 @@
+import { ALWAYS } from 'expo-secure-store';
 import React, {useState} from 'react'
-import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 const secureStore = require('../SecureStore')
 
 const image =  require('../assets/bg.png');
@@ -10,29 +11,35 @@ const buttonClickedHandler = () => {
     // do something
   };
 const loginSubmit = async (email, password, props) => {
+  if (await secureStore.GetValue('UserId') == null){
+    Alert.alert("Could not match a user, please check your email or password")
+  } else {
     try {
-        const url = 'https://meet-ut-2.herokuapp.com/auth';
-        const response = await fetch(url, {
-            method : 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
-        });
-        const responseJson = await response.json();
-        await secureStore.Save('UserId', email);
-        await secureStore.Save('JWT',responseJson.accessToken);
-        await secureStore.Save('RefreshToken', responseJson.refreshToken);
-        props.navigation.navigate({
-            routeName: 'Home'
-        })
-    }catch (error){
-        console.log(error)
-    }
+        
+      const url = 'https://meet-ut-2.herokuapp.com/auth';
+      const response = await fetch(url, {
+          method : 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              email: email,
+              password: password
+          })
+      });
+      const responseJson = await response.json();
+      await secureStore.Save('UserId', email);
+      await secureStore.Save('JWT',responseJson.accessToken);
+      await secureStore.Save('RefreshToken', responseJson.refreshToken);
+      props.navigation.navigate({
+          routeName: 'Home'
+      })
+  }catch (error){
+      console.log(error)
+  }
 }
+  }
+    
 const LoginScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
