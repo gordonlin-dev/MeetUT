@@ -70,7 +70,7 @@ exports.validateEmail = (req, res, next) => {
     }
 }
 
-exports.confrimPassword = (req, res, next) => {
+exports.confirmPassword = (req, res, next) => {
     let password = req.body.password
     let confirm = req.body.confirm
     if (password == confirm) {
