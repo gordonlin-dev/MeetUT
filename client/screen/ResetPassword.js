@@ -1,52 +1,52 @@
-import { ALWAYS } from 'expo-secure-store';
 import React, {useState} from 'react'
-import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
-const secureStore = require('../SecureStore')
-
-const image =  require('../assets/bg.png');
-
+import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground} from 'react-native'
 const {height, width} = Dimensions.get('window');
-const loginSubmit = async (email, password, props) => {
-  if (await secureStore.GetValue('UserId') == null){
-    Alert.alert("Could not match a user, please check your email or password")
-  } else {
+const secureStore = require('../SecureStore')
+const image =  require('../assets/bg.png');
+const resetSubmit = async (email, password, comfirm, props) => {
     try {
-        
-      const url = 'https://meet-ut-2.herokuapp.com/auth';
-      const response = await fetch(url, {
-          method : 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              email: email,
-              password: password
+        // const url = 'https://meet-ut-2.herokuapp.com/users/' + email + '/updatePassword'
+        const url = 'http://localhost:3000/users/' + email + '/updatePasword'
+        console.log(email)
+        console.log(url)
+        const response = await fetch(url, {
+            method : 'PUT',
+            params: {
+              userID: email
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                _id: email,
+                password: password,
+                confirm: comfirm
+            })
+        });
+        console.log('response status ' + response.status)
+        // console.log(response.text())
+        if (response.ok) {
+          props.navigation.navigate({
+              routeName: 'Login'
           })
-      });
-      const responseJson = await response.json();
-      await secureStore.Save('UserId', email);
-      await secureStore.Save('JWT',responseJson.accessToken);
-      await secureStore.Save('RefreshToken', responseJson.refreshToken);
-      props.navigation.navigate({
-          routeName: 'Home'
-      })
-  }catch (error){
-      console.log(error)
-  }
+        }
+    }catch (error){
+        console.log(error)
+    }
 }
-  }
-    
-const LoginScreen = props => {
+
+const SignupScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
+    const [confirm, onChangeNumber] = useState("");
+
     return (
         <View style={styles.bg}>
           <ImageBackground source={image} resizeMode="cover" style={styles.image} >
-          <View>
-              <Text style={styles.header} >
-                  Login
+          <Text style={styles.header} >
+                  Reset
               </Text>
-
+          <View>
           <TextInput
               style={styles.Input}
               onChangeText={onChangeEmail}
@@ -60,30 +60,30 @@ const LoginScreen = props => {
               secureTextEntry={true}
               placeholder="password"
             />
-          <TouchableOpacity
-              onPress={() => {
-                loginSubmit(email, password, props)
-            }}
-              style={styles.Button}>
-              <Text>Login</Text>
-            </TouchableOpacity>
+
+        <TextInput
+              style={styles.Input}
+              onChangeText={onChangeNumber}
+              value={confirm}
+              secureTextEntry={true}
+              placeholder="confirm password"
+            />
           </View>
         <View>
           <TouchableOpacity
               onPress={() => {
-                props.navigation.navigate('ResetPassword');
-                // do something
-              }}
+                resetSubmit(email, password, confirm, props)
+            }}
               style={styles.Button}>
               <Text>Reset Password</Text>
             </TouchableOpacity>
           </View>
-            
+
           </ImageBackground>
-      
+
         </View>
-          
-          
+
+
         );
 };
 
@@ -121,4 +121,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default LoginScreen;
+export default SignupScreen;

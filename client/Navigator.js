@@ -7,6 +7,7 @@ import ChatScreen from "./screen/Chat/Chat";
 import {createAppContainer} from "react-navigation";
 import ChatListScreen from "./screen/Chat/ChatList";
 import Splash from './screen/Splash';
+import ResetPasswordScreen from './screen/ResetPassword';
 
 
 const Navigator = createStackNavigator({
@@ -30,6 +31,12 @@ const Navigator = createStackNavigator({
     },
     Signup: {
         screen:SignupScreen,
+        navigationOptions:{
+            title:""
+        }
+    },
+    ResetPassword: {
+        screen:ResetPasswordScreen,
         navigationOptions:{
             title:""
         }
