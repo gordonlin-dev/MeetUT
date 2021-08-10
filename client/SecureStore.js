@@ -8,3 +8,12 @@ exports.GetValue = async (key) => {
     let result = await SecureStore.getItemAsync(key);
     return result;
 }
+
+exports.Delete = async (key) => {
+    try {
+        await SecureStore.deleteItemAsync(key);
+    } catch (error) {
+        console.log(error);
+    }
+    
+}

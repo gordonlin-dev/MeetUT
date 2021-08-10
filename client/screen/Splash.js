@@ -1,8 +1,7 @@
 import React, {useEffect} from 'react'
 import {View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, ImageBackground} from 'react-native'
 
-const logo = require('../assets/Logo-Transparent.png');
-const bgimage =  require('../assets/bg.png');
+
 const secureStore = require('../SecureStore')
 
 const {height, width} = Dimensions.get('window');
@@ -34,27 +33,7 @@ const Splash = props => {
         if (validateJWT(jwt)) {
             setTimeout(() => {props.navigation.navigate('Home')}, 2000);
         } else {
-          return (
-            <View style={styles.bg}>
-                <ImageBackground source={bgimage} resizeMode="cover" style={styles.image}>
-                    <Image source={logo} style={styles.logo}/>
-                    <View>
-                    <TouchableOpacity style={styles.button}  onPress={() => {
-                                props.navigation.navigate({routeName: 'Login'})
-                            }}>
-                            <Text>Login</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View>
-                            <TouchableOpacity style={styles.button} onPress={() => {
-                                props.navigation.navigate({routeName: 'Signup'})
-                            }}>
-                            <Text>Sign Up</Text>
-                            </TouchableOpacity>
-                    </View>
-                </ImageBackground>
-            </View>
-        )
+            setTimeout(() => {props.navigation.navigate('Landing')}, 2000);
         }
     }, []);
     return (<View style={styles.bg}>

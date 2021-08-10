@@ -7,7 +7,8 @@ import ChatScreen from "./screen/Chat/Chat";
 import {createAppContainer} from "react-navigation";
 import ChatListScreen from "./screen/Chat/ChatList";
 import Splash from './screen/Splash';
-import {Dimensions} from 'react-native'
+import SettingScreen from './screen/Setting';
+import {Dimensions} from 'react-native';
 
 import * as Font from 'expo-font';
 const customFonts = {
@@ -18,6 +19,13 @@ Font.loadAsync(customFonts);
 const Navigator = createStackNavigator({
     Splash: {
         screen:Splash,
+        navigationOptions:{
+            title:"",
+            headerShown: false
+        }
+    },
+    Landing: {
+        screen:LandingScreen,
         navigationOptions:{
             title:"",
             headerShown: false
@@ -38,6 +46,22 @@ const Navigator = createStackNavigator({
             title:"",
             headerStyle: {
                 backgroundColor: '#3590F2',
+            },
+        }
+    },
+    Setting: {
+        screen:SettingScreen,
+        navigationOptions:{
+            title:"Setting",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerLeft: ()=> null,
+            headerTintColor: '#ffff',
+            headerTitleStyle: { 
+                alignSelf: 'center',
+                fontFamily: "timeburner",
+                fontSize: 30,
             },
         }
     },

@@ -106,6 +106,9 @@ const HomeScreen = props => {
                 <View style={styles.footer}>
                 <View style={styles.footerButton}>
                 <Button title={'Setting'} onPress={() => {
+                        props.navigation.navigate({
+                            routeName: 'Setting'
+                        })
                     }}/>
                     <Button title={'Home'} onPress={() => {
                     }}/>
