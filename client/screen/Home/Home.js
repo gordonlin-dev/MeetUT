@@ -100,6 +100,11 @@ const HomeScreen = props => {
         <SafeAreaView style={styles.container}>
             <View style={styles.empty}>
                 <ProfileCard style={styles.empty} firstName={firstName} lastName={lastName}/>
+                <View style={styles.buttonContainer}>
+                    <Button style={styles.Button} title={'Pass'} onPress={async () => {await nextUser()}}/>
+                    <Button style={styles.Button} title={'Like'} onPress={async () => {await sendLike()}}/>
+                   
+                </View>
                 <View style={styles.footer}>
                 <View style={styles.footerButton}>
                 <Button title={'Setting'} onPress={() => {
