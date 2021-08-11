@@ -22,7 +22,7 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
               lastName: lastName,
               _id: email,
               password: password,
-              confirm: comfirm
+              confirm: confirm
           })
       });
       const responseJson = await response.json();

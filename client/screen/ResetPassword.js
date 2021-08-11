@@ -3,10 +3,13 @@ import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBa
 const {height, width} = Dimensions.get('window');
 const secureStore = require('../SecureStore')
 const image =  require('../assets/bg.png');
-const resetSubmit = async (email, password, comfirm, props) => {
+const resetSubmit = async (email, password, confirm, props) => {
     try {
-        // const url = 'https://meet-ut-2.herokuapp.com/users/' + email + '/updatePassword'
-        const url = 'http://localhost:3000/users/' + email + '/updatePasword'
+        const jwt = secureStore.GetValue('JWT')
+        // console.log(jwt)
+        // console.log(typeof(email))
+        const url = 'https://meet-ut-2.herokuapp.com/users/' + email + '/updatePassword'
+        // const url = 'http://localhost:3000/users/' + email + '/updatePasword'
         console.log(email)
         console.log(url)
         const response = await fetch(url, {
@@ -15,17 +18,17 @@ const resetSubmit = async (email, password, comfirm, props) => {
               userID: email
             },
             headers: {
-                'Content-Type': 'application/json'
+                'authorization': jwt
             },
             body: JSON.stringify({
                 _id: email,
                 password: password,
-                confirm: comfirm
+                confirm: confirm
             })
         });
         console.log('response status ' + response.status)
         // console.log(response.text())
-        if (response.ok) {
+        if (response.status == 200) {
           props.navigation.navigate({
               routeName: 'Login'
           })
