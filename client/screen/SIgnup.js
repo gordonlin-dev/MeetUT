@@ -1,43 +1,37 @@
 import React, {useState} from 'react'
-import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground, Alert } from 'react-native'
+import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
 const {height, width} = Dimensions.get('window');
 const secureStore = require('../SecureStore')
 const image =  require('../assets/bg.png');
-const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
-  const emailRegex = /\S+@mail.utoronto.ca/;
-  if (password != confirm) {
-    Alert.alert("The password and confirm password do not match");
-  } else if (!emailRegex.test(email)) {
-    Alert.alert("Please enter an email ends with mail.utoronto.ca")
-  } else {
+const signupSubmit = async (firstName, lastName, email, password, props) => {
     try {
-      const url = 'https://meet-ut-2.herokuapp.com/users/create';
-      const response = await fetch(url, {
-          method : 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              firstName: firstName,
-              lastName: lastName,
-              _id: email,
-              password: password,
-              confirm: confirm
+        
+        const url = 'https://meet-ut-2.herokuapp.com/users/create';
+        const response = await fetch(url, {
+            method : 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                firstName: firstName,
+                lastName: lastName,
+                _id: email,
+                password: password
+            })
+        });
+        if (response.status == 200) {
+          await secureStore.Save('UserId', email);
+          await secureStore.Save('JWT',responseJson.accessToken);
+          await secureStore.Save('RefreshToken', responseJson.refreshToken)
+          props.navigation.navigate({
+            routeName: 'Home'
           })
-      });
-      const responseJson = await response.json();
-      await secureStore.Save('UserId', email);
-      await secureStore.Save('JWT',responseJson.accessToken);
-      await secureStore.Save('RefreshToken', responseJson.refreshToken)
-      props.navigation.navigate({
-          routeName: 'Home'
-      })
+        }
     }catch (error){
-      console.log(error)
+        console.log(error)
     }
-  }
 }
-    
+
 
 const SignupScreen = props => {
     const [email, onChangeEmail] = useState("");
@@ -50,7 +44,7 @@ const SignupScreen = props => {
         <View style={styles.bg}>
           <ImageBackground source={image} resizeMode="cover" style={styles.image} >
           <Text style={styles.header} >
-                  Login
+                  Sign Up
               </Text>
           <View>
           <TextInput
@@ -58,18 +52,21 @@ const SignupScreen = props => {
               onChangeText={onChangeFirstName}
               value={firstName}
               placeholder="first name"
+              placeholderTextColor="white"
             />
             <TextInput
               style={styles.Input}
               onChangeText={onChangeLastName}
               value={lastName}
               placeholder="last name"
+              placeholderTextColor="white"
             />
           <TextInput
               style={styles.Input}
               onChangeText={onChangeEmail}
               value={email}
               placeholder="email"
+              placeholderTextColor="white"
             />
             <TextInput
               style={styles.Input}
@@ -77,6 +74,7 @@ const SignupScreen = props => {
               value={password}
               secureTextEntry={true}
               placeholder="password"
+              placeholderTextColor="white"
             />
 
         <TextInput
@@ -85,15 +83,16 @@ const SignupScreen = props => {
               value={confirm}
               secureTextEntry={true}
               placeholder="confirm password"
+              placeholderTextColor="white"
             />
           </View>
         <View>
           <TouchableOpacity
               onPress={() => {
-                signupSubmit(firstName, lastName, email, password, confirm, props)
+                signupSubmit(firstName, lastName, email, password, props)
             }}
               style={styles.Button}>
-              <Text>Sign Up</Text>
+              <Text style={styles.font}>Sign Up</Text>
             </TouchableOpacity>
           </View>
 
@@ -121,7 +120,8 @@ const styles = StyleSheet.create({
       borderRadius: 5,
       borderWidth: 2,
       padding: 10,
-      borderColor: "white"
+      borderColor: "white",
+      color: "white"
     },
     Button: {
       width: width * 0.6,
@@ -134,8 +134,16 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
     },
     header: {
-      fontSize:30,
-      marginLeft: width * 0.38,
+      fontSize:50,
+      marginLeft: width * 0.27,
+      color: "white",
+      fontFamily: 'timeburner',
+    },
+    font: {
+      fontFamily: 'timeburner',
+      fontSize:18,
+      color: "#0E0EA1",
+      fontWeight: "500"
     }
   });
 

@@ -14,8 +14,7 @@ const resetSubmit = async (email, password, confirm, props) => {
         const response = await fetch(url, {
             method : 'PUT',
             params: {
-              'Content-Type': 'application.json',
-              userID: email
+              'Content-Type': 'application.json'
             },
             body: JSON.stringify({
                 _id: email,
