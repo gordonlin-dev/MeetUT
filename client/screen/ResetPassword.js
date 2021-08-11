@@ -5,7 +5,6 @@ const secureStore = require('../SecureStore')
 const image =  require('../assets/bg.png');
 const resetSubmit = async (email, password, confirm, props) => {
     try {
-        const jwt = secureStore.GetValue('JWT')
         // console.log(jwt)
         // console.log(typeof(email))
         const url = 'https://meet-ut-2.herokuapp.com/users/' + email + '/updatePassword'
@@ -15,10 +14,8 @@ const resetSubmit = async (email, password, confirm, props) => {
         const response = await fetch(url, {
             method : 'PUT',
             params: {
+              'Content-Type': 'application.json',
               userID: email
-            },
-            headers: {
-                'authorization': jwt
             },
             body: JSON.stringify({
                 _id: email,

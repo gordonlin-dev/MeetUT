@@ -5,6 +5,6 @@ exports.routesConfig = function(app){
     app.post('/users/create', [UserController.validateEmail, UserController.validatePassword, UserController.confirmPassword, UserController.createUser])
     app.get('/users/:userID', [AuthValidation.jwtValid,UserController.getById])
     app.delete('/users/:userID', [AuthValidation.jwtValid,UserController.deleteUser])
-    app.put('/users/:userID/updatePassword', [AuthValidation.jwtValid, UserController.validatePassword, UserController.confirmPassword, UserController.updatePassword])
+    app.put('/users/:userID/updatePassword', [UserController.validatePassword, UserController.confirmPassword, UserController.updatePassword])
 
 }
