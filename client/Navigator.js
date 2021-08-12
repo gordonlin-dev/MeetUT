@@ -1,7 +1,7 @@
 import {createStackNavigator} from 'react-navigation-stack';
 import LandingScreen from './screen/Landing';
 import LoginScreen from "./screen/Login";
-import SignupScreen from "./screen/SIgnup";
+import SignupScreen from "./screen/Signup";
 import HomeScreen from "./screen/Home/Home";
 import ChatScreen from "./screen/Chat/Chat";
 import {createAppContainer} from "react-navigation";
@@ -59,7 +59,7 @@ const Navigator = createStackNavigator({
             },
             headerLeft: ()=> null,
             headerTintColor: '#ffff',
-            headerTitleStyle: { 
+            headerTitleStyle: {
                 alignSelf: 'center',
                 fontFamily: "timeburner",
                 fontSize: 30,
@@ -81,7 +81,7 @@ const Navigator = createStackNavigator({
             },
             headerLeft: ()=> null,
             headerTintColor: '#ffff',
-            headerTitleStyle: { 
+            headerTitleStyle: {
                 alignSelf: 'center',
                 fontFamily: "timeburner",
                 fontSize: 30,
@@ -96,7 +96,7 @@ const Navigator = createStackNavigator({
                 backgroundColor: '#3590F2',
             },
             headerTintColor: '#ffff',
-            headerTitleStyle: { 
+            headerTitleStyle: {
                 alignSelf: 'center',
                 fontFamily: "timeburner",
                 fontSize: 30,
@@ -111,7 +111,7 @@ const Navigator = createStackNavigator({
                 backgroundColor: '#3590F2',
             },
             headerTintColor: '#ffff',
-            headerTitleStyle: { 
+            headerTitleStyle: {
                 fontFamily: "timeburner",
                 fontSize: 30,
                 marginLeft: width * 0.14
