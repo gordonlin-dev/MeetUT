@@ -1,4 +1,3 @@
-import { ALWAYS } from 'expo-secure-store';
 import React, {useState} from 'react'
 import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 const secureStore = require('../SecureStore')
@@ -38,50 +37,44 @@ const LoginScreen = props => {
     const [password, onChangePassword] = useState("");
     return (
         <View style={styles.bg}>
-          <ImageBackground source={image} resizeMode="cover" style={styles.image} >
-          <View>
-              <Text style={styles.header} >
-                  Login
-              </Text>
-
-          <TextInput
-              style={styles.Input}
-              onChangeText={onChangeEmail}
-              value={email}
-              placeholder="email"
-            />
-            <TextInput
-              style={styles.Input}
-              onChangeText={onChangePassword}
-              value={password}
-              secureTextEntry={true}
-              placeholder="password"
-            />
-          <TouchableOpacity
-              onPress={() => {
-                loginSubmit(email, password, props)
-            }}
-              style={styles.Button}>
-              <Text>Login</Text>
-            </TouchableOpacity>
-          </View>
-        <View>
-          <TouchableOpacity
-              onPress={() => {
-                props.navigation.navigate('ResetPassword');
-                // do something
-              }}
-              style={styles.Button}>
-              <Text>Reset Password</Text>
-            </TouchableOpacity>
-          </View>
-
-          </ImageBackground>
-
+            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                <View>
+                    <Text style={styles.header}>
+                        Login
+                    </Text>
+                    <TextInput
+                        style={styles.Input}
+                        onChangeText={onChangeEmail}
+                        value={email}
+                        placeholder="email"
+                    />
+                    <TextInput
+                        style={styles.Input}
+                        onChangeText={onChangePassword}
+                        value={password}
+                        secureTextEntry={true}
+                        placeholder="password"
+                    />
+                    <TouchableOpacity
+                        onPress={() => {
+                            loginSubmit(email, password, props)
+                        }}
+                        style={styles.Button}>
+                        <Text>Login</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity
+                        onPress={() => {
+                            props.navigation.navigate('ResetPassword');
+                        }}
+                        style={styles.Button}>
+                        <Text>Reset Password</Text>
+                    </TouchableOpacity>
+                </View>
+            </ImageBackground>
         </View>
-
-
-        );
+    );
 };
 
 const styles = StyleSheet.create({
