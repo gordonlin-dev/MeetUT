@@ -36,18 +36,12 @@ const Navigator = createStackNavigator({
         screen: LoginScreen,
         navigationOptions:{
             title:"",
-            headerStyle: {
-                backgroundColor: '#3590F2',
-            },
         }
     },
     Signup: {
         screen:SignupScreen,
         navigationOptions:{
             title:"",
-            headerStyle: {
-                backgroundColor: '#3590F2',
-            },
         }
     },
     Setting: {
