@@ -1,27 +1,91 @@
-import React from "react";
-import { ImageBackground, StyleSheet, Button, View } from "react-native";
+import React, {useEffect} from 'react'
+import {View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, ImageBackground} from 'react-native'
+
+
+const secureStore = require('../SecureStore')
+
+const {height, width} = Dimensions.get('window');
 
 const image = require("../assets/Splash.png");
 
-function Splash({ navigation }) {
-  return (
-      <View style={styles.bg} onTouchStart={() => {navigation.navigate('Landing')}}>
-        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        </ImageBackground>
-      </View>
-  );
+const Splash = props => {
+  const jwt = secureStore.GetValue('JWT')
+
+  const validateJWT = async(jwt) => {
+
+      try {
+          const url = 'https://meet-ut-2.herokuapp.com/auth/validateJWT';
+
+          const response = await fetch(url, {
+              method : 'PUT',
+              headers: {
+                  'authorization': jwt
+              }
+          });
+          return response.status === 200
+
+      } catch (error) {
+          console.log(error)
+      }
+  }
+  useEffect(() => {
+      validateJWT(jwt).then(
+          (result) => {
+              if(result){
+                  setTimeout(() => {props.navigation.navigate('Home')}, 2000);
+              } else {
+                  setTimeout(() => {props.navigation.navigate('Landing')}, 2000);
+              }
+          }
+      )
+    }, []);
+    return (<View style={styles.bg}>
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+      </ImageBackground>
+    </View>)
 }
+
+
 const styles = StyleSheet.create({
-  bg: {
+  buttonContainer:{
+    flex:1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+},
+empty:{
+    flex:1
+},
+bg: {
     flex: 1,
-  },
-  image: {
+},
+image: {
     flex: 1,
     justifyContent: "center"
-  },
-  button: {
-    height: 5,
-  },
+},
+container: {
+    paddingTop: 100,
+    paddingBottom: 45,
+    paddingLeft: 100,
+},
+logo: {
+    marginTop: height * 0.05,
+    marginLeft: width * 0.355,
+    width: 100,
+    height: 95,
+},
+button: {
+  width: width * 0.6,
+  height: height * 0.06,
+  marginTop: height * 0.03,
+  marginLeft: width * 0.2,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 15,
+  backgroundColor: 'white',
+},
+text: {
+    color: "#0748BB"
+}
 
 });
 

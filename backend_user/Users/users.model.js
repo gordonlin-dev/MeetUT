@@ -7,9 +7,14 @@ const userSchema = new Schema({
     //id is email
     _id : String,
     password : String,
-    //
-    isArchived : Boolean
-})
+    isArchived : Boolean,
+    likedBy : {
+
+    },
+    matched: {
+
+    }
+}, {strict:false})
 
 userSchema.virtual('email').get(function (){
     return this._id
@@ -85,4 +90,45 @@ exports.updatePassword = (id, data) => {
             return result.save()
         }
     })
+}
+
+exports.like = async (curUser, likedUser) =>{
+    let cur = await User.findById(curUser)
+    let liked = await User.findById(likedUser)
+    if (cur.likedBy == null){
+        cur.likedBy = {
+        }
+    }
+    if (liked.likedBy == null){
+        liked.likedBy = {
+        }
+    }
+    if(cur.matched == null){
+        cur.matched = {
+        }
+    }
+    if(liked.matched == null){
+        liked.matched = {
+        }
+    }
+    const curUserLiked = cur.likedBy[likedUser]
+    if (curUserLiked == null){
+        //current user has not been liked by the likedUser, add current user to likedUser's likedBy attribute
+        liked.likedBy[curUser] = true
+        liked.markModified('likedBy')
+    }else{
+        //current user has been liked by likedUser, they are now matched. add current user to
+        //  likedUser's likedBy attribute
+        //Add each other to matched attribute
+        liked.likedBy[curUser] = true
+        cur.matched[likedUser] = true
+        liked.matched[curUser] = true
+        liked.markModified('likedBy')
+        cur.markModified('matched')
+        liked.markModified('matched')
+    }
+
+    await cur.save()
+    await liked.save()
+    return cur
 }

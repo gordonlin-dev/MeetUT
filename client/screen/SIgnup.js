@@ -5,7 +5,6 @@ const secureStore = require('../SecureStore')
 const image =  require('../assets/bg.png');
 const signupSubmit = async (firstName, lastName, email, password, props) => {
     try {
-        
         const url = 'https://meet-ut-2.herokuapp.com/users/create';
         const response = await fetch(url, {
             method : 'POST',

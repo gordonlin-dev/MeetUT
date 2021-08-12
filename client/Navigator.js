@@ -8,31 +8,62 @@ import {createAppContainer} from "react-navigation";
 import ChatListScreen from "./screen/Chat/ChatList";
 import Splash from './screen/Splash';
 import ResetPasswordScreen from './screen/ResetPassword';
+import SettingScreen from './screen/Setting';
+import {Dimensions} from 'react-native';
 
-
+import * as Font from 'expo-font';
+const customFonts = {
+    'timeburner': require('./assets/fonts/timeburner_regular.ttf'),
+  };
+const {height, width} = Dimensions.get('window');
+Font.loadAsync(customFonts);
 const Navigator = createStackNavigator({
     Splash: {
         screen:Splash,
         navigationOptions:{
-            title:""
+            title:"",
+            headerShown: false
         }
     },
     Landing: {
         screen:LandingScreen,
         navigationOptions:{
-            title:""
+            title:"",
+            headerShown: false
         }
     },
     Login: {
         screen: LoginScreen,
         navigationOptions:{
-            title:""
+            title:"",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
         }
     },
     Signup: {
         screen:SignupScreen,
         navigationOptions:{
-            title:""
+            title:"",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+        }
+    },
+    Setting: {
+        screen:SettingScreen,
+        navigationOptions:{
+            title:"Setting",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerLeft: ()=> null,
+            headerTintColor: '#ffff',
+            headerTitleStyle: { 
+                alignSelf: 'center',
+                fontFamily: "timeburner",
+                fontSize: 30,
+            },
         }
     },
     ResetPassword: {
@@ -44,19 +75,47 @@ const Navigator = createStackNavigator({
     Home:{
         screen:HomeScreen,
         navigationOptions:{
-            title:"",
+            title:"Home",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerLeft: ()=> null,
+            headerTintColor: '#ffff',
+            headerTitleStyle: { 
+                alignSelf: 'center',
+                fontFamily: "timeburner",
+                fontSize: 30,
+            },
         }
     },
     Chat:{
         screen:ChatScreen,
         navigationOptions:{
-            title:""
+            title:"",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerTintColor: '#ffff',
+            headerTitleStyle: { 
+                alignSelf: 'center',
+                fontFamily: "timeburner",
+                fontSize: 30,
+            },
         }
     },
     ChatList:{
         screen: ChatListScreen,
         navigationOptions:{
-            title:""
+            title:"Chat List",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerTintColor: '#ffff',
+            headerTitleStyle: { 
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.14
+            },
         }
     }
 });
