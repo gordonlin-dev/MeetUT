@@ -34,7 +34,7 @@ const resetSubmit = async (email, password, confirm, props) => {
     }
 }
 
-const SignupScreen = props => {
+const ResetPasswordScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
     const [confirm, onChangeNumber] = useState("");
@@ -120,4 +120,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default SignupScreen;
+export default ResetPasswordScreen;
