@@ -60,7 +60,6 @@ const HomeScreen = props => {
 
     const sendLike = async () => {
         try{
-            console.log(users[curUser])
             const jwt = await secureStore.GetValue('JWT');
             const userId = await secureStore.GetValue('UserId');
             const url = 'https://meet-ut-2.herokuapp.com/match/like';
@@ -103,7 +102,7 @@ const HomeScreen = props => {
                 <View style={styles.buttonContainer}>
                     <Button style={styles.Button} title={'Pass'} onPress={async () => {await nextUser()}}/>
                     <Button style={styles.Button} title={'Like'} onPress={async () => {await sendLike()}}/>
-                   
+
                 </View>
                 <View style={styles.footer}>
                 <View style={styles.footerButton}>
@@ -119,9 +118,9 @@ const HomeScreen = props => {
                             routeName: 'ChatList'
                         })
                     }}/>
-                    
+
                 </View>
-                
+
             </View>
             </View>
         </SafeAreaView>

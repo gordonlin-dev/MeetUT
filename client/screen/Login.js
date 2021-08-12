@@ -6,7 +6,7 @@ const image =  require('../assets/bg.png');
 const {height, width} = Dimensions.get('window');
 const loginSubmit = async (email, password, props) => {
     try {
-      
+
         const url = 'https://meet-ut-2.herokuapp.com/auth';
         const response = await fetch(url, {
             method : 'POST',
@@ -67,12 +67,16 @@ const LoginScreen = props => {
           </View>
         <View>
           <TouchableOpacity
-              onPress={buttonClickedHandler}
+              onPress={() =>{
+                  props.navigation.navigate({
+                      routeName: 'ResetPassword'
+                  })
+              }}
               style={styles.Button}>
               <Text style={styles.font}>Reset Password</Text>
             </TouchableOpacity>
           </View>
-            
+
           </ImageBackground>
         </View>
     );

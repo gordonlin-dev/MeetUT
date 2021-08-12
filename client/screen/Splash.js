@@ -9,17 +9,16 @@ const {height, width} = Dimensions.get('window');
 const image = require("../assets/Splash.png");
 
 const Splash = props => {
-  const jwt = secureStore.GetValue('JWT')
 
   const validateJWT = async(jwt) => {
-
       try {
           const url = 'https://meet-ut-2.herokuapp.com/auth/validateJWT';
 
           const response = await fetch(url, {
               method : 'PUT',
               headers: {
-                  'authorization': jwt
+                  'Content-Type': 'application/json',
+                  'authorization': 'Bearer ' + jwt
               }
           });
           return response.status === 200
@@ -29,15 +28,17 @@ const Splash = props => {
       }
   }
   useEffect(() => {
-      validateJWT(jwt).then(
-          (result) => {
-              if(result){
-                  setTimeout(() => {props.navigation.navigate('Home')}, 2000);
-              } else {
-                  setTimeout(() => {props.navigation.navigate('Landing')}, 2000);
+      secureStore.GetValue('JWT').then((jwt) =>{
+          validateJWT(jwt).then(
+              (result) => {
+                  if(result){
+                      setTimeout(() => {props.navigation.navigate('Home')}, 2000);
+                  } else {
+                      setTimeout(() => {props.navigation.navigate('Landing')}, 2000);
+                  }
               }
-          }
-      )
+          )
+      })
     }, []);
     return (<View style={styles.bg}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
