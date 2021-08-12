@@ -5,6 +5,9 @@ const secureStore = require('../SecureStore')
 const image =  require('../assets/bg.png');
 const signupSubmit = async (firstName, lastName, email, password, props) => {
     try {
+        props.navigation.navigate({
+            routeName: 'Home'
+        })
         const url = 'https://meet-ut-2.herokuapp.com/users/create';
         const response = await fetch(url, {
             method : 'POST',
@@ -22,13 +25,11 @@ const signupSubmit = async (firstName, lastName, email, password, props) => {
         await secureStore.Save('UserId', email);
         await secureStore.Save('JWT',responseJson.accessToken);
         await secureStore.Save('RefreshToken', responseJson.refreshToken)
-        props.navigation.navigate({
-            routeName: 'Home'
-        })
     }catch (error){
         console.log(error)
     }
 }
+
 
 const SignupScreen = props => {
     const [email, onChangeEmail] = useState("");
@@ -41,7 +42,7 @@ const SignupScreen = props => {
         <View style={styles.bg}>
           <ImageBackground source={image} resizeMode="cover" style={styles.image} >
           <Text style={styles.header} >
-                  Login
+                  Sign Up
               </Text>
           <View>
           <TextInput
@@ -49,18 +50,21 @@ const SignupScreen = props => {
               onChangeText={onChangeFirstName}
               value={firstName}
               placeholder="first name"
+              placeholderTextColor="white"
             />
             <TextInput
               style={styles.Input}
               onChangeText={onChangeLastName}
               value={lastName}
               placeholder="last name"
+              placeholderTextColor="white"
             />
           <TextInput
               style={styles.Input}
               onChangeText={onChangeEmail}
               value={email}
               placeholder="email"
+              placeholderTextColor="white"
             />
             <TextInput
               style={styles.Input}
@@ -68,6 +72,7 @@ const SignupScreen = props => {
               value={password}
               secureTextEntry={true}
               placeholder="password"
+              placeholderTextColor="white"
             />
 
         <TextInput
@@ -76,15 +81,16 @@ const SignupScreen = props => {
               value={confirm}
               secureTextEntry={true}
               placeholder="confirm password"
+              placeholderTextColor="white"
             />
           </View>
         <View>
           <TouchableOpacity
               onPress={() => {
-                signupSubmit(firstname, lastname, email, password, props)
+                signupSubmit(firstName, lastName, email, password, props)
             }}
               style={styles.Button}>
-              <Text>Sign Up</Text>
+              <Text style={styles.font}>Sign Up</Text>
             </TouchableOpacity>
           </View>
 
@@ -112,7 +118,8 @@ const styles = StyleSheet.create({
       borderRadius: 5,
       borderWidth: 2,
       padding: 10,
-      borderColor: "white"
+      borderColor: "white",
+      color: "white"
     },
     Button: {
       width: width * 0.6,
@@ -125,8 +132,16 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
     },
     header: {
-      fontSize:30,
-      marginLeft: width * 0.38,
+      fontSize:50,
+      marginLeft: width * 0.27,
+      color: "white",
+      fontFamily: 'timeburner',
+    },
+    font: {
+      fontFamily: 'timeburner',
+      fontSize:18,
+      color: "#0E0EA1",
+      fontWeight: "500"
     }
   });
 
