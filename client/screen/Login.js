@@ -7,11 +7,8 @@ const image =  require('../assets/bg.png');
 
 const {height, width} = Dimensions.get('window');
 const loginSubmit = async (email, password, props) => {
-  if (await secureStore.GetValue('UserId') == null){
-    Alert.alert("Could not match a user, please check your email or password")
-  } else {
     try {
-        
+
       const url = 'https://meet-ut-2.herokuapp.com/auth';
       const response = await fetch(url, {
           method : 'POST',
@@ -33,9 +30,9 @@ const loginSubmit = async (email, password, props) => {
   }catch (error){
       console.log(error)
   }
+
 }
-  }
-    
+
 const LoginScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
@@ -78,12 +75,12 @@ const LoginScreen = props => {
               <Text>Reset Password</Text>
             </TouchableOpacity>
           </View>
-            
+
           </ImageBackground>
-      
+
         </View>
-          
-          
+
+
         );
 };
 
