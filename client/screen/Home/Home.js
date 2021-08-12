@@ -74,9 +74,9 @@ const HomeScreen = props => {
                     likedUser: users[curUser].email
                 })
             });
-            const responseJson = await response.json();
-            await nextUser();
-
+            if(response.status == 200){
+                await nextUser();
+            }
         }catch (e){
             console.log(e)
         }
