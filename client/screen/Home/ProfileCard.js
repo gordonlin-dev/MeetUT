@@ -103,8 +103,6 @@ const ProfileCard = props => {
                 <View >
                 <Text style={styles.text} onPress={async () => {await sendLike()}}>{props.firstName + ' ' + props.lastName}</Text>
                 </View>
-                </View>
-                <View >
                     
                 </View>
             </Swiper>
