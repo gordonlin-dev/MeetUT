@@ -17,7 +17,7 @@ exports.like = async (req, res) => {
         const response = await axios.post(url, {
             participants: [curUserID, likedUserID]
         })
-        res.status(200).send(1)
+        res.status(200).send()
     }
-    res.status(200).send(1)
+    res.status(200).send()
 }
