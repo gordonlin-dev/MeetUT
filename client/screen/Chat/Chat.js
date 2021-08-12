@@ -1,9 +1,13 @@
 import React, {useState, useEffect, useCallback} from 'react'
+import {Image, StyleSheet} from 'react-native'
 import socketClient  from "socket.io-client";
 import { GiftedChat } from 'react-native-gifted-chat';
 const secureStore = require('../../SecureStore')
 
 let socket;
+
+const example_profilpic =  require('../../assets/logo.png')
+
 const ChatScreen = props => {
 
     const [messages, setMessages] = useState([]);
@@ -63,6 +67,13 @@ const ChatScreen = props => {
 
     return (
         <GiftedChat
+            renderAvatar={() => {
+                return (
+                    <Image source={example_profilpic} style={styles.tinyLogo}/>  
+                )
+            }}
+            // TODO: doesn't work as expected. Needs further investigation on how to use onPressAvatar
+            onPressAvatar={props => {props.navigation.navigate('ChatList')}}
             messages={messages}
             inverted={false}
             onSend={message => onSend(message)}
@@ -72,5 +83,13 @@ const ChatScreen = props => {
         />
     );
 };
+
+const styles = StyleSheet.create({
+    tinyLogo: {
+        borderRadius: 25,
+        width: 50,
+        height: 50
+    }
+  });
 
 export default ChatScreen;

@@ -1,53 +1,56 @@
 import React, {useState} from 'react'
-import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
-const secureStore = require('../SecureStore')
-
-const image =  require('../assets/bg.png');
+import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground} from 'react-native'
 const {height, width} = Dimensions.get('window');
-const loginSubmit = async (email, password, props) => {
+const secureStore = require('../SecureStore')
+const image =  require('../assets/bg.png');
+const resetSubmit = async (email, password, confirm, props) => {
     try {
-      
-        const url = 'https://meet-ut-2.herokuapp.com/auth';
+        // console.log(jwt)
+        // console.log(typeof(email))
+        const url = 'https://meet-ut-2.herokuapp.com/users/' + email + '/updatePassword'
+        // const url = 'http://localhost:3000/users/' + email + '/updatePasword'
+        console.log(email)
+        console.log(url)
         const response = await fetch(url, {
-            method : 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+            method : 'PUT',
+            params: {
+              'Content-Type': 'application.json'
             },
             body: JSON.stringify({
-                email: email,
-                password: password
+                _id: email,
+                password: password,
+                confirm: confirm
             })
         });
-        const responseJson = await response.json();
-        await secureStore.Save('UserId', email);
-        await secureStore.Save('JWT',responseJson.accessToken);
-        await secureStore.Save('RefreshToken', responseJson.refreshToken);
-        props.navigation.navigate({
-          routeName: 'Home'
-        })
+        console.log('response status ' + response.status)
+        // console.log(response.text())
+        if (response.status == 200) {
+          props.navigation.navigate({
+              routeName: 'Login'
+          })
+        }
     }catch (error){
         console.log(error)
     }
 }
 
-const LoginScreen = props => {
+const ResetPasswordScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
+    const [confirm, onChangeNumber] = useState("");
 
     return (
         <View style={styles.bg}>
           <ImageBackground source={image} resizeMode="cover" style={styles.image} >
-          <View>
-              <Text style={styles.header} >
-                  Login
+          <Text style={styles.header} >
+                  Reset
               </Text>
-
+          <View>
           <TextInput
               style={styles.Input}
               onChangeText={onChangeEmail}
               value={email}
               placeholder="email"
-              placeholderTextColor="white"
             />
             <TextInput
               style={styles.Input}
@@ -55,27 +58,32 @@ const LoginScreen = props => {
               value={password}
               secureTextEntry={true}
               placeholder="password"
-              placeholderTextColor="white"
             />
-          <TouchableOpacity
-              onPress={() => {
-                loginSubmit(email, password, props)
-            }}
-              style={styles.Button}>
-              <Text style={styles.font}>Login</Text>
-            </TouchableOpacity>
+
+        <TextInput
+              style={styles.Input}
+              onChangeText={onChangeNumber}
+              value={confirm}
+              secureTextEntry={true}
+              placeholder="confirm password"
+            />
           </View>
         <View>
           <TouchableOpacity
-              onPress={buttonClickedHandler}
+              onPress={() => {
+                resetSubmit(email, password, confirm, props)
+            }}
               style={styles.Button}>
-              <Text style={styles.font}>Reset Password</Text>
+              <Text>Reset Password</Text>
             </TouchableOpacity>
           </View>
-            
+
           </ImageBackground>
+
         </View>
-    );
+
+
+        );
 };
 
 const styles = StyleSheet.create({
@@ -94,13 +102,12 @@ const styles = StyleSheet.create({
       borderRadius: 5,
       borderWidth: 2,
       padding: 10,
-      borderColor: "white",
-      color: "white"
+      borderColor: "white"
     },
     Button: {
       width: width * 0.6,
       height: height * 0.06,
-      marginTop: height * 0.04,
+      marginTop: height * 0.03,
       marginLeft: width * 0.2,
       justifyContent: 'center',
       alignItems: 'center',
@@ -108,17 +115,9 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
     },
     header: {
-      fontSize:50,
-      marginLeft: width * 0.34,
-      color: "white",
-      fontFamily: 'timeburner',
-    },
-    font: {
-      fontFamily: 'timeburner',
-      fontSize:18,
-      color: "#0E0EA1",
-      fontWeight: "500"
+      fontSize:30,
+      marginLeft: width * 0.38,
     }
   });
 
-export default LoginScreen;
+export default ResetPasswordScreen;

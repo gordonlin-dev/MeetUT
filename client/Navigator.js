@@ -7,6 +7,7 @@ import ChatScreen from "./screen/Chat/Chat";
 import {createAppContainer} from "react-navigation";
 import ChatListScreen from "./screen/Chat/ChatList";
 import Splash from './screen/Splash';
+import ResetPasswordScreen from './screen/ResetPassword';
 import SettingScreen from './screen/Setting';
 import {Dimensions} from 'react-native';
 
@@ -63,6 +64,12 @@ const Navigator = createStackNavigator({
                 fontFamily: "timeburner",
                 fontSize: 30,
             },
+        }
+    },
+    ResetPassword: {
+        screen:ResetPasswordScreen,
+        navigationOptions:{
+            title:""
         }
     },
     Home:{
