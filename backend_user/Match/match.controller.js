@@ -9,11 +9,15 @@ exports.getMatchList = (req,res) =>{
 }
 
 exports.like = async (req, res) => {
-    const curUser = req.body.curUser
-    const likedUser = req.body.likedUser
-    const url = 'https://meet-ut-3.herokuapp.com/chat/create'
-    const response = await axios.post(url, {
-        participants: [curUser, likedUser]
-    })
+    const curUserID = req.body.curUser
+    const likedUserID = req.body.likedUser
+    const curUser = await UserModel.like(curUserID,likedUserID)
+    if(curUser.matched[likedUserID]){
+        const url = 'https://meet-ut-3.herokuapp.com/chat/create'
+        //const response = await axios.post(url, {
+        //    participants: [curUser, likedUser]
+        //})
+        res.status(200).send()
+    }
     res.status(200).send()
 }
