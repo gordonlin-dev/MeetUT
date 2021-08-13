@@ -51,6 +51,7 @@ const ResetPasswordScreen = props => {
               onChangeText={onChangeEmail}
               value={email}
               placeholder="email"
+              placeholderTextColor="white"
             />
             <TextInput
               style={styles.Input}
@@ -58,6 +59,7 @@ const ResetPasswordScreen = props => {
               value={password}
               secureTextEntry={true}
               placeholder="password"
+              placeholderTextColor="white"
             />
 
         <TextInput
@@ -66,6 +68,7 @@ const ResetPasswordScreen = props => {
               value={confirm}
               secureTextEntry={true}
               placeholder="confirm password"
+              placeholderTextColor="white"
             />
           </View>
         <View>
@@ -74,7 +77,7 @@ const ResetPasswordScreen = props => {
                 resetSubmit(email, password, confirm, props)
             }}
               style={styles.Button}>
-              <Text>Reset Password</Text>
+              <Text style={styles.font}>Reset Password</Text>
             </TouchableOpacity>
           </View>
 
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
     Button: {
       width: width * 0.6,
       height: height * 0.06,
-      marginTop: height * 0.03,
+      marginTop: height * 0.05,
       marginLeft: width * 0.2,
       justifyContent: 'center',
       alignItems: 'center',
@@ -115,8 +118,16 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
     },
     header: {
-      fontSize:30,
-      marginLeft: width * 0.38,
+      fontSize:50,
+      marginLeft: width * 0.33,
+      color: "white",
+      fontFamily: 'timeburner',
+    },
+    font: {
+      fontFamily: 'timeburner',
+      fontSize:18,
+      color: "#0E0EA1",
+      fontWeight: "500"
     }
   });
 

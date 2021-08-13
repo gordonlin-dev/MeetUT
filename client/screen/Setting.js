@@ -20,13 +20,22 @@ const SettingScreen = props => {
     return (
         <View style={styles.bg}>
           <ImageBackground source={image} resizeMode="cover" style={styles.image} >
-        <View>
+          <View style={styles.buttonContainer}>
           <TouchableOpacity
               onPress={() => {
                 signoutSubmit(props)
-            }}
+              }}
               style={styles.Button}>
               <Text style={styles.font}>Sign Out</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate({
+                  routeName: 'ResetPassword'
+                })
+              }}
+              style={styles.Button}>
+              <Text style={styles.font}>Reset Password</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.footer}>
@@ -104,12 +113,15 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         backgroundColor: '#3590F2',
         height: height * 0.1,
-        marginTop: height * 0.71
+        marginTop: height * 0.52
     },
     footerButton:{
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
+    buttonContainer: {
+      marginTop: height * 0.1
+    }
   });
 
 export default SettingScreen;
