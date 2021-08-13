@@ -1,0 +1,16 @@
+services:
+  api:
+    build:
+      context: /Users/gordonlin/Documents/meetUT/backend_onboarding
+      dockerfile: API/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:443;http://+:80
+    image: api
+    ports:
+    - target: 80
+    - target: 443
+    volumes:
+    - /Users/gordonlin/.aspnet/https:/root/.aspnet/https:ro
+    - /Users/gordonlin/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+version: '3.4'
