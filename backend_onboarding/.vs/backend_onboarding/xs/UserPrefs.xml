@@ -1,5 +1,34 @@
 ﻿<Properties StartupConfiguration="{C23AE0C3-0242-4B0D-ACB6-6EC13F5B18B7}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="API/Controllers/WeatherForecastController.cs">
+    <Files>
+      <File FileName="API/Dockerfile" Line="21" Column="35" />
+      <File FileName="API/Startup.cs" Line="28" Column="1" />
+      <File FileName="API/Program.cs" Line="25" Column="122" />
+      <File FileName="API/WeatherForecast.cs" Line="1" Column="1" />
+      <File FileName="API/Controllers/WeatherForecastController.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="backend_onboarding" expanded="True">
+            <Node name="Solution Items" expanded="True" />
+            <Node name="API" expanded="True">
+              <Node name="Controllers" expanded="True">
+                <Node name="WeatherForecastController.cs" selected="True" />
+              </Node>
+            </Node>
+            <Node name="docker-compose" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.API FirstBuild="True" PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.docker-compose PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>
