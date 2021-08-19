@@ -1,11 +1,10 @@
-﻿<Properties StartupConfiguration="{C23AE0C3-0242-4B0D-ACB6-6EC13F5B18B7}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="API/Controllers/WeatherForecastController.cs">
+﻿<Properties StartupConfiguration="{BDBB7248-0D29-44C5-90E5-14EBE6800E3E}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="API/Startup.cs">
     <Files>
-      <File FileName="API/Dockerfile" Line="21" Column="35" />
-      <File FileName="API/Startup.cs" Line="28" Column="1" />
-      <File FileName="API/Program.cs" Line="25" Column="122" />
-      <File FileName="API/WeatherForecast.cs" Line="1" Column="1" />
-      <File FileName="API/Controllers/WeatherForecastController.cs" Line="1" Column="1" />
+      <File FileName="API/Controllers/UserController.cs" Line="16" Column="46" />
+      <File FileName="API/Startup.cs" Line="5" Column="18" />
+      <File FileName="API/DAL/DbContext.cs" Line="10" Column="29" />
+      <File FileName="API/Models/d80elsmr4eis6uContext.cs" Line="9" Column="26" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -13,17 +12,24 @@
           <Node name="backend_onboarding" expanded="True">
             <Node name="Solution Items" expanded="True" />
             <Node name="API" expanded="True">
-              <Node name="Controllers" expanded="True">
-                <Node name="WeatherForecastController.cs" selected="True" />
+              <Node name="Dependencies" expanded="True">
+                <Node name="FrameworkReferences" expanded="True" />
+                <Node name="PackageDependencies" expanded="True" />
               </Node>
+              <Node name="Controllers" expanded="True" />
+              <Node name="Models" expanded="True" />
+              <Node name="Startup.cs" selected="True" />
             </Node>
             <Node name="docker-compose" expanded="True" />
           </Node>
         </State>
       </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.ItemProperties.API FirstBuild="True" PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.ItemProperties.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.docker-compose PreferredExecutionTarget="MonoDevelop.Default" />
