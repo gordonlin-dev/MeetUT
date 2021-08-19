@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,6 +28,7 @@ namespace API
         {
 
             services.AddControllers();
+            services.AddDbContext<d80elsmr4eis6uContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

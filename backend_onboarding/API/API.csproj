@@ -6,4 +6,29 @@
     <UserSecretsId>b524ac59-31cc-47e4-9ac7-dc2e6349c395</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="Microsoft.Extensions.DependencyInjection" />
+    <None Remove="Microsoft.EntityFrameworkCore" />
+    <None Remove="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <None Remove="Microsoft.EntityFrameworkCore.Design" />
+    <None Remove="Microsoft.NETCore.App" />
+    <None Remove="Microsoft.EntityFrameworkCore.Tools" />
+    <None Remove="Microsoft.VisualStudio.Web.CodeGeneration.Design" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.9">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
+  </ItemGroup>
 </Project>
