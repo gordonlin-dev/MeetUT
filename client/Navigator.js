@@ -9,6 +9,8 @@ import ChatListScreen from "./screen/Chat/ChatList";
 import Splash from './screen/Splash';
 import ResetPasswordScreen from './screen/ResetPassword';
 import SettingScreen from './screen/Setting';
+
+import DemographicsScreen from "./screen/onboarding/Demographics";
 import {Dimensions} from 'react-native';
 
 import * as Font from 'expo-font';
@@ -18,6 +20,22 @@ const customFonts = {
 const {height, width} = Dimensions.get('window');
 Font.loadAsync(customFonts);
 const Navigator = createStackNavigator({
+    Demographics:{
+        screen: DemographicsScreen,
+        navigationOptions:{
+            title:"Onboarding",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerTintColor: '#ffff',
+            headerTitleStyle: {
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.23
+            },
+        }
+
+    },
     Splash: {
         screen:Splash,
         navigationOptions:{
@@ -111,7 +129,8 @@ const Navigator = createStackNavigator({
                 marginLeft: width * 0.14
             },
         }
-    }
+    },
+    
 });
 
 export default createAppContainer(Navigator);
