@@ -19,6 +19,7 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
                 confirm:confirm
             })
         });
+        const responseJson = await response.json();
         if (response.status == 200) {
           await secureStore.Save('UserId', email);
           await secureStore.Save('JWT',responseJson.accessToken);
