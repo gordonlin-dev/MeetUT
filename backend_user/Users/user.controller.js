@@ -16,7 +16,7 @@ exports.createUser = (req, res) => {
         let token = jwt.sign({_id:result._id}, jwtSecret)
         let b = Buffer.from(hash)
         let refresh_token = b.toString('base64')
-        res.status(201).send({accessToken:token, refreshToken: refresh_token})
+        res.status(200).send({accessToken:token, refreshToken: refresh_token})
     })
 }
 

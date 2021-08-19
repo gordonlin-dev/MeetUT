@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBa
 const {height, width} = Dimensions.get('window');
 const secureStore = require('../SecureStore')
 const image =  require('../assets/bg.png');
-const signupSubmit = async (firstName, lastName, email, password, props) => {
+const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
     try {
         const url = 'https://meet-ut-2.herokuapp.com/users/create';
         const response = await fetch(url, {
@@ -15,7 +15,8 @@ const signupSubmit = async (firstName, lastName, email, password, props) => {
                 firstName: firstName,
                 lastName: lastName,
                 _id: email,
-                password: password
+                password: password,
+                confirm:confirm
             })
         });
         if (response.status == 200) {
@@ -88,7 +89,7 @@ const SignupScreen = props => {
         <View>
           <TouchableOpacity
               onPress={() => {
-                signupSubmit(firstName, lastName, email, password, props)
+                signupSubmit(firstName, lastName, email, password,confirm, props)
             }}
               style={styles.Button}>
               <Text style={styles.font}>Sign Up</Text>
