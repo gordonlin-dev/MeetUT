@@ -250,11 +250,12 @@ const Navigator = createStackNavigator({
             headerStyle: {
                 backgroundColor: '#3590F2',
             },
+            headerLeft: ()=> null,
             headerTintColor: '#ffff',
             headerTitleStyle: {
                 fontFamily: "timeburner",
                 fontSize: 30,
-                marginLeft: width * 0.14
+                marginLeft: width * 0.3
             },
         }
     },
