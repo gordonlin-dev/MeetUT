@@ -1,67 +1,47 @@
 import React, {useState} from 'react'
-import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
+import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+const secureStore = require('../../SecureStore')
+
+const image =  require('../../assets/bg.png');
 const {height, width} = Dimensions.get('window');
-const secureStore = require('../SecureStore')
-const image =  require('../assets/bg.png');
-const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
+const loginSubmit = async (email, password, props) => {
     try {
-        const url = 'https://meet-ut-2.herokuapp.com/users/create';
+
+        const url = 'https://meet-ut-2.herokuapp.com/auth';
         const response = await fetch(url, {
             method : 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                firstName: firstName,
-                lastName: lastName,
-                _id: email,
-                password: password,
-                confirm:confirm
+                email: email,
+                password: password
             })
         });
         const responseJson = await response.json();
-        if (response.status == 200) {
-          await secureStore.Save('UserId', email);
-          await secureStore.Save('JWT',responseJson.accessToken);
-          await secureStore.Save('RefreshToken', responseJson.refreshToken)
-          props.navigation.navigate({
-            routeName: 'Home'
-          })
-        }
+        await secureStore.Save('UserId', email);
+        await secureStore.Save('JWT',responseJson.accessToken);
+        await secureStore.Save('RefreshToken', responseJson.refreshToken);
+        props.navigation.navigate({
+          routeName: 'Home'
+        })
     }catch (error){
         console.log(error)
     }
 }
 
-
-const SignupScreen = props => {
+const LoginScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
-    const [confirm, onChangeNumber] = useState("");
-    const [firstName, onChangeFirstName] = useState("");
-    const [lastName, onChangeLastName] = useState("");
 
     return (
         <View style={styles.bg}>
           <ImageBackground source={image} resizeMode="cover" style={styles.image} >
-          <Text style={styles.header} >
-                  Sign Up
-              </Text>
           <View>
-          <TextInput
-              style={styles.Input}
-              onChangeText={onChangeFirstName}
-              value={firstName}
-              placeholder="first name"
-              placeholderTextColor="white"
-            />
-            <TextInput
-              style={styles.Input}
-              onChangeText={onChangeLastName}
-              value={lastName}
-              placeholder="last name"
-              placeholderTextColor="white"
-            />
+              <Text style={styles.header} >
+                  Login
+              </Text>
+
           <TextInput
               style={styles.Input}
               onChangeText={onChangeEmail}
@@ -77,32 +57,29 @@ const SignupScreen = props => {
               placeholder="password"
               placeholderTextColor="white"
             />
-
-        <TextInput
-              style={styles.Input}
-              onChangeText={onChangeNumber}
-              value={confirm}
-              secureTextEntry={true}
-              placeholder="confirm password"
-              placeholderTextColor="white"
-            />
+          <TouchableOpacity
+              onPress={() => {
+                loginSubmit(email, password, props)
+            }}
+              style={styles.Button}>
+              <Text style={styles.font}>Login</Text>
+            </TouchableOpacity>
           </View>
         <View>
           <TouchableOpacity
-              onPress={() => {
-                signupSubmit(firstName, lastName, email, password,confirm, props)
-            }}
+              onPress={() =>{
+                  props.navigation.navigate({
+                      routeName: 'ResetPassword'
+                  })
+              }}
               style={styles.Button}>
-              <Text style={styles.font}>Sign Up</Text>
+              <Text style={styles.font}>Reset Password</Text>
             </TouchableOpacity>
           </View>
 
           </ImageBackground>
-
         </View>
-
-
-        );
+    );
 };
 
 const styles = StyleSheet.create({
@@ -127,7 +104,7 @@ const styles = StyleSheet.create({
     Button: {
       width: width * 0.6,
       height: height * 0.06,
-      marginTop: height * 0.03,
+      marginTop: height * 0.04,
       marginLeft: width * 0.2,
       justifyContent: 'center',
       alignItems: 'center',
@@ -136,7 +113,7 @@ const styles = StyleSheet.create({
     },
     header: {
       fontSize:50,
-      marginLeft: width * 0.27,
+      marginLeft: width * 0.34,
       color: "white",
       fontFamily: 'timeburner',
     },
@@ -148,4 +125,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default SignupScreen;
+export default LoginScreen;

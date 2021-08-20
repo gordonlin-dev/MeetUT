@@ -1,13 +1,13 @@
 import {createStackNavigator} from 'react-navigation-stack';
 import LandingScreen from './screen/Landing';
-import LoginScreen from "./screen/Login";
-import SignupScreen from "./screen/Signup";
+import LoginScreen from "./screen/Authentication/Login";
+import SignupScreen from "./screen/Authentication/Signup";
 import HomeScreen from "./screen/Home/Home";
 import ChatScreen from "./screen/Chat/Chat";
 import {createAppContainer} from "react-navigation";
 import ChatListScreen from "./screen/Chat/ChatList";
 import Splash from './screen/Splash';
-import ResetPasswordScreen from './screen/ResetPassword';
+import ResetPasswordScreen from './screen/Authentication/ResetPassword';
 import SettingScreen from './screen/Setting';
 
 import DemographicsScreen from "./screen/onboarding/Demographics";
@@ -27,6 +27,14 @@ const customFonts = {
 const {height, width} = Dimensions.get('window');
 Font.loadAsync(customFonts);
 const Navigator = createStackNavigator({
+    Splash: {
+        screen:Splash,
+        navigationOptions:{
+            title:"",
+            headerShown: false
+        }
+    },
+
     Demographics:{
         screen: DemographicsScreen,
         navigationOptions:{
@@ -162,13 +170,6 @@ const Navigator = createStackNavigator({
             },
         }
 
-    },
-    Splash: {
-        screen:Splash,
-        navigationOptions:{
-            title:"",
-            headerShown: false
-        }
     },
     Landing: {
         screen:LandingScreen,
