@@ -1,11 +1,11 @@
 import React, {useState} from 'react'
 import {View, Text, StyleSheet, Image, Dimensions, ImageBackground, TouchableOpacity} from 'react-native'
-const secureStore = require('../SecureStore')
+const secureStore = require('../../SecureStore')
 
-const home =  require('../assets/home-icon.png');
-const setting =  require('../assets/setting-icon.png');
-const chat =  require('../assets/chat-icon.png');
-const image =  require('../assets/bg.png');
+const home =  require('../../assets/home-icon.png');
+const setting =  require('../../assets/setting-icon.png');
+const chat =  require('../../assets/chat-icon.png');
+const image =  require('../../assets/bg.png');
 const {height, width} = Dimensions.get('window');
 const signoutSubmit = async (props) => {
     try {

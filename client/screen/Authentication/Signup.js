@@ -1,12 +1,14 @@
 import React, {useState} from 'react'
 import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
 
+const cfg = require('../cfg.json')
+const presenter = require('../Presenter')
 const {height, width} = Dimensions.get('window');
 const secureStore = require('../../SecureStore')
 const image = require('../../assets/bg.png');
 const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
     try {
-        const url = 'http://192.168.1.84:3000/users/create';
+        const url = cfg.domain + cfg.signup
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -21,8 +23,8 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
             })
         });
 
+        const responseJson = await response.json();
         if (response.status === 200) {
-            const responseJson = await response.json();
             await secureStore.Save('UserId', email);
             await secureStore.Save('JWT', responseJson.accessToken);
             await secureStore.Save('RefreshToken', responseJson.refreshToken)
@@ -30,13 +32,11 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
                 routeName: 'Home'
             })
         } else if (response.status === 400) {
-            // TODO: Show the user the response
-            console.log(response)
-        } else {
-            console.log("unhandled")
+            Alert.alert(responseJson.error)
         }
     } catch (error) {
         console.log(error)
+        Alert.alert(presenter.internalError())
     }
 }
 

@@ -2,11 +2,11 @@ import React, {useEffect} from 'react'
 import {View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, ImageBackground} from 'react-native'
 
 
-const secureStore = require('../SecureStore')
+const secureStore = require('../../SecureStore')
 
 const {height, width} = Dimensions.get('window');
 
-const image = require("../assets/Splash.png");
+const image = require("../../assets/Splash.png");
 
 const Splash = props => {
 
@@ -32,9 +32,9 @@ const Splash = props => {
           validateJWT(jwt).then(
               (result) => {
                   if(result){
-                      setTimeout(() => {props.navigation.navigate('Home')}, 2000);
+                      props.navigation.navigate('Home')
                   } else {
-                      setTimeout(() => {props.navigation.navigate('Landing')}, 2000);
+                      props.navigation.navigate('Landing')
                   }
               }
           )

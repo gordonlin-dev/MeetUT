@@ -1,13 +1,12 @@
 import React, {useState} from 'react'
 import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 const secureStore = require('../../SecureStore')
-
+const cfg = require('../cfg.json')
 const image =  require('../../assets/bg.png');
 const {height, width} = Dimensions.get('window');
 const loginSubmit = async (email, password, props) => {
     try {
-
-        const url = 'https://meet-ut-2.herokuapp.com/auth';
+        const url = cfg.domain + cfg.login;
         const response = await fetch(url, {
             method : 'POST',
             headers: {

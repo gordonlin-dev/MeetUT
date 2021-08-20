@@ -7,7 +7,7 @@ const resetSubmit = async (email, password, confirm, props) => {
     try {
         // console.log(jwt)
         // console.log(typeof(email))
-        const url = 'https://meet-ut-2.herokuapp.com/users/' + email + '/updatePassword'
+        const url = 'https://meet-ut-2.herokuapp.com/users/' + email + '/updatePassword'  // TODO: Use config
         // const url = 'http://localhost:3000/users/' + email + '/updatePasword'
         console.log(email)
         console.log(url)
