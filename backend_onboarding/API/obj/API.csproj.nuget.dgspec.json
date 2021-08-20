@@ -17,7 +17,7 @@
           "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "/Users/gordonlin/.nuget/NuGet/NuGet.Config"
+          "/Users/gordonlin/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -41,6 +41,10 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "DocumentFormat.OpenXml": {
+              "target": "Package",
+              "version": "[2.13.1, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[5.0.9, )"

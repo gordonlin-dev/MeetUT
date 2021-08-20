@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "j2tHNuDhybc7BbOr+lKsCBStXzDMuyRfhA19hqyGCJQXTJUVzBLWlZtTKIkVNcAJjm1zf74a28/YA/B+5dvi+g==",
+  "dgSpecHash": "jsSjzr6up4QBzHr5dy0GKBdjhvyR/b5m99RDqrduA25Xgh+qJ4mu6F35zSlLr3QHfK4nXGKjA2OGWe24mnb4fw==",
   "success": true,
   "projectFilePath": "/Users/gordonlin/Documents/meetUT/backend_onboarding/API/API.csproj",
   "expectedPackageFiles": [
+    "/Users/gordonlin/.nuget/packages/documentformat.openxml/2.13.1/documentformat.openxml.2.13.1.nupkg.sha512",
     "/Users/gordonlin/.nuget/packages/humanizer.core/2.8.26/humanizer.core.2.8.26.nupkg.sha512",
     "/Users/gordonlin/.nuget/packages/microsoft.aspnetcore.html.abstractions/2.2.0/microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "/Users/gordonlin/.nuget/packages/microsoft.aspnetcore.razor/2.2.0/microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",
@@ -59,6 +60,7 @@
     "/usr/local/share/dotnet/sdk/NuGetFallbackFolder/system.diagnostics.tools/4.3.0/system.diagnostics.tools.4.3.0.nupkg.sha512",
     "/usr/local/share/dotnet/sdk/NuGetFallbackFolder/system.globalization/4.3.0/system.globalization.4.3.0.nupkg.sha512",
     "/usr/local/share/dotnet/sdk/NuGetFallbackFolder/system.io/4.3.0/system.io.4.3.0.nupkg.sha512",
+    "/Users/gordonlin/.nuget/packages/system.io.packaging/4.7.0/system.io.packaging.4.7.0.nupkg.sha512",
     "/usr/local/share/dotnet/sdk/NuGetFallbackFolder/system.linq/4.3.0/system.linq.4.3.0.nupkg.sha512",
     "/usr/local/share/dotnet/sdk/NuGetFallbackFolder/system.linq.expressions/4.3.0/system.linq.expressions.4.3.0.nupkg.sha512",
     "/Users/gordonlin/.nuget/packages/system.memory/4.5.4/system.memory.4.5.4.nupkg.sha512",
