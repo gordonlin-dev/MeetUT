@@ -3,9 +3,9 @@ const UserModel = require('./users.model')
 const jwt = require('jsonwebtoken')
 const jwtSecret = require("../env.config").jwt_secret
 const validator = require("email-validator");
+const presenter = require("./user.presenter")
 const cfg = require("./user.config.json");
 
-// TODO: user presenter
 exports.createUser = (req, res) => {
     let salt = crypto.randomBytes(16).toString('base64')
     let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
@@ -62,7 +62,7 @@ exports.updatePassword = (req, res) => {
  */
 exports.validatePassword = (req, res, next) => {
     if (req.body.password.length <= cfg.passwordMin || req.body.password.length >= cfg.passwordMax) {
-        return res.status(400).send("Password must be between 8 and 50 characters")
+        return res.status(400).send(presenter.invalidPassword("length"))
     } else {
         return next()
     }
@@ -75,24 +75,26 @@ exports.validatePassword = (req, res, next) => {
  */
 exports.validateEmail = (req, res, next) => {
     if (!validator.validate(req.body._id)) {
-        console.log("Invalid")
-        return res.status(400).send("Email must be valid")
+        return res.status(400).send(presenter.invalidEmail("address"))
     }
 
     const domain = req.body._id.split("@")[1]
     if (!cfg.emailDomains.includes(domain)) {
-        return res.status(400).send("Email must belong to University of Toronto")
+        return res.status(400).send(presenter.invalidEmail("domain"))
     } else {
         return next()
     }
 }
 
+/**
+ * @name confirmPassword
+ * @description Checks if the password and confirm password fields have the same input
+ * @returns next if email is valid, or status 400 if passwords do not match
+ */
 exports.confirmPassword = (req, res, next) => {
-    let password = req.body.password
-    let confirm = req.body.confirm
-    if (password === confirm) {
-        return next()
+    if (req.body.password !== req.body.confirm) {
+        return res.status(400).send(presenter.invalidPassword("match"))
     } else {
-        return res.status(400).send("Password not confirmed")
+        return next()
     }
 }
