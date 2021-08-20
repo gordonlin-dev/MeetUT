@@ -2,8 +2,8 @@
 import React from 'react';
 import { ImageBackground, Dimensions, View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-const logo = require('../assets/Logo-Transparent.png');
-const bgimage =  require('../assets/bg.png');
+const logo = require('../../assets/Logo-Transparent.png');
+const bgimage =  require('../../assets/bg.png');
 const {height, width} = Dimensions.get('window');
 
 const Authentication = (props) => {  

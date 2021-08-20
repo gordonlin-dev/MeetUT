@@ -1,7 +1,11 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, StyleSheet, Button, ScrollView, Dimensions, SafeAreaView} from 'react-native'
+import {View, Image, StyleSheet, Button, ScrollView, Dimensions, SafeAreaView, TouchableOpacity} from 'react-native'
 import ProfileCard from "./ProfileCard";
-import Swiper from 'react-native-swiper'
+import Swiper from 'react-native-swiper';
+
+const home =  require('../../assets/home-icon.png');
+const setting =  require('../../assets/setting-icon.png');
+const chat =  require('../../assets/chat-icon.png');
 
 const secureStore = require('../../SecureStore')
 const {height, width} = Dimensions.get('window');
@@ -106,18 +110,23 @@ const HomeScreen = props => {
                 </View>
                 <View style={styles.footer}>
                 <View style={styles.footerButton}>
-                <Button title={'Setting'} onPress={() => {
+                <TouchableOpacity onPress={() => {
                         props.navigation.navigate({
                             routeName: 'Setting'
                         })
-                    }}/>
-                    <Button title={'Home'} onPress={() => {
-                    }}/>
-                <Button title={'Chat list'} onPress={() => {
+                    }}>
+                    <Image style={styles.icon} source={setting}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {}}>
+                    <Image style={styles.icon} source={home}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
                         props.navigation.navigate({
                             routeName: 'ChatList'
                         })
-                    }}/>
+                    }}>
+                    <Image style={styles.icon} source={chat}/>
+                </TouchableOpacity>
 
                 </View>
 
@@ -165,6 +174,10 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 30,
         fontWeight: 'bold'
+    },
+    icon: {
+        height: height*0.05,
+        width: width*0.1
     }
 });
 

@@ -1,8 +1,11 @@
 import React, {useState} from 'react'
-import {View, Text, StyleSheet, Button, Dimensions, ImageBackground, TouchableOpacity} from 'react-native'
-const secureStore = require('../SecureStore')
+import {View, Text, StyleSheet, Image, Dimensions, ImageBackground, TouchableOpacity} from 'react-native'
+const secureStore = require('../../SecureStore')
 
-const image =  require('../assets/bg.png');
+const home =  require('../../assets/home-icon.png');
+const setting =  require('../../assets/setting-icon.png');
+const chat =  require('../../assets/chat-icon.png');
+const image =  require('../../assets/bg.png');
 const {height, width} = Dimensions.get('window');
 const signoutSubmit = async (props) => {
     try {
@@ -40,21 +43,27 @@ const SettingScreen = props => {
           </View>
           <View style={styles.footer}>
                 <View style={styles.footerButton}>
-                <Button title={'Setting'} onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'Setting'
-                        })
-                    }}/>
-                    <Button title={'Home'} onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'Home'
-                        })
-                    }}/>
-                <Button title={'Chat list'} onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'ChatList'
-                        })
-                    }}/>
+                  <TouchableOpacity onPress={() => {
+                      props.navigation.navigate({
+                          routeName: 'Setting'
+                      })
+                  }}>
+                      <Image style={styles.icon} source={setting}/>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => {
+                      props.navigation.navigate({
+                          routeName: 'Home'
+                      })
+                  }}>
+                      <Image style={styles.icon} source={home}/>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => {
+                      props.navigation.navigate({
+                          routeName: 'ChatList'
+                      })
+                  }}>
+                      <Image style={styles.icon} source={chat}/>
+                  </TouchableOpacity>
                     
                 </View>
                 
@@ -121,7 +130,11 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
       marginTop: height * 0.1
-    }
+    },
+    icon: {
+      height: height*0.05,
+      width: width*0.1
+  }
   });
 
 export default SettingScreen;

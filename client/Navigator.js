@@ -1,14 +1,23 @@
 import {createStackNavigator} from 'react-navigation-stack';
-import LandingScreen from './screen/Landing';
-import LoginScreen from "./screen/Login";
-import SignupScreen from "./screen/Signup";
+import LandingScreen from './screen/Landing/Landing';
+import LoginScreen from "./screen/Authentication/Login";
+import SignupScreen from "./screen/Authentication/Signup";
 import HomeScreen from "./screen/Home/Home";
 import ChatScreen from "./screen/Chat/Chat";
 import {createAppContainer} from "react-navigation";
 import ChatListScreen from "./screen/Chat/ChatList";
-import Splash from './screen/Splash';
-import ResetPasswordScreen from './screen/ResetPassword';
-import SettingScreen from './screen/Setting';
+import Splash from './screen/Landing/Splash';
+import ResetPasswordScreen from './screen/Authentication/ResetPassword';
+import SettingScreen from './screen/Settings/Setting';
+
+import DemographicsScreen from "./screen/Onboarding/Demographics";
+import PersonalScreen from "./screen/Onboarding/Personal";
+import AcedemicScreen from "./screen/Onboarding/Acedemic";
+import ReasonScreen from "./screen/Onboarding/Reason";
+import HobbiesScreen from "./screen/Onboarding/Hobbies";
+import SpecificHobbyScreen from "./screen/Onboarding/SpecificHobby"
+import ProjectInterestsScreen from "./screen/Onboarding/Project-interests"
+import IndustryScreen from "./screen/Onboarding/Industry"
 import {Dimensions} from 'react-native';
 
 import * as Font from 'expo-font';
@@ -24,6 +33,143 @@ const Navigator = createStackNavigator({
             title:"",
             headerShown: false
         }
+    },
+
+    Demographics:{
+        screen: DemographicsScreen,
+        navigationOptions:{
+            title:"Onboarding",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerLeft: ()=> null,
+            headerTintColor: '#ffff',
+            headerTitleStyle: {
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.23
+            },
+        }
+
+    },
+    Personal:{
+        screen: PersonalScreen,
+        navigationOptions:{
+            title:"Onboarding",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerLeft: ()=> null,
+            headerTintColor: '#ffff',
+            headerTitleStyle: {
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.23
+            },
+        }
+
+    },
+    Acedemic:{
+        screen: AcedemicScreen,
+        navigationOptions:{
+            title:"Onboarding",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerLeft: ()=> null,
+            headerTintColor: '#ffff',
+            headerTitleStyle: {
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.23
+            },
+        }
+
+    },
+    Reason:{
+        screen: ReasonScreen,
+        navigationOptions:{
+            title:"Onboarding",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerLeft: ()=> null,
+            headerTintColor: '#ffff',
+            headerTitleStyle: {
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.23
+            },
+        }
+
+    },
+    Hobbies:{
+        screen: HobbiesScreen,
+        navigationOptions:{
+            title:"Onboarding",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerLeft: ()=> null,
+            headerTintColor: '#ffff',
+            headerTitleStyle: {
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.23
+            },
+        }
+
+    },
+    SpecificHobby:{
+        screen: SpecificHobbyScreen,
+        navigationOptions:{
+            title:"Onboarding",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerLeft: ()=> null,
+            headerTintColor: '#ffff',
+            headerTitleStyle: {
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.23
+            },
+        }
+
+    },
+    ProjectInterests:{
+        screen: ProjectInterestsScreen,
+        navigationOptions:{
+            title:"Onboarding",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerLeft: ()=> null,
+            headerTintColor: '#ffff',
+            headerTitleStyle: {
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.23
+            },
+        }
+
+    },
+    Industry:{
+        screen: IndustryScreen,
+        navigationOptions:{
+            title:"Onboarding",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerLeft: ()=> null,
+            headerTintColor: '#ffff',
+            headerTitleStyle: {
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.23
+            },
+        }
+
     },
     Landing: {
         screen:LandingScreen,
@@ -111,7 +257,8 @@ const Navigator = createStackNavigator({
                 marginLeft: width * 0.14
             },
         }
-    }
+    },
+    
 });
 
 export default createAppContainer(Navigator);
