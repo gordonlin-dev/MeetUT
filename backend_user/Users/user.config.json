@@ -1,0 +1,5 @@
+{
+  "passwordMin": 8,
+  "passwordMax": 50,
+  "emailDomains": ["mail.utoronto.ca"]
+}
