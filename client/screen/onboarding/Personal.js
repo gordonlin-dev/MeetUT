@@ -153,6 +153,11 @@ const styles = StyleSheet.create({
         marginTop: height * 0.02,
         alignItems: 'center',
     },
+    quizFont: {
+        fontFamily: 'timeburner',
+        fontSize:17,
+        color: "black"  
+    },
     quizContainer: {
         
     },
@@ -173,11 +178,6 @@ const styles = StyleSheet.create({
         fontFamily: 'timeburner',
     },
     headerFont: {
-        fontFamily: 'timeburner',
-        fontSize:17,
-        color: "black"  
-    },
-    quizFont: {
         fontFamily: 'timeburner',
         fontSize:17,
         color: "black"  

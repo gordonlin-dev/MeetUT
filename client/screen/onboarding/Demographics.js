@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
-import {View, Image, StyleSheet, TextInput, Dimensions, TouchableOpacity, ScrollView, Text} from 'react-native'
+import {View, Image, StyleSheet, TextInput, Dimensions, TouchableOpacity, ScrollView, Text, SafeAreaView} from 'react-native'
 import {Picker} from '@react-native-picker/picker';
-import { withDecay } from 'react-native-reanimated';
 
 const {height, width} = Dimensions.get('window');
 const logo =  require('../../assets/logo.png');
@@ -12,7 +11,9 @@ const Demographics = props => {
 
     return (
           <View style={styles.container}>
-
+            <View style={styles.inputHeader}>
+                <Text style={styles.headerFont}>First Name</Text>
+            </View>
             <TextInput
                 style={styles.Input}
                 onChangeText={onChangeFirstName}
@@ -20,6 +21,9 @@ const Demographics = props => {
                 placeholder="first name"
                 placeholderTextColor="black"
             />
+            <View style={styles.inputHeader}>
+                <Text style={styles.headerFont}>Last Name</Text>
+            </View>
             <TextInput
               style={styles.Input}
               onChangeText={onChangeLastName}
@@ -43,20 +47,21 @@ const Demographics = props => {
                 <Picker.Item label="Prefer not to say" value="no" />
             </Picker>
 
-            <ScrollView style={styles.scrollView}>
-                <Image style={styles.avator} source={logo}/>
-            </ScrollView>
-            <View>
-                <TouchableOpacity 
-                    style={styles.Button}
-                    onPress={() => {
-                    props.navigation.navigate({
-                        routeName: 'Acedemic'
-                    })
-                }}>
-                    <Text style={styles.font}>Next</Text>
-                </TouchableOpacity>
-            </View>
+            <SafeAreaView style={styles.scrollViewContainer}>
+                <ScrollView style={styles.scrollView}>
+                    <Image style={styles.avator} source={logo}/>
+                </ScrollView>
+            </SafeAreaView>
+
+            <TouchableOpacity 
+                style={styles.Button}
+                onPress={() => {
+                props.navigation.navigate({
+                    routeName: 'Acedemic'
+                })
+            }}>
+                <Text style={styles.font}>Next</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -65,15 +70,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 40,
-        alignItems: "center",
         backgroundColor: "#e1e1ea"
+    },
+    scrollViewContainer: {
+        flex: 1,
+        alignItems: 'center',
     },
     Button: {
         position: 'absolute',
         width: width * 0.45,
         height: height * 0.06,
         bottom: height*0.01,
-        marginRight: width*0.6,
+        right: width*0.02,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 15,
@@ -81,12 +89,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
       },
     pickerHeader: {
-        position: 'absolute',
-        marginTop: height * 0.25,
+        marginTop: height * 0.01,
         left: width*0.16,
     },
+    inputHeader: {
+        left: width*0.16,
+        marginTop: height * 0.01,
+    },
     Input: {
-        marginTop: height * 0.03,
+        left: width*0.16,
         height: height * 0.06,
         width: width * 0.7,
         borderRadius: 5,
@@ -96,9 +107,9 @@ const styles = StyleSheet.create({
         color: "black"
     },
     picker: {
+        left: width*0.16,
         width: width * 0.7,
         height: height * 0.06,
-        marginTop: height * 0.04,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 15,

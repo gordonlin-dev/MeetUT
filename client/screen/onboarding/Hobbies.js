@@ -61,11 +61,12 @@ class Hobbies extends Component {
                 onChangeInput={ (text)=> console.log(text)}
                 altFontFamily="timeburner"
                 itemFontFamily="timeburner"
-                tagRemoveIconColor="#CCC"
-                tagBorderColor="#CCC"
-                tagTextColor="#CCC"
+                tagRemoveIconColor="black"
+                tagBorderColor="black"
+                tagTextColor="black"
                 selectedItemTextColor="#CCC"
                 selectedItemIconColor="#CCC"
+                selectedItemFontFamily="timeburner"
                 itemTextColor="#000"
                 displayKey="name"
                 searchInputStyle={{ color: '#CCC' }}
@@ -73,6 +74,12 @@ class Hobbies extends Component {
                 submitButtonText="Submit"
             >
             </MultiSelect>
+            <View style={styles.quizHeader}>
+                <Text style={styles.quizFont}>Added Activities</Text>
+            </View>
+            <View>
+                 {this.multiSelect && this.multiSelect.getSelectedItemsExt(selectedItems)}
+            </View>
             <TouchableOpacity 
                 style={styles.leftButton}
                 onPress={() => {
@@ -140,6 +147,15 @@ const styles = StyleSheet.create({
         fontSize:17,
         color: "black",
         marginBottom: height * 0.01
+    },
+    quizHeader: {
+      marginTop: height * 0.02,
+      alignItems: 'center',
+    },
+    quizFont: {
+        fontFamily: 'timeburner',
+        fontSize:17,
+        color: "black"  
     },
   });
 export default Hobbies;
