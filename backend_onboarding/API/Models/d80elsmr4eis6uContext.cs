@@ -31,6 +31,8 @@ namespace API.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseNpgsql("User ID=qhdnfykzfqptki;Password=ad77410c793d023714c38b394481f5d6027ffd1c9c56286495c11deaf880ce3a;Host=ec2-52-0-67-144.compute-1.amazonaws.com;Port=5432;Database=d80elsmr4eis6u;Pooling=true;SSL Mode=Require;TrustServerCertificate=True;");
             }
         }
 
