@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace API.Models
 {
-    public partial class QuestionnaireProgramOfStudyCategoriie
+    public partial class QuestionnaireProgramOfStudyCategory
     {
         public int Id { get; set; }
         public int ProgramId { get; set; }

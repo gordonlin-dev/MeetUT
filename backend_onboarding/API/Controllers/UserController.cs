@@ -10,7 +10,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController
+    public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
         private readonly d80elsmr4eis6uContext _context;
@@ -133,8 +133,8 @@ namespace API.Controllers
 
                             var programId = _context.QuestionnaireProgramOfStudies.
                                 Where(x => x.Value == firstString).First().Id;
-                            _context.QuestionnaireProgramOfStudyCategoriies.
-                                Add(new QuestionnaireProgramOfStudyCategoriie()
+                            _context.QuestionnaireProgramOfStudyCategories.
+                                Add(new QuestionnaireProgramOfStudyCategory()
                                 {
                                     ProgramId = programId,
                                     CategoryId = categoryId
