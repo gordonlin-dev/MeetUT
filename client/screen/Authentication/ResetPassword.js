@@ -1,16 +1,19 @@
 import React, {useState} from 'react'
-import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
 const {height, width} = Dimensions.get('window');
 const secureStore = require('../../SecureStore')
 const image =  require('../../assets/bg.png');
+const cfg = require('../cfg.json')
+const presenter = require('../Presenter')
+
+
 const resetSubmit = async (email, password, confirm, props) => {
     try {
-        // console.log(jwt)
-        // console.log(typeof(email))
-        const url = 'https://meet-ut-2.herokuapp.com/users/' + email + '/updatePassword'  // TODO: Use config
-        // const url = 'http://localhost:3000/users/' + email + '/updatePasword'
+        const url = cfg.domain + "/" + email + cfg.reset  // TODO: Use config
+
         console.log(email)
         console.log(url)
+
         const response = await fetch(url, {
             method : 'PUT',
             headers: {
@@ -24,13 +27,20 @@ const resetSubmit = async (email, password, confirm, props) => {
         });
         console.log('response status ' + response.status)
         // console.log(response.text())
+        const responseJson = await response.json()
         if (response.status == 200) {
+          await secureStore.Save('UserId', email);
+          await secureStore.Save('JWT', responseJson.accessToken);
+          await secureStore.Save('RefreshToken', responseJson.refreshToken)
           props.navigation.navigate({
               routeName: 'Login'
           })
+        }else if (response.status = 400) {
+          Alert.alert(responseJson.error)
         }
     }catch (error){
         console.log(error)
+        Alert.alert(presenter.internalError())
     }
 }
 
