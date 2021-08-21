@@ -9,12 +9,12 @@ namespace API.Models
     {
         public LookupProgramOfStudyCategory()
         {
-            QuestionnaireProgramOfStudyCategoriies = new HashSet<QuestionnaireProgramOfStudyCategoriie>();
+            QuestionnaireProgramOfStudyCategories = new HashSet<QuestionnaireProgramOfStudyCategory>();
         }
 
         public int Id { get; set; }
         public string Value { get; set; }
 
-        public virtual ICollection<QuestionnaireProgramOfStudyCategoriie> QuestionnaireProgramOfStudyCategoriies { get; set; }
+        public virtual ICollection<QuestionnaireProgramOfStudyCategory> QuestionnaireProgramOfStudyCategories { get; set; }
     }
 }

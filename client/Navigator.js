@@ -1,23 +1,23 @@
 import {createStackNavigator} from 'react-navigation-stack';
-import LandingScreen from './screen/Landing';
-import LoginScreen from "./screen/Login";
-import SignupScreen from "./screen/Signup";
+import LandingScreen from './screen/Landing/Landing';
+import LoginScreen from "./screen/Authentication/Login";
+import SignupScreen from "./screen/Authentication/Signup";
 import HomeScreen from "./screen/Home/Home";
 import ChatScreen from "./screen/Chat/Chat";
 import {createAppContainer} from "react-navigation";
 import ChatListScreen from "./screen/Chat/ChatList";
-import Splash from './screen/Splash';
-import ResetPasswordScreen from './screen/ResetPassword';
-import SettingScreen from './screen/Setting';
+import Splash from './screen/Landing/Splash';
+import ResetPasswordScreen from './screen/Authentication/ResetPassword';
+import SettingScreen from './screen/Settings/Setting';
 
-import DemographicsScreen from "./screen/onboarding/Demographics";
-import PersonalScreen from "./screen/onboarding/Personal";
-import AcedemicScreen from "./screen/onboarding/Acedemic";
-import ReasonScreen from "./screen/onboarding/Reason";
-import HobbiesScreen from "./screen/onboarding/Hobbies";
-import SpecificHobbyScreen from "./screen/onboarding/SpecificHobby"
-import ProjectInterestsScreen from "./screen/onboarding/Project-interests"
-import IndustryScreen from "./screen/onboarding/Industry"
+import DemographicsScreen from "./screen/Onboarding/Demographics";
+import PersonalScreen from "./screen/Onboarding/Personal";
+import AcedemicScreen from "./screen/Onboarding/Acedemic";
+import ReasonScreen from "./screen/Onboarding/Reason";
+import HobbiesScreen from "./screen/Onboarding/Hobbies";
+import SpecificHobbyScreen from "./screen/Onboarding/SpecificHobby"
+import ProjectInterestsScreen from "./screen/Onboarding/Project-interests"
+import IndustryScreen from "./screen/Onboarding/Industry"
 import {Dimensions} from 'react-native';
 
 import * as Font from 'expo-font';
@@ -27,6 +27,14 @@ const customFonts = {
 const {height, width} = Dimensions.get('window');
 Font.loadAsync(customFonts);
 const Navigator = createStackNavigator({
+    Splash: {
+        screen:Splash,
+        navigationOptions:{
+            title:"",
+            headerShown: false
+        }
+    },
+
     Demographics:{
         screen: DemographicsScreen,
         navigationOptions:{
@@ -162,13 +170,6 @@ const Navigator = createStackNavigator({
             },
         }
 
-    },
-    Splash: {
-        screen:Splash,
-        navigationOptions:{
-            title:"",
-            headerShown: false
-        }
     },
     Landing: {
         screen:LandingScreen,

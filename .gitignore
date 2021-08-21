@@ -2,3 +2,4 @@
 **/.env
 **/memory.db
 .DS_Store
+/local_client/

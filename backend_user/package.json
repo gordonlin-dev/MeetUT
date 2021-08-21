@@ -16,6 +16,10 @@
     "mongodb": "^3.6.8",
     "mongoose": "^5.13.2",
     "socket.io": "^4.1.3",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "email-validator": "2.0.4"
+  },
+  "devDependencies": {
+    "email-validator": "^2.0.4"
   }
 }

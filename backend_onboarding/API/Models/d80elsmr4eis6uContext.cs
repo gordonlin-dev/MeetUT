@@ -22,7 +22,7 @@ namespace API.Models
         public virtual DbSet<QuestionnaireHobby> QuestionnaireHobbies { get; set; }
         public virtual DbSet<QuestionnaireHobbyCategory> QuestionnaireHobbyCategories { get; set; }
         public virtual DbSet<QuestionnaireProgramOfStudy> QuestionnaireProgramOfStudies { get; set; }
-        public virtual DbSet<QuestionnaireProgramOfStudyCategoriie> QuestionnaireProgramOfStudyCategoriies { get; set; }
+        public virtual DbSet<QuestionnaireProgramOfStudyCategory> QuestionnaireProgramOfStudyCategories { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserHobby> UserHobbies { get; set; }
         public virtual DbSet<UserProgramOfStudy> UserProgramOfStudies { get; set; }
@@ -31,6 +31,8 @@ namespace API.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseNpgsql("User ID=qhdnfykzfqptki;Password=ad77410c793d023714c38b394481f5d6027ffd1c9c56286495c11deaf880ce3a;Host=ec2-52-0-67-144.compute-1.amazonaws.com;Port=5432;Database=d80elsmr4eis6u;Pooling=true;SSL Mode=Require;TrustServerCertificate=True;");
             }
         }
 
@@ -97,24 +99,26 @@ namespace API.Models
                 entity.Property(e => e.Value).IsRequired();
             });
 
-            modelBuilder.Entity<QuestionnaireProgramOfStudyCategoriie>(entity =>
+            modelBuilder.Entity<QuestionnaireProgramOfStudyCategory>(entity =>
             {
-                entity.ToTable("Questionnaire_ProgramOfStudy_Categoriies");
+                entity.ToTable("Questionnaire_ProgramOfStudy_Categories");
 
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasDefaultValueSql("nextval('\"Questionnaire_ProgramOfStudy_Categoriies_ID_seq\"'::regclass)");
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
                 entity.Property(e => e.ProgramId).HasColumnName("ProgramID");
 
                 entity.HasOne(d => d.Category)
-                    .WithMany(p => p.QuestionnaireProgramOfStudyCategoriies)
+                    .WithMany(p => p.QuestionnaireProgramOfStudyCategories)
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Category");
 
                 entity.HasOne(d => d.Program)
-                    .WithMany(p => p.QuestionnaireProgramOfStudyCategoriies)
+                    .WithMany(p => p.QuestionnaireProgramOfStudyCategories)
                     .HasForeignKey(d => d.ProgramId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProgramOfStudy");
