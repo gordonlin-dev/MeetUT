@@ -162,7 +162,7 @@ getTokens = (req, user) => {
 }
 
 getCode = () => {
-    return Math.floor(100000 + Math.random() * 900000)
+    return "" + Math.floor(100000 + Math.random() * 900000)
 }
 
 async function email_verification(recipient, code) {
