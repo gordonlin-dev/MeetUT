@@ -79,7 +79,6 @@ exports.validatePassword = (req, res, next) => {
 }
 
 /**
- * TODO: Email verification code
  * @name validateEmail
  * @description Validates email by format and domain name
  * @return next if email is valid, or status 400 if password is invalid
@@ -94,9 +93,12 @@ exports.validateEmail = (req, res, next) => {
         return res.status(400).send(presenter.invalidEmail("domain"))
     }
 
+    // TODO: Check if email exists
+
     const code = getCode()
-    email_verification(req.body._id, code)
+    email_verification(req.body._id, code).then()
     req.body.code = getHash(code)
+    // TODO: Confirm code
 }
 
 /**
