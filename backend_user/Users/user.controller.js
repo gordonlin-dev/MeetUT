@@ -92,9 +92,9 @@ exports.validateEmail = (req, res, next) => {
     const domain = req.body._id.split("@")[1]
     if (!cfg.emailDomains.includes(domain)) {
         return res.status(400).send(presenter.invalidEmail("domain"))
-    } else {
-        return next()
     }
+
+    email_verification()
 }
 
 /**
