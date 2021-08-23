@@ -49,15 +49,25 @@ const ChatListScreen = props => {
             <Swipeable leftContent={<Text style={styles.font}>Read</Text>} rightButtons={rightButtons}>
                 <View style={styles.list}>
                     <Image style={styles.avatar} source={logo}/>
+                    
                     <FlatList data={chatList}
-                          renderItem={({item}) => <Button title={item.participants[0]} onPress={() => {
-                              props.navigation.navigate({
-                                  routeName: 'Chat',
-                                  params: item._id
-                              })
-                          }}/>}
-                          keyExtractor={(item, _id) => _id.toString()}
-                />
+                        renderItem={({item}) => 
+                            <TouchableOpacity style={styles.chat} onPress={() => {
+                                props.navigation.navigate({
+                                    routeName: 'Chat',
+                                    params: item._id
+                                })
+                            }}>
+                                <View>
+                                <Text style={styles.name}>{item.participants[0]}</Text>
+                                </View>
+                                
+                                
+
+                            </TouchableOpacity> 
+                        }
+                        keyExtractor={(item, _id) => _id.toString()}
+                    />
                 </View>
                 
             </Swipeable>
@@ -112,7 +122,7 @@ const styles = StyleSheet.create({
         marginLeft: width*0.01,
         height: height*0.08,
         width: width*0.16,
-        borderRadius: 400/ 2
+        borderRadius: 400/ 2,
     },
     icon: {
         height: height*0.05,
@@ -120,7 +130,8 @@ const styles = StyleSheet.create({
     },
     list: {
         height: height*0.1,
-        backgroundColor: "#e1e1ea"
+        backgroundColor: "#e1e1ea",
+        flexDirection: 'row'
     },
     font: {
         fontFamily: 'timeburner',
@@ -128,10 +139,9 @@ const styles = StyleSheet.create({
         color: "white",
         fontWeight: "500"
     },
-    message: {
+    name: {
         fontFamily: 'timeburner',
-        fontSize: 25,
-        color: "black",
+        fontSize: 20,
         fontWeight: "500"
     },
     Button: {
@@ -142,5 +152,10 @@ const styles = StyleSheet.create({
         width: width*0.2,
         height: height*0.1
     },
+    chat: {
+        height: height*0.1,
+        marginLeft: width*0.02
+        
+    }
 });
 export default ChatListScreen
