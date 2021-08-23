@@ -3,5 +3,6 @@
   "server_domain": "https://meet-ut-2.herokuapp.com",
   "signup": "/users/create",
   "reset_password": "",
-  "login": "/auth"
+  "login": "/auth",
+  "verify": "/users/create/verify"
 }

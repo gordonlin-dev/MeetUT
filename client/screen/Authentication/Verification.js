@@ -7,7 +7,7 @@ const image = require('../../assets/bg.png');
 const {height, width} = Dimensions.get('window');
 const verificationSubmit = async (code, props) => {
     try {
-        const url = cfg.domain + cfg.login;
+        const url = cfg.domain + cfg.verify;
         const response = await fetch(url, {
             method: 'POST',
             headers: {

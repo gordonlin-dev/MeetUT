@@ -19,6 +19,16 @@ exports.createUser = (req, res) => {
     })
 }
 
+exports.verify = (req, res, next) => {
+    req.body.verification = getHash(getSalt(), req.body.verification)
+    if (req.body.code === req.body.verification) {
+        return next()
+    } else {
+        console.log(req.body.verification + ", " + req.body.code)
+        return res.status(400).send()
+    }
+}
+
 /**
  * @name getById
  * @description Get a user's information by the given id
