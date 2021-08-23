@@ -23,6 +23,8 @@ exports.invalidEmail = (reason) => {
         return {error: "Email must be valid"}
     } else if (reason === "domain") {
         return {error: "Email must belong to University of Toronto"}
+    } else if (reason === "code") {
+        return {error: "Verification email could not be sent, please try again."}
     }
 }
 

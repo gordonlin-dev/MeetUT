@@ -5,6 +5,7 @@ const jwtSecret = require("../env.config").jwt_secret
 const validator = require("email-validator");
 const presenter = require("./user.presenter")
 const cfg = require("./user.config.json");
+const mail = require("nodemailer")
 
 /**
  * @name createUser
@@ -70,7 +71,7 @@ exports.updatePassword = (req, res) => {
  * @return next if password is valid, or status 400 if password is invalid
  */
 exports.validatePassword = (req, res, next) => {
-    if (req.body.password.length <= cfg.passwordMin || req.body.password.length >= cfg.passwordMax) {
+    if (req.body.password.length < cfg.passwordMin || req.body.password.length > cfg.passwordMax) {
         return res.status(400).send(presenter.invalidPassword("length"))
     } else {
         return next()
@@ -78,7 +79,6 @@ exports.validatePassword = (req, res, next) => {
 }
 
 /**
- * TODO: Email verification code
  * @name validateEmail
  * @description Validates email by format and domain name
  * @return next if email is valid, or status 400 if password is invalid
@@ -91,9 +91,19 @@ exports.validateEmail = (req, res, next) => {
     const domain = req.body._id.split("@")[1]
     if (!cfg.emailDomains.includes(domain)) {
         return res.status(400).send(presenter.invalidEmail("domain"))
-    } else {
-        return next()
     }
+
+    // TODO: Check if email exists
+
+    const code = getCode()
+    try {
+        email_verification(req.body._id, code).then()
+    } catch (e) {
+        console.log(e)
+        return res.status(400).send(presenter.invalidEmail("code"))
+    }
+    req.body.code = getHash(code)
+    // TODO: Confirm code
 }
 
 /**
@@ -130,7 +140,7 @@ getHash = (salt, key) => {
 /**
  * @name getPasswordHash
  * @description An algorithm to get the salt/hash combination of a password
- * @return string the hash of the given password
+ * @return string The hash of the given password
  */
 getPasswordHash = (password) => {
     let salt = getSalt()
@@ -139,16 +149,12 @@ getPasswordHash = (password) => {
 }
 
 /**
- * @name getAccessToken
- * @description An algorithm to get the token of a user
- * @return string the token of the given user
+ * @name getTokens
+ * @description An algorithm to get and set all necessary tokens for the given request
+ * @returns {{accessToken: (*), refreshToken: string}}
  */
-getAccessToken = (user) => {
-    return jwt.sign({_id: user._id}, jwtSecret)
-}
-
 getTokens = (req, user) => {
-    let accessToken = getAccessToken(user)
+    let accessToken = jwt.sign({_id: user._id}, jwtSecret)
     let salt = getSalt()
     req.body.refreshKey = salt
     let refreshId = req.body._id + jwtSecret
@@ -157,3 +163,48 @@ getTokens = (req, user) => {
     let refresh_token = buffer.toString('base64')
     return {accessToken: accessToken, refreshToken: refresh_token}
 }
+
+/**
+ * @name getCode
+ * @description Generate and return a 6 digit code
+ * @returns {string} Generated code
+ */
+getCode = () => {
+    return "" + Math.floor(100000 + Math.random() * 900000)
+}
+
+/**
+ * @name email_verification
+ * @param recipient The email of the new user
+ * @param code The code to be sent to the new user
+ * @returns {Promise<void>}
+ */
+async function email_verification(recipient, code) {
+    // create reusable transporter object using the default SMTP transport
+    let transporter = mail.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: "mailmeetut@gmail.com",
+            pass: "meetutmail",
+        },
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+        from: '"MeetUT Mail" <"mailmeetut@gmail.com">', // sender address
+        to: recipient, // list of receivers
+        subject: "Email Verification", // Subject line
+        text: "Your verification code is " + code, // plain text body
+        html: "<b>Your verification code is " + code + "</b>", // html body
+    });
+
+    console.log("Message sent: %s", info.messageId);
+    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+    // Preview only available when sending through an Ethereal account
+    console.log("Preview URL: %s", mail.getTestMessageUrl(info));
+    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+}
+
