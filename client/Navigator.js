@@ -9,6 +9,7 @@ import ChatListScreen from "./screen/Chat/ChatList";
 import Splash from './screen/Landing/Splash';
 import ResetPasswordScreen from './screen/Authentication/ResetPassword';
 import SettingScreen from './screen/Settings/Setting';
+import VerificationScreen from './screen/Authentication/Verification'
 
 import DemographicsScreen from "./screen/Onboarding/Demographics";
 import PersonalScreen from "./screen/Onboarding/Personal";
@@ -258,6 +259,12 @@ const Navigator = createStackNavigator({
             },
         }
     },
+    Verification: {
+        screen: VerificationScreen,
+        navigationOptions:{
+            title:"",
+        }
+    }
     
 });
 
