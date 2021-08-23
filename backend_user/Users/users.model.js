@@ -3,30 +3,26 @@ const mongoose = require('../mongoose.service').mongoose
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
-    firstName : String,
-    lastName : String,
-    //id is email
-    _id : String,
-    password : String,
-    isArchived : Boolean,
-    likedBy : {
+    active: Boolean,
+    firstName: String,
+    lastName: String,
+    _id: String,
+    password: String,
+    isArchived: Boolean,
+    likedBy: {},
+    matched: {}
+}, {strict: false})
 
-    },
-    matched: {
-
-    }
-}, {strict:false})
-
-userSchema.virtual('email').get(function (){
+userSchema.virtual('email').get(function () {
     return this._id
 })
 
 userSchema.set('toJSON', {
-    virtuals : true
+    virtuals: true
 })
 
 
-userSchema.findById = function(cb){
+userSchema.findById = function (cb) {
     return this.model('Users').find({id: this.id}, cb)
 }
 
@@ -65,9 +61,21 @@ exports.getUserInfoById = (id) => {
     })
 }
 
+// TODO: fix
+exports.activateUser = (id) => {
+    return User.findById(id).then((result) => {
+        if (result != null) {
+            result.active = true
+            delete result.code
+            return result.save
+        } else {
+            console.log("no id")
+        }
+    })
+}
+
 exports.createUser = (data) => {
     const user = new User(data)
-    user.isArchived = false
     return user.save()
 }
 
@@ -75,7 +83,7 @@ exports.archiveUser = (id) => {
     return User.findById(id).then((result) => {
         if (result.isArchived) {
             return null
-        }else {
+        } else {
             result.isArchived = true
             return result.save()
         }
@@ -93,7 +101,7 @@ exports.deleteUser = (id) => {
 }
 
 exports.getAllUsers = () => {
-    return User.find({}).then((result) =>{
+    return User.find({}).then((result) => {
         for (const item in result) {
             const user = result[item].toJSON()
             delete user.password
@@ -108,38 +116,34 @@ exports.updatePassword = (id, data) => {
     return User.findById(id).then((result) => {
         if (result.isArchived) {
             return null
-        }else {
+        } else {
             result.password = data
             return result.save()
         }
     })
 }
 
-exports.like = async (curUser, likedUser) =>{
+exports.like = async (curUser, likedUser) => {
     let cur = await User.findById(curUser)
     let liked = await User.findById(likedUser)
-    if (cur.likedBy == null){
-        cur.likedBy = {
-        }
+    if (cur.likedBy == null) {
+        cur.likedBy = {}
     }
-    if (liked.likedBy == null){
-        liked.likedBy = {
-        }
+    if (liked.likedBy == null) {
+        liked.likedBy = {}
     }
-    if(cur.matched == null){
-        cur.matched = {
-        }
+    if (cur.matched == null) {
+        cur.matched = {}
     }
-    if(liked.matched == null){
-        liked.matched = {
-        }
+    if (liked.matched == null) {
+        liked.matched = {}
     }
     const curUserLiked = cur.likedBy[likedUser]
-    if (curUserLiked == null){
+    if (curUserLiked == null) {
         //current user has not been liked by the likedUser, add current user to likedUser's likedBy attribute
         liked.likedBy[curUser] = true
         liked.markModified('likedBy')
-    }else{
+    } else {
         //current user has been liked by likedUser, they are now matched. add current user to
         //  likedUser's likedBy attribute
         //Add each other to matched attribute

@@ -4,5 +4,5 @@
   "signup": "/users/create",
   "reset_password": "",
   "login": "/auth",
-  "verify": "/users/create/verify"
+  "verify": "/users/verify"
 }

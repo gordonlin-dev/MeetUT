@@ -14,19 +14,27 @@ const mail = require("nodemailer")
  */
 exports.createUser = (req, res) => {
     req.body.password = getPasswordHash(req.body.password)
+    req.body.active = false
+    delete req.body.confirm
+    delete req.body.email // TODO: Refactor into it's own data json
     UserModel.createUser(req.body).then((user) => {
         res.status(200).send(getTokens(req, user))
     })
 }
 
-exports.verify = (req, res, next) => {
-    req.body.verification = getHash(getSalt(), req.body.verification)
-    if (req.body.code === req.body.verification) {
-        return next()
-    } else {
-        console.log(req.body.verification + ", " + req.body.code)
-        return res.status(400).send()
-    }
+exports.verifyEmail = (req, res, next) => {
+    UserModel.getUserInfoById(req.body._id).then((result) => {
+        req.body.verification = getHash(getSalt(), req.body.verification)
+        if (result.verification === req.body.code) {
+            UserModel.activateUser(req.body._id).then((result) => {
+                console.log(result)
+                return res.status(200).send()
+            })
+        } else {
+            console.log(req.body.verification + ", " + req.body.code)
+            return res.status(400).send()
+        }
+    })
 }
 
 /**
@@ -104,6 +112,7 @@ exports.validateEmail = (req, res, next) => {
         }
 
         const code = getCode()
+        console.log(code)
         try {
             email_verification(req.body._id, code).then()
         } catch (e) {
@@ -112,7 +121,6 @@ exports.validateEmail = (req, res, next) => {
         }
         req.body.code = getHash(getSalt(), code)
         return next()
-        // TODO: Confirm code
     })
 }
 
