@@ -58,7 +58,7 @@ exports.createUser = (data) => {
     return user.save()
 }
 
-exports.deleteUser = (id) => {
+exports.archiveUser = (id) => {
     return User.findById(id).then((result) => {
         if (result.isArchived) {
             return null
@@ -66,6 +66,13 @@ exports.deleteUser = (id) => {
             result.isArchived = true
             return result.save()
         }
+    })
+}
+
+exports.deleteUser = (id) => {
+    return User.findById(id).then((result) => {
+        User.remove({_id: id})
+        return result.save()
     })
 }
 

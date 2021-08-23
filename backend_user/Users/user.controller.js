@@ -193,11 +193,11 @@ async function email_verification(recipient, code) {
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
-        from: '"MeetUT Mail" <"mailmeetut@gmail.com">', // sender address
+        from: cfg.mailSender, // sender address
         to: recipient, // list of receivers
-        subject: "Email Verification", // Subject line
-        text: "Your verification code is " + code, // plain text body
-        html: "<b>Your verification code is " + code + "</b>", // html body
+        subject: presenter.verificationEmail("subject"), // Subject line
+        text: presenter.verificationEmail("text", code), // plain text body
+        html: "<b>" + presenter.verificationEmail("text", code) + "</b>", // html body
     });
 
     console.log("Message sent: %s", info.messageId);

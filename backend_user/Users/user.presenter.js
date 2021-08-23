@@ -28,5 +28,12 @@ exports.invalidEmail = (reason) => {
     }
 }
 
+exports.verificationEmail = (field, code) => {
+    if (field === "subject") {
+        return "Email Verification"
+    } else if (field === "text") {
+        return "Your verification code is " + code
+    }
+}
 
 
