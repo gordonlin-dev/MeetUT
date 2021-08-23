@@ -79,29 +79,31 @@ exports.validatePassword = (req, res, next) => {
  * @return next if email is valid, or status 400 if password is invalid
  */
 exports.validateEmail = (req, res, next) => {
-    if (!validator.validate(req.body._id)) {
-        return res.status(400).send(presenter.invalidEmail("address"))
-    }
+    userExists(req.body._id).then((result) => {
+        if (result) {
+            return res.status(400).send(presenter.invalidUser("exist"))
+        }
 
-    const domain = req.body._id.split("@")[1]
-    if (!cfg.emailDomains.includes(domain)) {
-        return res.status(400).send(presenter.invalidEmail("domain"))
-    }
+        if (!validator.validate(req.body._id)) {
+            return res.status(400).send(presenter.invalidEmail("address"))
+        }
 
-    if (userExists(req.body._id)) {
-        return res.status(400).send(presenter.invalidUser("exist"))
-    }
+        const domain = req.body._id.split("@")[1]
+        if (!cfg.emailDomains.includes(domain)) {
+            return res.status(400).send(presenter.invalidEmail("domain"))
+        }
 
-    const code = getCode()
-    try {
-        email_verification(req.body._id, code).then()
-    } catch (e) {
-        console.log(e)
-        return res.status(400).send(presenter.invalidEmail("code"))
-    }
-    req.body.code = getHash(getSalt(), code)
-    return next()
-    // TODO: Confirm code
+        const code = getCode()
+        try {
+            email_verification(req.body._id, code).then()
+        } catch (e) {
+            console.log(e)
+            return res.status(400).send(presenter.invalidEmail("code"))
+        }
+        req.body.code = getHash(getSalt(), code)
+        return next()
+        // TODO: Confirm code
+    })
 }
 
 /**
@@ -177,7 +179,9 @@ getCode = () => {
  * @return boolean True if user exists, and False otherwise
  */
 userExists = (id) => {
-    return UserModel.exists(id)
+    return UserModel.exists(id).then((result) => {
+        return result
+    })
 }
 
 /**

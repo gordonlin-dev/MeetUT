@@ -1,3 +1,4 @@
+// TODO: Test and debug
 const mongoose = require('../mongoose.service').mongoose
 const Schema = mongoose.Schema
 
@@ -32,8 +33,8 @@ userSchema.findById = function(cb){
 const User = mongoose.model('User', userSchema)
 
 exports.exists = (id) => {
-    User.findById(id).then((result) => {
-        return result != null
+    return User.findById(id).then((result) => {
+        return (result != null)
     })
 }
 
