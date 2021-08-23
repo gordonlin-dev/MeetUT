@@ -27,9 +27,9 @@ exports.createUser = (req, res) => {
 exports.getById = (req, res) => {
     UserModel.getUserInfoById(req.params.userID).then((result) => {
         if (result != null) {
-            res.status(200).send()
+            res.status(200).send(result)
         } else {
-            res.status(404).send(presenter.invalidUser("exist"))
+            res.status(404).send(presenter.invalidUser("null"))
         }
     })
 }
@@ -40,13 +40,8 @@ exports.getById = (req, res) => {
  * @return status 200 redirect if request is valid, or status 404 if user does not exist
  */
 exports.deleteUser = (req, res) => {
-    UserModel.deleteUser(req.params.userID).then((result) => {
-        if (result != null) {
-            res.status(200).send()
-        } else {
-            res.status(404).send(presenter.invalidUser("exist"))
-        }
-    })
+    UserModel.deleteUser(req.params.userID)
+    res.status(200).send()
 }
 
 /**
@@ -93,7 +88,9 @@ exports.validateEmail = (req, res, next) => {
         return res.status(400).send(presenter.invalidEmail("domain"))
     }
 
-    // TODO: Check if email exists
+    if (userExists(req.body._id)) {
+        return res.status(400).send(presenter.invalidUser("exist"))
+    }
 
     const code = getCode()
     try {
@@ -102,7 +99,8 @@ exports.validateEmail = (req, res, next) => {
         console.log(e)
         return res.status(400).send(presenter.invalidEmail("code"))
     }
-    req.body.code = getHash(code)
+    req.body.code = getHash(getSalt(), code)
+    return next()
     // TODO: Confirm code
 }
 
@@ -171,6 +169,15 @@ getTokens = (req, user) => {
  */
 getCode = () => {
     return "" + Math.floor(100000 + Math.random() * 900000)
+}
+
+/**
+ * @name userExists
+ * @description Check if user exists
+ * @return boolean True if user exists, and False otherwise
+ */
+userExists = (id) => {
+    return UserModel.exists(id)
 }
 
 /**

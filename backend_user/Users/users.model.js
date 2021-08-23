@@ -31,19 +31,31 @@ userSchema.findById = function(cb){
 
 const User = mongoose.model('User', userSchema)
 
+exports.exists = (id) => {
+    User.findById(id).then((result) => {
+        return result != null
+    })
+}
+
 exports.findById = (id) => {
     return User.findById(id).then((result) => {
-        result = result.toJSON()
-        delete result.__v
-        return result
+        if (result == null) {
+            return null
+        } else {
+            result = result.toJSON()
+            delete result.__v
+            return result
+        }
     })
 }
 
 exports.getUserInfoById = (id) => {
     return User.findById(id).then((result) => {
-        if (result.isArchived) {
+        if (result == null) {
             return null
-        }else {
+        } else if (result.isArchived) {
+            return null
+        } else {
             result = result.toJSON()
             delete result.password
             delete result.__v
@@ -71,8 +83,11 @@ exports.archiveUser = (id) => {
 
 exports.deleteUser = (id) => {
     return User.findById(id).then((result) => {
-        User.remove({_id: id})
-        return result.save()
+        if (result == null) {
+            return null
+        } else {
+            result.deleteOne()
+        }
     })
 }
 

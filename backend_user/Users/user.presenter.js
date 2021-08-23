@@ -1,8 +1,8 @@
-const cfg = require("./user.config.json")
-
 exports.invalidUser = (reason) => {
     if (reason === "exist") {
-        return {error: "User"}
+        return {error: "User already exists"}
+    } else if (reason === "null") {
+        return {error: "User does not exist"}
     }
 }
 
