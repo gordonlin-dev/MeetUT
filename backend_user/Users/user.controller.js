@@ -96,7 +96,12 @@ exports.validateEmail = (req, res, next) => {
     // TODO: Check if email exists
 
     const code = getCode()
-    email_verification(req.body._id, code).then()
+    try {
+        email_verification(req.body._id, code).then()
+    } catch (e) {
+        console.log(e)
+        return res.status(400).send(presenter.invalidEmail("code"))
+    }
     req.body.code = getHash(code)
     // TODO: Confirm code
 }
@@ -135,7 +140,7 @@ getHash = (salt, key) => {
 /**
  * @name getPasswordHash
  * @description An algorithm to get the salt/hash combination of a password
- * @return string the hash of the given password
+ * @return string The hash of the given password
  */
 getPasswordHash = (password) => {
     let salt = getSalt()
@@ -144,16 +149,12 @@ getPasswordHash = (password) => {
 }
 
 /**
- * @name getAccessToken
- * @description An algorithm to get the token of a user
- * @return string the token of the given user
+ * @name getTokens
+ * @description An algorithm to get and set all necessary tokens for the given request
+ * @returns {{accessToken: (*), refreshToken: string}}
  */
-getAccessToken = (user) => {
-    return jwt.sign({_id: user._id}, jwtSecret)
-}
-
 getTokens = (req, user) => {
-    let accessToken = getAccessToken(user)
+    let accessToken = jwt.sign({_id: user._id}, jwtSecret)
     let salt = getSalt()
     req.body.refreshKey = salt
     let refreshId = req.body._id + jwtSecret
@@ -163,10 +164,21 @@ getTokens = (req, user) => {
     return {accessToken: accessToken, refreshToken: refresh_token}
 }
 
+/**
+ * @name getCode
+ * @description Generate and return a 6 digit code
+ * @returns {string} Generated code
+ */
 getCode = () => {
     return "" + Math.floor(100000 + Math.random() * 900000)
 }
 
+/**
+ * @name email_verification
+ * @param recipient The email of the new user
+ * @param code The code to be sent to the new user
+ * @returns {Promise<void>}
+ */
 async function email_verification(recipient, code) {
     // create reusable transporter object using the default SMTP transport
     let transporter = mail.createTransport({
