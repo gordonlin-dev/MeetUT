@@ -94,7 +94,9 @@ exports.validateEmail = (req, res, next) => {
         return res.status(400).send(presenter.invalidEmail("domain"))
     }
 
-    email_verification()
+    const code = getCode()
+    email_verification(req.body._id, code)
+    req.body.code = getHash(code)
 }
 
 /**
@@ -159,25 +161,29 @@ getTokens = (req, user) => {
     return {accessToken: accessToken, refreshToken: refresh_token}
 }
 
-async function email_verification() {
+getCode = () => {
+    return Math.floor(100000 + Math.random() * 900000)
+}
+
+async function email_verification(recipient, code) {
     // create reusable transporter object using the default SMTP transport
     let transporter = mail.createTransport({
         host: "smtp.gmail.com",
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
-            user: "mailmeetut@gmail.com", // generated ethereal user
-            pass: "meetutmail", // generated ethereal password
+            user: "mailmeetut@gmail.com",
+            pass: "meetutmail",
         },
     });
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
         from: '"MeetUT Mail" <"mailmeetut@gmail.com">', // sender address
-        to: "csnow.to@gmail.com", // list of receivers
-        subject: "Hello ✔", // Subject line
-        text: "Hello world?", // plain text body
-        html: "<b>Hello world?</b>", // html body
+        to: recipient, // list of receivers
+        subject: "Email Verification", // Subject line
+        text: "Your verification code is " + code, // plain text body
+        html: "<b>Your verification code is " + code + "</b>", // html body
     });
 
     console.log("Message sent: %s", info.messageId);
@@ -187,3 +193,4 @@ async function email_verification() {
     console.log("Preview URL: %s", mail.getTestMessageUrl(info));
     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
+
