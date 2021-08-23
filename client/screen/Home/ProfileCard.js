@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, Button, StyleSheet, Slide, Dimensions, SafeAreaView} from 'react-native'
+import {View, Text, Button, StyleSheet, Slide, Dimensions, SafeAreaView, Alert} from 'react-native'
 import Swiper from 'react-native-swiper'
 
+const presenter = require('../Presenter')
 const secureStore = require('../../SecureStore')
 const {height, width} = Dimensions.get('window');
 
@@ -49,12 +50,12 @@ const ProfileCard = props => {
 
 
         }catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
     const nextUser = async () => {
-        await setCurUser(curUser + 1)
+        await setCurUser(curUser + 1);
     }
 
     const sendLike = async () => {
@@ -78,7 +79,8 @@ const ProfileCard = props => {
             await nextUser();
 
         }catch (e){
-            console.log(e)
+            console.log(e);
+            Alert.alert(presenter.internalError())
         }
     }
 
@@ -98,20 +100,39 @@ const ProfileCard = props => {
     return(
         <SafeAreaView style={styles.container}>
             
-            <Swiper style={styles.wrapper} showsButtons={true}>
-                <View style={styles.slide}>
-                <View >
-                <Text style={styles.text} onPress={async () => {await sendLike()}}>{props.firstName + ' ' + props.lastName}</Text>
-                </View>
-                    
-                </View>
+            <Swiper style={styles.wrapper}>
+                {users.map((props) => {
+                    return (
+                        <View style={styles.slide}>
+                            <View style={styles.leftButton}>
+                                <Button style={styles.Button} title={'   Pass   '} onPress={async () => {await nextUser()}}/>
+
+                            </View>
+                        <View >
+                        
+                        <Text style={styles.text} onPress={async () => {await sendLike()}}>{props.firstName + ' ' + props.lastName}</Text>
+                        </View>
+                        <View style={styles.rightButton}>
+                            <Button style={styles.Button} title={'   Like   '} onPress={async () => {await sendLike()}}/>
+
+                        </View>
+                        </View>
+                    );
+                })}
+                
             </Swiper>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
-    buttonContainer:{
+    rightButton:{
+        position: "absolute",
+        right: 0,
+    },
+    leftButton:{
+        position: "absolute",
+        left: 0
     },
     container:{
         flex:1,
