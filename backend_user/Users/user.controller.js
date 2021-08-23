@@ -6,51 +6,60 @@ const validator = require("email-validator");
 const presenter = require("./user.presenter")
 const cfg = require("./user.config.json");
 
+/**
+ * @name createUser
+ * @description Create the user requested given that all request data is valid
+ * @return status 200 redirect with the tokens required
+ */
 exports.createUser = (req, res) => {
-    let salt = crypto.randomBytes(16).toString('base64')
-    let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
-    req.body.password = salt + "$" + hash
-    UserModel.createUser(req.body).then((result) => {
-        let refreshId = req.body._id + jwtSecret
-        let salt = crypto.randomBytes(16).toString('base64')
-        let hash = crypto.createHmac('sha512', salt).update(refreshId).digest('base64')
-        req.body.refreshKey = salt
-        let token = jwt.sign({_id: result._id}, jwtSecret)
-        let b = Buffer.from(hash)
-        let refresh_token = b.toString('base64')
-        res.status(200).send({accessToken: token, refreshToken: refresh_token})
+    req.body.password = getPasswordHash(req.body.password)
+    UserModel.createUser(req.body).then((user) => {
+        res.status(200).send(getTokens(req, user))
     })
 }
 
+/**
+ * @name getById
+ * @description Get a user's information by the given id
+ * @return status 200 redirect if request is valid, or status 404 if user does not exist
+ */
 exports.getById = (req, res) => {
     UserModel.getUserInfoById(req.params.userID).then((result) => {
-        if (result == null) {
-            res.status(404).send("User not found")
+        if (result != null) {
+            res.status(200).send()
         } else {
-            res.status(200).send(result)
+            res.status(404).send(presenter.invalidUser("exist"))
         }
     })
 }
 
+/**
+ * @name deleteUser
+ * @description Delete the given user
+ * @return status 200 redirect if request is valid, or status 404 if user does not exist
+ */
 exports.deleteUser = (req, res) => {
     UserModel.deleteUser(req.params.userID).then((result) => {
-        if (result == null) {
-            res.status(404).send("User not found")
-        } else {
+        if (result != null) {
             res.status(200).send()
+        } else {
+            res.status(404).send(presenter.invalidUser("exist"))
         }
     })
 }
 
+/**
+ * @name updatePassword
+ * @description Update the password of the given user
+ * @return status 200 redirect if request is valid, or status 404 if user does not exist
+ */
 exports.updatePassword = (req, res) => {
-    let salt = crypto.randomBytes(16).toString('base64')
-    let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
-    req.body.password = salt + "$" + hash
+    req.body.password = getPasswordHash(req.body.password)
     UserModel.updatePassword(req.params.userID, req.body.password).then((result) => {
-        if (result == null) {
-            res.status(404).send("User not found")
+        if (result != null) {
+            res.status(200).send(presenter.updatedPassword())
         } else {
-            res.status(200).send()
+            res.status(404).send(presenter.invalidUser("exist"))
         }
     })
 }
@@ -69,6 +78,7 @@ exports.validatePassword = (req, res, next) => {
 }
 
 /**
+ * TODO: Email verification code
  * @name validateEmail
  * @description Validates email by format and domain name
  * @return next if email is valid, or status 400 if password is invalid
@@ -97,4 +107,53 @@ exports.confirmPassword = (req, res, next) => {
     } else {
         return next()
     }
+}
+
+/**
+ * @name getSalt
+ * @description An algorithm to get the salt for a password hash
+ * @return string The salt of the algorithm
+ */
+getSalt = () => {
+    return crypto.randomBytes(16).toString('base64')
+}
+
+/**
+ * @name getHash
+ * @description An algorithm to get the hash of a key
+ * @return string the hash of the given key
+ */
+getHash = (salt, key) => {
+    return crypto.createHmac('sha512', salt).update(key).digest('base64')
+}
+
+/**
+ * @name getPasswordHash
+ * @description An algorithm to get the salt/hash combination of a password
+ * @return string the hash of the given password
+ */
+getPasswordHash = (password) => {
+    let salt = getSalt()
+    let hash = getHash(salt, password)
+    return salt + "$" + hash
+}
+
+/**
+ * @name getAccessToken
+ * @description An algorithm to get the token of a user
+ * @return string the token of the given user
+ */
+getAccessToken = (user) => {
+    return jwt.sign({_id: user._id}, jwtSecret)
+}
+
+getTokens = (req, user) => {
+    let accessToken = getAccessToken(user)
+    let salt = getSalt()
+    req.body.refreshKey = salt
+    let refreshId = req.body._id + jwtSecret
+    let hash = getHash(salt, refreshId)
+    let buffer = Buffer.from(hash)
+    let refresh_token = buffer.toString('base64')
+    return {accessToken: accessToken, refreshToken: refresh_token}
 }

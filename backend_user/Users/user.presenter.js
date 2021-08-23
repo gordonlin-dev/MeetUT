@@ -1,5 +1,15 @@
 const cfg = require("./user.config.json")
 
+exports.invalidUser = (reason) => {
+    if (reason === "exist") {
+        return {error: "User"}
+    }
+}
+
+exports.updatedPassword = () => {
+    return {result: "Password updated successfully"}
+}
+
 exports.invalidPassword = (reason) => {
     if (reason === "length") {
         return {error: "Password must be between 8 and 50 characters long"}
