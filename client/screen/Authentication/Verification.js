@@ -8,7 +8,8 @@ const {height, width} = Dimensions.get('window');
 const secureStore = require('../../SecureStore')
 
 
-const verificationSubmit = async (email, code, props) => {
+const verificationSubmit = async (code, props) => {
+    console.log(await secureStore.GetValue("UserId"))
     try {
         const url = cfg.domain + cfg.verify;
         const response = await fetch(url, {
@@ -17,7 +18,7 @@ const verificationSubmit = async (email, code, props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                _id: email,
+                _id: await secureStore.GetValue("UserId"),
                 verification: code
             })
         });
@@ -35,12 +36,11 @@ const verificationSubmit = async (email, code, props) => {
     }
 }
 
-const resend = async (email, props) => {
+const resend = async (props) => {
 
 }
 
 const verificationScreen = props => {
-    const email = secureStore.GetValue("UserId")
     const [code, onChangeCode] = useState("")
 
     return (
@@ -59,20 +59,19 @@ const verificationScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            resend(email, props)
+                            resend(props)
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Resend Code</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            verificationSubmit(email, code, props)
+                            verificationSubmit(code, props)
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Submit</Text>
                     </TouchableOpacity>
                 </View>
-
             </ImageBackground>
         </View>
     );
