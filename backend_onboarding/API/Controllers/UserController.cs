@@ -27,7 +27,6 @@ namespace API.Controllers
             return "1234";
         }
 
-
         public void loadHobbiesData()
         {
             string filePath = "DataSource/hobbies.xlsx";
