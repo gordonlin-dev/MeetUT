@@ -47,6 +47,7 @@ exports.sendVerification = (req, res, next) => {
  */
 exports.verifyEmail = (req, res) => { // TODO: Set max times
     UserModel.getUserCode(req.body._id).then((result) => {
+        console.log(req.body._id)
         req.body.verification = getHash(cfg.codeSalt, req.body.verification)
         if (req.body.verification === result) {
             UserModel.activateUser(req.body._id).then(() => {return res.status(200).send()})
