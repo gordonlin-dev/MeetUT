@@ -16,23 +16,44 @@ exports.createUser = (req, res) => {
     req.body.password = getPasswordHash(req.body.password)
     req.body.active = false
     delete req.body.confirm
-    delete req.body.email // TODO: Refactor into it's own data json
+    delete req.body.email
+
     UserModel.createUser(req.body).then((user) => {
         res.status(200).send(getTokens(req, user))
     })
 }
 
-exports.verifyEmail = (req, res) => {
-    UserModel.getUserInfoById(req.body._id).then((result) => {
-        req.body.verification = getHash(getSalt(), req.body.verification)
-        if (result.verification === req.body.code) {
+/**
+ * @name sendVerification
+ * @description Send the email for verification given that the request body is valid
+ * @return next if sent successfully, or status 400 otherwise
+ */
+exports.sendVerification = (req, res, next) => {
+    const code = getCode()
+    console.log(code)
+    req.body.code = getHash(cfg.codeSalt, code)
+    try {
+        email_verification(req.body._id, code).then()
+        return next()
+    } catch (e) {
+        console.log(e)
+        return res.status(400).send(presenter.invalidEmail("code"))
+    }
+}
+
+/**
+ * @name verifyEmail
+ * @description Check if the posted code is the same as the stored code, and activate the account if needed
+ */
+exports.verifyEmail = (req, res) => { // TODO: Set max times
+    UserModel.getUserCode(req.body._id).then((result) => {
+        req.body.verification = getHash(cfg.codeSalt, req.body.verification)
+        if (req.body.verification === result) {
             UserModel.activateUser(req.body._id).then((result) => {
-                console.log(result)
                 return res.status(200).send()
             })
         } else {
-            console.log(req.body.verification + ", " + req.body.code)
-            return res.status(400).send()
+            return res.status(400).send(presenter.invalidCode())
         }
     })
 }
@@ -111,15 +132,6 @@ exports.validateEmail = (req, res, next) => {
             return res.status(400).send(presenter.invalidEmail("domain"))
         }
 
-        const code = getCode()
-        console.log(code)
-        try {
-            email_verification(req.body._id, code).then()
-        } catch (e) {
-            console.log(e)
-            return res.status(400).send(presenter.invalidEmail("code"))
-        }
-        req.body.code = getHash(getSalt(), code)
         return next()
     })
 }

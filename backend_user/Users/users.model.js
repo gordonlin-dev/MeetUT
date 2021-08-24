@@ -62,6 +62,18 @@ exports.getUserInfoById = (id) => {
     })
 }
 
+exports.getUserCode = (id) => {
+    return User.findById(id).then((result) => {
+        if (result == null) {
+            return null
+        } else if (result.active) {
+            return null
+        } else {
+            return result.code
+        }
+    })
+}
+
 exports.activateUser = (id) => {
     return User.findById(id).then((result) => {
         if (result != null) {
