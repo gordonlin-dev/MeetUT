@@ -9,8 +9,7 @@ const presenter = require('../Presenter')
 
 const resetSubmit = async (email, password, confirm, props) => {
     try {
-        const url = cfg.domain + "/" + email + cfg.reset  // TODO: Use config
-
+        const url = cfg.domain + cfg.resetPassword + "/" + email // TODO: Use config
         console.log(email)
         console.log(url)
 

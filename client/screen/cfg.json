@@ -1,7 +1,7 @@
 {
   "domain": "https://meet-ut-2.herokuapp.com",
   "signup": "/users/create",
-  "reset_password": "",
+  "resetPassword": "/updatePassword",
   "login": "/auth",
-  "reset": "/updatePassword"
+  "verify": "/users/verify"
 }

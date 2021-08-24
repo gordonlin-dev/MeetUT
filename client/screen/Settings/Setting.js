@@ -18,6 +18,12 @@ const signoutSubmit = async (props) => {
         console.log(error)
     }
 }
+
+/* Delete user function here, saw the function in controller, not sure how to call it
+*/
+const deleteButton = async (props) => {
+
+}
 const SettingScreen = props => {
 
     return (
@@ -39,6 +45,13 @@ const SettingScreen = props => {
               }}
               style={styles.Button}>
               <Text style={styles.font}>Reset Password</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                deleteButton(props)
+              }}
+              style={styles.Button}>
+              <Text style={styles.font}>Delete Myself</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.footer}>
@@ -118,18 +131,22 @@ const styles = StyleSheet.create({
       fontWeight: "500"
     },
     footer: {
-        justifyContent: 'space-around',
-        alignItems: 'stretch',
-        backgroundColor: '#3590F2',
-        height: height * 0.1,
-        marginTop: height * 0.52
+      position: "absolute",
+      justifyContent: 'space-around',
+      alignItems: 'stretch',
+      backgroundColor: '#3590F2',
+      height: height * 0.1,
+      marginTop: height * 0.52,
+      width: width,
+      bottom: 0
     },
     footerButton:{
-        flexDirection: 'row',
-        justifyContent: 'space-around',
+      flexDirection: 'row',
+      justifyContent: 'space-around',
     },
     buttonContainer: {
-      marginTop: height * 0.1
+      position: "absolute",
+      top: height*0.1
     },
     icon: {
       height: height*0.05,

@@ -1,8 +1,8 @@
-const cfg = require("./user.config.json")
-
 exports.invalidUser = (reason) => {
     if (reason === "exist") {
-        return {error: "User"}
+        return {error: "User already exists"}
+    } else if (reason === "null") {
+        return {error: "User does not exist"}
     }
 }
 
@@ -28,5 +28,14 @@ exports.invalidEmail = (reason) => {
     }
 }
 
+exports.verificationEmail = (field, code) => {
+    if (field === "subject") {
+        return "Email Verification"
+    } else if (field === "text") {
+        return "Your verification code is " + code
+    }
+}
 
-
+exports.invalidCode = () => {
+    return {error: "Verification code does not match"}
+}
