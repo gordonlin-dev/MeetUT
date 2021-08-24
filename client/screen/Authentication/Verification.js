@@ -27,8 +27,11 @@ const verificationSubmit = async (code, props) => {
                 routeName: 'Home'
             })
         } else {
-            console.log(response.status)
-            Alert.alert(presenter.internalError())
+            const responseJson = await response.json();
+            Alert.alert(responseJson.error)
+            props.navigation.navigate({
+                routeName: 'Verification'
+            })
         }
     } catch (error) {
         console.log(error)
@@ -36,7 +39,7 @@ const verificationSubmit = async (code, props) => {
     }
 }
 
-const resend = async () => {
+const resend = async (props) => {
     try {
         const url = cfg.domain + cfg.resendCode;
         const response = await fetch(url, {
@@ -45,11 +48,15 @@ const resend = async () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                _id: await secureStore.GetValue("UserId"),
+                _id: await secureStore.GetValue("UserId")
             })
         });
 
-        if (response.status !== 200) {
+        if (response.status === 200) {
+            props.navigation.navigate({
+                routeName: 'Verification'
+            })
+        } else {
             console.log(response.status)
             Alert.alert(presenter.internalError())
         }
@@ -78,7 +85,7 @@ const verificationScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            resend()
+                            resend(props)
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Resend Code</Text>
