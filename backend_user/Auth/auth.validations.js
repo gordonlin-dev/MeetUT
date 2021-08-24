@@ -32,10 +32,9 @@ exports.isActive = (req, res, next) => {
     return getInfo(req.body.email).then((result) => {
         if (result == null) {
             return res.status(404).send()
-        } else if (result.active) {
-            return next()
         } else {
-            return res.status(400).send()
+            req.body.active = result.active
+            return next()
         }
     })
 }

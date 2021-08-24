@@ -3,6 +3,10 @@ const crypto = require('crypto')
 const jwtSecret = require("../env.config").jwt_secret
 
 exports.auth = (req, res) => {
+    if (!req.body.active) {
+        res.status(400).send()
+    }
+
     try {
         let refreshId = req.body.email + jwtSecret
         let salt = crypto.randomBytes(16).toString('base64')
