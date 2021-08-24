@@ -15,6 +15,7 @@ namespace API.Models
 
         public int Id { get; set; }
         public string Value { get; set; }
+        public int? MatchValue { get; set; }
 
         public virtual ICollection<QuestionnaireProgramOfStudyCategory> QuestionnaireProgramOfStudyCategories { get; set; }
         public virtual ICollection<UserProgramOfStudy> UserProgramOfStudies { get; set; }

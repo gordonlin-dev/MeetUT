@@ -27,6 +27,11 @@ namespace API.Controllers
             return "1234";
         }
 
+        public void SetUserMatchCoordinates()
+        {
+
+        }
+
         public void loadHobbiesData()
         {
             string filePath = "DataSource/hobbies.xlsx";
