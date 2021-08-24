@@ -1,5 +1,7 @@
 {
   "passwordMin": 8,
   "passwordMax": 50,
-  "emailDomains": ["mail.utoronto.ca"]
+  "emailDomains": ["mail.utoronto.ca"],
+  "mailSender": "\"MeetUT Mail\" <\"mailmeetut@gmail.com\">",
+  "codeSalt": "XmtsFFlytf1d04lf"
 }

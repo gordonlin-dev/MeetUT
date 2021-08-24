@@ -14,8 +14,47 @@ const mail = require("nodemailer")
  */
 exports.createUser = (req, res) => {
     req.body.password = getPasswordHash(req.body.password)
+    req.body.active = false
+    delete req.body.confirm
+    delete req.body.email
+
     UserModel.createUser(req.body).then((user) => {
         res.status(200).send(getTokens(req, user))
+    })
+}
+
+/**
+ * @name sendVerification
+ * @description Send the email for verification given that the request body is valid
+ * @return next if sent successfully, or status 400 otherwise
+ */
+exports.sendVerification = (req, res, next) => {
+    const code = getCode()
+    console.log(code)
+    req.body.code = getHash(cfg.codeSalt, code)
+    try {
+        email_verification(req.body._id, code).then()
+        return next()
+    } catch (e) {
+        console.log(e)
+        return res.status(400).send(presenter.invalidEmail("code"))
+    }
+}
+
+/**
+ * @name verifyEmail
+ * @description Check if the posted code is the same as the stored code, and activate the account if needed
+ */
+exports.verifyEmail = (req, res) => { // TODO: Set max times
+    UserModel.getUserCode(req.body._id).then((result) => {
+        req.body.verification = getHash(cfg.codeSalt, req.body.verification)
+        if (req.body.verification === result) {
+            UserModel.activateUser(req.body._id).then((result) => {
+                return res.status(200).send()
+            })
+        } else {
+            return res.status(400).send(presenter.invalidCode())
+        }
     })
 }
 
@@ -27,9 +66,9 @@ exports.createUser = (req, res) => {
 exports.getById = (req, res) => {
     UserModel.getUserInfoById(req.params.userID).then((result) => {
         if (result != null) {
-            res.status(200).send()
+            res.status(200).send(result)
         } else {
-            res.status(404).send(presenter.invalidUser("exist"))
+            res.status(404).send(presenter.invalidUser("null"))
         }
     })
 }
@@ -40,13 +79,8 @@ exports.getById = (req, res) => {
  * @return status 200 redirect if request is valid, or status 404 if user does not exist
  */
 exports.deleteUser = (req, res) => {
-    UserModel.deleteUser(req.params.userID).then((result) => {
-        if (result != null) {
-            res.status(200).send()
-        } else {
-            res.status(404).send(presenter.invalidUser("exist"))
-        }
-    })
+    UserModel.deleteUser(req.params.userID)
+    res.status(200).send()
 }
 
 /**
@@ -84,26 +118,22 @@ exports.validatePassword = (req, res, next) => {
  * @return next if email is valid, or status 400 if password is invalid
  */
 exports.validateEmail = (req, res, next) => {
-    if (!validator.validate(req.body._id)) {
-        return res.status(400).send(presenter.invalidEmail("address"))
-    }
+    userExists(req.body._id).then((result) => {
+        if (result) {
+            return res.status(400).send(presenter.invalidUser("exist"))
+        }
 
-    const domain = req.body._id.split("@")[1]
-    if (!cfg.emailDomains.includes(domain)) {
-        return res.status(400).send(presenter.invalidEmail("domain"))
-    }
+        if (!validator.validate(req.body._id)) {
+            return res.status(400).send(presenter.invalidEmail("address"))
+        }
 
-    // TODO: Check if email exists
+        const domain = req.body._id.split("@")[1]
+        if (!cfg.emailDomains.includes(domain)) {
+            return res.status(400).send(presenter.invalidEmail("domain"))
+        }
 
-    const code = getCode()
-    try {
-        email_verification(req.body._id, code).then()
-    } catch (e) {
-        console.log(e)
-        return res.status(400).send(presenter.invalidEmail("code"))
-    }
-    req.body.code = getHash(code)
-    // TODO: Confirm code
+        return next()
+    })
 }
 
 /**
@@ -174,6 +204,17 @@ getCode = () => {
 }
 
 /**
+ * @name userExists
+ * @description Check if user exists
+ * @return boolean True if user exists, and False otherwise
+ */
+userExists = (id) => {
+    return UserModel.exists(id).then((result) => {
+        return result
+    })
+}
+
+/**
  * @name email_verification
  * @param recipient The email of the new user
  * @param code The code to be sent to the new user
@@ -193,11 +234,11 @@ async function email_verification(recipient, code) {
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
-        from: '"MeetUT Mail" <"mailmeetut@gmail.com">', // sender address
+        from: cfg.mailSender, // sender address
         to: recipient, // list of receivers
-        subject: "Email Verification", // Subject line
-        text: "Your verification code is " + code, // plain text body
-        html: "<b>Your verification code is " + code + "</b>", // html body
+        subject: presenter.verificationEmail("subject"), // Subject line
+        text: presenter.verificationEmail("text", code), // plain text body
+        html: "<b>" + presenter.verificationEmail("text", code) + "</b>", // html body
     });
 
     console.log("Message sent: %s", info.messageId);

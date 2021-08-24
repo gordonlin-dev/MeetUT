@@ -1,37 +1,38 @@
 import React, {useState} from 'react'
 import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
-
-const secureStore = require('../../SecureStore')
+const presenter = require('../Presenter')
 const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png');
 const {height, width} = Dimensions.get('window');
-const verificationSubmit = async (code, props) => {
+const verificationSubmit = async (email, code, props) => {
     try {
-        const url = cfg.domain + cfg.login;
+        const url = cfg.domain + cfg.verify;
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: email,
-                password: password
+                _id: email,
+                verification: code
             })
         });
-        const responseJson = await response.json();
-        await secureStore.Save('UserId', email);
-        await secureStore.Save('JWT', responseJson.accessToken);
-        await secureStore.Save('RefreshToken', responseJson.refreshToken);
-        props.navigation.navigate({
-            routeName: 'Home'
-        })
+
+        if (response.status === 200) {
+            props.navigation.navigate({
+                routeName: 'Home'
+            })
+        } else {
+            console.log(response.status)
+        }
     } catch (error) {
         console.log(error)
-        Alert.alert(cfg.internalError)
+        Alert.alert(presenter.internalError())
     }
 }
 
 const verificationScreen = props => {
+    const [email, onChangeEmail] = useState("");
     const [code, onChangeCode] = useState("");
 
     return (
@@ -44,6 +45,13 @@ const verificationScreen = props => {
 
                     <TextInput
                         style={styles.Input}
+                        onChangeText={onChangeEmail}
+                        value={email}
+                        placeholder="email"
+                        placeholderTextColor="white"
+                    />
+                    <TextInput
+                        style={styles.Input}
                         onChangeText={onChangeCode}
                         value={code}
                         placeholder="code"
@@ -51,7 +59,7 @@ const verificationScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            verificationSubmit(code, props)
+                            verificationSubmit(email, code, props)
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Submit</Text>
