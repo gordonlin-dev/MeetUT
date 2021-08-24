@@ -15,6 +15,7 @@ namespace API.Models
 
         public int Id { get; set; }
         public string Email { get; set; }
+        public int[] MatchCoordinates { get; set; }
 
         public virtual ICollection<UserHobby> UserHobbies { get; set; }
         public virtual ICollection<UserProgramOfStudy> UserProgramOfStudies { get; set; }
