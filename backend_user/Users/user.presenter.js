@@ -39,5 +39,3 @@ exports.verificationEmail = (field, code) => {
 exports.invalidCode = () => {
     return {error: "Verification code does not match"}
 }
-
-
