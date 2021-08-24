@@ -30,10 +30,11 @@ exports.jwtValid = (req, res, next) => {
 
 exports.isActive = (req, res, next) => {
     return getInfo(req.body.email).then((result) => {
-        if (result != null && result.active) {
+        if (result == null) {
+            return res.status(404).send()
+        } else if (result.active) {
             return next()
         } else {
-            console.log("Inactive")
             return res.status(400).send()
         }
     })
