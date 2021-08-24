@@ -22,7 +22,7 @@ exports.createUser = (req, res) => {
     })
 }
 
-exports.verifyEmail = (req, res, next) => {
+exports.verifyEmail = (req, res) => {
     UserModel.getUserInfoById(req.body._id).then((result) => {
         req.body.verification = getHash(getSalt(), req.body.verification)
         if (result.verification === req.body.code) {

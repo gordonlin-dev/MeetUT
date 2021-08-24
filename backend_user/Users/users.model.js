@@ -4,6 +4,7 @@ const Schema = mongoose.Schema
 
 const userSchema = new Schema({
     active: Boolean,
+    code: String,
     firstName: String,
     lastName: String,
     _id: String,
@@ -61,13 +62,12 @@ exports.getUserInfoById = (id) => {
     })
 }
 
-// TODO: fix
 exports.activateUser = (id) => {
     return User.findById(id).then((result) => {
         if (result != null) {
+            result.code = undefined // Deletes key in document
             result.active = true
-            delete result.code
-            return result.save
+            return result.save()
         } else {
             console.log("no id")
         }
