@@ -29,7 +29,7 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
             await secureStore.Save('JWT', responseJson.accessToken);
             await secureStore.Save('RefreshToken', responseJson.refreshToken)
             props.navigation.navigate({
-                routeName: 'Verification'
+                routeName: 'Home'
             })
         } else if (response.status === 400) {
             Alert.alert(responseJson.error)

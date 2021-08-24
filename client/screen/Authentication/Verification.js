@@ -30,7 +30,9 @@ const verificationSubmit = async (email, code, props) => {
         Alert.alert(presenter.internalError())
     }
 }
+const resend = async (email, props) => {
 
+}
 const verificationScreen = props => {
     const [email, onChangeEmail] = useState("");
     const [code, onChangeCode] = useState("");
@@ -59,6 +61,13 @@ const verificationScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
+                            resend(email, props)
+                        }}
+                        style={styles.Button}>
+                        <Text style={styles.font}>Resend Code</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
                             verificationSubmit(email, code, props)
                         }}
                         style={styles.Button}>
@@ -80,7 +89,7 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     Input: {
-        marginTop: height * 0.1,
+        marginTop: height * 0.05,
         marginLeft: width * 0.15,
         height: height * 0.06,
         width: width * 0.7,
@@ -93,7 +102,7 @@ const styles = StyleSheet.create({
     Button: {
         width: width * 0.6,
         height: height * 0.06,
-        marginTop: height * 0.15,
+        marginTop: height * 0.05,
         marginLeft: width * 0.2,
         justifyContent: 'center',
         alignItems: 'center',
