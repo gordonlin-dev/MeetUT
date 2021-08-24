@@ -1,9 +1,13 @@
 import React, {useState} from 'react'
 import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+
 const presenter = require('../Presenter')
 const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png');
 const {height, width} = Dimensions.get('window');
+const secureStore = require('../../SecureStore')
+
+
 const verificationSubmit = async (email, code, props) => {
     try {
         const url = cfg.domain + cfg.verify;
@@ -30,12 +34,14 @@ const verificationSubmit = async (email, code, props) => {
         Alert.alert(presenter.internalError())
     }
 }
+
 const resend = async (email, props) => {
 
 }
+
 const verificationScreen = props => {
-    const [email, onChangeEmail] = useState("");
-    const [code, onChangeCode] = useState("");
+    const email = secureStore.GetValue("UserId")
+    const [code, onChangeCode] = useState("")
 
     return (
         <View style={styles.bg}>
@@ -44,14 +50,6 @@ const verificationScreen = props => {
                     <Text style={styles.header}>
                         Verification
                     </Text>
-
-                    <TextInput
-                        style={styles.Input}
-                        onChangeText={onChangeEmail}
-                        value={email}
-                        placeholder="email"
-                        placeholderTextColor="white"
-                    />
                     <TextInput
                         style={styles.Input}
                         onChangeText={onChangeCode}
