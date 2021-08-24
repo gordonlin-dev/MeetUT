@@ -30,7 +30,7 @@ exports.jwtValid = (req, res, next) => {
 
 exports.isActive = (req, res, next) => {
     return getInfo(req.body.email).then((result) => {
-        if (result.active) {
+        if (result != null && result.active) {
             return next()
         } else {
             console.log("Inactive")
@@ -41,6 +41,8 @@ exports.isActive = (req, res, next) => {
 
 getInfo = (id) => {
     return UserModel.getUserInfoById(id).then((result) => {
-        return result.toJSON()
+        if (result != null) {
+            return result
+        }
     })
 }
