@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
-import {View, Text, StyleSheet, Image, Dimensions, ImageBackground, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, Image, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 const secureStore = require('../../SecureStore')
-
+const cfg = require('../cfg.json')
+const presenter = require('../Presenter')
 const home =  require('../../assets/home-icon.png');
 const setting =  require('../../assets/setting-icon.png');
 const chat =  require('../../assets/chat-icon.png');
@@ -24,11 +25,41 @@ const signoutSubmit = async (props) => {
 const deleteButton = async (props) => {
 
 }
-const SettingScreen = props => {
 
+const profile = async (firstName, lastName) => {
+  try {
+      const userID = await secureStore.GetValue('UserId');
+      const url = cfg.domain + '/users/' + userID
+      const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      });
+
+      const responseJson = await response.json();
+      if (response.status === 200) {
+          firstName = responseJson.firstName;
+          lastName = responseJson.lastName;
+          
+      } else {
+          Alert.alert(responseJson.error)
+      }
+  } catch (error) {
+      console.log(error)
+      Alert.alert(presenter.internalError())
+  }
+}
+const SettingScreen = props => {
+    var firstName;
+    var lastName;
+    profile(firstName, lastName);
     return (
         <View style={styles.bg}>
           <ImageBackground source={image} resizeMode="cover" style={styles.image} >
+          <View style={styles.profile}>
+          <Text style={styles.font}>{firstName}</Text>
+          </View>
           <View style={styles.buttonContainer}>
           <TouchableOpacity
               onPress={() => {
@@ -145,13 +176,19 @@ const styles = StyleSheet.create({
       justifyContent: 'space-around',
     },
     buttonContainer: {
-      position: "absolute",
-      top: height*0.1
+      marginTop: 0
     },
     icon: {
       height: height*0.05,
       width: width*0.1
-  }
+    },
+    profile: {
+      position: "absolute",
+      height: height*0.1,
+      width: width,
+      backgroundColor: "white",
+      top: 0
+    }
   });
 
 export default SettingScreen;
