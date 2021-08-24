@@ -103,12 +103,8 @@ const SignupScreen = props => {
                         <Text style={styles.font}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
-
             </ImageBackground>
-
         </View>
-
-
     );
 };
 

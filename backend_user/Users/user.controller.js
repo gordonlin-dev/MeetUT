@@ -224,7 +224,7 @@ async function email_verification(recipient, code) {
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
-            user: cfg.mailSender,
+            user: cfg.mailUser,
             pass: cfg.mailPassword,
         },
     });
