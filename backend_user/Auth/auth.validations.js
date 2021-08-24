@@ -27,3 +27,20 @@ exports.jwtValid = (req, res, next) => {
         return res.status(401).send()
     }
 }
+
+exports.isActive = (req, res, next) => {
+    return getInfo(req.body.email).then((result) => {
+        if (result.active) {
+            return next()
+        } else {
+            console.log("Inactive")
+            return res.status(400).send()
+        }
+    })
+}
+
+getInfo = (id) => {
+    return UserModel.getUserInfoById(id).then((result) => {
+        return result.toJSON()
+    })
+}

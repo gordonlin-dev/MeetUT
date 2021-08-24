@@ -22,9 +22,17 @@ const loginSubmit = async (email, password, props) => {
         await secureStore.Save('UserId', email);
         await secureStore.Save('JWT', responseJson.accessToken);
         await secureStore.Save('RefreshToken', responseJson.refreshToken);
-        props.navigation.navigate({
-            routeName: 'Home'
-        })
+
+        if (response.status === 400) {
+            props.navigation.navigate({
+                routeName: 'Verification'
+            })
+        } else {
+            props.navigation.navigate({
+                routeName: 'Home'
+            })
+        }
+
     } catch (error) {
         console.log(error)
         Alert.alert(cfg.internalError)

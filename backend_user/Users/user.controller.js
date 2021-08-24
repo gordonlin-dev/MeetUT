@@ -49,9 +49,7 @@ exports.verifyEmail = (req, res) => { // TODO: Set max times
     UserModel.getUserCode(req.body._id).then((result) => {
         req.body.verification = getHash(cfg.codeSalt, req.body.verification)
         if (req.body.verification === result) {
-            UserModel.activateUser(req.body._id).then((result) => {
-                return res.status(200).send()
-            })
+            UserModel.activateUser(req.body._id).then(() => {return res.status(200).send()})
         } else {
             return res.status(400).send(presenter.invalidCode())
         }
@@ -221,31 +219,21 @@ userExists = (id) => {
  * @returns {Promise<void>}
  */
 async function email_verification(recipient, code) {
-    // create reusable transporter object using the default SMTP transport
     let transporter = mail.createTransport({
         host: "smtp.gmail.com",
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
-            user: "mailmeetut@gmail.com",
-            pass: "meetutmail",
+            user: cfg.mailSender,
+            pass: cfg.mailPassword,
         },
     });
 
-    // send mail with defined transport object
-    let info = await transporter.sendMail({
+    await transporter.sendMail({
         from: cfg.mailSender, // sender address
         to: recipient, // list of receivers
         subject: presenter.verificationEmail("subject"), // Subject line
         text: presenter.verificationEmail("text", code), // plain text body
         html: "<b>" + presenter.verificationEmail("text", code) + "</b>", // html body
     });
-
-    console.log("Message sent: %s", info.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-    // Preview only available when sending through an Ethereal account
-    console.log("Preview URL: %s", mail.getTestMessageUrl(info));
-    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
-
