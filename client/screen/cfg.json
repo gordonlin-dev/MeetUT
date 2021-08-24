@@ -3,5 +3,6 @@
   "signup": "/users/create",
   "resetPassword": "/updatePassword",
   "login": "/auth",
-  "verify": "/users/verify"
+  "verify": "/users/verify",
+  "resendCode": "/users/verify/resend"
 }

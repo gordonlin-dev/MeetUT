@@ -39,3 +39,7 @@ exports.verificationEmail = (field, code) => {
 exports.invalidCode = () => {
     return {error: "Verification code does not match"}
 }
+
+exports.updateCode = () => {
+    return {result: "New code sent successfully"}
+}

@@ -30,7 +30,7 @@ exports.createUser = (req, res) => {
  */
 exports.sendVerification = (req, res, next) => {
     const code = getCode()
-    console.log(code)
+    console.log(code) // TODO: Remove for production use
     req.body.code = getHash(cfg.codeSalt, code)
     try {
         email_verification(req.body._id, code).then()
@@ -41,13 +41,22 @@ exports.sendVerification = (req, res, next) => {
     }
 }
 
+exports.updateCode = (req, res) => {
+    UserModel.updateCode(req.body._id, req.body.code).then((result) => {
+        if (result != null) {
+            res.status(200).send(presenter.updateCode())
+        } else {
+            res.status(404).send(presenter.invalidUser("exist"))
+        }
+    })
+}
+
 /**
  * @name verifyEmail
  * @description Check if the posted code is the same as the stored code, and activate the account if needed
  */
 exports.verifyEmail = (req, res) => { // TODO: Set max times
     UserModel.getUserCode(req.body._id).then((result) => {
-        console.log(req.body._id)
         req.body.verification = getHash(cfg.codeSalt, req.body.verification)
         if (req.body.verification === result) {
             UserModel.activateUser(req.body._id).then(() => {return res.status(200).send()})
@@ -78,7 +87,7 @@ exports.getById = (req, res) => {
  * @return status 200 redirect if request is valid, or status 404 if user does not exist
  */
 exports.deleteUser = (req, res) => {
-    UserModel.deleteUser(req.params.userID)
+    UserModel.deleteUser(req.params.userID).then()
     res.status(200).send()
 }
 

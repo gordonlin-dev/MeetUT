@@ -9,7 +9,6 @@ const secureStore = require('../../SecureStore')
 
 
 const verificationSubmit = async (code, props) => {
-    console.log(await secureStore.GetValue("UserId"))
     try {
         const url = cfg.domain + cfg.verify;
         const response = await fetch(url, {
@@ -29,6 +28,7 @@ const verificationSubmit = async (code, props) => {
             })
         } else {
             console.log(response.status)
+            Alert.alert(presenter.internalError())
         }
     } catch (error) {
         console.log(error)
@@ -36,8 +36,27 @@ const verificationSubmit = async (code, props) => {
     }
 }
 
-const resend = async (props) => {
+const resend = async () => {
+    try {
+        const url = cfg.domain + cfg.resendCode;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                _id: await secureStore.GetValue("UserId"),
+            })
+        });
 
+        if (response.status !== 200) {
+            console.log(response.status)
+            Alert.alert(presenter.internalError())
+        }
+    } catch (error) {
+        console.log(error)
+        Alert.alert(presenter.internalError())
+    }
 }
 
 const verificationScreen = props => {
@@ -59,7 +78,7 @@ const verificationScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            resend(props)
+                            resend()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Resend Code</Text>
