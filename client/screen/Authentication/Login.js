@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {View, Text, BackHandler, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {styles} from '../styles';
 const secureStore = require('../../SecureStore')
 const cfg = require('../cfg.json')
@@ -41,6 +41,11 @@ const loginSubmit = async (email, password, props) => {
 }
 
 const LoginScreen = props => {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+          BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
 

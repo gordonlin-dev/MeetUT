@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View, TouchableOpacity, StyleSheet, Button, Image, Dimensions, SafeAreaView, FlatList} from 'react-native'
+import {View, TouchableOpacity, StyleSheet, Button, Image, Dimensions, SafeAreaView, FlatList, BackHandler} from 'react-native'
 
 const secureStore = require('../../SecureStore')
 
@@ -8,6 +8,11 @@ const setting =  require('../../assets/setting-icon.png');
 const chat =  require('../../assets/chat-icon.png');
 const {height, width} = Dimensions.get('window');
 const ChatListScreen = props => {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+          BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
     const [chatList, setChatList] = useState([])
 
     const loadChat = async () => {

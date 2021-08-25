@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {View, Text, StyleSheet, Image, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {View, Text, StyleSheet, Image, BackHandler, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {styles} from '../styles';
 const secureStore = require('../../SecureStore')
 const cfg = require('../cfg.json')
@@ -28,6 +28,12 @@ const deleteButton = async (props) => {
 }
 
 const SettingScreen = props => {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+          BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
+
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");

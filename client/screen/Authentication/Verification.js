@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {View, Text, BackHandler, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {styles} from '../styles';
 const presenter = require('../Presenter')
 const cfg = require('../cfg.json')
@@ -67,6 +67,12 @@ const resend = async (props) => {
 }
 
 const verificationScreen = props => {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+          BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
+
     const [code, onChangeCode] = useState("")
 
     return (

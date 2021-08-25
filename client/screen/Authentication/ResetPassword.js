@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {View, Text, BackHandler, Dimensions, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
 import {styles} from '../styles';
 const secureStore = require('../../SecureStore')
 const image =  require('../../assets/bg.png');
@@ -44,6 +44,11 @@ const resetSubmit = async (email, password, confirm, props) => {
 }
 
 const ResetPasswordScreen = props => {
+    useEffect(() => {
+      BackHandler.addEventListener('hardwareBackPress', () => true)
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
     const [confirm, onChangeNumber] = useState("");

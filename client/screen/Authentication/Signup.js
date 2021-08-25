@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {View, Text, StyleSheet, BackHandler, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
 import {styles} from '../styles';
 
 const cfg = require('../cfg.json')
@@ -42,6 +42,12 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
 
 
 const SignupScreen = props => {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+          BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
+
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
     const [confirm, onChangeNumber] = useState("");

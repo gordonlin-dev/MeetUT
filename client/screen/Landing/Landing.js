@@ -1,12 +1,18 @@
 
-import React from 'react';
-import { ImageBackground, Dimensions, View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import React, {useEffect} from 'react';
+import { ImageBackground, BackHandler, View, Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 const logo = require('../../assets/Logo-Transparent.png');
 const bgimage =  require('../../assets/bg.png');
 import {styles} from '../styles';
 
 const Authentication = (props) => {  
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => true)
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', () => true)
+  }, [])
+  
   return (
     <View style={styles.empty}>
     <ImageBackground source={bgimage} resizeMode="cover" style={styles.image}>

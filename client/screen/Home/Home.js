@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View, Image, StyleSheet, Button, ScrollView, Dimensions, SafeAreaView, TouchableOpacity} from 'react-native'
+import {View, Image, StyleSheet, Button, BackHandler, Dimensions, SafeAreaView, TouchableOpacity} from 'react-native'
 import ProfileCard from "./ProfileCard";
 import { styles } from '../styles'; 
 
@@ -9,6 +9,12 @@ const chat =  require('../../assets/chat-icon.png');
 
 const secureStore = require('../../SecureStore')
 const HomeScreen = props => {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+          BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
+
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
