@@ -1,169 +1,180 @@
-import React, {useState} from 'react'
-import {View, Image, StyleSheet, TextInput, Dimensions, TouchableOpacity, ScrollView, Text} from 'react-native'
+import React, { Component, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView} from 'react-native';
+import MultiSelect from 'react-native-multiple-select';
 import {Picker} from '@react-native-picker/picker';
+import { styles } from '../styles'; 
 
-const {height, width} = Dimensions.get('window');
-const Acedemic = props => {
-    const [selectedValue, setSelectedValue] = useState("--");
+class Acedemic extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            programs: [],
+            year: '--',
+            college: '--',
+            type: []
+        };
+    }
+    
+  
+    onSelectedItemsChange = selectedItems => {
+        this.setState({ selectedItems });
+    };
+    
+    render() {
+        const loadTypes = async () => {
+            try{
+                const url = 'https://meet-ut-1.herokuapp.com/questionnaire/programs'
+                const response = await fetch(url, {
+                    method : 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const responseJson = await response.json();
+                this.setState({ type: responseJson })
+                
+        
+            }catch (e) {
+                console.log(e);
+            }
+        }
+        const { selectedItems } = this.state;
 
+        loadTypes();
+        const allTypes = [];
+        for (let i = 0; i < this.state.type.length; i++) {
+            allTypes.push({ id: i, name: this.state.type[i].categoryValue })
+        }
+        
+        /* Not completed yet
+        */
+        const loadPrograms = selectedItems => {
+            const allPrograms = [];
+            for (let i = 0; i < this.state.type.length; i++) {
+                if (selectedItems.includes(i)){
+                    console.log(this.state.type[i].categoryValue)
+                    for (let j = 0; j < this.state.type[i].contenet.length; j++) {
+                        allPrograms.push({ id: j, name: this.state.type[i].content[j].Value})
+                        console.log(this.state.type[i].content[j].Value)
+                    }
+                }
+                
+            }
+            
+        }
+        
     return (
-          <View style={styles.container}>
+        <View >
+            <ScrollView style={styles.quizContainer} >
+                <View style={styles.pickerHeader}>
+                    <Text style={styles.headerFont}>Type of Study</Text>
+                    <MultiSelect
+                        style={styles.select}
+                        hideTags
+                        items={allTypes}
+                        uniqueKey="id"
+                        ref={(component) => { this.multiSelect = component }}
+                        onSelectedItemsChange={this.onSelectedItemsChange}
+                        selectedItems={selectedItems}
+                        searchInputPlaceholderText="Search Items..."
+                        onChangeInput={ (text)=> console.log(text)}
+                        altFontFamily="timeburner"
+                        itemFontFamily="timeburner"
+                        tagRemoveIconColor="black"
+                        tagBorderColor="black"
+                        tagTextColor="black"
+                        selectedItemTextColor="#CCC"
+                        selectedItemIconColor="#CCC"
+                        selectedItemFontFamily="timeburner"
+                        itemTextColor="#000"
+                        displayKey="name"
+                        searchInputStyle={{ color: '#CCC' }}
+                        submitButtonColor="#CCC"
+                        submitButtonText="Submit"
+                    >
+                    </MultiSelect>
+                    <Text style={styles.headerFont}>Year of Study</Text>
+                    <Picker
+                        style={styles.picker}
+                        selectedValue={this.state.selectedValue}
+                        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                    >
+                        <Picker.Item label="--" value="--" />
+                        <Picker.Item label="Other" value="other" />
+                        <Picker.Item label="Prefer not to say" value="no" />
+                    </Picker>
+                </View>
 
-            <View style={styles.pickerHeader}>
-                <Text style={styles.headerFont}>Type of Study</Text>
-                <Picker
-                    style={styles.picker}
-                    selectedValue={selectedValue}
-                    ColorValue="black"
-                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                >
-                    <Picker.Item label="--" value="--" />
-                    <Picker.Item label="Other" value="other" />
-                    <Picker.Item label="Prefer not to say" value="no" />
-                </Picker>
-            </View>
-            
-            <View style={styles.pickerHeader}>
-                <Text style={styles.headerFont}>Year of Study</Text>
-                <Picker
-                    style={styles.picker}
-                    selectedValue={selectedValue}
-                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                >
-                    <Picker.Item label="--" value="--" />
-                    <Picker.Item label="Other" value="other" />
-                    <Picker.Item label="Prefer not to say" value="no" />
-                </Picker>
-            </View>
-
-            <View style={styles.pickerHeader}>
-                <Text style={styles.headerFont}>College</Text>
-                <Picker
-                    style={styles.picker}
-                    selectedValue={selectedValue}
-                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                >
-                    <Picker.Item label="--" value="--" />
-                    <Picker.Item label="Other" value="other" />
-                    <Picker.Item label="Prefer not to say" value="no" />
-                </Picker>
-            </View>
-            
-            <View style={styles.pickerHeader}>
+                <View style={styles.pickerHeader}>
+                    <Text style={styles.headerFont}>College</Text>
+                    <Picker
+                        style={styles.picker}
+                        selectedValue={this.state.selectedValue}
+                        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                    >
+                        <Picker.Item label="--" value="--" />
+                        <Picker.Item label="Other" value="other" />
+                        <Picker.Item label="Prefer not to say" value="no" />
+                    </Picker>
+                </View>
                 <Text style={styles.headerFont}>Programs</Text>
-                <Picker
-                    style={styles.picker}
-                    selectedValue={selectedValue}
-                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                <MultiSelect
+                    hideTags
+                    items={allTypes}
+                    uniqueKey="id"
+                    ref={(component) => { this.multiSelect = component }}
+                    onSelectedItemsChange={this.onSelectedItemsChange}
+                    selectedItems={selectedItems}
+                    searchInputPlaceholderText="Search Items..."
+                    onChangeInput={ (text)=> console.log(text)}
+                    altFontFamily="timeburner"
+                    itemFontFamily="timeburner"
+                    tagRemoveIconColor="black"
+                    tagBorderColor="black"
+                    tagTextColor="black"
+                    selectedItemTextColor="#CCC"
+                    selectedItemIconColor="#CCC"
+                    selectedItemFontFamily="timeburner"
+                    itemTextColor="#000"
+                    displayKey="name"
+                    searchInputStyle={{ color: '#CCC' }}
+                    submitButtonColor="#CCC"
+                    submitButtonText="Submit"
                 >
-                    <Picker.Item label="--" value="--" />
-                    <Picker.Item label="Other" value="other" />
-                    <Picker.Item label="Prefer not to say" value="no" />
-                </Picker>
+                </MultiSelect>
+                <View style={styles.quizHeader}>
+                    <Text style={styles.quizFont}>Added Programs</Text>
+                </View>
+                <View>
+                    {this.multiSelect && this.multiSelect.getSelectedItemsExt(selectedItems)}
+                </View>
+            </ScrollView>
+            <View style={styles.quizeFooter}>
+                <TouchableOpacity 
+                    style={styles.quizLeftButton}
+                    onPress={() => {
+                    this.props.navigation.navigate({
+                        routeName: 'Demographics'
+                    })
+                }}>
+                    <Text style={styles.font}>Back</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                    style={styles.quizRightButton}
+                    onPress={() => {
+                    this.props.navigation.navigate({
+                        routeName: 'Personal'
+                    })
+                }}>
+                    <Text style={styles.font}>Next</Text>
+                </TouchableOpacity>
             </View>
-
-            <TouchableOpacity 
-                style={styles.leftButton}
-                onPress={() => {
-                props.navigation.navigate({
-                    routeName: 'Demographics'
-                })
-            }}>
-                <Text style={styles.font}>Back</Text>
-            </TouchableOpacity>
             
-            <TouchableOpacity 
-                style={styles.Button}
-                onPress={() => {
-                props.navigation.navigate({
-                    routeName: 'Personal'
-                })
-            }}>
-                <Text style={styles.font}>Next</Text>
-            </TouchableOpacity>
+            
         </View>
     );
-};
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: height*0.05,
-        alignItems: "center",
-        backgroundColor: "#e1e1ea"
-    },
-    leftButton: {
-        position: 'absolute',
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        left: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-      },
-    Button: {
-        position: 'absolute',
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        right: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-      },
-    pickerHeader: {
-        marginTop: height * 0.01,
-        left: width*0.01,
-    },
-    Input: {
-        marginTop: height * 0.03,
-        height: height * 0.06,
-        width: width * 0.7,
-        borderRadius: 5,
-        borderWidth: 2,
-        padding: 10,
-        borderColor: "black",
-        color: "black"
-    },
-    picker: {
-        width: width * 0.7,
-        height: height * 0.06,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        backgroundColor: 'white',
-        color: "black"
-        
-    },
-    header: {
-        fontSize:50,
-        marginLeft: width * 0.34,
-        color: "white",
-        fontFamily: 'timeburner',
-    },
-    headerFont: {
-        fontFamily: 'timeburner',
-        fontSize:17,
-        color: "black"  
-    },
-    font: {
-        fontFamily: 'timeburner',
-        fontSize:18,
-        color: "black",
-        fontWeight: "500"
-    },
-    scrollView: {
-        marginTop: height*0.05,
-    },
-    avator: {
-        height: height*0.08,
-        width: width*0.12
-    }
-  });
+  }
+}
 
 export default Acedemic;

@@ -7,6 +7,16 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between'
     },
+    quizContainer: {
+        flex: 1,
+        position: 'absolute',
+        height: height*0.85,
+        width: width,
+        paddingTop: height*0.05,
+        paddingLeft: width*0.15,
+        paddingRight: width*0.15,
+        backgroundColor: "#e1e1ea"
+    },
     buttonInRow: {
         marginTop: 0
     },
@@ -24,6 +34,13 @@ const styles = StyleSheet.create({
         position: 'absolute',
         height: height*0.85,
         width: width,
+    },
+    quizeFooter: {
+        position: "absolute",
+        backgroundColor: '#e1e1ea',
+        height: height * 0.1,
+        width: width,
+        top: height*0.82
     },
     footer: {
         position: "absolute",
@@ -64,6 +81,19 @@ const styles = StyleSheet.create({
         padding: 10,
         borderColor: "white",
         color: "white"
+    },
+    pickerHeader: {
+        marginTop: height * 0.01,
+    },
+    picker: {
+        width: width * 0.7,
+        height: height * 0.075,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        backgroundColor: 'white',
+        color: "black"
+        
     },
     Button: {
         width: width * 0.6,
@@ -146,11 +176,59 @@ const styles = StyleSheet.create({
         width: width*0.16,
         borderRadius: 400/ 2,
     },
+    
+    avator: {
+        height: height*0.08,
+        width: width*0.12
+    },
     chat: {
         height: height*0.1,
         marginLeft: width*0.02
         
-    }
+    },
+    headerFont: {
+        fontFamily: 'timeburner',
+        fontSize:17,
+        color: "black",
+        marginBottom: height * 0.01,
+        marginTop: height*0.01
+    },
+    quizHeader: {
+        marginTop: height * 0.02,
+        alignItems: 'center',
+      },
+    quizFont: {
+        fontFamily: 'timeburner',
+        fontSize:17,
+        color: "black"  
+    },
+    quizLeftButton: {
+        position: 'absolute',
+        width: width * 0.45,
+        height: height * 0.06,
+        bottom: height*0.01,
+        left: width*0.02,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        borderColor: "black",
+        backgroundColor: 'white',
+    },
+    quizRightButton: {
+        position: 'absolute',
+        width: width * 0.45,
+        height: height * 0.06,
+        bottom: height*0.01,
+        right: width*0.02,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        borderColor: "black",
+        backgroundColor: 'white',
+    },
+    scrollView: {
+        marginTop: height*0.05,
+    },
 });
     
 export { styles };
