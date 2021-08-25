@@ -135,9 +135,22 @@ const styles = StyleSheet.create({
         position: "absolute",
         height: height*0.1,
         width: width,
+        top: 0,
         backgroundColor: "white",
-        top: 0
+        flexDirection: 'row'
     },
+    avatar: {
+        marginTop: height*0.01,
+        marginLeft: width*0.01,
+        height: height*0.08,
+        width: width*0.16,
+        borderRadius: 400/ 2,
+    },
+    chat: {
+        height: height*0.1,
+        marginLeft: width*0.02
+        
+    }
 });
     
 export { styles };
