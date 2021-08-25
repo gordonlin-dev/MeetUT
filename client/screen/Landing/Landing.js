@@ -4,11 +4,11 @@ import { ImageBackground, Dimensions, View, Image, StyleSheet, TouchableOpacity,
 
 const logo = require('../../assets/Logo-Transparent.png');
 const bgimage =  require('../../assets/bg.png');
-const {height, width} = Dimensions.get('window');
+import {styles} from '../styles';
 
 const Authentication = (props) => {  
   return (
-    <View style={styles.bg}>
+    <View style={styles.empty}>
     <ImageBackground source={bgimage} resizeMode="cover" style={styles.image}>
         <Image source={logo} style={styles.logo}/>
         <View>
@@ -33,34 +33,4 @@ const Authentication = (props) => {
   
 }
 
-const styles = StyleSheet.create({
-  bg: {
-    flex: 1,
-  },
-  image: {
-    flex: 1,
-    justifyContent: "center"
-  },
-  logo: {
-    width: width * 0.2,
-    height: height * 0.15,
-    marginLeft: width * 0.39
-  },
-  Button: {
-    width: width * 0.6,
-    height: height * 0.06,
-    marginTop: height * 0.04,
-    marginLeft: width * 0.2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 15,
-    backgroundColor: 'white',
-  },
-  font: {
-    fontFamily: 'timeburner',
-    fontSize:18,
-    color: "#0E0EA1",
-    fontWeight: "500"
-  }
-});
 export default Authentication;

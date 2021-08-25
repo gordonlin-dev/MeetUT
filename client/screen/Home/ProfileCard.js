@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, Button, StyleSheet, Slide, Dimensions, SafeAreaView, Alert} from 'react-native'
 import Swiper from 'react-native-swiper'
-
+import {styles} from '../styles';
 const presenter = require('../Presenter')
 const secureStore = require('../../SecureStore')
-const {height, width} = Dimensions.get('window');
 
 const ProfileCard = props => {
     const [email, setEmail] = useState("");
@@ -98,7 +97,7 @@ const ProfileCard = props => {
     }, [users, curUser]);
 
     return(
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.homeBg}>
             
             <Swiper style={styles.wrapper}>
                 {users.map((props) => {
@@ -125,44 +124,4 @@ const ProfileCard = props => {
     )
 }
 
-const styles = StyleSheet.create({
-    rightButton:{
-        position: "absolute",
-        right: 0,
-    },
-    leftButton:{
-        position: "absolute",
-        left: 0
-    },
-    container:{
-        flex:1,
-        flexDirection: 'column',
-        justifyContent: 'space-between'
-    },
-    profilebg: {
-        marginTop: height * 0.05,
-        marginBottom: height * 0.08,
-        marginLeft: width * 0.1,
-        height: height * 0.6,
-        width: width * 0.8
-    },
-    wrapper: {},
-    slide: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#9DD6EB',
-        flexDirection: 'row',
-    },
-    text: {
-        color: '#fff',
-        fontSize: 30,
-        fontWeight: 'bold'
-    },
-    buttonText: {
-        color: '#3590F2',
-        fontSize: 50,
-        fontWeight: 'bold'
-    }
-})
 export default ProfileCard

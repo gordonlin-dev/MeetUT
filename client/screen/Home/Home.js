@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import {View, Image, StyleSheet, Button, ScrollView, Dimensions, SafeAreaView, TouchableOpacity} from 'react-native'
 import ProfileCard from "./ProfileCard";
-import Swiper from 'react-native-swiper';
+import { styles } from '../styles'; 
 
 const home =  require('../../assets/home-icon.png');
 const setting =  require('../../assets/setting-icon.png');
 const chat =  require('../../assets/chat-icon.png');
 
 const secureStore = require('../../SecureStore')
-const {height, width} = Dimensions.get('window');
 const HomeScreen = props => {
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -102,7 +101,7 @@ const HomeScreen = props => {
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.empty}>
-                <ProfileCard style={styles.empty}/>
+                <ProfileCard style={styles.homeBg}/>
                 
                 <View style={styles.footer}>
                 <View style={styles.footerButton}>
@@ -131,51 +130,5 @@ const HomeScreen = props => {
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        flexDirection: 'column',
-        justifyContent: 'space-between'
-    },
-
-    buttonContainer:{
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: height * 0.02,
-        marginBottom: height * 0.02
-    },
-    empty:{
-        flex:1,
-    },
-    footer: {
-        justifyContent: 'space-around',
-        alignItems: 'stretch',
-        backgroundColor: '#3590F2',
-        height: height * 0.1,
-    },
-    footerButton:{
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: height * 0.005
-    },
-    wrapper: {},
-    slide: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#9DD6EB'
-    },
-    text: {
-        color: '#fff',
-        fontSize: 30,
-        fontWeight: 'bold'
-    },
-    icon: {
-        height: height*0.05,
-        width: width*0.1
-    }
-});
-
 
 export default HomeScreen;
