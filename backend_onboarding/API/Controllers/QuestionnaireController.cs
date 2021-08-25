@@ -112,6 +112,7 @@ namespace API.Controllers
             }
             _context.UserHobbies.AddRange(userHobbies);
             _context.SaveChanges();
+            SetUserMatchCoordinates(curUser);
             return new JsonResult("");
         }
         [HttpPost]
@@ -147,9 +148,36 @@ namespace API.Controllers
             }
             _context.UserProgramOfStudies.AddRange(userPrograms);
             _context.SaveChanges();
+            SetUserMatchCoordinates(curUser);
             return new JsonResult("");
         }
+
+        public void SetUserMatchCoordinates(User user)
+        {
+            //[hobby,program]
+            var coordinateList = new List<int>();
+            //hobbies
+            var hobbyQuery = _context.UserHobbies.Join(
+                    _context.QuestionnaireHobbies,
+                    userHobby => userHobby.HobbyId,
+                    hobby => hobby.Id,
+                    (userHobby, hobby) => hobby.MatchValue
+                ).ToList();
+            coordinateList.Add((int)hobbyQuery.Sum() / hobbyQuery.Count());
+
+            var programQuery = _context.UserProgramOfStudies.Join(
+                    _context.QuestionnaireProgramOfStudies,
+                    userProgram => userProgram.ProgramId,
+                    program => program.Id,
+                    (userProgram, program) => program.MatchValue
+                ).ToList();
+            coordinateList.Add((int)programQuery.Sum() / programQuery.Count());
+            user.MatchCoordinates = coordinateList.ToArray();
+            _context.Update(user);
+            _context.SaveChanges();
+        }
     }
+
 
     public class UserProgramModel
     {
