@@ -29,31 +29,41 @@ namespace API.Controllers
             return "1234";
         }
 
-        
-        public void SetUserMatchCoordinates(User user)
+        [HttpGet]
+        [Route("Recommendations")]
+        public JsonResult GetUserRecommendations(UserRecommendationInput input)
         {
-            //[hobby,program]
-            var coordinateList = new List<int>();
-            //hobbies
-            var hobbyQuery = _context.UserHobbies.Join(
-                    _context.QuestionnaireHobbies,
-                    userHobby => userHobby.HobbyId,
-                    hobby => hobby.Id,
-                    (userHobby, hobby) => hobby.MatchValue
-                ).ToList();
-            coordinateList.Add((int) hobbyQuery.Sum() / hobbyQuery.Count());
+            var curUserQuery = _context.Users.Where(x => x.Email == input.curUser);
 
-            var programQuery = _context.UserProgramOfStudies.Join(
-                    _context.QuestionnaireProgramOfStudies,
-                    userProgram => userProgram.ProgramId,
-                    program => program.Id,
-                    (userProgram, program) => program.MatchValue
+            if (!curUserQuery.Any())
+            {
+                return null;
+            }
+
+            var curUser = curUserQuery.First();
+            var userQuery = _context.Users.Where(x => x.Email != curUser.Email).ToList();
+            var matchedUserQuery = _context.Users.Join(
+                    input.matchedUsers,
+                    user => user.Email,
+                    matchedUser => matchedUser,
+                    (user, matchedUser) => user
                 ).ToList();
-            coordinateList.Add((int)programQuery.Sum() / programQuery.Count());
-            user.MatchCoordinates = coordinateList.ToArray();
-            _context.Update(user);
-            _context.SaveChanges();
+            userQuery = userQuery.Except(matchedUserQuery).ToList();
+            userQuery.OrderBy(user => Util.CalculateDistance(user.MatchCoordinates, curUser.MatchCoordinates));
+            return null;
         }
 
+        
+
+    }
+
+    public class UserRecommendationInput
+    {
+        public string curUser { get; set; }
+        public List<string> matchedUsers { get; set; }
+        public UserRecommendationInput()
+        {
+
+        }
     }
 }

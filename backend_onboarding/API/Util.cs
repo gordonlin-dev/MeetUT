@@ -15,6 +15,22 @@ namespace API
         {
         }
 
+        public static double CalculateDistance(int[] point1, int[] point2)
+        {
+            if (point1.Count() != point2.Count())
+            {
+                return -1;
+            }
+
+            double sum = 0;
+            for (int i = 0; i < point1.Count(); i++)
+            {
+                sum += (point1.ElementAt(i) - point2.ElementAt(i)) ^ 2;
+            }
+
+            return Math.Sqrt(sum);
+        }
+
         public void AddProgramValue()
         {
             var categories = _context.LookupProgramOfStudyCategories.ToList();
