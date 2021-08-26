@@ -1,24 +1,20 @@
 import React, { Component, useState } from 'react';
-import { View, StyleSheet, Dimensions, TouchableOpacity, Text} from 'react-native';
-import MultiSelect from 'react-native-multiple-select';
+import { View, SafeAreaView, Dimensions, TouchableOpacity, Text, ScrollView} from 'react-native';
 import { styles } from '../styles'; 
+import NestedListView from 'react-native-nested-listview'
 
-class Hobbies extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        hobbies : [],
-      };
-    }
-    
-    
-  
-    onSelectedItemsChange = selectedItems => {
-        this.setState({ selectedItems });
+
+
+const Hobbies = (props) => {
+    const [hobbies, setHobbies] = useState([]);
+    const [selected, setSelected] = useState([]);
+    const colorLevels = {
+        [0]: '#d0d0d9',
+        [1]: '#abe1f5',
+        [2]: '#f2f2fc',
     };
-    
-    render() {
-      const loadHobbies = async () => {
+
+    const loadHobbies = async () => {
         try{
             const url = 'https://meet-ut-1.herokuapp.com/questionnaire/hobbies'
             const response = await fetch(url, {
@@ -28,79 +24,118 @@ class Hobbies extends Component {
                 },
             });
             const responseJson = await response.json();
-            this.setState({ hobbies: responseJson })
-            
+            setHobbies(responseJson)
       
-        }catch (e) {
-            console.log(e);
+            }catch (e) {
+                console.log(e);
+            }
         }
-      }
-      const { selectedItems } = this.state;
 
-      loadHobbies();
-      const generalHobbies = [];
-      for (let i = 0; i < this.state.hobbies.length; i++) {
-        generalHobbies.push({ id: i, name: this.state.hobbies[i].categoryValue })
-      }
+        loadHobbies();
+        const sortedHobbies = [];
+        for (let i = 0; i < hobbies.length; i++) {
+            const temp = {};
+            temp.title = hobbies[i].categoryValue;
+            temp.items = [];
+            for (let j = 0; j < hobbies[i].content.length; j++) {
+                temp.items.push({title: hobbies[i].content[j].value, id: hobbies[i].content[j].hobbyId})
+            }
+            sortedHobbies.push(temp)
+        }
+    const toggleChecked = (node) => {
+        if (selected.some(el => el.value === node.title)) {
+            const newSelected = selected.filter((id) => id !== node.id);
+            setSelected(newSelected);
+        } else {
+            selected.push({hobbyId: node.id, value: node.title})
+        }
+    } 
+
+    const unselect = (props) => {
+        for (let i = 0; i < selected.length; i++) {
+            if (selected[i].value === props.value) {
+                selected.splice(i, 1)
+            }
+        } 
+    }
+    const renderNode = (node, level) => {
+        const paddingLeft = (level ?? 0 + 1) * 30;
+        const backgroundColor = colorLevels[level ?? 0] || 'white';
+        
+        if (level === 1) {
+            return (
+                <View style={[styles.row, { backgroundColor, paddingLeft }]}>
+                    <Text style={styles.headerFont}>{node.title}</Text>
+                </View>
+            );
+            
+        } else {
+            return (
+                <View style={[styles.row, { backgroundColor, paddingLeft }]}>
+                    <Text style={styles.headerFont}>{node.title}</Text>
+                    <TouchableOpacity style={styles.selectButton} onPress={() => toggleChecked(node)}> 
+                    <Text style={styles.headerFont}>select</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+        
+    };
+    
     return (
-        <View style={styles.quizContainer} >
-            <Text style={styles.headerFont}>Activities</Text>
-            <MultiSelect
-                hideTags
-                items={generalHobbies}
-                uniqueKey="id"
-                ref={(component) => { this.multiSelect = component }}
-                onSelectedItemsChange={this.onSelectedItemsChange}
-                selectedItems={selectedItems}
-                searchInputPlaceholderText="Search Items..."
-                onChangeInput={ (text)=> console.log(text)}
-                altFontFamily="timeburner"
-                itemFontFamily="timeburner"
-                tagRemoveIconColor="black"
-                tagBorderColor="black"
-                tagTextColor="black"
-                selectedItemTextColor="#CCC"
-                selectedItemIconColor="#CCC"
-                selectedItemFontFamily="timeburner"
-                itemTextColor="#000"
-                displayKey="name"
-                searchInputStyle={{ color: '#CCC' }}
-                submitButtonColor="#CCC"
-                submitButtonText="Submit"
-            >
-            </MultiSelect>
-            <View style={styles.quizHeader}>
-                <Text style={styles.quizFont}>Added Activities</Text>
+        <SafeAreaView style={styles.quizContainer} >
+            <View style={styles.scrollContainer} >
+                <Text style={styles.headerFont}>Activities</Text>
+                <NestedListView
+                    data={sortedHobbies}
+                    renderNode={renderNode}
+                />
             </View>
-            <View>
-                 {this.multiSelect && this.multiSelect.getSelectedItemsExt(selectedItems)}
+            <View style={styles.selectedContainer}>
+            <Text style={styles.headerFont}>Selected Activities ({selected.length})</Text>
+                <ScrollView style={styles.outputContainer}>
+                    
+                    {selected.map((props) => {
+                        return(
+                            <View style={{flexDirection: 'row',}}>
+                                <View style={styles.outputCard}>
+                                    <Text style={styles.quizFont}>{props.value}</Text>
+                                </View>
+                                <TouchableOpacity style={styles.swipeButton} onPress={() => unselect(props)}>
+                                        <Text style={styles.headerFont}>Unselect</Text>
+                                </TouchableOpacity>
+                            </View>
+                            
+                            
+                        )
+                        
+                    })}
+                </ScrollView>
             </View>
-            <View style={styles.quizeFooter}>
                 <TouchableOpacity 
                     style={styles.quizLeftButton}
                     onPress={() => {
-                    this.props.navigation.navigate({
+                    props.navigation.navigate({
                         routeName: 'Reason'
                     })
                 }}>
-                    <Text style={styles.font}>Back</Text>
+                    <Text style={styles.quizFont}>Back</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
                     style={styles.quizRightButton}
                     onPress={() => {
-                    this.props.navigation.navigate({
+                    props.navigation.navigate({
                         routeName: 'SpecificHobby'
                     })
                 }}>
-                    <Text style={styles.font}>Next</Text>
+                    <Text style={styles.quizFont}>Next</Text>
                 </TouchableOpacity>
-            </View>
             
             
-        </View>
+        </SafeAreaView>
     );
-  }
+  
 }
 
 export default Hobbies;

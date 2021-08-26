@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, Button, StyleSheet, Slide, Dimensions, SafeAreaView, Alert} from 'react-native'
+import {View, Text, Button, Box , Slide, Dimensions, SafeAreaView, Alert} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {styles} from '../styles';
 const presenter = require('../Presenter')

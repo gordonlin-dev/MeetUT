@@ -10,12 +10,47 @@ const styles = StyleSheet.create({
     quizContainer: {
         flex: 1,
         position: 'absolute',
-        height: height*0.85,
+        height: height*0.92,
         width: width,
         paddingTop: height*0.05,
         paddingLeft: width*0.15,
         paddingRight: width*0.15,
         backgroundColor: "#e1e1ea"
+    },
+    scrollContainer: {
+        position: 'absolute',
+        height: height*0.45,
+        width: width,
+        paddingTop: height*0.05,
+        paddingLeft: width*0.05,
+        paddingRight: width*0.05,
+    },
+    outputContainer:{
+        height: height*0.35,
+        width: width,
+        marginLeft: width*0.1
+    },
+    outputCard:{
+        flex: 0.6,
+        backgroundColor: '#d0d0d9',
+        height: height*0.08,
+        width: width*0.9,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    selectedContainer:{
+        position: 'absolute',
+        width: width,
+        height: height*0.35,
+        top: height * 0.48,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    row: {
+        borderColor: 'black',
+        borderWidth: 1,
+        height: height*0.08,
+        flexDirection: 'row',
     },
     buttonInRow: {
         marginTop: 0
@@ -104,6 +139,28 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 15,
         backgroundColor: 'white',
+    },
+    swipeButton: {
+        position: 'absolute',
+        right: width*0.1,
+        width: width * 0.2,
+        height: height * 0.06,
+        marginTop: height*0.01,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 400/ 2,
+        backgroundColor: 'white',
+    },
+    selectButton: {
+        position: "absolute",
+        width: width * 0.16,
+        height: height * 0.03,
+        marginTop: height*0.04,
+        marginLeft: width*0.7,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 400/ 2,
+        backgroundColor: '#e1e1ea',        
     },
     header: {
         fontSize: 50,
