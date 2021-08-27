@@ -42,35 +42,37 @@ const ChatListScreen = props => {
         <Text style={styles.font}>Archive</Text>
     </TouchableOpacity>
     ];
-
+    console.log(chatList)
     return(
         <SafeAreaView>
             <View>
-            <Swipeable leftContent={<Text style={styles.font}>Read</Text>} rightButtons={rightButtons}>
-                <View style={styles.list}>
-                    <Image style={styles.avatar} source={logo}/>
-                    
-                    <FlatList data={chatList}
+            <FlatList data={chatList}
                         renderItem={({item}) => 
-                            <TouchableOpacity style={styles.chat} onPress={() => {
-                                props.navigation.navigate({
-                                    routeName: 'Chat',
-                                    params: item._id
-                                })
-                            }}>
-                                <View>
-                                <Text style={styles.name}>{item.participants[0]}</Text>
+                            <Swipeable leftContent={<Text style={styles.font}>Read</Text>} rightButtons={rightButtons}>
+                                <View style={styles.list}>
+                                    <Image style={styles.avatar} source={logo}/>
+                                    <TouchableOpacity style={styles.chat} onPress={() => {
+                                        props.navigation.navigate({
+                                            routeName: 'Chat',
+                                            params: item._id
+                                        })
+                                    }}>
+                                        <View>
+                                        <Text style={styles.name}>{item.participants[0]}</Text>
+                                        </View>
+                                        
+                                        
+
+                                    </TouchableOpacity>
+                                
                                 </View>
                                 
-                                
-
-                            </TouchableOpacity> 
+                            </Swipeable>
+                             
                         }
                         keyExtractor={(item, _id) => _id.toString()}
                     />
-                </View>
-                
-            </Swipeable>
+            
                 
             </View>
             <View style={styles.footer}>
