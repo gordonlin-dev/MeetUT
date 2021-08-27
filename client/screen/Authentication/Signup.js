@@ -23,8 +23,9 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
             })
         });
 
+        console.log(response.status)
         const responseJson = await response.json();
-        if (response.status === 200) {
+        if (response.status === 201) {
             await secureStore.Save('UserId', email);
             await secureStore.Save('JWT', responseJson.accessToken);
             await secureStore.Save('RefreshToken', responseJson.refreshToken)

@@ -4,8 +4,7 @@ const crypto = require('crypto')
 const jwtSecret = require("../env.config").jwt_secret
 
 exports.passwordMatch = (req, res, next) =>{
-    UserModel.findById(req.body.email).then(
-        (user) => {
+    UserModel.findById(req.body._id).then((user) => {
             //TODO: null check
             let parts = user.password.split('$')
             let salt = parts[0]
@@ -29,7 +28,7 @@ exports.jwtValid = (req, res, next) => {
 }
 
 exports.isActive = (req, res, next) => {
-    return getInfo(req.body.email).then((result) => {
+    return getInfo(req.body._id).then((result) => {
         if (result == null) {
             return res.status(404).send()
         } else {

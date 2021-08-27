@@ -14,7 +14,7 @@ const loginSubmit = async (email, password, props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: email,
+                _id: email,
                 password: password
             })
         });
@@ -23,8 +23,7 @@ const loginSubmit = async (email, password, props) => {
         await secureStore.Save('JWT', responseJson.accessToken);
         await secureStore.Save('RefreshToken', responseJson.refreshToken);
 
-        console.log(response.status)
-        if (response.status === 200) {
+        if (response.status === 201) {
             props.navigation.navigate({
                 routeName: 'Home'
             })
