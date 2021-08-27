@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import {Image, StyleSheet} from 'react-native'
+import {Image, StyleSheet, Dimensions } from 'react-native'
 import socketClient  from "socket.io-client";
 import { GiftedChat } from 'react-native-gifted-chat';
 const secureStore = require('../../SecureStore')
 
 let socket;
-
+const {height, width} = Dimensions.get('window');
 const example_profilpic =  require('../../assets/logo.png')
 
 const ChatScreen = props => {
@@ -88,7 +88,8 @@ const styles = StyleSheet.create({
     tinyLogo: {
         borderRadius: 25,
         width: 50,
-        height: 50
+        height: 50,
+        marginTop: height*0.01
     }
   });
 
