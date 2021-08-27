@@ -12,14 +12,14 @@ const mail = require("nodemailer")
  * @description Create the user requested given that all request data is valid
  * @return status 200 redirect with the tokens required
  */
-exports.createUser = (req, res) => {
+exports.createUser = (req, res, next) => {
     req.body.password = getPasswordHash(req.body.password)
     req.body.active = false
     delete req.body.confirm
     delete req.body.email
 
-    UserModel.createUser(req.body).then((user) => {
-        res.status(200).send(getTokens(req, user))
+    UserModel.createUser(req.body).then(() => {
+        return next()
     })
 }
 
