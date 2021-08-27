@@ -24,6 +24,7 @@ namespace API.Models
         public virtual DbSet<QuestionnaireProgramOfStudy> QuestionnaireProgramOfStudies { get; set; }
         public virtual DbSet<QuestionnaireProgramOfStudyCategory> QuestionnaireProgramOfStudyCategories { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserCompatability> UserCompatabilities { get; set; }
         public virtual DbSet<UserHobby> UserHobbies { get; set; }
         public virtual DbSet<UserProgramOfStudy> UserProgramOfStudies { get; set; }
 
@@ -134,6 +135,25 @@ namespace API.Models
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Email).IsRequired();
+            });
+
+            modelBuilder.Entity<UserCompatability>(entity =>
+            {
+                entity.ToTable("User_Compatability");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.HasOne(d => d.User1)
+                    .WithMany(p => p.UserCompatabilityUser1s)
+                    .HasForeignKey(d => d.User1Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User1");
+
+                entity.HasOne(d => d.User2)
+                    .WithMany(p => p.UserCompatabilityUser2s)
+                    .HasForeignKey(d => d.User2Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User2");
             });
 
             modelBuilder.Entity<UserHobby>(entity =>
