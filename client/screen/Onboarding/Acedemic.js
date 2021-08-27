@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import { View, SafeAreaView, Dimensions, TouchableOpacity, Text, ScrollView} from 'react-native';
 import { styles } from '../styles'; 
 import NestedListView from 'react-native-nested-listview'
-
+const secureStore = require('../../SecureStore')
 
 const Acedemic = (props) => {
     const [programs, setPrograms] = useState([]);
@@ -12,6 +12,33 @@ const Acedemic = (props) => {
         [1]: '#abe1f5',
         [2]: '#f2f2fc',
     };
+
+    const submit = async (props, chosen) => {
+        try{
+            const userID = await secureStore.GetValue('UserId');
+            const url = 'https://meet-ut-1.herokuapp.com/questionnaire/programs'
+            const response = await fetch(url, {
+                method : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    UserId: userID,
+                    Programs: chosen
+                })
+            });
+            const responseJson = await response.json();
+            props.navigation.navigate({
+                routeName: 'Personal'
+            })
+            
+    
+        }catch (e) {
+            console.log(e);
+        }
+    }
+    
+
 
     const loadPrograms = async () => {
         try{
@@ -38,16 +65,14 @@ const Acedemic = (props) => {
         temp.title = programs[i].categoryValue;
         temp.items = [];
         for (let j = 0; j < programs[i].content.length; j++) {
-            temp.items.push({title: programs[i].content[j].value, id: programs[i].content[j].programId})
+            temp.items.push({id: programs[i].content[j].programId, title: programs[i].content[j].value})
         }
         sortedPrograms.push(temp)
     }
     const toggleChecked = (node) => {
-        if (chosen.some(el => el.value === node.title)) {
-            const newSelected = chosen.filter((id) => id !== node.id);
-            setChosen(newSelected);
-        } else {
+        if (!chosen.some(el => el.value === node.title)) {
             chosen.push({programId: node.id, value: node.title})
+            
         }
     } 
 
@@ -61,7 +86,6 @@ const Acedemic = (props) => {
     const renderNode = (node, level) => {
         const paddingLeft = (level ?? 0 + 1) * 30;
         const backgroundColor = colorLevels[level ?? 0] || 'white';
-        
         if (level === 1) {
             return (
                 <View style={[styles.row, { backgroundColor, paddingLeft }]}>
@@ -128,9 +152,8 @@ const Acedemic = (props) => {
                 <TouchableOpacity 
                     style={styles.quizRightButton}
                     onPress={() => {
-                    props.navigation.navigate({
-                        routeName: 'Personal'
-                    })
+                        submit(props, chosen) 
+                    
                 }}>
                     <Text style={styles.font}>Next</Text>
                 </TouchableOpacity>

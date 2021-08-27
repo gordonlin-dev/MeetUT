@@ -13,7 +13,30 @@ const Hobbies = (props) => {
         [1]: '#abe1f5',
         [2]: '#f2f2fc',
     };
-
+    const submit = async (props, selected) => {
+        try{
+            const userID = await secureStore.GetValue('UserId');
+            const url = 'https://meet-ut-1.herokuapp.com/questionnaire/hobbies'
+            const response = await fetch(url, {
+                method : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    UserId: userID,
+                    Hobbies: selected
+                })
+            });
+            const responseJson = await response.json();
+            props.navigation.navigate({
+                routeName: 'SpecificHobby'
+            })
+            
+    
+        }catch (e) {
+            console.log(e);
+        }
+    }
     const loadHobbies = async () => {
         try{
             const url = 'https://meet-ut-1.herokuapp.com/questionnaire/hobbies'
@@ -26,22 +49,22 @@ const Hobbies = (props) => {
             const responseJson = await response.json();
             setHobbies(responseJson)
       
-            }catch (e) {
-                console.log(e);
-            }
+        }catch (e) {
+            console.log(e);
         }
+    }
 
-        loadHobbies();
-        const sortedHobbies = [];
-        for (let i = 0; i < hobbies.length; i++) {
-            const temp = {};
-            temp.title = hobbies[i].categoryValue;
-            temp.items = [];
-            for (let j = 0; j < hobbies[i].content.length; j++) {
-                temp.items.push({title: hobbies[i].content[j].value, id: hobbies[i].content[j].hobbyId})
-            }
-            sortedHobbies.push(temp)
+    loadHobbies();
+    const sortedHobbies = [];
+    for (let i = 0; i < hobbies.length; i++) {
+        const temp = {};
+        temp.title = hobbies[i].categoryValue;
+        temp.items = [];
+        for (let j = 0; j < hobbies[i].content.length; j++) {
+            temp.items.push({title: hobbies[i].content[j].value, id: hobbies[i].content[j].hobbyId})
         }
+        sortedHobbies.push(temp)
+    }
     const toggleChecked = (node) => {
         if (selected.some(el => el.value === node.title)) {
             const newSelected = selected.filter((id) => id !== node.id);
@@ -125,9 +148,7 @@ const Hobbies = (props) => {
                 <TouchableOpacity 
                     style={styles.quizRightButton}
                     onPress={() => {
-                    props.navigation.navigate({
-                        routeName: 'SpecificHobby'
-                    })
+                        submit(props, selected)
                 }}>
                     <Text style={styles.quizFont}>Next</Text>
                 </TouchableOpacity>
