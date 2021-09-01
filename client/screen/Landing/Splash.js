@@ -32,7 +32,7 @@ const Splash = props => {
           validateJWT(jwt).then(
               (result) => {
                   if(result){
-                      props.navigation.navigate('Acedemic')
+                      props.navigation.navigate('Home')
                   } else {
                       props.navigation.navigate('Landing')
                   }

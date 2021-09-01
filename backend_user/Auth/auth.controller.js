@@ -8,7 +8,9 @@ exports.auth = (req, res) => {
         let salt = crypto.randomBytes(16).toString('base64')
         let hash = crypto.createHmac('sha512', salt).update(refreshId).digest('base64')
         req.body.refreshKey = salt
-        let token = jwt.sign(req.body._id, jwtSecret)
+        console.log(req.body.active)
+        let token = jwt.sign({_id: req.body._id, active: req.body.active}, jwtSecret)
+        console.log(jwt.decode(token))
         let b = Buffer.from(hash)
         let refresh_token = b.toString('base64')
 

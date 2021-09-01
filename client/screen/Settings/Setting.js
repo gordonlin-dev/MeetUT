@@ -40,11 +40,14 @@ const SettingScreen = props => {
     const profile = async () => {
         try {
             const userID = await secureStore.GetValue('UserId');
+            const accessToken = await secureStore.GetValue('JWT')
+            const refreshToken = await secureStore.GetValue('RefreshToken')
             const url = cfg.domain + '/users/' + userID
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': refreshToken + " " + accessToken
                 }
             });
     

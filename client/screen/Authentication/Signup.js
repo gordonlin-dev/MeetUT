@@ -23,7 +23,6 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
             })
         });
 
-        console.log(response.status)
         const responseJson = await response.json();
         if (response.status === 201) {
             await secureStore.Save('UserId', email);
@@ -34,6 +33,8 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
             })
         } else if (response.status === 400) {
             Alert.alert(responseJson.error)
+        } else if (response.status === 404) {
+            Alert.alert(cfg.notFound)
         }
     } catch (error) {
         console.log(error)
