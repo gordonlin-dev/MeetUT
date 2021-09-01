@@ -4,6 +4,7 @@ import {styles} from '../styles';
 const presenter = require('../Presenter')
 const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png');
+const handler = require('../Handler')
 
 const secureStore = require('../../SecureStore')
 
@@ -30,10 +31,7 @@ const verificationSubmit = async (code, props) => {
                 routeName: 'Home'
             })
         } else {
-            Alert.alert(responseJson.error)
-            props.navigation.navigate({
-                routeName: 'Verification'
-            })
+            handler.handle(response, responseJson, props)
         }
     } catch (error) {
         console.log(error)

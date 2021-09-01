@@ -6,6 +6,7 @@ const cfg = require('../cfg.json')
 const presenter = require('../Presenter')
 const secureStore = require('../../SecureStore')
 const image = require('../../assets/bg.png');
+const handler = require('../Handler')
 const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
     try {
         const url = cfg.domain + cfg.signup
@@ -31,10 +32,8 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
             props.navigation.navigate({
                 routeName: 'Verification'
             })
-        } else if (response.status === 400) {
-            Alert.alert(responseJson.error)
-        } else if (response.status === 404) {
-            Alert.alert(cfg.notFound)
+        } else {
+            handler.handle(response, responseJson, props)
         }
     } catch (error) {
         console.log(error)
@@ -47,7 +46,7 @@ const SignupScreen = props => {
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', () => true)
         return () =>
-          BackHandler.removeEventListener('hardwareBackPress', () => true)
+            BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
 
     const [email, onChangeEmail] = useState("");
