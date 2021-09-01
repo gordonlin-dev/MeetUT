@@ -121,7 +121,141 @@ namespace API.Controllers
             return new JsonResult(result);
         }
 
-        
+        private void CalculateCompatibility(User user)
+        {
+            var curUserPrograms = GetUserPrograms(user.Id);
+            var curUserHobbies = GetUserHobbies(user.Id);
+            var compatabilityQuery = _context.UserCompatabilities.Where(x =>
+                x.User1Id == user.Id || x.User2Id == user.Id).ToList();
+
+            var userQuery = _context.Users.Where(x => x.Id != user.Id).ToList();
+            var hobbyCategories = _context.QuestionnaireHobbyCategories.ToList();
+            var programCategories = _context.QuestionnaireProgramOfStudyCategories.ToList();
+
+            var curUserHobbyCategories = curUserHobbies.Join(
+                        hobbyCategories,
+                        hobby => hobby.Id,
+                        category => category.HobbyId,
+                        (hobby, category) => category.CategoryId
+                    );
+            var curUserProgramCategories = curUserPrograms.Join(
+                        programCategories,
+                        program => program.Id,
+                        category => category.ProgramId,
+                        (hobby, category) => category.CategoryId
+                    );
+            var curUserHobbyCategoriesDict = new Dictionary<int, int>();
+            foreach(var cat in curUserHobbyCategories)
+            {
+                if (curUserHobbyCategoriesDict.TryGetValue(cat, out int curValue))
+                {
+                    curUserHobbyCategoriesDict[cat] = curValue + 1;
+                }
+                else
+                {
+                    curUserHobbyCategoriesDict[cat] = 1;
+                }
+
+            }
+            var curUserProgramCategoriesDict = new Dictionary<int, int>();
+            foreach(var cat in curUserProgramCategories)
+            {
+                int curValue = 0;
+                if (curUserProgramCategoriesDict.TryGetValue(cat, out curValue))
+                {
+                    curUserProgramCategoriesDict[cat] = curValue + 1;
+                }
+                else
+                {
+                    curUserProgramCategoriesDict[cat] = 1;
+                }
+            }
+
+            foreach (var queriedUser in userQuery)
+            {
+                var queriedUserPrograms = GetUserPrograms(queriedUser.Id);
+                var queriedUserHobbies = GetUserHobbies(queriedUser.Id);
+                var query = compatabilityQuery.Where(x => x.User1Id == queriedUser.Id
+                    || x.User2Id == queriedUser.Id);
+                
+                UserCompatability compatability;
+                if (!query.Any())
+                {
+                    compatability = new UserCompatability()
+                    {
+                        User1Id = user.Id,
+                        User2Id = queriedUser.Id,
+                        CompatabilityScore = 0
+                    };
+                }
+                else
+                {
+                    compatability = compatabilityQuery.First();
+                    compatability.CompatabilityScore = 0;
+                }
+                var commonHobbies = curUserHobbies.Intersect(queriedUserHobbies).ToList();
+                compatability.CompatabilityScore += commonHobbies.Count * 2;
+
+                var queriedUserHobbyCategories = queriedUserHobbies.Join(
+                        hobbyCategories,
+                        hobby => hobby.Id,
+                        category => category.HobbyId,
+                        (hobby, category) => category.CategoryId
+                    ).ToList();
+                var queriedUserHobbyCategoryDict = new Dictionary<int, int>();
+                foreach(var cat in queriedUserHobbyCategories)
+                {
+                    if (queriedUserHobbyCategoryDict.TryGetValue(cat, out int curValue))
+                    {
+                        queriedUserHobbyCategoryDict[cat] = curValue + 1;
+                    }
+                    else
+                    {
+                        queriedUserHobbyCategoryDict[cat] = 1;
+                    }
+                }
+                foreach(var key in queriedUserHobbyCategoryDict.Keys)
+                {
+                    int queriedUserValue = queriedUserHobbyCategoryDict[key];
+                    if (curUserHobbyCategoriesDict.TryGetValue(key, out int curUserValue))
+                    {
+                        compatability.CompatabilityScore += Math.Min(curUserValue, queriedUserValue);
+                    }
+                }
+                var commonPrograms = curUserPrograms.Intersect(queriedUserPrograms).ToList();
+                compatability.CompatabilityScore += commonPrograms.Count * 2;
+                var queriedUserProgramCategories = queriedUserPrograms.Join(
+                        programCategories,
+                        program => program.Id,
+                        category => category.ProgramId,
+                        (program, category) => category.CategoryId
+                    );
+
+                var queriedUserProgramCategoriesDict = new Dictionary<int, int>();
+                foreach (var cat in queriedUserProgramCategories)
+                {
+                    if(queriedUserProgramCategoriesDict.TryGetValue(cat, out int value))
+                    {
+                        queriedUserProgramCategoriesDict[cat] = value + 1;
+                    }
+                    else
+                    {
+                        queriedUserProgramCategoriesDict[cat] = 1;
+                    }
+                }
+                foreach(var key in queriedUserProgramCategoriesDict.Keys)
+                {
+                    int queriedUserValue = queriedUserProgramCategoriesDict[key];
+                    if(curUserProgramCategoriesDict.TryGetValue(key, out int curUserValue))
+                    {
+                        compatability.CompatabilityScore += Math.Min(queriedUserValue, curUserValue);
+                    }
+
+                }
+                _context.UserCompatabilities.Add(compatability);
+            }
+            _context.SaveChanges();
+        }
 
     }
 
