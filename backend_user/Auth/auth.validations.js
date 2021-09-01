@@ -24,7 +24,7 @@ exports.jwtValid = (req, res, next) => {
         if (req.jwt.active) {
             return next()
         } else {
-            return res.status(402).send()
+            return res.status(403).send()
         }
     }catch (err){
         console.log(err)
