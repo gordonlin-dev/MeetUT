@@ -14,8 +14,9 @@ const Acedemic = (props) => {
     };
 
     const submit = async (props, chosen) => {
+
         try{
-            const userID = await secureStore.GetValue('UserId');
+            const userId = await secureStore.GetValue('UserId');
             const url = 'https://meet-ut-1.herokuapp.com/questionnaire/programs'
             const response = await fetch(url, {
                 method : 'POST',
@@ -23,7 +24,7 @@ const Acedemic = (props) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    UserId: userID,
+                    UserId: userId,
                     Programs: chosen
                 })
             });
@@ -37,9 +38,6 @@ const Acedemic = (props) => {
             console.log(e);
         }
     }
-    
-
-
     const loadPrograms = async () => {
         try{
             const url = 'https://meet-ut-1.herokuapp.com/questionnaire/programs'
@@ -52,7 +50,6 @@ const Acedemic = (props) => {
             const responseJson = await response.json();
             setPrograms(responseJson)
             
-    
         }catch (e) {
             console.log(e);
         }
@@ -65,14 +62,16 @@ const Acedemic = (props) => {
         temp.title = programs[i].categoryValue;
         temp.items = [];
         for (let j = 0; j < programs[i].content.length; j++) {
-            temp.items.push({id: programs[i].content[j].programId, title: programs[i].content[j].value})
+            temp.items.push({title: programs[i].content[j].value, id: programs[i].content[j].programId})
         }
         sortedPrograms.push(temp)
     }
     const toggleChecked = (node) => {
-        if (!chosen.some(el => el.value === node.title)) {
+        if (chosen.some(el => el.value === node.title)) {
+            const newSelected = chosen.filter((id) => id !== node.id);
+            setChosen(newSelected);
+        } else {
             chosen.push({programId: node.id, value: node.title})
-            
         }
     } 
 
@@ -122,7 +121,7 @@ const Acedemic = (props) => {
                     
                     {chosen.map((props) => {
                         return(
-                            <View style={{flexDirection: 'row',}}>
+                            <View style={{flexDirection: 'row',}} key={props.programId}>
                                 <View style={styles.outputCard}>
                                     <Text style={styles.quizFont}>{props.value}</Text>
                                 </View>
