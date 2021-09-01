@@ -24,8 +24,8 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
             })
         });
 
-        const responseJson = await response.json();
         if (response.status === 403) {
+            const responseJson = await response.json();
             await secureStore.Save('UserId', email);
             await secureStore.Save('JWT', responseJson.accessToken);
             await secureStore.Save('RefreshToken', responseJson.refreshToken)
@@ -33,7 +33,7 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
                 routeName: 'Verification'
             })
         } else {
-            handler.handle(response, responseJson, props)
+            await handler.handle(response, props)
         }
     } catch (error) {
         console.log(error)
