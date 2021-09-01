@@ -3,7 +3,7 @@ const UserModel = require('./users.model')
 const jwt = require('jsonwebtoken')
 const jwtSecret = require("../env.config").jwt_secret
 const validator = require("email-validator");
-const presenter = require("./user.presenter")
+const presenter = require("../presenter")
 const cfg = require("./user.config.json");
 const mail = require("nodemailer")
 
@@ -48,7 +48,7 @@ exports.sendVerification = (req, res, next) => {
 exports.updateCode = (req, res) => {
     UserModel.updateCode(req.body._id, req.body.code).then((result) => {
         if (result != null) {
-            res.status(200).send(presenter.updateCode())
+            res.status(201).send(presenter.updateCode())
         } else {
             res.status(404).send(presenter.invalidUser("exist"))
         }

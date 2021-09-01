@@ -2,23 +2,26 @@ const UserModel = require('../Users/users.model')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const jwtSecret = require("../env.config").jwt_secret
+const presenter = require("../presenter")
 
 exports.passwordMatch = (req, res, next) =>{
     UserModel.findById(req.body._id).then((user) => {
-            //TODO: null check
+        if (user == null) {
+            return res.status(400).send(presenter.invalidUser("null"))
+        } else {
             let parts = user.password.split('$')
             let salt = parts[0]
             let passwordHash = parts[1]
             let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
-            if (passwordHash === hash){
+            if (passwordHash === hash) {
                 return next()
-            } 
+            }
         }
-    )
+    })
 }
 
 exports.jwtValid = (req, res, next) => {
-    try{
+    try {
         let authorization = req.headers['authorization'].split(' ')
         req.jwt = jwt.verify(authorization[1], jwtSecret)
         if (req.jwt.active) {
@@ -26,9 +29,9 @@ exports.jwtValid = (req, res, next) => {
         } else {
             return res.status(403).send()
         }
-    }catch (err){
+    } catch (err) {
         console.log(err)
-        return res.status(401).send()
+        return res.status(500).send()
     }
 }
 
