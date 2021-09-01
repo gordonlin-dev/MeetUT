@@ -8,13 +8,14 @@ exports.auth = (req, res) => {
         let salt = crypto.randomBytes(16).toString('base64')
         let hash = crypto.createHmac('sha512', salt).update(refreshId).digest('base64')
         req.body.refreshKey = salt
-        console.log(req.body.active)
         let token = jwt.sign({_id: req.body._id, active: req.body.active}, jwtSecret)
-        console.log(jwt.decode(token))
         let b = Buffer.from(hash)
         let refresh_token = b.toString('base64')
-
-        res.status(201).send({accessToken: token, refreshToken: refresh_token})
+        if (req.body.active) {
+            res.status(201).send({accessToken: token, refreshToken: refresh_token})
+        } else {
+            res.status(403).send({accessToken: token, refreshToken: refresh_token})
+        }
 
     } catch (e) {
         res.status(500).send({error: e})
