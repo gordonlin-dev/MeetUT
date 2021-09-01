@@ -27,10 +27,12 @@ const loginSubmit = async (email, password, props) => {
             props.navigation.navigate({
                 routeName: 'Home'
             })
-        } else if (response.status === 401) {
+        } else if (response.status === 403) {
             props.navigation.navigate({
                 routeName: 'Verification'
             })
+        } else if (response.status === 404) {
+            Alert.alert(cfg.notFound)
         }
 
     } catch (error) {

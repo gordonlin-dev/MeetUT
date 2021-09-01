@@ -34,6 +34,7 @@ exports.createUser = (req, res, next) => {
 exports.sendVerification = (req, res, next) => {
     const code = getCode()
     console.log(code) // TODO: Remove for production use
+    req.body.active = false
     req.body.code = getHash(cfg.codeSalt, code)
     try {
         email_verification(req.body._id, code).then()
@@ -58,11 +59,12 @@ exports.updateCode = (req, res) => {
  * @name verifyEmail
  * @description Check if the posted code is the same as the stored code, and activate the account if needed
  */
-exports.verifyEmail = (req, res) => { // TODO: Set max times
+exports.verifyEmail = (req, res, next) => { // TODO: Set max times
     UserModel.getUserCode(req.body._id).then((result) => {
         req.body.verification = getHash(cfg.codeSalt, req.body.verification)
         if (req.body.verification === result) {
-            UserModel.activateUser(req.body._id).then(() => { return res.status(200).send() })
+            req.body.active = true
+            UserModel.activateUser(req.body._id).then(() => { return next() })
         } else {
             return res.status(400).send(presenter.invalidCode())
         }

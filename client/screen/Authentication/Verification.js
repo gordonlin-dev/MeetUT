@@ -22,12 +22,14 @@ const verificationSubmit = async (code, props) => {
             })
         });
 
-        if (response.status === 200) {
+        const responseJson = await response.json();
+        if (response.status === 201) {
+            await secureStore.Save('JWT', responseJson.accessToken);
+            await secureStore.Save('RefreshToken', responseJson.refreshToken)
             props.navigation.navigate({
                 routeName: 'Home'
             })
         } else {
-            const responseJson = await response.json();
             Alert.alert(responseJson.error)
             props.navigation.navigate({
                 routeName: 'Verification'

@@ -1,9 +1,10 @@
 {
-  "domain": "http://192.168.1.37:3000",
-  "oldDomain": "https://meet-ut-2.herokuapp.com",
+  "domain": "https://meet-ut-2.herokuapp.com",
   "signup": "/users/create",
   "resetPassword": "/updatePassword",
   "login": "/auth",
   "verify": "/users/verify",
-  "resendCode": "/users/verify/resend"
+  "resendCode": "/users/verify/resend",
+  "user": "/users",
+  "match": "/match"
 }

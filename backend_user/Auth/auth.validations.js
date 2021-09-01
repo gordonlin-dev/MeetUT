@@ -21,14 +21,19 @@ exports.jwtValid = (req, res, next) => {
     try{
         let authorization = req.headers['authorization'].split(' ')
         req.jwt = jwt.verify(authorization[1], jwtSecret)
-        return next()
+        if (req.jwt.active) {
+            return next()
+        } else {
+            return res.status(403).send()
+        }
     }catch (err){
+        console.log(err)
         return res.status(401).send()
     }
 }
 
 exports.isActive = (req, res, next) => {
-    return getInfo(req.body._id).then((result) => {
+    getInfo(req.body._id).then((result) => {
         if (result == null) {
             return res.status(404).send()
         } else {
