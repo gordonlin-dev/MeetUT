@@ -1,169 +1,168 @@
-import React, {useState} from 'react'
-import {View, Image, StyleSheet, TextInput, Dimensions, TouchableOpacity, ScrollView, Text} from 'react-native'
-import {Picker} from '@react-native-picker/picker';
+import React, { Component, useState } from 'react';
+import { View, SafeAreaView, Dimensions, TouchableOpacity, Text, ScrollView} from 'react-native';
+import { styles } from '../styles'; 
+import NestedListView from 'react-native-nested-listview'
+const secureStore = require('../../SecureStore')
 
-const {height, width} = Dimensions.get('window');
-const Acedemic = props => {
-    const [selectedValue, setSelectedValue] = useState("--");
+const Acedemic = (props) => {
+    const [programs, setPrograms] = useState([]);
+    const [chosen, setChosen] = useState([]);
+    const colorLevels = {
+        [0]: '#d0d0d9',
+        [1]: '#abe1f5',
+        [2]: '#f2f2fc',
+    };
 
-    return (
-          <View style={styles.container}>
-
-            <View style={styles.pickerHeader}>
-                <Text style={styles.headerFont}>Type of Study</Text>
-                <Picker
-                    style={styles.picker}
-                    selectedValue={selectedValue}
-                    ColorValue="black"
-                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                >
-                    <Picker.Item label="--" value="--" />
-                    <Picker.Item label="Other" value="other" />
-                    <Picker.Item label="Prefer not to say" value="no" />
-                </Picker>
-            </View>
-            
-            <View style={styles.pickerHeader}>
-                <Text style={styles.headerFont}>Year of Study</Text>
-                <Picker
-                    style={styles.picker}
-                    selectedValue={selectedValue}
-                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                >
-                    <Picker.Item label="--" value="--" />
-                    <Picker.Item label="Other" value="other" />
-                    <Picker.Item label="Prefer not to say" value="no" />
-                </Picker>
-            </View>
-
-            <View style={styles.pickerHeader}>
-                <Text style={styles.headerFont}>College</Text>
-                <Picker
-                    style={styles.picker}
-                    selectedValue={selectedValue}
-                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                >
-                    <Picker.Item label="--" value="--" />
-                    <Picker.Item label="Other" value="other" />
-                    <Picker.Item label="Prefer not to say" value="no" />
-                </Picker>
-            </View>
-            
-            <View style={styles.pickerHeader}>
-                <Text style={styles.headerFont}>Programs</Text>
-                <Picker
-                    style={styles.picker}
-                    selectedValue={selectedValue}
-                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                >
-                    <Picker.Item label="--" value="--" />
-                    <Picker.Item label="Other" value="other" />
-                    <Picker.Item label="Prefer not to say" value="no" />
-                </Picker>
-            </View>
-
-            <TouchableOpacity 
-                style={styles.leftButton}
-                onPress={() => {
-                props.navigation.navigate({
-                    routeName: 'Demographics'
+    const submit = async (props, chosen) => {
+        try{
+            const userID = await secureStore.GetValue('UserId');
+            const url = 'https://meet-ut-1.herokuapp.com/questionnaire/programs'
+            const response = await fetch(url, {
+                method : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    UserId: userID,
+                    Programs: chosen
                 })
-            }}>
-                <Text style={styles.font}>Back</Text>
-            </TouchableOpacity>
+            });
+            const responseJson = await response.json();
+            props.navigation.navigate({
+                routeName: 'Personal'
+            })
             
-            <TouchableOpacity 
-                style={styles.Button}
-                onPress={() => {
-                props.navigation.navigate({
-                    routeName: 'Personal'
-                })
-            }}>
-                <Text style={styles.font}>Next</Text>
-            </TouchableOpacity>
-        </View>
-    );
-};
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: height*0.05,
-        alignItems: "center",
-        backgroundColor: "#e1e1ea"
-    },
-    leftButton: {
-        position: 'absolute',
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        left: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-      },
-    Button: {
-        position: 'absolute',
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        right: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-      },
-    pickerHeader: {
-        marginTop: height * 0.01,
-        left: width*0.01,
-    },
-    Input: {
-        marginTop: height * 0.03,
-        height: height * 0.06,
-        width: width * 0.7,
-        borderRadius: 5,
-        borderWidth: 2,
-        padding: 10,
-        borderColor: "black",
-        color: "black"
-    },
-    picker: {
-        width: width * 0.7,
-        height: height * 0.06,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        backgroundColor: 'white',
-        color: "black"
-        
-    },
-    header: {
-        fontSize:50,
-        marginLeft: width * 0.34,
-        color: "white",
-        fontFamily: 'timeburner',
-    },
-    headerFont: {
-        fontFamily: 'timeburner',
-        fontSize:17,
-        color: "black"  
-    },
-    font: {
-        fontFamily: 'timeburner',
-        fontSize:18,
-        color: "black",
-        fontWeight: "500"
-    },
-    scrollView: {
-        marginTop: height*0.05,
-    },
-    avator: {
-        height: height*0.08,
-        width: width*0.12
+    
+        }catch (e) {
+            console.log(e);
+        }
     }
-  });
+    
+
+
+    const loadPrograms = async () => {
+        try{
+            const url = 'https://meet-ut-1.herokuapp.com/questionnaire/programs'
+            const response = await fetch(url, {
+                method : 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const responseJson = await response.json();
+            setPrograms(responseJson)
+            
+    
+        }catch (e) {
+            console.log(e);
+        }
+    }
+
+    loadPrograms();
+    const sortedPrograms = [];
+    for (let i = 0; i < programs.length; i++) {
+        const temp = {};
+        temp.title = programs[i].categoryValue;
+        temp.items = [];
+        for (let j = 0; j < programs[i].content.length; j++) {
+            temp.items.push({id: programs[i].content[j].programId, title: programs[i].content[j].value})
+        }
+        sortedPrograms.push(temp)
+    }
+    const toggleChecked = (node) => {
+        if (!chosen.some(el => el.value === node.title)) {
+            chosen.push({programId: node.id, value: node.title})
+            
+        }
+    } 
+
+    const unselect = (props) => {
+        for (let i = 0; i < chosen.length; i++) {
+            if (chosen[i].value === props.value) {
+                chosen.splice(i, 1)
+            }
+        } 
+    }
+    const renderNode = (node, level) => {
+        const paddingLeft = (level ?? 0 + 1) * 30;
+        const backgroundColor = colorLevels[level ?? 0] || 'white';
+        if (level === 1) {
+            return (
+                <View style={[styles.row, { backgroundColor, paddingLeft }]}>
+                    <Text style={styles.headerFont}>{node.title}</Text>
+                </View>
+            );
+            
+        } else {
+            return (
+                <View style={[styles.row, { backgroundColor, paddingLeft }]}>
+                    <Text style={styles.headerFont}>{node.title}</Text>
+                    <TouchableOpacity style={styles.selectButton} onPress={() => toggleChecked(node)}> 
+                    <Text style={styles.headerFont}>select</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+        
+    };
+    
+    return (
+        <SafeAreaView style={styles.quizContainer} >
+            
+            <View style={styles.scrollContainer} >
+                <Text style={styles.headerFont}>Programs</Text>
+                <NestedListView
+                    data={sortedPrograms}
+                    renderNode={renderNode}
+                />
+            </View>
+            <View style={styles.selectedContainer}>
+            <Text style={styles.headerFont}>chosen Programs ({chosen.length})</Text>
+                <ScrollView style={styles.outputContainer}>
+                    
+                    {chosen.map((props) => {
+                        return(
+                            <View style={{flexDirection: 'row',}}>
+                                <View style={styles.outputCard}>
+                                    <Text style={styles.quizFont}>{props.value}</Text>
+                                </View>
+                                <TouchableOpacity style={styles.swipeButton} onPress={() => unselect(props)}>
+                                        <Text style={styles.headerFont}>Unselect</Text>
+                                </TouchableOpacity>
+                            </View>
+                            
+                            
+                        )
+                        
+                    })}
+                </ScrollView>
+            </View>
+            
+                <View style={styles.quizeFooter}>
+                <TouchableOpacity 
+                    style={styles.quizLeftButton}
+                    onPress={() => {
+                    props.navigation.navigate({
+                        routeName: 'Demographics'
+                    })
+                }}>
+                    <Text style={styles.font}>Back</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                    style={styles.quizRightButton}
+                    onPress={() => {
+                        submit(props, chosen) 
+                    
+                }}>
+                    <Text style={styles.font}>Next</Text>
+                </TouchableOpacity>
+            </View>
+            
+            
+        </SafeAreaView>
+    );
+  
+}
 
 export default Acedemic;

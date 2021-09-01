@@ -31,9 +31,10 @@ const Demographics = props => {
               placeholder="last name"
               placeholderTextColor="black"
             />
+            
             <View style={styles.pickerHeader}>
                 <Text style={styles.headerFont}>Gender</Text>
-            </View>
+            
             <Picker
                 style={styles.picker}
                 selectedValue={selectedValue}
@@ -46,6 +47,29 @@ const Demographics = props => {
                 <Picker.Item label="Other" value="other" />
                 <Picker.Item label="Prefer not to say" value="no" />
             </Picker>
+            
+                    
+                    <Text style={styles.headerFont}>Year of Study</Text>
+                    <Picker
+                        style={styles.picker}
+                        selectedValue={selectedValue}
+                        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                    >
+                        <Picker.Item label="--" value="--" />
+                        <Picker.Item label="Other" value="other" />
+                        <Picker.Item label="Prefer not to say" value="no" />
+                    </Picker>
+                    <Text style={styles.headerFont}>College</Text>
+                    <Picker
+                        style={styles.picker}
+                        selectedValue={selectedValue}
+                        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                    >
+                        <Picker.Item label="--" value="--" />
+                        <Picker.Item label="Other" value="other" />
+                        <Picker.Item label="Prefer not to say" value="no" />
+                    </Picker>
+                </View>
 
             <SafeAreaView style={styles.scrollViewContainer}>
                 <ScrollView style={styles.scrollView}>
@@ -107,7 +131,7 @@ const styles = StyleSheet.create({
         color: "black"
     },
     picker: {
-        left: width*0.16,
+        
         width: width * 0.7,
         height: height * 0.06,
         justifyContent: 'center',

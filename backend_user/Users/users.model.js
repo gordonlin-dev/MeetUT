@@ -135,6 +135,17 @@ exports.updatePassword = (id, data) => {
     })
 }
 
+exports.updateCode = (id, data) => {
+    return User.findById(id).then((result) => {
+        if (result.isArchived) {
+            return null
+        } else {
+            result.code = data
+            return result.save()
+        }
+    })
+}
+
 exports.like = async (curUser, likedUser) => {
     let cur = await User.findById(curUser)
     let liked = await User.findById(likedUser)

@@ -1,10 +1,14 @@
-import React, {useState} from 'react'
-import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {View, Text, BackHandler, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import {styles} from '../styles';
 const presenter = require('../Presenter')
 const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png');
-const {height, width} = Dimensions.get('window');
-const verificationSubmit = async (email, code, props) => {
+
+const secureStore = require('../../SecureStore')
+
+
+const verificationSubmit = async (code, props) => {
     try {
         const url = cfg.domain + cfg.verify;
         const response = await fetch(url, {
@@ -13,17 +17,50 @@ const verificationSubmit = async (email, code, props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                _id: email,
+                _id: await secureStore.GetValue("UserId"),
                 verification: code
+            })
+        });
+
+        const responseJson = await response.json();
+        if (response.status === 201) {
+            await secureStore.Save('JWT', responseJson.accessToken);
+            await secureStore.Save('RefreshToken', responseJson.refreshToken)
+            props.navigation.navigate({
+                routeName: 'Home'
+            })
+        } else {
+            Alert.alert(responseJson.error)
+            props.navigation.navigate({
+                routeName: 'Verification'
+            })
+        }
+    } catch (error) {
+        console.log(error)
+        Alert.alert(presenter.internalError())
+    }
+}
+
+const resend = async (props) => {
+    try {
+        const url = cfg.domain + cfg.resendCode;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                _id: await secureStore.GetValue("UserId")
             })
         });
 
         if (response.status === 200) {
             props.navigation.navigate({
-                routeName: 'Home'
+                routeName: 'Verification'
             })
         } else {
             console.log(response.status)
+            Alert.alert(presenter.internalError())
         }
     } catch (error) {
         console.log(error)
@@ -32,24 +69,21 @@ const verificationSubmit = async (email, code, props) => {
 }
 
 const verificationScreen = props => {
-    const [email, onChangeEmail] = useState("");
-    const [code, onChangeCode] = useState("");
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+          BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
+
+    const [code, onChangeCode] = useState("")
 
     return (
-        <View style={styles.bg}>
+        <View style={styles.empty}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View>
-                    <Text style={styles.header}>
+                    <Text style={styles.verificationHeader}>
                         Verification
                     </Text>
-
-                    <TextInput
-                        style={styles.Input}
-                        onChangeText={onChangeEmail}
-                        value={email}
-                        placeholder="email"
-                        placeholderTextColor="white"
-                    />
                     <TextInput
                         style={styles.Input}
                         onChangeText={onChangeCode}
@@ -59,59 +93,22 @@ const verificationScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            verificationSubmit(email, code, props)
+                            resend(props)
+                        }}
+                        style={styles.Button}>
+                        <Text style={styles.font}>Resend Code</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            verificationSubmit(code, props)
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Submit</Text>
                     </TouchableOpacity>
                 </View>
-
             </ImageBackground>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    bg: {
-        flex: 1,
-    },
-    image: {
-        flex: 1,
-        justifyContent: "center"
-    },
-    Input: {
-        marginTop: height * 0.1,
-        marginLeft: width * 0.15,
-        height: height * 0.06,
-        width: width * 0.7,
-        borderRadius: 5,
-        borderWidth: 2,
-        padding: 10,
-        borderColor: "white",
-        color: "white"
-    },
-    Button: {
-        width: width * 0.6,
-        height: height * 0.06,
-        marginTop: height * 0.15,
-        marginLeft: width * 0.2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        backgroundColor: 'white',
-    },
-    header: {
-        fontSize: 50,
-        marginLeft: width * 0.15,
-        color: "white",
-        fontFamily: 'timeburner',
-    },
-    font: {
-        fontFamily: 'timeburner',
-        fontSize: 18,
-        color: "#0E0EA1",
-        fontWeight: "500"
-    }
-});
 
 export default verificationScreen;

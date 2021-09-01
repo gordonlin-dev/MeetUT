@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import {Image, StyleSheet, Dimensions } from 'react-native'
+import {Image, StyleSheet, Dimensions, backHandler} from 'react-native'
 import socketClient  from "socket.io-client";
 import { GiftedChat } from 'react-native-gifted-chat';
 const secureStore = require('../../SecureStore')
@@ -65,6 +65,11 @@ const ChatScreen = props => {
         socket.disconnect()
     }, [] );
 
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+          BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
     return (
         <GiftedChat
             renderAvatar={() => {

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import {View, TouchableOpacity, StyleSheet, Button, Image, Dimensions, SafeAreaView, FlatList, Text, TouchableHighlight} from 'react-native'
+
+import {View, TouchableOpacity, StyleSheet, Button, Image, Dimensions, SafeAreaView, FlatList, Text, TouchableHighlight, BackHandler} from 'react-native'
 
 import Swipeable from 'react-native-swipeable-row';
 
@@ -10,6 +11,11 @@ const setting =  require('../../assets/setting-icon.png');
 const chat =  require('../../assets/chat-icon.png');
 const {height, width} = Dimensions.get('window');
 const ChatListScreen = props => {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+          BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
     const [chatList, setChatList] = useState([])
 
     const loadChat = async () => {

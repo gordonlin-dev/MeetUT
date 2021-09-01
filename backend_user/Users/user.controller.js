@@ -12,14 +12,17 @@ const mail = require("nodemailer")
  * @description Create the user requested given that all request data is valid
  * @return status 200 redirect with the tokens required
  */
-exports.createUser = (req, res) => {
-    req.body.password = getPasswordHash(req.body.password)
-    req.body.active = false
-    delete req.body.confirm
-    delete req.body.email
+exports.createUser = (req, res, next) => {
+    let userData = {}
+    userData.firstName = req.body.firstName
+    userData.lastName = req.body.lastName
+    userData._id = req.body._id
+    userData.code = req.body.code
+    userData.password = getPasswordHash(req.body.password)
+    userData.active = false
 
-    UserModel.createUser(req.body).then((user) => {
-        res.status(200).send(getTokens(req, user))
+    UserModel.createUser(userData).then(() => {
+        return next()
     })
 }
 
@@ -30,7 +33,8 @@ exports.createUser = (req, res) => {
  */
 exports.sendVerification = (req, res, next) => {
     const code = getCode()
-    console.log(code)
+    console.log(code) // TODO: Remove for production use
+    req.body.active = false
     req.body.code = getHash(cfg.codeSalt, code)
     try {
         email_verification(req.body._id, code).then()
@@ -41,17 +45,26 @@ exports.sendVerification = (req, res, next) => {
     }
 }
 
+exports.updateCode = (req, res) => {
+    UserModel.updateCode(req.body._id, req.body.code).then((result) => {
+        if (result != null) {
+            res.status(200).send(presenter.updateCode())
+        } else {
+            res.status(404).send(presenter.invalidUser("exist"))
+        }
+    })
+}
+
 /**
  * @name verifyEmail
  * @description Check if the posted code is the same as the stored code, and activate the account if needed
  */
-exports.verifyEmail = (req, res) => { // TODO: Set max times
+exports.verifyEmail = (req, res, next) => { // TODO: Set max times
     UserModel.getUserCode(req.body._id).then((result) => {
         req.body.verification = getHash(cfg.codeSalt, req.body.verification)
         if (req.body.verification === result) {
-            UserModel.activateUser(req.body._id).then((result) => {
-                return res.status(200).send()
-            })
+            req.body.active = true
+            UserModel.activateUser(req.body._id).then(() => { return next() })
         } else {
             return res.status(400).send(presenter.invalidCode())
         }
@@ -79,7 +92,7 @@ exports.getById = (req, res) => {
  * @return status 200 redirect if request is valid, or status 404 if user does not exist
  */
 exports.deleteUser = (req, res) => {
-    UserModel.deleteUser(req.params.userID)
+    UserModel.deleteUser(req.params.userID).then()
     res.status(200).send()
 }
 
@@ -221,31 +234,21 @@ userExists = (id) => {
  * @returns {Promise<void>}
  */
 async function email_verification(recipient, code) {
-    // create reusable transporter object using the default SMTP transport
     let transporter = mail.createTransport({
         host: "smtp.gmail.com",
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
-            user: "mailmeetut@gmail.com",
-            pass: "meetutmail",
+            user: cfg.mailUser,
+            pass: cfg.mailPassword,
         },
     });
 
-    // send mail with defined transport object
-    let info = await transporter.sendMail({
+    await transporter.sendMail({
         from: cfg.mailSender, // sender address
         to: recipient, // list of receivers
         subject: presenter.verificationEmail("subject"), // Subject line
         text: presenter.verificationEmail("text", code), // plain text body
         html: "<b>" + presenter.verificationEmail("text", code) + "</b>", // html body
     });
-
-    console.log("Message sent: %s", info.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-    // Preview only available when sending through an Ethereal account
-    console.log("Preview URL: %s", mail.getTestMessageUrl(info));
-    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
-
