@@ -57,7 +57,7 @@ const Acedemic = (props) => {
 
     loadPrograms();
     const sortedPrograms = [];
-    for (let i = 0; i < programs.length - 2; i++) {
+    for (let i = 0; i < programs.length; i++) {
         const temp = {};
         temp.title = programs[i].categoryValue;
         temp.items = [];

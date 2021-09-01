@@ -28,6 +28,23 @@ const customFonts = {
 const {height, width} = Dimensions.get('window');
 Font.loadAsync(customFonts);
 const Navigator = createStackNavigator({
+    Acedemic:{
+        screen: AcedemicScreen,
+        navigationOptions:{
+            title:"Onboarding",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerLeft: ()=> null,
+            headerTintColor: '#ffff',
+            headerTitleStyle: {
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.23
+            },
+        }
+
+    },
     Splash: {
         screen:Splash,
         navigationOptions:{
@@ -70,23 +87,7 @@ const Navigator = createStackNavigator({
         }
 
     },
-    Acedemic:{
-        screen: AcedemicScreen,
-        navigationOptions:{
-            title:"Onboarding",
-            headerStyle: {
-                backgroundColor: '#3590F2',
-            },
-            headerLeft: ()=> null,
-            headerTintColor: '#ffff',
-            headerTitleStyle: {
-                fontFamily: "timeburner",
-                fontSize: 30,
-                marginLeft: width * 0.23
-            },
-        }
-
-    },
+    
     Reason:{
         screen: ReasonScreen,
         navigationOptions:{
