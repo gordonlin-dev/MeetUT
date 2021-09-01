@@ -2,8 +2,7 @@ import React, { Component, useState } from 'react';
 import { View, SafeAreaView, Dimensions, TouchableOpacity, Text, ScrollView} from 'react-native';
 import { styles } from '../styles'; 
 import NestedListView from 'react-native-nested-listview'
-
-
+const secureStore = require('../../SecureStore')
 
 const Hobbies = (props) => {
     const [hobbies, setHobbies] = useState([]);
@@ -13,6 +12,7 @@ const Hobbies = (props) => {
         [1]: '#abe1f5',
         [2]: '#f2f2fc',
     };
+
     const submit = async (props, selected) => {
         try{
             const userID = await secureStore.GetValue('UserId');
@@ -84,7 +84,6 @@ const Hobbies = (props) => {
     const renderNode = (node, level) => {
         const paddingLeft = (level ?? 0 + 1) * 30;
         const backgroundColor = colorLevels[level ?? 0] || 'white';
-        
         if (level === 1) {
             return (
                 <View style={[styles.row, { backgroundColor, paddingLeft }]}>
@@ -120,7 +119,7 @@ const Hobbies = (props) => {
                     
                     {selected.map((props) => {
                         return(
-                            <View style={{flexDirection: 'row',}}>
+                            <View style={{flexDirection: 'row',}}  key={props.hobbyId}>
                                 <View style={styles.outputCard}>
                                     <Text style={styles.quizFont}>{props.value}</Text>
                                 </View>
