@@ -29,9 +29,9 @@ namespace API.Controllers
             return "1234";
         }
 
-        private List<QuestionnaireHobby> GetUserHobbies(User user)
+        private List<QuestionnaireHobby> GetUserHobbies(int userId)
         {
-            return _context.UserHobbies.Where(x => x.UserId == user.Id).Join(
+            return _context.UserHobbies.Where(x => x.UserId == userId).Join(
                     _context.QuestionnaireHobbies,
                     userHobby => userHobby.HobbyId,
                     hobby => hobby.Id,
@@ -39,9 +39,9 @@ namespace API.Controllers
                 ).ToList();
         }
 
-        private List<QuestionnaireProgramOfStudy> GetUserPrograms(User user)
+        private List<QuestionnaireProgramOfStudy> GetUserPrograms(int userId)
         {
-            return _context.UserProgramOfStudies.Where(x => x.UserId == user.Id).Join(
+            return _context.UserProgramOfStudies.Where(x => x.UserId == userId).Join(
                     _context.QuestionnaireProgramOfStudies,
                     userProgram => userProgram.ProgramId,
                     program => program.Id,
@@ -62,25 +62,60 @@ namespace API.Controllers
             }
 
             var curUser = curUserQuery.First();
-            var userQuery = _context.Users.Where(x => x.Email != curUser.Email).ToList();
+            var userQuery = _context.UserCompatabilities.Where(x => x.User1Id == curUser.Id || x.User2Id == curUser.Id).ToList();
+            var query1 = _context.UserCompatabilities.Where(x => x.User1Id == curUser.Id).ToList();
+            var query2 = _context.UserCompatabilities.Where(x => x.User2Id == curUser.Id).ToList();
+            var result1 = query1.Join(
+                    _context.Users,
+                    userComp => userComp.User2Id,
+                    user => user.Id,
+                    (userComp, user) => new 
+                    {
+                        RecommendedUserEmail = user.Email,
+                        RecommendedUserId = user.Id,
+                        CompatabilityScore = userComp.CompatabilityScore
+                    }
+                );
+            var result2 = query2.Join(
+                    _context.Users,
+                    userComp => userComp.User1Id,
+                    user => user.Id,
+                    (userComp, user) => new
+                    {
+                        RecommendedUserEmail = user.Email,
+                        RecommendedUserId = user.Id,
+                        CompatabilityScore = userComp.CompatabilityScore
+                    }
+                );
+
             if (input.ExcludedUsers.Any())
             {
-                var matchedUserQuery = _context.Users.ToList().Join(
-                    input.ExcludedUsers,
-                    user => user.Email,
-                    matchedUser => matchedUser,
-                    (user, matchedUser) => user
-                ).ToList();
-                userQuery = userQuery.Except(matchedUserQuery).ToList();
+                var matchedUserQuery1 = result1.Join(
+                        input.ExcludedUsers,
+                        recUser => recUser.RecommendedUserEmail,
+                        matchedUser => matchedUser,
+                        (recUser, matchedUser) => recUser
+                    );
+                var matchedUserQuery2 = result2.Join(
+                        input.ExcludedUsers,
+                        recUser => recUser.RecommendedUserEmail,
+                        matchedUser => matchedUser,
+                        (recUser, matchedUser) => recUser
+                    );
+                result1 = result1.Except(matchedUserQuery1).ToList();
+                result2 = result2.Except(matchedUserQuery2).ToList();
             }
-            userQuery.OrderBy(user => Util.CalculateDistance(user.MatchCoordinates, curUser.MatchCoordinates));
+            var finalResult = result1.ToList();
+            finalResult.AddRange(result2.ToList());
+            finalResult.OrderBy(x => x.CompatabilityScore);
             var result = new List<RecommendationResult>();
-            foreach(var user in userQuery.Take(100))
+            
+            foreach(var user in finalResult.Take(100))
             {
                 var recommendationResult = new RecommendationResult();
-                recommendationResult.UserId = user.Email;
-                recommendationResult.Hobbies = GetUserHobbies(user);
-                recommendationResult.Programs = GetUserPrograms(user);
+                recommendationResult.UserId = user.RecommendedUserEmail;
+                recommendationResult.Hobbies = GetUserHobbies(user.RecommendedUserId);
+                recommendationResult.Programs = GetUserPrograms(user.RecommendedUserId);
                 result.Add(recommendationResult);
             }
             return new JsonResult(result);
