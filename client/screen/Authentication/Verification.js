@@ -52,7 +52,7 @@ const resend = async (props) => {
             })
         });
 
-        if (response.status === 200) {
+        if (response.status === 201) {
             props.navigation.navigate({
                 routeName: 'Verification'
             })

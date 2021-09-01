@@ -17,9 +17,9 @@ exports.auth = (req, res) => {
             res.status(403).send({accessToken: token, refreshToken: refresh_token})
         }
 
-    } catch (e) {
-        res.status(500).send({error: e})
-        console.log(e)
+    } catch (error) {
+        res.status(500).send()
+        console.log(error)
     }
 }
 
