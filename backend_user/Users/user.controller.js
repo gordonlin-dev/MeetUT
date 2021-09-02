@@ -27,11 +27,11 @@ exports.createUser = (req, res, next) => {
 }
 
 /**
- * @name sendVerification
+ * @name emailVerification
  * @description Send the email for verification given that the request body is valid
  * @return next if sent successfully, or status 400 otherwise
  */
-exports.sendVerification = (req, res, next) => {
+exports.emailVerification = (req, res, next) => {
     const code = getCode()
     console.log(code) // TODO: Remove for production use
     req.body.active = false
@@ -43,6 +43,49 @@ exports.sendVerification = (req, res, next) => {
         console.log(e)
         return res.status(400).send(presenter.invalidEmail("code"))
     }
+}
+
+/**
+ * @name passwordVerification
+ * @description Send the email for verification given that the request body is valid
+ * @return next if sent successfully, or status 400 otherwise
+ */
+exports.passwordVerification = (req, res, next) => {
+    userExists(req.body._id).then((result) => {
+        if (!result) {
+            return res.status(400).send(presenter.invalidUser("null"))
+        }
+
+        if (!validator.validate(req.body._id)) {
+            return res.status(400).send(presenter.invalidEmail("address"))
+        }
+
+        const domain = req.body._id.split("@")[1]
+        if (!cfg.emailDomains.includes(domain)) {
+            return res.status(400).send(presenter.invalidEmail("domain"))
+        }
+    })
+
+    const code = getCode()
+    console.log(code) // TODO: Remove for production use
+    req.body.code = getHash(cfg.codeSalt, code)
+    try {
+        email_verification(req.body._id, code).then()
+        return next()
+    } catch (e) {
+        console.log(e)
+        return res.status(400).send(presenter.invalidEmail("code"))
+    }
+}
+
+exports.updatePasswordCode = (req, res) => {
+    UserModel.updatePasswordCode(req.body._id, req.body.code).then((result) => {
+        if (result != null) {
+            res.status(201).send(presenter.updateCode())
+        } else {
+            res.status(404).send(presenter.invalidUser("null"))
+        }
+    })
 }
 
 exports.updateCode = (req, res) => {
@@ -61,6 +104,22 @@ exports.updateCode = (req, res) => {
  */
 exports.verifyEmail = (req, res, next) => { // TODO: Set max times
     UserModel.getUserCode(req.body._id).then((result) => {
+        req.body.verification = getHash(cfg.codeSalt, req.body.verification)
+        if (req.body.verification === result) {
+            req.body.active = true
+            UserModel.activateUser(req.body._id).then(() => { return next() })
+        } else {
+            return res.status(400).send(presenter.invalidCode())
+        }
+    })
+}
+
+/**
+ * @name verifyForgot
+ * @description Check if the posted code is the same as the stored code, and activate the account if needed
+ */
+exports.verifyForgot = (req, res, next) => { // TODO: Set max times
+    UserModel.getPasswordCode(req.body._id).then((result) => {
         req.body.verification = getHash(cfg.codeSalt, req.body.verification)
         if (req.body.verification === result) {
             req.body.active = true
