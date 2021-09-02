@@ -3,12 +3,13 @@ import {View, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView, Text,
 import {Picker} from '@react-native-picker/picker';
 import { AirbnbRating } from 'react-native-ratings';
 const {height, width} = Dimensions.get('window');
+import {styles} from '../styles'
 const SpecificHobby = props => {
     const [selectedValue, setSelectedValue] = useState("--");
 
     return (
-          <SafeAreaView style={styles.container}>
-            <ScrollView style={styles.scrollView}>
+          <SafeAreaView style={styles.onboardContainer}>
+            <ScrollView style={styles.onboardEmpty}>
 
               <View style={styles.pickerHeader}>
                   <Text style={styles.headerFont}>Chosen general activity</Text>
@@ -27,7 +28,7 @@ const SpecificHobby = props => {
               <View style={styles.quizHeader}>
                   <Text style={styles.quizFont}>How much do you enjoy this activity?</Text>
               </View>
-              <View style={styles.quizContainer}>
+              <View style={styles.onboardEmpty}>
                   <AirbnbRating count="7" showRating={false} selectedColor="#3590F2" reviewColor="#3590F2"/>
                   <Text style={styles.leftFont}>1</Text>
               </View>
@@ -49,7 +50,7 @@ const SpecificHobby = props => {
               <View style={styles.quizHeader}>
                   <Text style={styles.quizFont}>How much do you enjoy this activity?</Text>
               </View>
-              <View style={styles.quizContainer}>
+              <View style={styles.onboardEmpty}>
                   <AirbnbRating count="7" showRating={false} selectedColor="#3590F2" reviewColor="#3590F2"/>
                   <Text style={styles.leftFont}>1</Text>
               </View>
@@ -72,7 +73,7 @@ const SpecificHobby = props => {
               <View style={styles.quizHeader}>
                   <Text style={styles.quizFont}>How much do you enjoy this activity?</Text>
               </View>
-              <View style={styles.quizContainer}>
+              <View style={styles.onboardEmpty}>
                   <AirbnbRating count="7" showRating={false} selectedColor="#3590F2" reviewColor="#3590F2"/>
                   <Text style={styles.leftFont}>1</Text>
               </View>
@@ -94,7 +95,7 @@ const SpecificHobby = props => {
               <View style={styles.quizHeader}>
                   <Text style={styles.quizFont}>How much do you enjoy this activity?</Text>
               </View>
-              <View style={styles.quizContainer}>
+              <View style={styles.onboardEmpty}>
                   <AirbnbRating count="7" showRating={false} selectedColor="#3590F2" reviewColor="#3590F2"/>
                   <Text style={styles.leftFont}>1</Text>
               </View>
@@ -104,7 +105,7 @@ const SpecificHobby = props => {
               </ScrollView>
 
               <TouchableOpacity 
-                  style={styles.leftButton}
+                  style={styles.quizLeftButton}
                   onPress={() => {
                   props.navigation.navigate({
                       routeName: 'Hobbies'
@@ -114,7 +115,7 @@ const SpecificHobby = props => {
               </TouchableOpacity>
 
               <TouchableOpacity 
-                  style={styles.Button}
+                  style={styles.quizRightButton}
                   onPress={() => {
                   props.navigation.navigate({
                       routeName: 'ProjectInterests'
@@ -126,57 +127,7 @@ const SpecificHobby = props => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#e1e1ea',
-    },
-    scrollView: {
-    },
-    leftButton: {
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        left: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-      },
-    Button: {
-        position: 'absolute',
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        right: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-      },
-    pickerHeader: {
-        marginTop: height * 0.02,
-        left: width*0.15
-    },
-    quizContainer: {
-        
-    },
-    quizHeader: {
-        marginTop: height * 0.02,
-        alignItems: 'center',
-    },
-    picker: {
-        width: width * 0.7,
-        height: height * 0.055,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        backgroundColor: 'white',
-        color: "black"
-        
-    },
+const none = StyleSheet.create({
     header: {
         fontSize:50,
         marginLeft: width * 0.34,

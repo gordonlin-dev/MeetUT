@@ -2,6 +2,41 @@ import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, Touchabl
 
 const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
+    onboardEmpty: {
+
+    },
+    onboardContainer: {
+        flex: 1,
+        backgroundColor: "#e1e1ea",
+        paddingBottom: height * 0.1
+    },
+    scrollViewContainer: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    pickerHeader: {
+        marginTop: height * 0.02,
+        left: width*0.15,
+    },
+    inputHeader: {
+        left: width*0.16,
+        marginTop: height * 0.01,
+    },
+    onboardInput: {
+        left: width*0.16,
+        height: height * 0.06,
+        width: width * 0.7,
+        borderRadius: 5,
+        borderWidth: 2,
+        padding: 10,
+        borderColor: "black",
+        color: "black"
+    },
+    onboardHeaderFont: {
+        fontFamily: 'timeburner',
+        fontSize:17,
+        color: "black"  
+    },
     container:{
         flex:1,
         flexDirection: 'column',
@@ -119,10 +154,11 @@ const styles = StyleSheet.create({
     },
     pickerHeader: {
         marginTop: height * 0.01,
+        left: width*0.16,
     },
     picker: {
         width: width * 0.7,
-        height: height * 0.075,
+        height: height * 0.055,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 15,
@@ -253,6 +289,7 @@ const styles = StyleSheet.create({
     quizHeader: {
         marginTop: height * 0.02,
         alignItems: 'center',
+        marginLeft: width * 0.01
       },
     quizFont: {
         fontFamily: 'timeburner',
@@ -285,6 +322,12 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         marginTop: height*0.05,
+    },
+    leftFont: {
+        fontFamily: 'timeburner',
+        fontSize:12,
+        color: "black",  
+        left: width*0.11,
     },
 });
     
