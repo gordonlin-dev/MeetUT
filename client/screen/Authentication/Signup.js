@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, StyleSheet, BackHandler, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
+import {View, Text, BackHandler, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
 import {styles} from '../styles';
 
 const cfg = require('../cfg.json')
@@ -7,8 +7,11 @@ const presenter = require('../Presenter')
 const secureStore = require('../../SecureStore')
 const image = require('../../assets/bg.png');
 const handler = require('../Handler')
+const fixer = require('../Fixer')
+
 const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
     try {
+        email = fixer.email(email)
         const url = cfg.domain + cfg.signup
         const response = await fetch(url, {
             method: 'POST',

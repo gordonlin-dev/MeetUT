@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, BackHandler, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {styles} from '../styles'
 const secureStore = require('../../SecureStore')
 const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png')
 const handler = require('../Handler')
+const fixer = require('../Fixer')
 
 const loginSubmit = async (email, password, props) => {
     try {
+        email = fixer.email(email)
         const url = cfg.domain + cfg.login;
         const response = await fetch(url, {
             method: 'POST',
