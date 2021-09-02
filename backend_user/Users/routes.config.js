@@ -9,5 +9,6 @@ exports.routesConfig = function(app){
     app.delete('/users/delete/:userID', [UserController.deleteUser]) // TODO: Include AuthValidation.jwtValid before deleting
     app.put('/users/updatePassword/:userID', [AuthValidation.jwtValid, UserController.validatePassword, UserController.confirmPassword, UserController.updatePassword, AuthValidation.isActive, AuthController.auth])
     app.post('/users/verify/resend', [UserController.emailVerification, UserController.updateCode])
-    app.post('/users/forgotPassword', [UserController.passwordVerification, UserController.updatePasswordCode, AuthController.auth])
+    app.post('/users/forgotPassword/resend', [UserController.passwordVerification, UserController.updatePasswordCode])
+    app.post('/users/forgotPassword', [UserController.verifyForgot, AuthController.auth])
 }
