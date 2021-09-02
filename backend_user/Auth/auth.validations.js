@@ -7,7 +7,7 @@ const presenter = require("../presenter")
 exports.passwordMatch = (req, res, next) =>{
     UserModel.findById(req.body._id).then((user) => {
         if (user == null) {
-            return res.status(400).send(presenter.invalidUser("null"))
+            return res.status(400).send(presenter.invalidUser("null"))  // TODO 402
         } else {
             let parts = user.password.split('$')
             let salt = parts[0]

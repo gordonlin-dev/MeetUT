@@ -8,11 +8,10 @@ const cfg = require('../cfg.json')
 const presenter = require('../Presenter')
 const handler = require('../Handler')
 
-const resetSubmit = async (email, password, confirm, props) => {
+const resetSubmit = async (password, confirm, props) => {
     try {
-        const url = cfg.domain + cfg.resetPassword + "/" + email // TODO: Use config
-        console.log(email)
-        console.log(url)
+        const email = await secureStore.GetValue('UserId')
+        const url = cfg.domain + cfg.resetPassword + "/" + email
 
         const response = await fetch(url, {
             method: 'PUT',
@@ -25,10 +24,9 @@ const resetSubmit = async (email, password, confirm, props) => {
                 confirm: confirm
             })
         });
-        console.log('response status ' + response.status)
-        // console.log(response.text())
-        const responseJson = await response.json()
-        if (response.status === 200) {  // TODO: Should be 201
+
+        if (response.status === 200) {
+            const responseJson = await response.json()
             await secureStore.Save('UserId', email);
             await secureStore.Save('JWT', responseJson.accessToken);
             await secureStore.Save('RefreshToken', responseJson.refreshToken)
@@ -36,7 +34,7 @@ const resetSubmit = async (email, password, confirm, props) => {
                 routeName: 'Login'
             })
         } else {
-            handler.handle(response, responseJson, props)
+            handler.handle(response, props)
         }
     } catch (error) {
         console.log(error)
@@ -63,17 +61,10 @@ const ResetPasswordScreen = props => {
                 <View>
                     <TextInput
                         style={styles.Input}
-                        onChangeText={onChangeEmail}
-                        value={email}
-                        placeholder="email"
-                        placeholderTextColor="white"
-                    />
-                    <TextInput
-                        style={styles.Input}
                         onChangeText={onChangePassword}
                         value={password}
                         secureTextEntry={true}
-                        placeholder="password"
+                        placeholder="new password"
                         placeholderTextColor="white"
                     />
 
@@ -89,7 +80,7 @@ const ResetPasswordScreen = props => {
                 <View>
                     <TouchableOpacity
                         onPress={() => {
-                            resetSubmit(email, password, confirm, props)
+                            resetSubmit(password, confirm, props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Reset Password</Text>
