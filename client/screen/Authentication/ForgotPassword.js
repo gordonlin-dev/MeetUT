@@ -1,99 +1,112 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, BackHandler, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
-import {styles} from '../styles'
-const secureStore = require('../../SecureStore')
+import {styles} from '../styles';
+const presenter = require('../Presenter')
 const cfg = require('../cfg.json')
-const image = require('../../assets/bg.png')
+const image = require('../../assets/bg.png');
 const handler = require('../Handler')
 
-const loginSubmit = async (email, password, props) => {
+const secureStore = require('../../SecureStore')
+
+
+const emailSubmit = async (code, props) => {
     try {
-        const url = cfg.domain + cfg.login;
+        const url = cfg.domain + cfg.verify;
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                _id: email,
-                password: password
+                _id: await secureStore.GetValue("UserId"),
+                verification: code
             })
         });
 
         if (response.status === 201) {
             const responseJson = await response.json();
-            await secureStore.Save('UserId', email);
             await secureStore.Save('JWT', responseJson.accessToken);
-            await secureStore.Save('RefreshToken', responseJson.refreshToken);
+            await secureStore.Save('RefreshToken', responseJson.refreshToken)
             props.navigation.navigate({
-                routeName: 'Home'
+                routeName: 'ResetPassword'
             })
         } else {
             await handler.handle(response, props)
         }
-
     } catch (error) {
         console.log(error)
-        Alert.alert(cfg.internalError)
+        Alert.alert(presenter.internalError())
     }
 }
 
-const LoginScreen = props => {
+const resend = async (props) => {
+    try {
+        const url = cfg.domain + cfg.resendCode;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                _id: await secureStore.GetValue("UserId")
+            })
+        });
+
+        if (response.status === 201) {
+            props.navigation.navigate({
+                routeName: 'ForgotPassword'
+            })
+        } else {
+            await handler.handle(response, props)
+        }
+    } catch (error) {
+        console.log(error)
+        Alert.alert(presenter.internalError())
+    }
+}
+
+const ForgotPasswordScreen = props => {
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', () => true)
         return () =>
           BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
-    const [email, onChangeEmail] = useState("");
-    const [password, onChangePassword] = useState("");
+
+    const [code, onChangeCode] = useState("")
 
     return (
         <View style={styles.empty}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View>
-                    <Text style={styles.header}>
-                        Login
+                    <Text style={styles.verificationHeader}>
+                        Verification
                     </Text>
-
+                    
                     <TextInput
                         style={styles.Input}
-                        onChangeText={onChangeEmail}
-                        value={email}
-                        placeholder="email"
-                        placeholderTextColor="white"
-                    />
-                    <TextInput
-                        style={styles.Input}
-                        onChangeText={onChangePassword}
-                        value={password}
-                        secureTextEntry={true}
-                        placeholder="password"
+                        onChangeText={onChangeCode}
+                        value={code}
+                        placeholder="code"
                         placeholderTextColor="white"
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            loginSubmit(email, password, props)
+                            resend(props)
                         }}
                         style={styles.Button}>
-                        <Text style={styles.font}>Login</Text>
+                        <Text style={styles.font}>Resend Code</Text>
                     </TouchableOpacity>
-                </View>
-                <View>
                     <TouchableOpacity
                         onPress={() => {
-                            props.navigation.navigate({
-                                routeName: 'ForgotPassword'
-                            })
+                            emailSubmit(code, props)
                         }}
                         style={styles.Button}>
-                        <Text style={styles.font}>Forgot Password</Text>
+                        <Text style={styles.font}>Submit</Text>
                     </TouchableOpacity>
                 </View>
-
             </ImageBackground>
         </View>
     );
 };
 
-
-export default LoginScreen;
+export default ForgotPasswordScreen;

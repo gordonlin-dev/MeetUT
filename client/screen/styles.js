@@ -139,10 +139,10 @@ const styles = StyleSheet.create({
     
     image: {
         flex: 1,
-        justifyContent: "center"
+        justifyContent: "center",
     },
     Input: {
-        marginTop: height * 0.03,
+        marginBottom: height * 0.03,
         marginLeft: width * 0.15,
         height: height * 0.06,
         width: width * 0.7,
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     Button: {
         width: width * 0.6,
         height: height * 0.06,
-        marginTop: height * 0.04,
+        marginBottom: height * 0.04,
         marginLeft: width * 0.2,
         justifyContent: 'center',
         alignItems: 'center',
@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 50,
         marginLeft: width * 0.34,
+        marginBottom: height *0.03,
         color: "white",
         fontFamily: 'timeburner',
     },
@@ -225,7 +226,8 @@ const styles = StyleSheet.create({
     logo: {
         width: width * 0.2,
         height: height * 0.15,
-        marginLeft: width * 0.39
+        marginLeft: width * 0.39,
+        marginBottom: height * 0.03
     },
     rightButton:{
         position: "absolute",

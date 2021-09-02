@@ -10,6 +10,8 @@ import Splash from './screen/Landing/Splash';
 import ResetPasswordScreen from './screen/Authentication/ResetPassword';
 import SettingScreen from './screen/Settings/Setting';
 import VerificationScreen from './screen/Authentication/Verification'
+import ForgotPasswordScreen from './screen/Authentication/ForgotPassword';
+import GetEmailScreen from './screen/Authentication/GetEmail';
 
 import DemographicsScreen from "./screen/Onboarding/Demographics";
 import PersonalScreen from "./screen/Onboarding/Personal";
@@ -22,6 +24,7 @@ import IndustryScreen from "./screen/Onboarding/Industry"
 import {Dimensions} from 'react-native';
 
 import * as Font from 'expo-font';
+import { forestgreen } from 'color-name';
 const customFonts = {
     'timeburner': require('./assets/fonts/timeburner_regular.ttf'),
   };
@@ -262,6 +265,18 @@ const Navigator = createStackNavigator({
     },
     Verification: {
         screen: VerificationScreen,
+        navigationOptions:{
+            title:"",
+        }
+    },
+    ForgotPassword: {
+        screen: ForgotPasswordScreen,
+        navigationOptions:{
+            title:"",
+        }
+    },
+    GetEmail: {
+        screen: GetEmailScreen,
         navigationOptions:{
             title:"",
         }
