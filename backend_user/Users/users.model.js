@@ -5,6 +5,7 @@ const Schema = mongoose.Schema
 const userSchema = new Schema({
     active: Boolean,
     code: String,
+    passwordCode: String,
     firstName: String,
     lastName: String,
     _id: String,
@@ -74,14 +75,23 @@ exports.getUserCode = (id) => {
     })
 }
 
+exports.getPasswordCode = (id) => {
+    return User.findById(id).then((result) => {
+        if (result == null) {
+            return null
+        } else {
+            return result.passwordCode
+        }
+    })
+}
+
 exports.activateUser = (id) => {
     return User.findById(id).then((result) => {
         if (result != null) {
             result.code = undefined // Deletes key in document
             result.active = true
+            result.passwordCode = undefined
             return result.save()
-        } else {
-            console.log("no id")
         }
     })
 }
@@ -137,10 +147,21 @@ exports.updatePassword = (id, data) => {
 
 exports.updateCode = (id, data) => {
     return User.findById(id).then((result) => {
-        if (result.isArchived) {
+        if (result == null) {
             return null
         } else {
             result.code = data
+            return result.save()
+        }
+    })
+}
+
+exports.updatePasswordCode = (id, data) => {
+    return User.findById(id).then((result) => {
+        if (result == null) {
+            return null
+        } else {
+            result.passwordCode = data
             return result.save()
         }
     })
