@@ -9,6 +9,7 @@ const setting =  require('../../assets/setting-icon.png');
 const chat =  require('../../assets/chat-icon.png');
 const image =  require('../../assets/bg.png');
 const logo = require('../../assets/logo.png')
+const handler = require('../Handler')
 const signoutSubmit = async (props) => {
     try {
         await secureStore.Delete('UserId');
@@ -58,7 +59,7 @@ const SettingScreen = props => {
               setEmail(userID)
                 
           } else {
-              Alert.alert(responseJson.error)
+            await handler.handle(response, props)
           }
         } catch (error) {
             console.log(error)

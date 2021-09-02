@@ -102,7 +102,7 @@ const ProfileCard = props => {
             <Swiper style={styles.wrapper}>
                 {users.map((props) => {
                     return (
-                        <View style={styles.slide}>
+                        <View style={styles.slide} key={props._id}>
                             <View style={styles.leftButton}>
                                 <Button style={styles.Button} title={'   Pass   '} onPress={async () => {await nextUser()}}/>
 

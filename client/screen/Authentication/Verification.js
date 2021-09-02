@@ -23,15 +23,15 @@ const verificationSubmit = async (code, props) => {
             })
         });
 
-        const responseJson = await response.json();
         if (response.status === 201) {
+            const responseJson = await response.json();
             await secureStore.Save('JWT', responseJson.accessToken);
             await secureStore.Save('RefreshToken', responseJson.refreshToken)
             props.navigation.navigate({
                 routeName: 'Home'
             })
         } else {
-            handler.handle(response, responseJson, props)
+            await handler.handle(response, props)
         }
     } catch (error) {
         console.log(error)
@@ -57,8 +57,7 @@ const resend = async (props) => {
                 routeName: 'Verification'
             })
         } else {
-            console.log(response.status)
-            Alert.alert(presenter.internalError())
+            await handler.handle(response, props)
         }
     } catch (error) {
         console.log(error)

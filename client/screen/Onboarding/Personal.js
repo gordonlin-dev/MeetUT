@@ -2,14 +2,15 @@ import React, {useState} from 'react'
 import {View, SafeAreaView, StyleSheet, TextInput, Dimensions, TouchableOpacity, ScrollView, Text} from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import { AirbnbRating } from 'react-native-ratings';
+import {styles} from '../styles'
 const {height, width} = Dimensions.get('window');
 const Personal = props => {
     const [selectedValue, setSelectedValue] = useState("--");
 
     return (
-          <SafeAreaView style={styles.container}>
+          <SafeAreaView style={styles.onboardContainer}>
 
-            <ScrollView style={styles.scrollView}>
+            <ScrollView style={styles.onboardEmpty}>
                 <View style={styles.pickerHeader}>
                     <Text style={styles.headerFont}>Country of Birth</Text>
                     <Picker
@@ -58,41 +59,38 @@ const Personal = props => {
                 <View style={styles.quizHeader}>
                     <Text style={styles.quizFont}>I seldom feel blue</Text>
                 </View>
-                <View style={styles.quizContainer}>
+                <View style={styles.onboardEmpty}>
                     <AirbnbRating showRating={false} selectedColor="#3590F2" reviewColor="#3590F2"/>
-                    <Text style={styles.leftFont}>1</Text>
+                    <Text style={[styles.leftFont, {left: width*0.24}]}>1</Text>
                 </View>
 
                 <View style={styles.quizHeader}>
                     <Text style={styles.quizFont}>I'm not interested in other people's problems</Text>
                 </View>
-                <View style={styles.quizContainer}>
+                <View style={styles.onboardEmpty}>
                     <AirbnbRating showRating={false} selectedColor="#3590F2" reviewColor="#3590F2"/>
-                    <Text style={styles.leftFont}>1</Text>
+                    <Text style={[styles.leftFont, {left: width*0.24}]}>1</Text>
                 </View>
                 
                 <View style={styles.quizHeader}>
                     <Text style={styles.quizFont}>I usually carry out my plans</Text>
                 </View>
-                <View style={styles.quizContainer}>
+                <View style={styles.onboardEmpty}>
                     <AirbnbRating showRating={false} selectedColor="#3590F2" reviewColor="#3590F2"/>
-                    <Text style={styles.leftFont}>1</Text>
+                    <Text style={[styles.leftFont, {left: width*0.24}]}>1</Text>
                 </View>
 
                 <View style={styles.quizHeader}>
                     <Text style={styles.quizFont}>I make friends easily</Text>
                 </View>
-                <View style={styles.quizContainer}>
+                <View style={styles.onboardEmpty}>
                     <AirbnbRating showRating={false} selectedColor="#3590F2" reviewColor="#3590F2"/>
-                    <Text style={styles.leftFont}>1</Text>
-                    <Text style={styles.leftFont}></Text>
-                    <Text style={styles.leftFont}></Text>
-                    <Text style={styles.leftFont}></Text>
+                    <Text style={[styles.leftFont, {left: width*0.24}]}>1</Text>
                 </View>
             </ScrollView>
 
             <TouchableOpacity 
-                style={styles.leftButton}
+                style={styles.quizLeftButton}
                 onPress={() => {
                 props.navigation.navigate({
                     routeName: 'Acedemic'
@@ -102,7 +100,7 @@ const Personal = props => {
             </TouchableOpacity>
             
             <TouchableOpacity 
-                style={styles.Button}
+                style={styles.quizRightButton}
                 onPress={() => {
                 props.navigation.navigate({
                     routeName: 'Reason'
@@ -114,80 +112,5 @@ const Personal = props => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#e1e1ea"
-    },
-    scrollView: {
-    },
-    leftButton: {
-        position: 'absolute',
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        left: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-      },
-    Button: {
-        position: 'absolute',
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        right: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-      },
-    pickerHeader: {
-        marginTop: height * 0.02,
-        left: width*0.15
-    },
-    quizHeader: {
-        marginTop: height * 0.02,
-        alignItems: 'center',
-    },
-    quizFont: {
-        fontFamily: 'timeburner',
-        fontSize:17,
-        color: "black"  
-    },
-    quizContainer: {
-        
-    },
-    picker: {
-        width: width * 0.7,
-        height: height * 0.055,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        backgroundColor: 'white',
-        color: "black"
-        
-    },
-    header: {
-        fontSize:50,
-        marginLeft: width * 0.34,
-        color: "white",
-        fontFamily: 'timeburner',
-    },
-    headerFont: {
-        fontFamily: 'timeburner',
-        fontSize:17,
-        color: "black"  
-    },
-    leftFont: {
-        fontFamily: 'timeburner',
-        fontSize:12,
-        color: "black",  
-        left: width*0.24,
-    },
-  });
 
 export default Personal;

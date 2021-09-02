@@ -19,18 +19,17 @@ const loginSubmit = async (email, password, props) => {
                 password: password
             })
         });
-        const responseJson = await response.json();
-        await secureStore.Save('UserId', email);
-        await secureStore.Save('JWT', responseJson.accessToken);
-        await secureStore.Save('RefreshToken', responseJson.refreshToken);
 
         if (response.status === 201) {
+            const responseJson = await response.json();
+            await secureStore.Save('UserId', email);
+            await secureStore.Save('JWT', responseJson.accessToken);
+            await secureStore.Save('RefreshToken', responseJson.refreshToken);
             props.navigation.navigate({
                 routeName: 'Home'
             })
         } else {
-            console.log("Hello")
-            handler.handle(response, responseJson, props)
+            await handler.handle(response, props)
         }
 
     } catch (error) {
