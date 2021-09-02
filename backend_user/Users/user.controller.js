@@ -55,15 +55,6 @@ exports.passwordVerification = (req, res, next) => {
         if (!result) {
             return res.status(400).send(presenter.invalidUser("null"))
         }
-
-        if (!validator.validate(req.body._id)) {
-            return res.status(400).send(presenter.invalidEmail("address"))
-        }
-
-        const domain = req.body._id.split("@")[1]
-        if (!cfg.emailDomains.includes(domain)) {
-            return res.status(400).send(presenter.invalidEmail("domain"))
-        }
     })
 
     const code = getCode()

@@ -5,6 +5,7 @@ const Schema = mongoose.Schema
 const userSchema = new Schema({
     active: Boolean,
     code: String,
+    passwordCode: String,
     firstName: String,
     lastName: String,
     _id: String,
@@ -146,7 +147,7 @@ exports.updatePassword = (id, data) => {
 
 exports.updateCode = (id, data) => {
     return User.findById(id).then((result) => {
-        if (result.isArchived) {
+        if (result == null) {
             return null
         } else {
             result.code = data
@@ -157,7 +158,7 @@ exports.updateCode = (id, data) => {
 
 exports.updatePasswordCode = (id, data) => {
     return User.findById(id).then((result) => {
-        if (result.isArchived) {
+        if (result == null) {
             return null
         } else {
             result.passwordCode = data

@@ -11,7 +11,7 @@ const secureStore = require('../../SecureStore')
 
 const emailSubmit = async (code, props) => {
     try {
-        const url = cfg.domain + cfg.verify;
+        const url = cfg.domain + cfg.forgotPassword;
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -41,7 +41,7 @@ const emailSubmit = async (code, props) => {
 
 const resend = async (props) => {
     try {
-        const url = cfg.domain + cfg.resendCode;
+        const url = cfg.domain + cfg.forgotPasswordResend;
         const response = await fetch(url, {
             method: 'POST',
             headers: {

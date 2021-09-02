@@ -11,7 +11,7 @@ const secureStore = require('../../SecureStore')
 
 const emailSubmit = async (email, props) => {
     try {
-        const url = cfg.domain + cfg.verify;
+        const url = cfg.domain + cfg.forgotPasswordResend;
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -23,9 +23,7 @@ const emailSubmit = async (email, props) => {
         });
 
         if (response.status === 201) {
-            const responseJson = await response.json();
-            await secureStore.Save('JWT', responseJson.accessToken);
-            await secureStore.Save('RefreshToken', responseJson.refreshToken)
+            await secureStore.Save('UserId', email)
             props.navigation.navigate({
                 routeName: 'ForgotPassword'
             })

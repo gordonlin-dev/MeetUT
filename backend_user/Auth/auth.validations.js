@@ -33,7 +33,7 @@ exports.jwtValid = (req, res, next) => {
         }
     } catch (err) {
         console.log(err)
-        return res.status(500).send()
+        return res.status(402).send()
     }
 }
 

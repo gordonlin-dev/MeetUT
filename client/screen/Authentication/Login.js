@@ -82,7 +82,7 @@ const LoginScreen = props => {
                     <TouchableOpacity
                         onPress={() => {
                             props.navigation.navigate({
-                                routeName: 'ForgotPassword'
+                                routeName: 'GetEmail'
                             })
                         }}
                         style={styles.Button}>

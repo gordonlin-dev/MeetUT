@@ -6,5 +6,7 @@
   "verify": "/users/verify",
   "resendCode": "/users/verify/resend",
   "user": "/users",
-  "match": "/match"
+  "match": "/match",
+  "forgotPassword": "/users/forgotPassword",
+  "forgotPasswordResend": "/users/forgotPassword/resend"
 }
