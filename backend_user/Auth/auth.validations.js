@@ -15,6 +15,8 @@ exports.passwordMatch = (req, res, next) =>{
             let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
             if (passwordHash === hash) {
                 return next()
+            } else {
+                return res.status(400).send(presenter.invalidPassword("incorrect"))
             }
         }
     })

@@ -15,6 +15,8 @@ exports.invalidPassword = (reason) => {
         return {error: "Password must be between 8 and 50 characters long"}
     } else if (reason === "match") {
         return {error: "Passwords do not match"}
+    } else if (reason === "incorrect") {
+        return {error: "The password you entered is incorrect"}
     }
 }
 
