@@ -101,11 +101,11 @@ exports.deleteUser = (req, res) => {
  * @description Update the password of the given user
  * @return status 200 redirect if request is valid, or status 404 if user does not exist
  */
-exports.updatePassword = (req, res) => {
+exports.updatePassword = (req, res, next) => {
     req.body.password = getPasswordHash(req.body.password)
     UserModel.updatePassword(req.params.userID, req.body.password).then((result) => {
         if (result != null) {
-            res.status(200).send(presenter.updatedPassword())
+            return next()
         } else {
             res.status(404).send(presenter.invalidUser("exist"))
         }

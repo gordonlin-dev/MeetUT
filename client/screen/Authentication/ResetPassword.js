@@ -8,16 +8,19 @@ const cfg = require('../cfg.json')
 const presenter = require('../Presenter')
 const handler = require('../Handler')
 
-const resetSubmit = async (email, password, confirm, props) => {
+const resetSubmit = async (password, confirm, props) => {
     try {
-        const url = cfg.domain + cfg.resetPassword + "/" + email // TODO: Use config
-        console.log(email)
-        console.log(url)
+        const email = await secureStore.GetValue('UserId')
+        const accessToken = await secureStore.GetValue('JWT')
+        const refreshToken = await secureStore.GetValue('RefreshToken')
+
+        const url = cfg.domain + cfg.resetPassword + "/" + email
 
         const response = await fetch(url, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'authorization': refreshToken + " " + accessToken
             },
             body: JSON.stringify({
                 _id: email,
@@ -25,22 +28,20 @@ const resetSubmit = async (email, password, confirm, props) => {
                 confirm: confirm
             })
         });
-        console.log('response status ' + response.status)
-        // console.log(response.text())
-        const responseJson = await response.json()
-        if (response.status === 200) {  // TODO: Should be 201
-            await secureStore.Save('UserId', email);
+
+        if (response.status === 201) {
+            const responseJson = await response.json()
             await secureStore.Save('JWT', responseJson.accessToken);
             await secureStore.Save('RefreshToken', responseJson.refreshToken)
             props.navigation.navigate({
-                routeName: 'Login'
+                routeName: 'Home'
             })
         } else {
-            handler.handle(response, responseJson, props)
+            await handler.handle(response, props)
         }
     } catch (error) {
         console.log(error)
-        Alert.alert(presenter.internalError())
+        Alert.alert(presenter.clientError())
     }
 }
 
@@ -50,7 +51,6 @@ const ResetPasswordScreen = props => {
         return () =>
             BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
-    const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
     const [confirm, onChangeNumber] = useState("");
 
@@ -63,17 +63,10 @@ const ResetPasswordScreen = props => {
                 <View>
                     <TextInput
                         style={styles.Input}
-                        onChangeText={onChangeEmail}
-                        value={email}
-                        placeholder="email"
-                        placeholderTextColor="white"
-                    />
-                    <TextInput
-                        style={styles.Input}
                         onChangeText={onChangePassword}
                         value={password}
                         secureTextEntry={true}
-                        placeholder="password"
+                        placeholder="new password"
                         placeholderTextColor="white"
                     />
 
@@ -89,7 +82,7 @@ const ResetPasswordScreen = props => {
                 <View>
                     <TouchableOpacity
                         onPress={() => {
-                            resetSubmit(email, password, confirm, props)
+                            resetSubmit(password, confirm, props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Reset Password</Text>

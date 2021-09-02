@@ -1,8 +1,9 @@
 const {Alert} = require("react-native");
 const presenter = require("./Presenter");
 
-exports.handle = (response, responseJson, props) => {
+exports.handle = async (response, props) => {
     if (response.status === 400) {
+        const responseJson = await response.json();
         Alert.alert(responseJson.error)
     } else if (response.status === 401) {
         props.navigation.navigate({

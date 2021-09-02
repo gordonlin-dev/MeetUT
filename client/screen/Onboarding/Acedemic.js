@@ -145,7 +145,7 @@ const Acedemic = (props) => {
                         routeName: 'Demographics'
                     })
                 }}>
-                    <Text style={styles.font}>Back</Text>
+                    <Text style={styles.quizFont}>Back</Text>
                 </TouchableOpacity>
                 
                 <TouchableOpacity 
@@ -154,7 +154,7 @@ const Acedemic = (props) => {
                         submit(props, chosen) 
                     
                 }}>
-                    <Text style={styles.font}>Next</Text>
+                    <Text style={styles.quizFont}>Next</Text>
                 </TouchableOpacity>
             </View>
             

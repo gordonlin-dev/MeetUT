@@ -7,7 +7,7 @@ const presenter = require("../presenter")
 exports.passwordMatch = (req, res, next) =>{
     UserModel.findById(req.body._id).then((user) => {
         if (user == null) {
-            return res.status(400).send(presenter.invalidUser("null"))
+            return res.status(400).send(presenter.invalidUser("null"))  // TODO 402
         } else {
             let parts = user.password.split('$')
             let salt = parts[0]
@@ -15,6 +15,8 @@ exports.passwordMatch = (req, res, next) =>{
             let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest('base64')
             if (passwordHash === hash) {
                 return next()
+            } else {
+                return res.status(400).send(presenter.invalidPassword("incorrect"))
             }
         }
     })
