@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, BackHandler, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
-import {styles} from '../styles';
+import {styles} from '../styles'
 const secureStore = require('../../SecureStore')
 const cfg = require('../cfg.json')
-const image = require('../../assets/bg.png');
+const image = require('../../assets/bg.png')
+const handler = require('../Handler')
 
 const loginSubmit = async (email, password, props) => {
     try {
@@ -27,12 +28,9 @@ const loginSubmit = async (email, password, props) => {
             props.navigation.navigate({
                 routeName: 'Home'
             })
-        } else if (response.status === 403) {
-            props.navigation.navigate({
-                routeName: 'Verification'
-            })
-        } else if (response.status === 404) {
-            Alert.alert(cfg.notFound)
+        } else {
+            console.log("Hello")
+            handler.handle(response, responseJson, props)
         }
 
     } catch (error) {
