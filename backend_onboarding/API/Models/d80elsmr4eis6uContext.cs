@@ -141,7 +141,7 @@ namespace API.Models
             {
                 entity.ToTable("User_Compatability");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.HasOne(d => d.User1)
                     .WithMany(p => p.UserCompatabilityUser1s)
