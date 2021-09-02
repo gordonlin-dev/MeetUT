@@ -11,12 +11,16 @@ const handler = require('../Handler')
 const resetSubmit = async (password, confirm, props) => {
     try {
         const email = await secureStore.GetValue('UserId')
+        const accessToken = await secureStore.GetValue('JWT')
+        const refreshToken = await secureStore.GetValue('RefreshToken')
+
         const url = cfg.domain + cfg.resetPassword + "/" + email
 
         const response = await fetch(url, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'authorization': refreshToken + " " + accessToken
             },
             body: JSON.stringify({
                 _id: email,
@@ -25,20 +29,19 @@ const resetSubmit = async (password, confirm, props) => {
             })
         });
 
-        if (response.status === 200) {
+        if (response.status === 201) {
             const responseJson = await response.json()
-            await secureStore.Save('UserId', email);
             await secureStore.Save('JWT', responseJson.accessToken);
             await secureStore.Save('RefreshToken', responseJson.refreshToken)
             props.navigation.navigate({
-                routeName: 'Login'
+                routeName: 'Home'
             })
         } else {
-            handler.handle(response, props)
+            await handler.handle(response, props)
         }
     } catch (error) {
         console.log(error)
-        Alert.alert(presenter.internalError())
+        Alert.alert(presenter.clientError())
     }
 }
 
@@ -48,7 +51,6 @@ const ResetPasswordScreen = props => {
         return () =>
             BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
-    const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
     const [confirm, onChangeNumber] = useState("");
 
