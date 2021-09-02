@@ -31,61 +31,6 @@ namespace API
             return Math.Sqrt(sum);
         }
 
-        public void AddProgramValue()
-        {
-            var categories = _context.LookupProgramOfStudyCategories.ToList();
-            var interval = 0;
-            foreach (var category in categories)
-            {
-                var query = _context.QuestionnaireProgramOfStudyCategories.
-                    Where(x => x.CategoryId == category.Id).
-                    Join(
-                        _context.QuestionnaireProgramOfStudies,
-                        programCategory => programCategory.ProgramId,
-                        program => program.Id,
-                        (programCategory, program) => program
-                    ).ToList();
-                var count = 0;
-                foreach (var program in query)
-                {
-                    program.MatchValue = count + interval;
-                    count++;
-                }
-                interval += 100;
-                _context.QuestionnaireProgramOfStudies.UpdateRange(query);
-            }
-            _context.SaveChanges();
-        }
-        public void AddHobbyValue()
-        {
-            var updateList = new List<QuestionnaireHobby>();
-            var interval = 0;
-            var categories = _context.LookupHobbyCategories.ToList();
-            foreach (var category in categories)
-            {
-
-                var query = _context.QuestionnaireHobbyCategories.
-                    Where(x => x.CategoryId == category.Id).Join(
-                        _context.QuestionnaireHobbies,
-                        hobbyCategory => hobbyCategory.HobbyId,
-                        hobby => hobby.Id,
-                        (hobbyCategory, hobby) => hobby
-                    ).ToList();
-                var count = 0;
-                foreach (var hobby in query)
-                {
-
-                    hobby.MatchValue = count + interval;
-                    count++;
-
-                }
-                interval += 100;
-                _context.QuestionnaireHobbies.UpdateRange(query);
-            }
-
-            _context.SaveChanges();
-        }
-
         public void loadHobbiesData()
         {
             string filePath = "DataSource/hobbies.xlsx";
