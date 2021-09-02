@@ -74,14 +74,23 @@ exports.getUserCode = (id) => {
     })
 }
 
+exports.getPasswordCode = (id) => {
+    return User.findById(id).then((result) => {
+        if (result == null) {
+            return null
+        } else {
+            return result.passwordCode
+        }
+    })
+}
+
 exports.activateUser = (id) => {
     return User.findById(id).then((result) => {
         if (result != null) {
             result.code = undefined // Deletes key in document
             result.active = true
+            result.passwordCode = undefined
             return result.save()
-        } else {
-            console.log("no id")
         }
     })
 }
@@ -141,6 +150,17 @@ exports.updateCode = (id, data) => {
             return null
         } else {
             result.code = data
+            return result.save()
+        }
+    })
+}
+
+exports.updatePasswordCode = (id, data) => {
+    return User.findById(id).then((result) => {
+        if (result.isArchived) {
+            return null
+        } else {
+            result.passwordCode = data
             return result.save()
         }
     })
