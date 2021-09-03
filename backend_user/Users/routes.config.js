@@ -4,7 +4,7 @@ const AuthController = require('../Auth/auth.controller')
 
 exports.routesConfig = function(app){
     app.post('/users/create', [UserController.validateEmail, UserController.validatePassword, UserController.confirmPassword, UserController.emailVerification, UserController.createUser, AuthController.auth])
-    app.post('/users/verify', [AuthValidation.jwtInactive, UserController.verifyEmail])
+    app.post('/users/verify', [AuthValidation.jwtInactive, UserController.verifyEmail, AuthController.auth])
     app.get('/users', [AuthValidation.jwtValid, UserController.getById])
     app.delete('/users/delete', [AuthValidation.jwtValid, UserController.deleteUser])
     app.put('/users/updatePassword', [AuthValidation.jwtValid, UserController.validatePassword, UserController.confirmPassword, UserController.updatePassword, AuthValidation.isActive, AuthController.auth])

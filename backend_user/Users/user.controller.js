@@ -98,7 +98,9 @@ exports.verifyEmail = (req, res, next) => { // TODO: Set max times
         req.body.verification = getHash(cfg.codeSalt, req.body.verification)
         if (req.body.verification === result) {
             req.body.active = true
-            UserModel.activateUser(req.body._id).then(() => { return next() })
+            UserModel.activateUser(req.body._id).then(() => {
+                return next()
+            })
         } else {
             return res.status(400).send(presenter.invalidCode())
         }

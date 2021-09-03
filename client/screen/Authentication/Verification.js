@@ -42,11 +42,13 @@ const verificationSubmit = async (code, props) => {
 
 const resend = async (props) => {
     try {
+        const accessToken = await secureStore.GetValue('JWT')
         const url = cfg.domain + cfg.resendCode;
         const response = await fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'authorization': 'Bearer ' + accessToken
             },
             body: JSON.stringify({
                 _id: await secureStore.GetValue("UserId")
