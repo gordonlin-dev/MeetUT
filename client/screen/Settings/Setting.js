@@ -25,7 +25,7 @@ const signoutSubmit = async (props) => {
 /* Delete user function here, saw the function in controller, not sure how to call it
 */
 const deleteButton = async (props) => {
-
+    // TODO
 }
 
 const SettingScreen = props => {
@@ -42,13 +42,12 @@ const SettingScreen = props => {
         try {
             const userID = await secureStore.GetValue('UserId');
             const accessToken = await secureStore.GetValue('JWT')
-            const refreshToken = await secureStore.GetValue('RefreshToken')
-            const url = cfg.domain + '/users/' + userID
+            const url = cfg.domain + '/users/'
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authorization': refreshToken + " " + accessToken
+                    'authorization': "Bearer " + accessToken
                 }
             });
     

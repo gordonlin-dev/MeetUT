@@ -13,7 +13,7 @@ const resetSubmit = async (password, confirm, props) => {
         const email = await secureStore.GetValue('UserId')
         const accessToken = await secureStore.GetValue('JWT')
 
-        const url = cfg.domain + cfg.resetPassword + "/" + email
+        const url = cfg.domain + cfg.resetPassword
 
         const response = await fetch(url, {
             method: 'PUT',

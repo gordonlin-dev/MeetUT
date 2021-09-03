@@ -8,7 +8,7 @@ exports.routesConfig = function(app){
     app.get('/users', [AuthValidation.jwtValid, UserController.getById])
     app.delete('/users/delete', [AuthValidation.jwtValid, UserController.deleteUser])
     app.put('/users/updatePassword', [AuthValidation.jwtValid, UserController.validatePassword, UserController.confirmPassword, UserController.updatePassword, AuthValidation.isActive, AuthController.auth])
-    app.post('/users/verify/resend', [UserController.emailVerification, UserController.updateCode])
+    app.post('/users/verify/resend', [AuthValidation.jwtInactive, UserController.emailVerification, UserController.updateCode])
     app.post('/users/forgotPassword/resend', [UserController.passwordVerification, UserController.updatePasswordCode])
     app.post('/users/forgotPassword', [UserController.verifyForgot, AuthController.auth])
 }
