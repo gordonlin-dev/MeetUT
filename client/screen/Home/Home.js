@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {View, Image, StyleSheet, Button, BackHandler, Dimensions, SafeAreaView, TouchableOpacity} from 'react-native'
 import ProfileCard from "./ProfileCard";
-import { styles } from '../styles'; 
+import { styles } from '../styles';
 const handler = require('../Handler')
 const home =  require('../../assets/home-icon.png');
 const setting =  require('../../assets/setting-icon.png');
@@ -48,13 +48,18 @@ const HomeScreen = props => {
             const userID = await secureStore.GetValue('UserId');
             const url = 'https://meet-ut-1.herokuapp.com/user/recommendations'
             const response = await fetch(url, {
-                method : 'GET',
+                method : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     //'authorization': 'Bearer ' + jwt
                 },
+                body:JSON.stringify({
+                    curUser: userID,
+                    excludedUsers:[]
+                })
             });
             const responseJson = await response.json();
+            console.log(responseJson)
             setUsers(responseJson)
 
 
@@ -110,7 +115,7 @@ const HomeScreen = props => {
         <SafeAreaView style={styles.container}>
             <View style={styles.empty}>
                 <ProfileCard style={styles.homeBg}/>
-                
+
                 <View style={styles.footer}>
                 <View style={styles.footerButton}>
                 <TouchableOpacity onPress={() => {
