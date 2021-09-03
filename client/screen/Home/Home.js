@@ -79,7 +79,7 @@ const HomeScreen = props => {
                     //'authorization': 'Bearer ' + jwt
                 },
                 body: JSON.stringify({
-                    curUser: userId,
+                    _id: userId,
                     likedUser: users[curUser].email
                 })
             });
