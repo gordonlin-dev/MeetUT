@@ -36,7 +36,7 @@ const ProfileCard = props => {
     const loadUser = async () => {
         try{
             const userID = await secureStore.GetValue('UserId');
-            const url = 'https://meet-ut-2.herokuapp.com/match' + '/' + userID
+            const url = 'https://meet-ut-1.herokuapp.com/user/recommendations'
             const response = await fetch(url, {
                 method : 'GET',
                 headers: {
