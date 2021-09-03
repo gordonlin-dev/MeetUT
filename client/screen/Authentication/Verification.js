@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, BackHandler, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {styles} from '../styles';
 const presenter = require('../Presenter')
 const cfg = require('../cfg.json')
@@ -11,11 +11,13 @@ const secureStore = require('../../SecureStore')
 
 const verificationSubmit = async (code, props) => {
     try {
+        const accessToken = await secureStore.GetValue('JWT')
         const url = cfg.domain + cfg.verify;
         const response = await fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'authorization': 'Bearer ' + accessToken
             },
             body: JSON.stringify({
                 _id: await secureStore.GetValue("UserId"),
@@ -26,7 +28,6 @@ const verificationSubmit = async (code, props) => {
         if (response.status === 201) {
             const responseJson = await response.json();
             await secureStore.Save('JWT', responseJson.accessToken);
-            await secureStore.Save('RefreshToken', responseJson.refreshToken)
             props.navigation.navigate({
                 routeName: 'Home'
             })

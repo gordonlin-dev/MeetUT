@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, BackHandler, Dimensions, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
+import {View, Text, BackHandler, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
 import {styles} from '../styles';
 
 const secureStore = require('../../SecureStore')
@@ -12,7 +12,6 @@ const resetSubmit = async (password, confirm, props) => {
     try {
         const email = await secureStore.GetValue('UserId')
         const accessToken = await secureStore.GetValue('JWT')
-        const refreshToken = await secureStore.GetValue('RefreshToken')
 
         const url = cfg.domain + cfg.resetPassword + "/" + email
 
@@ -20,7 +19,7 @@ const resetSubmit = async (password, confirm, props) => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'authorization': refreshToken + " " + accessToken
+                'authorization': 'Bearer ' + accessToken
             },
             body: JSON.stringify({
                 _id: email,
@@ -32,7 +31,6 @@ const resetSubmit = async (password, confirm, props) => {
         if (response.status === 201) {
             const responseJson = await response.json()
             await secureStore.Save('JWT', responseJson.accessToken);
-            await secureStore.Save('RefreshToken', responseJson.refreshToken)
             props.navigation.navigate({
                 routeName: 'Home'
             })

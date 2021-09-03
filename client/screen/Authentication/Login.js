@@ -26,7 +26,6 @@ const loginSubmit = async (email, password, props) => {
             const responseJson = await response.json();
             await secureStore.Save('UserId', email);
             await secureStore.Save('JWT', responseJson.accessToken);
-            await secureStore.Save('RefreshToken', responseJson.refreshToken);
             props.navigation.navigate({
                 routeName: 'Home'
             })

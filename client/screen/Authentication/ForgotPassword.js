@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, BackHandler, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {styles} from '../styles';
 const presenter = require('../Presenter')
 const cfg = require('../cfg.json')
@@ -26,7 +26,6 @@ const emailSubmit = async (code, props) => {
         if (response.status === 201) {
             const responseJson = await response.json();
             await secureStore.Save('JWT', responseJson.accessToken);
-            await secureStore.Save('RefreshToken', responseJson.refreshToken)
             props.navigation.navigate({
                 routeName: 'ResetPassword'
             })
