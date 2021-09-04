@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System;
 using System.Collections;
 using Microsoft.EntityFrameworkCore;
+using API.AuthService;
+using Microsoft.Extensions.Primitives;
 
 namespace API.Controllers
 {
@@ -54,9 +56,20 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("Recommendations")]
-        public JsonResult GetUserRecommendations(UserRecommendationInput input)
+        public ActionResult GetUserRecommendations(UserRecommendationInput input)
         {
-            var curUserQuery = _context.Users.Where(x => x.Email == input.CurUser);
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            if(authorizationToken.ToString().Length == 0)
+            {
+                return Unauthorized();
+            }
+            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
+            if (curUserEmail == null)
+            {
+                return Unauthorized();
+            }
+            var curUserQuery = _context.Users.Where(x => x.Email == curUserEmail);
 
             if (!curUserQuery.Any())
             {
@@ -124,9 +137,20 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("Compatibility")]
-        public JsonResult UpdateUserCompatibility(UserEmail userEmail)
+        public ActionResult UpdateUserCompatibility()
         {
-            var curUser = _context.Users.Where(x => x.Email == userEmail.Email).First();
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            if (authorizationToken.ToString().Length == 0)
+            {
+                return Unauthorized();
+            }
+            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
+            if (curUserEmail == null)
+            {
+                return Unauthorized();
+            }
+            var curUser = _context.Users.Where(x => x.Email == curUserEmail).First();
             CalculateCompatibility(curUser);
             return new JsonResult("");
         }
@@ -270,14 +294,6 @@ namespace API.Controllers
         }
     }
 
-    public class UserEmail
-    {
-        public string Email { get; set; }
-        public UserEmail()
-        {
-
-        }
-    }
     public class RecommendationResult
     {
         public string UserId { get; set; }
@@ -290,7 +306,6 @@ namespace API.Controllers
     }
     public class UserRecommendationInput
     {
-        public string CurUser { get; set; }
         public List<string> ExcludedUsers { get; set; }
         public UserRecommendationInput()
         {

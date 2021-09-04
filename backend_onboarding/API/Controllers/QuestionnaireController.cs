@@ -4,6 +4,7 @@ using System.Linq;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -24,8 +25,19 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("Hobbies")]
-        public JsonResult GetHobbies()
+        public ActionResult GetHobbies()
         {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            if (authorizationToken.ToString().Length == 0)
+            {
+                return Unauthorized();
+            }
+            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
+            if (curUserEmail == null)
+            {
+                return Unauthorized();
+            }
             var results = new List<HobbyCategoryResults>();
 
             var categories = _context.LookupHobbyCategories.ToList();
@@ -53,8 +65,19 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("Programs")]
-        public JsonResult GetPrograms()
+        public ActionResult GetPrograms()
         {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            if (authorizationToken.ToString().Length == 0)
+            {
+                return Unauthorized();
+            }
+            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
+            if (curUserEmail == null)
+            {
+                return Unauthorized();
+            }
             var results = new List<ProgramCategoryResults>();
             var categories = _context.LookupProgramOfStudyCategories.ToList();
             foreach (var category in categories)
@@ -82,15 +105,26 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("Hobbies")]
-        public JsonResult UpdateUserHobbies(UserHobbyModel model)
+        public ActionResult UpdateUserHobbies(UserHobbyModel model)
         {
-            var query = _context.Users.Where(x => x.Email == model.UserId);
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            if (authorizationToken.ToString().Length == 0)
+            {
+                return Unauthorized();
+            }
+            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
+            if (curUserEmail == null)
+            {
+                return Unauthorized();
+            }
+            var query = _context.Users.Where(x => x.Email == curUserEmail);
             var curUser = query.FirstOrDefault();
             if (!query.Any())
             {
                 var newUser = new User()
                 {
-                    Email = model.UserId
+                    Email = curUserEmail
                 };
                 _context.Users.Add(newUser);
                 _context.SaveChanges();
@@ -116,15 +150,26 @@ namespace API.Controllers
         }
         [HttpPost]
         [Route("Programs")]
-        public JsonResult UpdateUserPrograms(UserProgramModel model)
+        public ActionResult UpdateUserPrograms(UserProgramModel model)
         {
-            var query = _context.Users.Where(x => x.Email == model.UserId);
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            if (authorizationToken.ToString().Length == 0)
+            {
+                return Unauthorized();
+            }
+            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
+            if (curUserEmail == null)
+            {
+                return Unauthorized();
+            }
+            var query = _context.Users.Where(x => x.Email == curUserEmail);
             var curUser = query.FirstOrDefault();
             if (!query.Any())
             {
                 var newUser = new User()
                 {
-                    Email = model.UserId
+                    Email = curUserEmail
                 };
                 _context.Users.Add(newUser);
                 _context.SaveChanges();
@@ -154,7 +199,6 @@ namespace API.Controllers
 
     public class UserProgramModel
     {
-        public string UserId { get; set; }
         public List<ProgramResults> Programs { get; set; }
         public UserProgramModel()
         {
@@ -164,7 +208,6 @@ namespace API.Controllers
 
     public class UserHobbyModel
     {
-        public string UserId { get; set; }
         public List<HobbyResults> Hobbies { get; set; }
 
         public UserHobbyModel()
