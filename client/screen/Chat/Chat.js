@@ -47,12 +47,22 @@ const ChatScreen = props => {
         }
     }
 
-    useEffect(() => {
+    useEffect(async () => {
+        const jwt = await secureStore.GetValue('JWT');
         socket = socketClient("https://meet-ut-3.herokuapp.com/")
-        socket.on('connection', () => {
+        socket.on('connect', () =>{
+                socket.emit('authenticate', {jwt})
+            }
+        );
+        socket.on('authenticated', () =>{
             getMessages()
             socket.emit('joinRoom', roomID)
         })
+        /*
+        socket.on('connection', () => {
+            getMessages()
+            socket.emit('joinRoom', roomID)
+        })*/
         socket.on('broadcast', (message) =>{
             console.log(message)
             message[0].user._id = 2
@@ -74,7 +84,7 @@ const ChatScreen = props => {
         <GiftedChat
             renderAvatar={() => {
                 return (
-                    <Image source={example_profilpic} style={styles.tinyLogo}/>  
+                    <Image source={example_profilpic} style={styles.tinyLogo}/>
                 )
             }}
             // TODO: doesn't work as expected. Needs further investigation on how to use onPressAvatar
