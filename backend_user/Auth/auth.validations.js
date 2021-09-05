@@ -7,7 +7,7 @@ const presenter = require("../presenter")
 exports.passwordMatch = (req, res, next) =>{
     UserModel.findById(req.body._id).then((user) => {
         if (user == null) {
-            return res.status(400).send(presenter.invalidUser("null"))  // TODO 402
+            return res.status(400).send(presenter.invalidUser("null"))
         } else {
             let parts = user.password.split('$')
             let salt = parts[0]
@@ -33,8 +33,7 @@ exports.jwtValid = (req, res, next) => {
             return res.status(403).send()
         }
     } catch (err) {
-        console.log(err)
-        return res.status(402).send()
+        return res.status(401).send()
     }
 }
 
@@ -46,11 +45,10 @@ exports.jwtInactive = (req, res, next) => {
         if (!req.jwt.active) {
             return next()
         } else {
-            return res.status(402).send()
+            return res.status(400).send()
         }
     } catch (err) {
-        console.log(err)
-        return res.status(402).send()
+        return res.status(401).send()
     }
 }
 

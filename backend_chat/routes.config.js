@@ -1,7 +1,8 @@
 const ChatController = require('./chat.controller')
+const AuthValidation = require('./auth.validation')
 
 exports.routesConfig = function(app){
-    app.post('/chat/create', [ChatController.createChat])
-    app.get('/chat/:userID', [ChatController.getChatRooms])
-    app.get('/chat/:userID/room/:roomID', [ChatController.getChatRoom])
+    app.post('/chat/create', [AuthValidation.jwtValid,ChatController.createChat])
+    app.get('/chat', [AuthValidation.jwtValid,ChatController.getChatRooms])
+    app.get('/chat/room/:roomID', [AuthValidation.jwtValid,ChatController.getChatRoom])
 }

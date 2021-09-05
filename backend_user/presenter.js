@@ -16,7 +16,7 @@ exports.invalidPassword = (reason) => {
     } else if (reason === "match") {
         return {error: "Passwords do not match"}
     } else if (reason === "incorrect") {
-        return {error: "The password you entered is incorrect"}
+        return {error: "The email address or password is incorrect"}
     }
 }
 
