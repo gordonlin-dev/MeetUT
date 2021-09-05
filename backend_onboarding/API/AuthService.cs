@@ -28,6 +28,11 @@ namespace API.AuthService
                 );
                 var jwtSecurityToken = (JwtSecurityToken) validatedToken;
                 jwtSecurityToken.Payload.TryGetValue("_id", out object id);
+                jwtSecurityToken.Payload.TryGetValue("active", out object active);
+                if(! (bool)active)
+                {
+                    return null;
+                }
                 return id.ToString();
             }
             catch (Exception e)
