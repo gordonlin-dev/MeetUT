@@ -6,6 +6,7 @@ const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png');
 const handler = require('../Handler')
 const fixer = require('../Fixer')
+const headers = require('../Headers')
 
 const secureStore = require('../../SecureStore')
 
@@ -16,9 +17,7 @@ const emailSubmit = async (email, props) => {
         const url = cfg.domain + cfg.forgotPasswordResend;
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: headers.unauthorized(),
             body: JSON.stringify({
                 _id: email,
             })

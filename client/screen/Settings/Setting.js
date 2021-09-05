@@ -10,6 +10,8 @@ const chat =  require('../../assets/chat-icon.png');
 const image =  require('../../assets/bg.png');
 const logo = require('../../assets/logo.png')
 const handler = require('../Handler')
+const headers = require('../Headers')
+
 const signoutSubmit = async (props) => {
     try {
         await secureStore.Delete('UserId');
@@ -45,10 +47,7 @@ const SettingScreen = props => {
             const url = cfg.domain + '/users/'
             const response = await fetch(url, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': "Bearer " + accessToken
-                }
+                headers: headers.authorized(accessToken)
             });
     
           const responseJson = await response.json();

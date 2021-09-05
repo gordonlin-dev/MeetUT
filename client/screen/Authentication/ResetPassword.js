@@ -7,6 +7,7 @@ const image = require('../../assets/bg.png');
 const cfg = require('../cfg.json')
 const presenter = require('../Presenter')
 const handler = require('../Handler')
+const headers = require('../Headers')
 
 const resetSubmit = async (password, confirm, props) => {
     try {
@@ -17,10 +18,7 @@ const resetSubmit = async (password, confirm, props) => {
 
         const response = await fetch(url, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + accessToken
-            },
+            headers: headers.authorized(accessToken),
             body: JSON.stringify({
                 _id: email,
                 password: password,

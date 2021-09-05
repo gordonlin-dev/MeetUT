@@ -8,6 +8,7 @@ const secureStore = require('../../SecureStore')
 const image = require('../../assets/bg.png');
 const handler = require('../Handler')
 const fixer = require('../Fixer')
+const headers = require('../Headers')
 
 const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
     try {
@@ -15,9 +16,7 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
         const url = cfg.domain + cfg.signup
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: headers.unauthorized(),
             body: JSON.stringify({
                 firstName: firstName,
                 lastName: lastName,

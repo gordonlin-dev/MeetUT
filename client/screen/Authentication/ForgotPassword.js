@@ -5,6 +5,7 @@ const presenter = require('../Presenter')
 const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png');
 const handler = require('../Handler')
+const headers = require('../Headers')
 
 const secureStore = require('../../SecureStore')
 
@@ -14,14 +15,12 @@ const emailSubmit = async (code, props) => {
         const url = cfg.domain + cfg.forgotPassword;
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: headers.unauthorized(),
             body: JSON.stringify({
                 _id: await secureStore.GetValue("UserId"),
                 verification: code
             })
-        });
+        })
 
         if (response.status === 201) {
             const responseJson = await response.json();

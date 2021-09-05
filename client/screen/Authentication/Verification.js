@@ -5,6 +5,7 @@ const presenter = require('../Presenter')
 const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png');
 const handler = require('../Handler')
+const headers = require('../Headers')
 
 const secureStore = require('../../SecureStore')
 
@@ -15,10 +16,7 @@ const verificationSubmit = async (code, props) => {
         const url = cfg.domain + cfg.verify;
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + accessToken
-            },
+            headers: headers.authorized(accessToken),
             body: JSON.stringify({
                 _id: await secureStore.GetValue("UserId"),
                 verification: code
