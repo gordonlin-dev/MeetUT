@@ -71,17 +71,15 @@ const HomeScreen = props => {
     const sendLike = async () => {
         try{
             const accessToken = await secureStore.GetValue('JWT');
-            const userId = await secureStore.GetValue('UserId');
             const url = 'https://meet-ut-2.herokuapp.com/match/like';
             const response = await fetch(url, {
                 method : 'POST',
                 headers: headers.authorized(accessToken),
                 body: JSON.stringify({
-                    _id: userId,
                     likedUser: users[curUser].email
                 })
             });
-            if(response.status == 200){
+            if(response.status === 200){
                 await nextUser();
             } else {
                 await handler.handle(response, props);

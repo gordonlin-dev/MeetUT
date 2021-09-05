@@ -89,14 +89,14 @@ const ForgotPasswordScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            resend(props)
+                            resend(props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Resend Code</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            emailSubmit(code, props)
+                            emailSubmit(code, props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Submit</Text>

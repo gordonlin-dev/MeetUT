@@ -14,7 +14,7 @@ const headers = require('../Headers')
 
 const signoutSubmit = async (props) => {
     try {
-        await secureStore.Delete('UserId');
+        await secureStore.Delete('UserId'); // TODO: Find a way to remove dependency on UserId
         await secureStore.Delete('JWT');
         props.navigation.navigate({
             routeName: 'Landing'

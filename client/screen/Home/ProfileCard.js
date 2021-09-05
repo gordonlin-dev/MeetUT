@@ -17,7 +17,7 @@ const ProfileCard = props => {
         try{
             const accessToken = await secureStore.GetValue('JWT');
             const userId = await secureStore.GetValue('UserId');
-            const url = 'https://meet-ut-2.herokuapp.com/users/' + userId;
+            const url = 'https://meet-ut-2.herokuapp.com/users/' + userId; // TODO: Find a way to remove dependency on UserId
             const response = await fetch(url, {
                 method : 'GET',
                 headers: headers.authorized(accessToken),
@@ -33,14 +33,11 @@ const ProfileCard = props => {
     }
     const loadUser = async () => {
         try{
-            const userID = await secureStore.GetValue('UserId');
+            const accessToken = await secureStore.GetValue('JWT')
             const url = 'https://meet-ut-1.herokuapp.com/user/recommendations'
             const response = await fetch(url, {
                 method : 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    //'authorization': 'Bearer ' + jwt
-                },
+                headers: headers.authorized(accessToken),
             });
             const responseJson = await response.json();
             setUsers(responseJson)
@@ -59,13 +56,11 @@ const ProfileCard = props => {
         try{
             console.log(users[curUser])
             const accessToken = await secureStore.GetValue('JWT');
-            const userId = await secureStore.GetValue('UserId');
             const url = 'https://meet-ut-2.herokuapp.com/match/like';
             const response = await fetch(url, {
                 method : 'POST',
                 headers: headers.authorized(accessToken),
                 body: JSON.stringify({
-                    curUser: userId,
                     likedUser: users[curUser].email
                 })
             });

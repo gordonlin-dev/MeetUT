@@ -23,7 +23,7 @@ const loginSubmit = async (email, password, props) => {
 
         if (response.status === 201) {
             const responseJson = await response.json();
-            await secureStore.Save('UserId', email);
+            await secureStore.Save('UserId', email); // TODO: Remove when all screens are independent of UserID
             await secureStore.Save('JWT', responseJson.accessToken);
             props.navigation.navigate({
                 routeName: 'Home'
@@ -72,7 +72,7 @@ const LoginScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            loginSubmit(email, password, props)
+                            loginSubmit(email, password, props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Login</Text>

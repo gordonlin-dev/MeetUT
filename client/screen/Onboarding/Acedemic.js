@@ -17,14 +17,12 @@ const Acedemic = (props) => {
     const submit = async (props, chosen) => {
 
         try{
-            const userId = await secureStore.GetValue('UserId');
             const accessToken = await secureStore.GetValue('JWT')
             const url = 'https://meet-ut-1.herokuapp.com/questionnaire/programs'
             const response = await fetch(url, {
                 method : 'POST',
                 headers: headers.authorized(accessToken),
                 body: JSON.stringify({
-                    UserId: userId,
                     Programs: chosen
                 })
             });

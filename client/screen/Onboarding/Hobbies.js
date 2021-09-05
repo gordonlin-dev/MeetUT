@@ -16,14 +16,12 @@ const Hobbies = (props) => {
 
     const submit = async (props, selected) => {
         try{
-            const userID = await secureStore.GetValue('UserId');
             const accessToken = await secureStore.GetValue('JWT')
             const url = 'https://meet-ut-1.herokuapp.com/questionnaire/hobbies'
             const response = await fetch(url, {
                 method : 'POST',
                 headers: headers.authorized(accessToken),
                 body: JSON.stringify({
-                    UserId: userID,
                     Hobbies: selected
                 })
             });

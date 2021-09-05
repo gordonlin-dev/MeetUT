@@ -22,7 +22,7 @@ const ChatListScreen = props => {
 
     const loadChat = async () => {
         try {
-            const userId = await secureStore.GetValue('UserId');
+            const userId = await secureStore.GetValue('UserId'); // TODO: Find a way to remove dependency on UserId
             const accessToken = await secureStore.GetValue('JWT')
             let url = 'https://meet-ut-3.herokuapp.com/chat'
             url = url + "/" + userId

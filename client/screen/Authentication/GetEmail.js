@@ -24,7 +24,7 @@ const emailSubmit = async (email, props) => {
         });
 
         if (response.status === 201) {
-            await secureStore.Save('UserId', email)
+            await secureStore.Save('UserId', email) // TODO: Find a way to remove dependency on secureStore for this segment
             props.navigation.navigate({
                 routeName: 'ForgotPassword'
             })
@@ -65,7 +65,7 @@ const GetEmailScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            emailSubmit(email, props)
+                            emailSubmit(email, props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Submit</Text>

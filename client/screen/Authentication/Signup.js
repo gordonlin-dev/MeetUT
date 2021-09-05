@@ -28,7 +28,7 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
 
         if (response.status === 403) {
             const responseJson = await response.json();
-            await secureStore.Save('UserId', email);
+            await secureStore.Save('UserId', email); // TODO: Remove when all screens are independent of UserId
             await secureStore.Save('JWT', responseJson.accessToken);
             props.navigation.navigate({
                 routeName: 'Verification'
@@ -105,7 +105,7 @@ const SignupScreen = props => {
                 <View>
                     <TouchableOpacity
                         onPress={() => {
-                            signupSubmit(firstName, lastName, email, password, confirm, props)
+                            signupSubmit(firstName, lastName, email, password, confirm, props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Sign Up</Text>
