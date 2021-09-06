@@ -3,6 +3,7 @@ import { View, SafeAreaView, Dimensions, TouchableOpacity, Text, ScrollView} fro
 import { styles } from '../styles'; 
 import NestedListView from 'react-native-nested-listview'
 const secureStore = require('../../SecureStore')
+const headers = require('../Headers')
 
 const Acedemic = (props) => {
     const [programs, setPrograms] = useState([]);
@@ -16,15 +17,12 @@ const Acedemic = (props) => {
     const submit = async (props, chosen) => {
 
         try{
-            const userId = await secureStore.GetValue('UserId');
+            const accessToken = await secureStore.GetValue('JWT')
             const url = 'https://meet-ut-1.herokuapp.com/questionnaire/programs'
             const response = await fetch(url, {
                 method : 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: headers.authorized(accessToken),
                 body: JSON.stringify({
-                    UserId: userId,
                     Programs: chosen
                 })
             });
@@ -41,11 +39,10 @@ const Acedemic = (props) => {
     const loadPrograms = async () => {
         try{
             const url = 'https://meet-ut-1.herokuapp.com/questionnaire/programs'
+            const accessToken = await secureStore.GetValue('JWT')
             const response = await fetch(url, {
                 method : 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: headers.authorized(accessToken),
             });
             const responseJson = await response.json();
             setPrograms(responseJson)

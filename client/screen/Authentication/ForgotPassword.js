@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, BackHandler, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {styles} from '../styles';
 const presenter = require('../Presenter')
 const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png');
 const handler = require('../Handler')
+const headers = require('../Headers')
 
 const secureStore = require('../../SecureStore')
 
@@ -14,19 +15,16 @@ const emailSubmit = async (code, props) => {
         const url = cfg.domain + cfg.forgotPassword;
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: headers.unauthorized(),
             body: JSON.stringify({
                 _id: await secureStore.GetValue("UserId"),
                 verification: code
             })
-        });
+        })
 
         if (response.status === 201) {
             const responseJson = await response.json();
             await secureStore.Save('JWT', responseJson.accessToken);
-            await secureStore.Save('RefreshToken', responseJson.refreshToken)
             props.navigation.navigate({
                 routeName: 'ResetPassword'
             })
@@ -91,14 +89,14 @@ const ForgotPasswordScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            resend(props)
+                            resend(props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Resend Code</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            emailSubmit(code, props)
+                            emailSubmit(code, props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Submit</Text>

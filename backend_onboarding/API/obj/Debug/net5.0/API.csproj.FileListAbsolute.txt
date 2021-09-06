@@ -107,3 +107,10 @@
 /Users/gordonlin/Documents/meetUT/backend_onboarding/API/obj/Debug/net5.0/API.csproj.AssemblyReference.cache
 /Users/gordonlin/Documents/meetUT/backend_onboarding/API/bin/Debug/net5.0/DocumentFormat.OpenXml.dll
 /Users/gordonlin/Documents/meetUT/backend_onboarding/API/bin/Debug/net5.0/System.IO.Packaging.dll
+/Users/gordonlin/Documents/meetUT/backend_onboarding/API/bin/Debug/net5.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/gordonlin/Documents/meetUT/backend_onboarding/API/bin/Debug/net5.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/gordonlin/Documents/meetUT/backend_onboarding/API/bin/Debug/net5.0/Microsoft.IdentityModel.Logging.dll
+/Users/gordonlin/Documents/meetUT/backend_onboarding/API/bin/Debug/net5.0/Microsoft.IdentityModel.Protocols.dll
+/Users/gordonlin/Documents/meetUT/backend_onboarding/API/bin/Debug/net5.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/gordonlin/Documents/meetUT/backend_onboarding/API/bin/Debug/net5.0/Microsoft.IdentityModel.Tokens.dll
+/Users/gordonlin/Documents/meetUT/backend_onboarding/API/bin/Debug/net5.0/System.IdentityModel.Tokens.Jwt.dll

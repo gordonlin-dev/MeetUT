@@ -1,3 +1,4 @@
 exports.email = (email) => {
-    return email.trim().toLowerCase()
+    return email
+    // TODO: return email.trim().toLowerCase()
 }

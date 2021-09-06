@@ -8,6 +8,7 @@ const secureStore = require('../../SecureStore')
 const image = require('../../assets/bg.png');
 const handler = require('../Handler')
 const fixer = require('../Fixer')
+const headers = require('../Headers')
 
 const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
     try {
@@ -15,9 +16,7 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
         const url = cfg.domain + cfg.signup
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: headers.unauthorized(),
             body: JSON.stringify({
                 firstName: firstName,
                 lastName: lastName,
@@ -29,9 +28,8 @@ const signupSubmit = async (firstName, lastName, email, password, confirm, props
 
         if (response.status === 403) {
             const responseJson = await response.json();
-            await secureStore.Save('UserId', email);
+            await secureStore.Save('UserId', email); // TODO: Remove when all screens are independent of UserId
             await secureStore.Save('JWT', responseJson.accessToken);
-            await secureStore.Save('RefreshToken', responseJson.refreshToken)
             props.navigation.navigate({
                 routeName: 'Verification'
             })
@@ -107,7 +105,7 @@ const SignupScreen = props => {
                 <View>
                     <TouchableOpacity
                         onPress={() => {
-                            signupSubmit(firstName, lastName, email, password, confirm, props)
+                            signupSubmit(firstName, lastName, email, password, confirm, props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Sign Up</Text>

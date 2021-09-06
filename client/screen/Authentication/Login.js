@@ -6,6 +6,7 @@ const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png')
 const handler = require('../Handler')
 const fixer = require('../Fixer')
+const headers = require('../Headers')
 
 const loginSubmit = async (email, password, props) => {
     try {
@@ -13,9 +14,7 @@ const loginSubmit = async (email, password, props) => {
         const url = cfg.domain + cfg.login;
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: headers.unauthorized(),
             body: JSON.stringify({
                 _id: email,
                 password: password
@@ -24,9 +23,8 @@ const loginSubmit = async (email, password, props) => {
 
         if (response.status === 201) {
             const responseJson = await response.json();
-            await secureStore.Save('UserId', email);
+            await secureStore.Save('UserId', email); // TODO: Remove when all screens are independent of UserID
             await secureStore.Save('JWT', responseJson.accessToken);
-            await secureStore.Save('RefreshToken', responseJson.refreshToken);
             props.navigation.navigate({
                 routeName: 'Home'
             })
@@ -74,7 +72,7 @@ const LoginScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            loginSubmit(email, password, props)
+                            loginSubmit(email, password, props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Login</Text>

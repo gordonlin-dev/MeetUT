@@ -1,6 +1,6 @@
 const MatchController = require('./match.controller')
+const AuthValidation = require('../Auth/auth.validations')
 
 exports.routesConfig = function(app){
-    app.get('/match/:userID', [MatchController.getMatchList])
-    app.post('/match/like', [MatchController.like])
+    app.post('/match/like', [AuthValidation.jwtValid,MatchController.like])
 }

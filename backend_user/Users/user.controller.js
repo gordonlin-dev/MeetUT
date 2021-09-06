@@ -98,7 +98,9 @@ exports.verifyEmail = (req, res, next) => { // TODO: Set max times
         req.body.verification = getHash(cfg.codeSalt, req.body.verification)
         if (req.body.verification === result) {
             req.body.active = true
-            UserModel.activateUser(req.body._id).then(() => { return next() })
+            UserModel.activateUser(req.body._id).then(() => {
+                return next()
+            })
         } else {
             return res.status(400).send(presenter.invalidCode())
         }
@@ -127,7 +129,7 @@ exports.verifyForgot = (req, res, next) => { // TODO: Set max times
  * @return status 200 redirect if request is valid, or status 404 if user does not exist
  */
 exports.getById = (req, res) => {
-    UserModel.getUserInfoById(req.params.userID).then((result) => {
+    UserModel.getUserInfoById(req.body._id).then((result) => {
         if (result != null) {
             res.status(200).send(result)
         } else {
@@ -142,7 +144,7 @@ exports.getById = (req, res) => {
  * @return status 200 redirect if request is valid, or status 404 if user does not exist
  */
 exports.deleteUser = (req, res) => {
-    UserModel.deleteUser(req.params.userID).then()
+    UserModel.deleteUser(req.body._id).then()
     res.status(200).send()
 }
 
@@ -153,7 +155,7 @@ exports.deleteUser = (req, res) => {
  */
 exports.updatePassword = (req, res, next) => {
     req.body.password = getPasswordHash(req.body.password)
-    UserModel.updatePassword(req.params.userID, req.body.password).then((result) => {
+    UserModel.updatePassword(req.body._id, req.body.password).then((result) => {
         if (result != null) {
             return next()
         } else {

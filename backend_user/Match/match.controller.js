@@ -1,15 +1,8 @@
 const UserModel = require('../Users/users.model')
 const axios = require('axios')
 
-exports.getMatchList = (req,res) =>{
-    UserModel.getAllUsers().then((result) => {
-        result = result.filter((user) => user._id !== req.params.userID)
-        res.status(200).send(result)
-    })
-}
-
 exports.like = async (req, res) => {
-    const curUserID = req.body.curUser
+    const curUserID = req.body._id
     const likedUserID = req.body.likedUser
     const curUser = await UserModel.like(curUserID,likedUserID)
     if(curUser.matched[likedUserID]){

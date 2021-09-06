@@ -6,6 +6,7 @@ const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png');
 const handler = require('../Handler')
 const fixer = require('../Fixer')
+const headers = require('../Headers')
 
 const secureStore = require('../../SecureStore')
 
@@ -16,16 +17,14 @@ const emailSubmit = async (email, props) => {
         const url = cfg.domain + cfg.forgotPasswordResend;
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: headers.unauthorized(),
             body: JSON.stringify({
                 _id: email,
             })
         });
 
         if (response.status === 201) {
-            await secureStore.Save('UserId', email)
+            await secureStore.Save('UserId', email) // TODO: Find a way to remove dependency on secureStore for this segment
             props.navigation.navigate({
                 routeName: 'ForgotPassword'
             })
@@ -66,7 +65,7 @@ const GetEmailScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            emailSubmit(email, props)
+                            emailSubmit(email, props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Submit</Text>

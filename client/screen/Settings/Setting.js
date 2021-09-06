@@ -10,9 +10,11 @@ const chat =  require('../../assets/chat-icon.png');
 const image =  require('../../assets/bg.png');
 const logo = require('../../assets/logo.png')
 const handler = require('../Handler')
+const headers = require('../Headers')
+
 const signoutSubmit = async (props) => {
     try {
-        await secureStore.Delete('UserId');
+        await secureStore.Delete('UserId'); // TODO: Find a way to remove dependency on UserId
         await secureStore.Delete('JWT');
         props.navigation.navigate({
             routeName: 'Landing'
@@ -25,7 +27,7 @@ const signoutSubmit = async (props) => {
 /* Delete user function here, saw the function in controller, not sure how to call it
 */
 const deleteButton = async (props) => {
-
+    // TODO
 }
 
 const SettingScreen = props => {
@@ -42,14 +44,10 @@ const SettingScreen = props => {
         try {
             const userID = await secureStore.GetValue('UserId');
             const accessToken = await secureStore.GetValue('JWT')
-            const refreshToken = await secureStore.GetValue('RefreshToken')
-            const url = cfg.domain + '/users/' + userID
+            const url = cfg.domain + '/users/'
             const response = await fetch(url, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': refreshToken + " " + accessToken
-                }
+                headers: headers.authorized(accessToken)
             });
     
           const responseJson = await response.json();

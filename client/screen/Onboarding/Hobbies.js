@@ -3,6 +3,7 @@ import { View, SafeAreaView, Dimensions, TouchableOpacity, Text, ScrollView} fro
 import { styles } from '../styles'; 
 import NestedListView from 'react-native-nested-listview'
 const secureStore = require('../../SecureStore')
+const headers = require('../Headers')
 
 const Hobbies = (props) => {
     const [hobbies, setHobbies] = useState([]);
@@ -15,15 +16,12 @@ const Hobbies = (props) => {
 
     const submit = async (props, selected) => {
         try{
-            const userID = await secureStore.GetValue('UserId');
+            const accessToken = await secureStore.GetValue('JWT')
             const url = 'https://meet-ut-1.herokuapp.com/questionnaire/hobbies'
             const response = await fetch(url, {
                 method : 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: headers.authorized(accessToken),
                 body: JSON.stringify({
-                    UserId: userID,
                     Hobbies: selected
                 })
             });
@@ -40,11 +38,10 @@ const Hobbies = (props) => {
     const loadHobbies = async () => {
         try{
             const url = 'https://meet-ut-1.herokuapp.com/questionnaire/hobbies'
+            const accessToken = secureStore.GetValue('JWT')
             const response = await fetch(url, {
                 method : 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: headers.authorized(accessToken),
             });
             const responseJson = await response.json();
             setHobbies(responseJson)
