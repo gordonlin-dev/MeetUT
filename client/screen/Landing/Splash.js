@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, Ima
 
 
 const secureStore = require('../../SecureStore')
+const headers = require('../Headers')
 
 import {styles} from '../styles';
 
@@ -10,16 +11,13 @@ const image = require("../../assets/Splash.png");
 
 const Splash = props => {
 
-  const validateJWT = async(jwt) => {
+  const validateJWT = async(accessToken) => {
       try {
           const url = 'https://meet-ut-2.herokuapp.com/auth/validateJWT';
 
           const response = await fetch(url, {
               method : 'PUT',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'authorization': 'Bearer ' + jwt
-              }
+              headers: headers.authorized(accessToken)
           });
           return response.status === 200
 

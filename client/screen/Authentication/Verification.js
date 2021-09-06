@@ -5,6 +5,7 @@ const presenter = require('../Presenter')
 const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png');
 const handler = require('../Handler')
+const headers = require('../Headers')
 
 const secureStore = require('../../SecureStore')
 
@@ -15,12 +16,8 @@ const verificationSubmit = async (code, props) => {
         const url = cfg.domain + cfg.verify;
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + accessToken
-            },
+            headers: headers.authorized(accessToken),
             body: JSON.stringify({
-                _id: await secureStore.GetValue("UserId"),
                 verification: code
             })
         });
@@ -46,13 +43,7 @@ const resend = async (props) => {
         const url = cfg.domain + cfg.resendCode;
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + accessToken
-            },
-            body: JSON.stringify({
-                _id: await secureStore.GetValue("UserId")
-            })
+            headers: headers.authorized(accessToken)
         });
 
         if (response.status === 201) {
@@ -93,14 +84,14 @@ const verificationScreen = props => {
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            resend(props)
+                            resend(props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Resend Code</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            verificationSubmit(code, props)
+                            verificationSubmit(code, props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Submit</Text>

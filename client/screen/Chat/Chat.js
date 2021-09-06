@@ -3,10 +3,11 @@ import {Image, StyleSheet, Dimensions, backHandler} from 'react-native'
 import socketClient  from "socket.io-client";
 import { GiftedChat } from 'react-native-gifted-chat';
 const secureStore = require('../../SecureStore')
+const headers = require('../Headers')
 
 let socket;
 const {height, width} = Dimensions.get('window');
-const example_profilpic =  require('../../assets/logo.png')
+const example_profilepic =  require('../../assets/logo.png')
 
 const ChatScreen = props => {
 
@@ -27,16 +28,14 @@ const ChatScreen = props => {
 
     const getMessages = async () => {
         try{
-            const userID = await secureStore.GetValue('UserId');
+            const userID = await secureStore.GetValue('UserId'); // TODO: Find a way to remove dependency on UserId
+            const accessToken = await secureStore.GetValue('JWT')
             let url = 'https://meet-ut-3.herokuapp.com/chat'
             url = url + "/" + userID
             url = url + "/room/" + roomID
             const response = await fetch(url, {
                 method : 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    //'authorization': 'Bearer ' + jwt
-                },
+                headers: headers.authorized(accessToken),
             });
             const responseJson = await response.json();
             const messages = responseJson.messages
@@ -84,7 +83,7 @@ const ChatScreen = props => {
         <GiftedChat
             renderAvatar={() => {
                 return (
-                    <Image source={example_profilpic} style={styles.tinyLogo}/>
+                    <Image source={example_profilepic} style={styles.tinyLogo}/>
                 )
             }}
             // TODO: doesn't work as expected. Needs further investigation on how to use onPressAvatar

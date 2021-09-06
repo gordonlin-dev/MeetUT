@@ -5,6 +5,8 @@ import {View, TouchableOpacity, StyleSheet, Button, Image, Dimensions, SafeAreaV
 import Swipeable from 'react-native-swipeable-row';
 
 const secureStore = require('../../SecureStore')
+const headers = require('../Headers')
+
 const logo = require('../../assets/logo.png');
 const home =  require('../../assets/home-icon.png');
 const setting =  require('../../assets/setting-icon.png');
@@ -20,15 +22,13 @@ const ChatListScreen = props => {
 
     const loadChat = async () => {
         try {
-            const userId = await secureStore.GetValue('UserId');
+            const userId = await secureStore.GetValue('UserId'); // TODO: Find a way to remove dependency on UserId
+            const accessToken = await secureStore.GetValue('JWT')
             let url = 'https://meet-ut-3.herokuapp.com/chat'
             url = url + "/" + userId
             const response = await fetch(url, {
                 method : 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    //'authorization': 'Bearer ' + jwt
-                },
+                headers: headers.authorized(accessToken),
             });
             const responseJson = await response.json();
             setChatList(responseJson)
