@@ -55,36 +55,9 @@ const HomeScreen = props => {
                 })
             });
             const responseJson = await response.json();
-            console.log(responseJson)
             setUsers(responseJson)
 
-
         }catch (e) {
-            console.log(e)
-        }
-    }
-
-    const nextUser = async () => {
-        await setCurUser(curUser + 1)
-    }
-
-    const sendLike = async () => {
-        try{
-            const accessToken = await secureStore.GetValue('JWT');
-            const url = 'https://meet-ut-2.herokuapp.com/match/like';
-            const response = await fetch(url, {
-                method : 'POST',
-                headers: headers.authorized(accessToken),
-                body: JSON.stringify({
-                    likedUser: users[curUser].email
-                })
-            });
-            if(response.status === 200){
-                await nextUser();
-            } else {
-                await handler.handle(response, props);
-            }
-        }catch (e){
             console.log(e)
         }
     }
@@ -100,12 +73,13 @@ const HomeScreen = props => {
             setFirstName(users[curUser].firstName)
             setLastName(users[curUser].lastName)
         }
+        
     }, [users, curUser]);
 
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.empty}>
-                <ProfileCard style={styles.homeBg}/>
+                <ProfileCard style={styles.homeBg} users={users}/>
 
                 <View style={styles.footer}>
                 <View style={styles.footerButton}>
