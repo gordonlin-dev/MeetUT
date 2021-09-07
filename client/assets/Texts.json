@@ -12,8 +12,14 @@
       "Verification": "Please verify your email",
       "Authenticate": "Please log in"
     },
-    "Button": {
+    "Buttons": {
       "OK": "OK"
+    }
+  },
+  "Splash": {
+    "Buttons": {
+      "Login": "Log in",
+      "SignUp": "Sign up"
     }
   }
 }
