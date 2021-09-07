@@ -27,6 +27,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 15,
         backgroundColor: 'white',
+    ButtonView : {
+        position: 'absolute',
+        bottom:0
+    },
+    Main : {
+        paddingTop: height*0.05,
     },
     onboardEmpty: {
 
@@ -61,7 +67,7 @@ const styles = StyleSheet.create({
     onboardHeaderFont: {
         fontFamily: 'timeburner',
         fontSize:17,
-        color: "black"  
+        color: "black"
     },
     container:{
         flex:1,
@@ -162,7 +168,7 @@ const styles = StyleSheet.create({
         height: height*0.05,
         width: width*0.1
     },
-    
+
     image: {
         flex: 1,
         justifyContent: "center",
@@ -178,10 +184,6 @@ const styles = StyleSheet.create({
         borderColor: "white",
         color: "white"
     },
-    pickerHeader: {
-        marginTop: height * 0.01,
-        left: width*0.16,
-    },
     picker: {
         width: width * 0.7,
         height: height * 0.055,
@@ -190,7 +192,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         backgroundColor: 'white',
         color: "black"
-        
+
     },
     Button: {
         width: width * 0.6,
@@ -222,7 +224,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 400/ 2,
-        backgroundColor: '#e1e1ea',        
+        backgroundColor: '#e1e1ea',
     },
     header: {
         fontSize: 50,
@@ -234,6 +236,7 @@ const styles = StyleSheet.create({
     signUpHeader: {
         fontSize: 50,
         marginLeft: width * 0.27,
+        marginBottom: height * 0.03,
         color: "white",
         fontFamily: 'timeburner',
     },
@@ -297,7 +300,7 @@ const styles = StyleSheet.create({
         width: width*0.16,
         borderRadius: 400/ 2,
     },
-    
+
     avator: {
         height: height*0.08,
         width: width*0.12
@@ -305,7 +308,7 @@ const styles = StyleSheet.create({
     chat: {
         height: height*0.1,
         marginLeft: width*0.02
-        
+
     },
     headerFont: {
         fontFamily: 'timeburner',
@@ -322,7 +325,7 @@ const styles = StyleSheet.create({
     quizFont: {
         fontFamily: 'timeburner',
         fontSize:17,
-        color: "black"  
+        color: "black"
     },
     quizLeftButton: {
         position: 'absolute',
@@ -354,9 +357,9 @@ const styles = StyleSheet.create({
     leftFont: {
         fontFamily: 'timeburner',
         fontSize:12,
-        color: "black",  
+        color: "black",
         left: width*0.11,
     },
 });
-    
+
 export { styles };

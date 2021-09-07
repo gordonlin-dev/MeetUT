@@ -1,5 +1,4 @@
 import {createStackNavigator} from 'react-navigation-stack';
-import LandingScreen from './screen/Landing/Landing';
 import LoginScreen from "./screen/Authentication/Login";
 import SignupScreen from "./screen/Authentication/Signup";
 import HomeScreen from "./screen/Home/Home";
@@ -175,13 +174,6 @@ const Navigator = createStackNavigator({
         }
 
     },
-    Landing: {
-        screen:LandingScreen,
-        navigationOptions:{
-            title:"",
-            headerShown: false
-        }
-    },
     Login: {
         screen: LoginScreen,
         navigationOptions:{
@@ -281,7 +273,7 @@ const Navigator = createStackNavigator({
             title:"",
         }
     }
-    
+
 });
 
 export default createAppContainer(Navigator);

@@ -183,6 +183,7 @@ exports.validatePassword = (req, res, next) => {
  * @return next if email is valid, or status 400 if password is invalid
  */
 exports.validateEmail = (req, res, next) => {
+    req.body._id = req.body._id.toLowerCase().trim()
     userExists(req.body._id).then((result) => {
         if (result) {
             return res.status(400).send(presenter.invalidUser("exist"))

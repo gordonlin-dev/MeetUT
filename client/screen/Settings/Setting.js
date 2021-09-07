@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, StyleSheet, Image, BackHandler, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import {View, Text, Image, BackHandler, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {styles} from '../styles';
 const secureStore = require('../../SecureStore')
 const cfg = require('../cfg.json')

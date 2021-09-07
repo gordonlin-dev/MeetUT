@@ -1,24 +1,75 @@
-const {Alert} = require("react-native");
-const presenter = require("./Presenter");
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const {Alert, DevSettings} = require("react-native");
+const texts = require("../assets/Texts.json");
 
-exports.handle = async (response, props) => {
+exports.handleResponse = async (response, props) => {
     if (response.status === 400) {
         const responseJson = await response.json();
-        Alert.alert(responseJson.error)
+        Alert.alert(texts.Alert.Title.UnableToProcess,
+            responseJson,
+            [{text: texts.Alert.Buttons.OK}])
+
     } else if (response.status === 401) {
         props.navigation.navigate({
             routeName: "Login"
         })
+        Alert.alert(texts.Alert.Title.Unauthorized,
+            texts.Alert.Message.Authenticate,
+            [{text: texts.Alert.Buttons.OK, onPress: () => props.navigation.navigate({
+                    routeName: "Login"
+                })}])
+
     } else if (response.status === 403) {
-        props.navigation.navigate({
-            routeName: "Verification"
-        })
+        Alert.alert(texts.Alert.Title.Verification,
+            texts.Alert.Message.Verification,
+            [{text: texts.Alert.Buttons.OK, onPress: () => props.navigation.navigate({
+                    routeName: "Verification"
+                })}])
+
     } else if (response.status === 404) {
-        Alert.alert(presenter.notFound())
-        props.navigation.navigate({
-            routeName: "Login"
-        })
+        Alert.alert(texts.Alert.Title.Error,
+            texts.Alert.Message.NotFound,
+            [{text: texts.Alert.Buttons.OK, onPress: () => props.navigation.navigate({
+                    routeName: "Login"
+                })}])
+
     } else {
-        Alert.alert(presenter.internalError())
+        Alert.alert(texts.Alert.Title.Error,
+            texts.Alert.Message.RestartApp,
+            [{text: texts.Alert.Buttons.OK, onPress: () => DevSettings.reload()}])
+    }
+}
+
+exports.sendRequest = async (url, method, body, unhandled, props) => {
+    try {
+        const token = await AsyncStorage.getItem('accessToken')
+        let requestObject = {
+            method : method,
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': 'Bearer ' + token
+            }
+        }
+        if(method === texts.HTTP.Post) {
+            requestObject.body = JSON.stringify(body)
+        }
+        const response = await fetch(url, requestObject);
+        if(unhandled || response.ok){
+            return response
+        }
+        await this.handleResponse(response, props)
+    } catch(e) {
+        console.log(e)
+        Alert.alert(texts.Alert.Title.Error,
+            texts.Alert.Message.RestartApp,
+            [{text: texts.Alert.Button.OK, onPress: () => DevSettings.reload()}])
+    }
+
+}
+
+exports.HTTP = {
+    Method : {
+        Get : 'Get',
+        Post : 'Post'
     }
 }

@@ -1,48 +1,61 @@
-import React, {useEffect} from 'react'
-import {View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, ImageBackground} from 'react-native'
+import React, {useEffect, useState} from 'react'
+import {
+    View,
+    ImageBackground, Text, TouchableOpacity,
+} from 'react-native'
 
-
-const secureStore = require('../../SecureStore')
-const headers = require('../Headers')
-
+const handler = require('../Handler')
+const endpoints = require('../../API_endpoints.json')
 import {styles} from '../styles';
-
+const texts = require("../../assets/Texts.json");
 const image = require("../../assets/Splash.png");
 
 const Splash = props => {
-
-  const validateJWT = async(accessToken) => {
-      try {
-          const url = 'https://meet-ut-2.herokuapp.com/auth/validateJWT';
-
-          const response = await fetch(url, {
-              method : 'PUT',
-              headers: headers.authorized(accessToken)
-          });
-          return response.status === 200
-
-      } catch (error) {
-          console.log(error)
+    const [showButtons, setShowButtons] = useState(false);
+    const validateJWT = async() => {
+      const response = await handler.sendRequest(endpoints.Server.User.Auth.ValidateJWT,
+          texts.HTTP.Get,
+          null,
+          true,
+          props)
+      if(response.ok){
+          setTimeout(() => {props.navigation.navigate('Home')}, 1000)
+      }else{
+          setTimeout(() => {setShowButtons(true)}, 1000)
       }
-  }
-  useEffect(() => {
-      secureStore.GetValue('JWT').then((jwt) =>{
-          validateJWT(jwt).then(
-              (result) => {
-                  if(result){
-                      props.navigation.navigate('Home')
-                  } else {
-                      props.navigation.navigate('Landing')
-                  }
-              }
-          )
-      })
+    }
+    useEffect(() => {
+        validateJWT()
     }, []);
-    return (<View style={styles.empty}>
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-      </ImageBackground>
-    </View>)
-}
 
+    if(showButtons){
+        return (
+            <View style={styles.empty}>
+                <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                    <View style={styles.ButtonView}>
+                        <TouchableOpacity style={styles.Button}  onPress={() => {
+                            props.navigation.navigate({routeName: 'Login'})
+                        }}>
+                            <Text style={styles.font}>{texts.Splash.Buttons.Login}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.Button} onPress={() => {
+                            props.navigation.navigate({routeName: 'Signup'})
+                        }}>
+                            <Text style={styles.font}>{texts.Splash.Buttons.SignUp}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ImageBackground>
+            </View>
+        )
+    }else{
+        return (
+            <View style={styles.empty}>
+                <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                </ImageBackground>
+            </View>
+        )
+    }
+
+}
 
 export default Splash;

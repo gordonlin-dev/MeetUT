@@ -5,7 +5,7 @@ exports.auth = (req, res) => {
     try {
         let token = jwt.sign({_id: req.body._id, active: req.body.active}, jwtSecret)
         if (req.body.active) {
-            res.status(201).send({accessToken: token})
+            res.status(200).send({accessToken: token})
         } else {
             res.status(403).send({accessToken: token})
         }
