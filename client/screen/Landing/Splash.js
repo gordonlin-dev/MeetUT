@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {
     View,
-    ImageBackground, Text, TouchableOpacity, Dimensions, StyleSheet,
+    ImageBackground, Text, TouchableOpacity,
 } from 'react-native'
 
 const handler = require('../Handler')
@@ -32,7 +32,7 @@ const Splash = props => {
         return (
             <View style={styles.empty}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-                    <View style={customStyles.ButtonView}>
+                    <View style={styles.ButtonView}>
                         <TouchableOpacity style={styles.Button}  onPress={() => {
                             props.navigation.navigate({routeName: 'Login'})
                         }}>
@@ -58,11 +58,4 @@ const Splash = props => {
 
 }
 
-const {height, width} = Dimensions.get('window');
-const customStyles = StyleSheet.create({
-    ButtonView : {
-        position: 'absolute',
-        bottom:0
-    }
-})
 export default Splash;

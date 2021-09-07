@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {View, Image, StyleSheet, TextInput, Dimensions, TouchableOpacity, ScrollView, Text, SafeAreaView} from 'react-native'
+import {View, Image, TextInput, TouchableOpacity, ScrollView, Text, SafeAreaView} from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import {styles} from '../styles'
 const logo =  require('../../assets/logo.png');

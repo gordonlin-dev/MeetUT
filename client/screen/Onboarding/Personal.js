@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {View, SafeAreaView, StyleSheet, TextInput, Dimensions, TouchableOpacity, ScrollView, Text} from 'react-native'
+import {View, SafeAreaView, Dimensions, TouchableOpacity, ScrollView, Text} from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import { AirbnbRating } from 'react-native-ratings';
 import {styles} from '../styles'

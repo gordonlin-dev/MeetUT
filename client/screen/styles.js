@@ -2,6 +2,14 @@ import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, Touchabl
 
 const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
+    ButtonView : {
+        position: 'absolute',
+        bottom:0
+    },
+    Main : {
+        paddingTop: height*0.05,
+
+    },
     onboardEmpty: {
 
     },
@@ -204,6 +212,7 @@ const styles = StyleSheet.create({
     signUpHeader: {
         fontSize: 50,
         marginLeft: width * 0.27,
+        marginBottom: height * 0.03,
         color: "white",
         fontFamily: 'timeburner',
     },
