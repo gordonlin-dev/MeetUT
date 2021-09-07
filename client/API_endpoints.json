@@ -1,0 +1,22 @@
+{
+  "Server": {
+    "User": {
+      "Auth": {
+        "Login": "https://meet-ut-2.herokuapp.com/auth",
+        "ValidateJWT": "https://meet-ut-2.herokuapp.com/auth/validateJWT"
+      },
+      "User": {
+
+      },
+      "Match" : {
+
+      }
+    },
+    "Chat": {
+
+    },
+    "Onboarding": {
+
+    }
+  }
+}

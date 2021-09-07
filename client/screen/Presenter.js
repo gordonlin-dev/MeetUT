@@ -1,5 +1,5 @@
 exports.internalError = () => {
-    return "An internal error has occurred. Please try again later."
+    return "An error has occurred. Restarting the app."
 }
 
 exports.notFound = () => {

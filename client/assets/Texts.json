@@ -1,0 +1,19 @@
+{
+  "Alert" : {
+    "Title": {
+      "Unauthorized": "Unauthorized",
+      "Error": "An error has occurred",
+      "Verification": "Verification needed",
+      "UnableToProcess": "Unable to process request"
+    },
+    "Message": {
+      "RestartApp": "Restarting the app.",
+      "NotFound": "Resource not found",
+      "Verification": "Please verify your email",
+      "Authenticate": "Please log in"
+    },
+    "Button": {
+      "OK": "OK"
+    }
+  }
+}
