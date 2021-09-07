@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const {Alert, DevSettings} = require("react-native");
 const texts = require("../assets/Texts.json");
 
-
 exports.handleResponse = async (response, props) => {
     if (response.status === 400) {
         const responseJson = await response.json();
@@ -41,21 +40,26 @@ exports.handleResponse = async (response, props) => {
     }
 }
 
-exports.sendRequest = async (url, method, unhandled, props) => {
+exports.sendRequest = async (url, method, body, unhandled, props) => {
     try {
         const token = await AsyncStorage.getItem('accessToken')
-        const response = await fetch(url, {
+        let requestObject = {
             method : method,
             headers: {
                 'Content-Type': 'application/json',
                 'authorization': 'Bearer ' + token
             }
-        });
+        }
+        if(method === texts.HTTP.Post) {
+            requestObject.body = JSON.stringify(body)
+        }
+        const response = await fetch(url, requestObject);
         if(unhandled || response.ok){
             return response
         }
         await this.handleResponse(response, props)
     } catch(e) {
+        console.log(e)
         Alert.alert(texts.Alert.Title.Error,
             texts.Alert.Message.RestartApp,
             [{text: texts.Alert.Button.OK, onPress: () => DevSettings.reload()}])

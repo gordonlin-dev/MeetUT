@@ -1,44 +1,54 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, BackHandler, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
-import {styles} from '../styles';
+import {
+    View,
+    Text,
+    BackHandler,
+    TextInput,
+    TouchableOpacity,
+    ImageBackground,
+    Platform,
+    KeyboardAvoidingView, ScrollView, StyleSheet, Dimensions
+} from 'react-native'
+import {Header, useHeaderHeight} from 'react-navigation-stack';
 
-const cfg = require('../cfg.json')
+import {styles} from '../styles';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const presenter = require('../Presenter')
 const secureStore = require('../../SecureStore')
 const image = require('../../assets/bg.png');
 const handler = require('../Handler')
 const fixer = require('../Fixer')
-const headers = require('../Headers')
+const endpoints = require('../../API_endpoints.json')
+const texts = require("../../assets/Texts.json");
 
 const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
     try {
-        email = fixer.email(email)
-        const url = cfg.domain + cfg.signup
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: headers.unauthorized(),
-            body: JSON.stringify({
-                firstName: firstName,
-                lastName: lastName,
-                _id: email,
-                password: password,
-                confirm: confirm
-            })
-        });
-
-        if (response.status === 403) {
-            const responseJson = await response.json();
-            await secureStore.Save('UserId', email); // TODO: Remove when all screens are independent of UserId
-            await secureStore.Save('JWT', responseJson.accessToken);
+        const body = {
+            firstName: firstName,
+            lastName: lastName,
+            _id: fixer.email(email),
+            password: password,
+            confirm: confirm
+        }
+        const response = await handler.sendRequest(
+            endpoints.Server.User.User.SignUp,
+            texts.HTTP.Post,
+            body,
+            true,
+            props
+        )
+        const responseJson = await response.json();
+        if (response.status == 403) {
+            await AsyncStorage.setItem('accessToken', responseJson.accessToken)
             props.navigation.navigate({
                 routeName: 'Verification'
             })
         } else {
-            await handler.handle(response, props)
+            await handler.handleResponse(response, props)
         }
     } catch (error) {
         console.log(error)
-        Alert.alert(presenter.internalError())
     }
 }
 
@@ -57,12 +67,12 @@ const SignupScreen = props => {
     const [lastName, onChangeLastName] = useState("");
 
     return (
-        <View style={styles.empty}>
-            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-                <Text style={styles.signUpHeader}>
-                    Sign Up
-                </Text>
-                <View>
+        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+            <ScrollView>
+                <KeyboardAvoidingView  style={customStyles.Main} behavior={"padding"} keyboardVerticalOffset = {useHeaderHeight()}>
+                    <Text style={styles.signUpHeader}>
+                        Sign Up
+                    </Text>
                     <TextInput
                         style={styles.Input}
                         onChangeText={onChangeFirstName}
@@ -83,6 +93,7 @@ const SignupScreen = props => {
                         value={email}
                         placeholder="email"
                         placeholderTextColor="white"
+                        autoCapitalize='none'
                     />
                     <TextInput
                         style={styles.Input}
@@ -101,19 +112,24 @@ const SignupScreen = props => {
                         placeholder="confirm password"
                         placeholderTextColor="white"
                     />
-                </View>
-                <View>
                     <TouchableOpacity
-                        onPress={() => {
-                            signupSubmit(firstName, lastName, email, password, confirm, props).then()
+                        onPress={async () => {
+                            await signupSubmit(firstName, lastName, email, password, confirm, props)
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>Sign Up</Text>
                     </TouchableOpacity>
-                </View>
-            </ImageBackground>
-        </View>
+                </KeyboardAvoidingView>
+            </ScrollView>
+        </ImageBackground>
     );
 };
+
+const {height, width} = Dimensions.get('window');
+const customStyles = StyleSheet.create({
+    Main : {
+        paddingTop: height*0.05
+    }
+})
 
 export default SignupScreen;

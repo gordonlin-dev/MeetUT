@@ -14,7 +14,8 @@ const Splash = props => {
     const [showButtons, setShowButtons] = useState(false);
     const validateJWT = async() => {
       const response = await handler.sendRequest(endpoints.Server.User.Auth.ValidateJWT,
-          handler.HTTP.Method.Get,
+          texts.HTTP.Get,
+          null,
           true,
           props)
       if(response.ok){
@@ -26,12 +27,12 @@ const Splash = props => {
     useEffect(() => {
         validateJWT()
     }, []);
-    
+
     if(showButtons){
         return (
             <View style={styles.empty}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-                    <View style={customeStyles.ButtonView}>
+                    <View style={customStyles.ButtonView}>
                         <TouchableOpacity style={styles.Button}  onPress={() => {
                             props.navigation.navigate({routeName: 'Login'})
                         }}>
@@ -58,7 +59,7 @@ const Splash = props => {
 }
 
 const {height, width} = Dimensions.get('window');
-const customeStyles = StyleSheet.create({
+const customStyles = StyleSheet.create({
     ButtonView : {
         position: 'absolute',
         bottom:0

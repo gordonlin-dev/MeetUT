@@ -21,5 +21,9 @@
       "Login": "Log in",
       "SignUp": "Sign up"
     }
+  },
+  "HTTP": {
+    "Get": "Get",
+    "Post": "Post"
   }
 }
