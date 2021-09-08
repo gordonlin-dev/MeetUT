@@ -45,7 +45,7 @@ exports.jwtInactive = (req, res, next) => {
         if (!req.jwt.active) {
             return next()
         } else {
-            return res.status(400).send()
+            return res.status(400).send("User already activated")
         }
     } catch (err) {
         return res.status(401).send()

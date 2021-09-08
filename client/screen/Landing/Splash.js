@@ -16,7 +16,7 @@ const Splash = props => {
       const response = await handler.sendRequest(endpoints.Server.User.Auth.ValidateJWT,
           texts.HTTP.Get,
           null,
-          true,
+          false,
           props)
       if(response.ok){
           setTimeout(() => {props.navigation.navigate('Home')}, 500)

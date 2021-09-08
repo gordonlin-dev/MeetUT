@@ -1,61 +1,46 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+const endpoints = require('../../API_endpoints.json')
 import {styles} from '../styles';
-const presenter = require('../Presenter')
-const cfg = require('../cfg.json')
-const image = require('../../assets/bg.png');
+import AsyncStorage from "@react-native-async-storage/async-storage";
+const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
-const headers = require('../Headers')
-
-const secureStore = require('../../SecureStore')
+const image = require('../../assets/bg.png');
 
 
 const verificationSubmit = async (code, props) => {
-    try {
-        const accessToken = await secureStore.GetValue('JWT')
-        const url = cfg.domain + cfg.verify;
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: headers.authorized(accessToken),
-            body: JSON.stringify({
-                verification: code
-            })
-        });
-
-        if (response.status === 201) {
-            const responseJson = await response.json();
-            await secureStore.Save('JWT', responseJson.accessToken);
-            props.navigation.navigate({
-                routeName: 'Home'
-            })
-        } else {
-            await handler.handle(response, props)
-        }
-    } catch (error) {
-        console.log(error)
-        Alert.alert(presenter.internalError())
+    const body = {
+        verification : code
+    }
+    const response = await handler.sendRequest(
+        endpoints.Server.User.User.Verify,
+        texts.HTTP.Post,
+        body,
+        false,
+        props
+    )
+    if(response.ok){
+        const responseJson = response.json()
+        console.log(responseJson)
+        await AsyncStorage.setItem('accessToken', responseJson.accessToken)
+        props.navigation.navigate({
+            routeName: 'Home'
+        })
     }
 }
 
 const resend = async (props) => {
-    try {
-        const accessToken = await secureStore.GetValue('JWT')
-        const url = cfg.domain + cfg.resendCode;
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: headers.authorized(accessToken)
-        });
-
-        if (response.status === 201) {
-            props.navigation.navigate({
-                routeName: 'Verification'
-            })
-        } else {
-            await handler.handle(response, props)
-        }
-    } catch (error) {
-        console.log(error)
-        Alert.alert(presenter.internalError())
+    const response = await handler.sendRequest(
+        endpoints.Server.User.User.ResendCode,
+        texts.HTTP.Post,
+        {},
+        false,
+        props
+    )
+    if(response.ok){
+        Alert.alert("",
+            texts.Alert.Message.SentCode,
+            [{text: texts.Alert.Buttons.OK, onPress: () => {}}])
     }
 }
 
@@ -73,29 +58,30 @@ const verificationScreen = props => {
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View>
                     <Text style={styles.verificationHeader}>
-                        Verification
+                        {texts.Screens.Verification.Verification}
                     </Text>
                     <TextInput
                         style={styles.Input}
                         onChangeText={onChangeCode}
                         value={code}
-                        placeholder="code"
+                        placeholder={texts.Global.Common.Code}
                         placeholderTextColor="white"
                     />
-                    <TouchableOpacity
-                        onPress={() => {
-                            resend(props).then()
-                        }}
-                        style={styles.Button}>
-                        <Text style={styles.font}>Resend Code</Text>
-                    </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
                             verificationSubmit(code, props).then()
                         }}
                         style={styles.Button}>
-                        <Text style={styles.font}>Submit</Text>
+                        <Text style={styles.font}>{texts.Global.Common.Submit}</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            resend(props).then()
+                        }}
+                        style={styles.Button}>
+                        <Text style={styles.font}>{texts.Global.Common.ResendCode}</Text>
+                    </TouchableOpacity>
+
                 </View>
             </ImageBackground>
         </View>

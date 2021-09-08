@@ -7,8 +7,8 @@
       },
       "User": {
         "SignUp": "https://meet-ut-2.herokuapp.com/users/create",
-        "Login": "https://meet-ut-2.herokuapp.com/auth"
-
+        "Verify": "https://meet-ut-2.herokuapp.com/users/verify",
+        "ResendCode": "https://meet-ut-2.herokuapp.com/users/verify/resend"
       },
       "Match" : {
 

@@ -10,7 +10,8 @@
       "RestartApp": "Restarting the app.",
       "NotFound": "Resource not found",
       "Verification": "Please verify your email",
-      "Authenticate": "Please log in"
+      "Authenticate": "Please log in",
+      "SentCode": "A new code has been sent to your email address"
     },
     "Buttons": {
       "OK": "OK"
@@ -25,7 +26,15 @@
       "Email": "Email",
       "Password": "Password",
       "ConfirmPassword": "Confirm password",
-      "ForgotPassword": "Forgot password"
+      "ForgotPassword": "Forgot password",
+      "ResendCode": "Resend code",
+      "Code": "Code",
+      "Submit" : "Submit"
+    }
+  },
+  "Screens": {
+    "Verification" : {
+      "Verification" : "Verification"
     }
   },
   "HTTP": {
