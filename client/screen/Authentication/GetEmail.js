@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {styles} from '../styles';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const image = require('../../assets/bg.png');
 const fixer = require('../Fixer')
 const texts = require("../../assets/Texts.json");
@@ -20,7 +21,9 @@ const emailSubmit = async (email, props) => {
         props
     )
     if(response.ok){
-        props.navigation.navigate('ForgotPassword',{
+        await AsyncStorage.setItem('resetPasswordEmail', email)
+        props.navigation.navigate({
+            routeName: 'ForgotPassword'
         })
     }
 }

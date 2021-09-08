@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {styles} from '../styles';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const image = require('../../assets/bg.png');
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
@@ -9,55 +10,38 @@ const endpoints = require('../../API_endpoints.json')
 
 
 const emailSubmit = async (code, props) => {
-    try {
-        const url = cfg.domain + cfg.forgotPassword;
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: headers.unauthorized(),
-            body: JSON.stringify({
-                _id: await secureStore.GetValue("UserId"),
-                verification: code
-            })
+    const body = {
+        verification: code
+    }
+    const response = await handler.sendRequest(
+        endpoints.Server.User.User.ForgotPassword,
+        texts.HTTP.Post,
+        body,
+        false,
+        props
+    )
+    if(response.ok){
+        const responseJson = await response.json();
+        await AsyncStorage.setItem('accessToken', responseJson.accessToken)
+        props.navigation.navigate({
+            routeName: 'ResetPassword'
         })
-
-        if (response.status === 201) {
-            const responseJson = await response.json();
-            await secureStore.Save('JWT', responseJson.accessToken);
-            props.navigation.navigate({
-                routeName: 'ResetPassword'
-            })
-        } else {
-            await handler.handle(response, props)
-        }
-    } catch (error) {
-        console.log(error)
-        Alert.alert(presenter.internalError())
     }
 }
 
 const resend = async (props) => {
-    try {
-        const url = cfg.domain + cfg.forgotPasswordResend;
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                _id: await secureStore.GetValue("UserId")
-            })
-        });
-
-        if (response.status === 201) {
-            props.navigation.navigate({
-                routeName: 'ForgotPassword'
-            })
-        } else {
-            await handler.handle(response, props)
-        }
-    } catch (error) {
-        console.log(error)
-        Alert.alert(presenter.internalError())
+    const email = await AsyncStorage.getItem('resetPasswordEmail')
+    const response = await handler.sendRequest(
+        endpoints.Server.User.User.ResendPasswordCode,
+        texts.HTTP.Post,
+        {_id:email},
+        false,
+        props
+    )
+    if(response.ok){
+        Alert.alert("",
+            texts.Alert.Message.SentCode,
+            [{text: texts.Alert.Buttons.OK, onPress: () => {}}])
     }
 }
 
@@ -75,7 +59,7 @@ const ForgotPasswordScreen = props => {
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View>
                     <Text style={styles.verificationHeader}>
-                        {texts.Screens.Verification}
+                        {texts.Screens.Verification.Verification}
                     </Text>
 
                     <TextInput
