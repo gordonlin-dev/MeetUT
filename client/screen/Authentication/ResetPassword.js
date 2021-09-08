@@ -1,43 +1,32 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, BackHandler, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
 import {styles} from '../styles';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const secureStore = require('../../SecureStore')
 const image = require('../../assets/bg.png');
-const cfg = require('../cfg.json')
-const presenter = require('../Presenter')
+const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
-const headers = require('../Headers')
+const endpoints = require('../../API_endpoints.json')
 
 const resetSubmit = async (password, confirm, props) => {
-    try {
-        const email = await secureStore.GetValue('UserId')
-        const accessToken = await secureStore.GetValue('JWT')
-
-        const url = cfg.domain + cfg.resetPassword
-
-        const response = await fetch(url, {
-            method: 'PUT',
-            headers: headers.authorized(accessToken),
-            body: JSON.stringify({
-                _id: email,
-                password: password,
-                confirm: confirm
-            })
-        });
-
-        if (response.status === 201) {
-            const responseJson = await response.json()
-            await secureStore.Save('JWT', responseJson.accessToken);
-            props.navigation.navigate({
-                routeName: 'Home'
-            })
-        } else {
-            await handler.handle(response, props)
-        }
-    } catch (error) {
-        console.log(error)
-        Alert.alert(presenter.clientError())
+    const body = {
+        password: password,
+        confirm: confirm
+    }
+    console.log(body)
+    const response = await handler.sendRequest(
+        endpoints.Server.User.User.ResetPassword,
+        texts.HTTP.Put,
+        body,
+        true,
+        props
+    )
+    if(response.ok){
+        const responseJson = await response.json();
+        await AsyncStorage.setItem('accessToken', responseJson.accessToken)
+        props.navigation.navigate({
+            routeName: 'Home'
+        })
     }
 }
 
@@ -54,7 +43,7 @@ const ResetPasswordScreen = props => {
         <View style={styles.empty}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <Text style={styles.header}>
-                    Reset
+                    {texts.Screens.ResetPassword.ResetPassword}
                 </Text>
                 <View>
                     <TextInput
@@ -62,7 +51,7 @@ const ResetPasswordScreen = props => {
                         onChangeText={onChangePassword}
                         value={password}
                         secureTextEntry={true}
-                        placeholder="new password"
+                        placeholder= {texts.Screens.ResetPassword.NewPassword}
                         placeholderTextColor="white"
                     />
 
@@ -71,7 +60,7 @@ const ResetPasswordScreen = props => {
                         onChangeText={onChangeNumber}
                         value={confirm}
                         secureTextEntry={true}
-                        placeholder="confirm password"
+                        placeholder={texts.Global.Common.ConfirmPassword}
                         placeholderTextColor="white"
                     />
                 </View>
@@ -81,7 +70,7 @@ const ResetPasswordScreen = props => {
                             resetSubmit(password, confirm, props).then()
                         }}
                         style={styles.Button}>
-                        <Text style={styles.font}>Reset Password</Text>
+                        <Text style={styles.font}>{texts.Screens.ResetPassword.ResetPassword}</Text>
                     </TouchableOpacity>
                 </View>
 

@@ -36,10 +36,15 @@
     "Verification" : {
       "Verification" : "Verification",
       "EnterEmail": "Please enter your email address:"
+    },
+    "ResetPassword": {
+      "ResetPassword": "Reset password",
+      "NewPassword": "New password"
     }
   },
   "HTTP": {
     "Get": "Get",
-    "Post": "Post"
+    "Post": "Post",
+    "Put": "Put"
   }
 }

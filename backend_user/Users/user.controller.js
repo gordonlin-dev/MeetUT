@@ -170,6 +170,7 @@ exports.updatePassword = (req, res, next) => {
  * @return next if password is valid, or status 400 if password is invalid
  */
 exports.validatePassword = (req, res, next) => {
+    console.log(req.body)
     if (req.body.password.length < cfg.passwordMin || req.body.password.length > cfg.passwordMax) {
         return res.status(400).send(presenter.invalidPassword("length"))
     } else {
