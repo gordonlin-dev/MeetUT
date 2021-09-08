@@ -6,6 +6,7 @@
         "ValidateJWT": "https://meet-ut-2.herokuapp.com/auth/validateJWT"
       },
       "User": {
+        "baseURL": "https://meet-ut-2.herokuapp.com/users",
         "SignUp": "https://meet-ut-2.herokuapp.com/users/create",
         "Verify": "https://meet-ut-2.herokuapp.com/users/verify",
         "ResendCode": "https://meet-ut-2.herokuapp.com/users/verify/resend",

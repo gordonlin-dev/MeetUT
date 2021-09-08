@@ -1,27 +1,20 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, Image, BackHandler, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import {View, Text, Image, BackHandler, ImageBackground, TouchableOpacity, Alert, DevSettings} from 'react-native'
 import {styles} from '../styles';
-const secureStore = require('../../SecureStore')
-const cfg = require('../cfg.json')
-const presenter = require('../Presenter')
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const home =  require('../../assets/home-icon.png');
 const setting =  require('../../assets/setting-icon.png');
 const chat =  require('../../assets/chat-icon.png');
 const image =  require('../../assets/bg.png');
 const logo = require('../../assets/logo.png')
-const handler = require('../Handler')
-const headers = require('../Headers')
 
-const signoutSubmit = async (props) => {
-    try {
-        await secureStore.Delete('UserId'); // TODO: Find a way to remove dependency on UserId
-        await secureStore.Delete('JWT');
-        props.navigation.navigate({
-            routeName: 'Landing'
-        })        
-    }catch (error){
-        console.log(error)
-    }
+const texts = require("../../assets/Texts.json");
+const handler = require('../Handler')
+const endpoints = require('../../API_endpoints.json')
+
+const signOutSubmit = async (props) => {
+    await AsyncStorage.setItem('accessToken', "")
+    DevSettings.reload()
 }
 
 /* Delete user function here, saw the function in controller, not sure how to call it
@@ -32,6 +25,7 @@ const deleteButton = async (props) => {
 
 const SettingScreen = props => {
     useEffect(() => {
+        getProfile()
         BackHandler.addEventListener('hardwareBackPress', () => true)
         return () =>
           BackHandler.removeEventListener('hardwareBackPress', () => true)
@@ -40,31 +34,22 @@ const SettingScreen = props => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const profile = async () => {
-        try {
-            const userID = await secureStore.GetValue('UserId');
-            const accessToken = await secureStore.GetValue('JWT')
-            const url = cfg.domain + '/users/'
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: headers.authorized(accessToken)
-            });
-    
-          const responseJson = await response.json();
-          if (response.status === 200) {
-              setLastName(responseJson.lastName)
-              setFirstName(responseJson.firstName)
-              setEmail(userID)
-                
-          } else {
-            await handler.handle(response, props)
-          }
-        } catch (error) {
-            console.log(error)
-            Alert.alert(presenter.internalError())
+    const getProfile = async () => {
+        const response = await handler.sendRequest(
+            endpoints.Server.User.User.baseURL,
+            texts.HTTP.Get,
+            {},
+            false,
+            props
+        )
+        if (response.ok){
+            const responseJson = await response.json();
+            setLastName(responseJson.lastName)
+            setFirstName(responseJson.firstName)
+            setEmail(responseJson._id)
         }
     }
-    profile();
+
     return (
         <View style={styles.empty}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image} >
@@ -74,15 +59,15 @@ const SettingScreen = props => {
                     <Text style={styles.font}>{firstName + ' ' + lastName}</Text>
                     <Text style={styles.font}>{email}</Text>
                 </View>
-            
+
                 </View>
                 <View style={styles.buttonInRow}>
                 <TouchableOpacity
                     onPress={() => {
-                        signoutSubmit(props)
+                        signOutSubmit(props)
                     }}
                     style={styles.Button}>
-                    <Text style={styles.font}>Sign Out</Text>
+                    <Text style={styles.font}>{texts.Screens.Settings.SignOut}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                     onPress={() => {
@@ -91,14 +76,14 @@ const SettingScreen = props => {
                         })
                     }}
                     style={styles.Button}>
-                    <Text style={styles.font}>Reset Password</Text>
+                    <Text style={styles.font}>{texts.Screens.ResetPassword.ResetPassword}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                     onPress={() => {
                         deleteButton(props)
                     }}
                     style={styles.Button}>
-                    <Text style={styles.font}>Delete Myself</Text>
+                    <Text style={styles.font}>{texts.Screens.Settings.Delete}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.footer}>
@@ -124,15 +109,15 @@ const SettingScreen = props => {
                     }}>
                         <Image style={styles.icon} source={chat}/>
                     </TouchableOpacity>
-                        
+
                     </View>
-                    
+
                 </View>
             </ImageBackground>
-      
+
         </View>
-          
-          
+
+
         );
 };
 

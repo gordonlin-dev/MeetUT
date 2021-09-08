@@ -40,6 +40,10 @@
     "ResetPassword": {
       "ResetPassword": "Reset password",
       "NewPassword": "New password"
+    },
+    "Settings": {
+      "SignOut": "Sign out",
+      "Delete": "Delete this account"
     }
   },
   "HTTP": {
