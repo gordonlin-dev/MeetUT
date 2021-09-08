@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {View, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView, Text, SafeAreaView} from 'react-native'
+import {View, StyleSheet, Dimensions, TouchableOpacity, ScrollView, Text, SafeAreaView} from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import { AirbnbRating } from 'react-native-ratings';
 const {height, width} = Dimensions.get('window');
@@ -126,30 +126,5 @@ const SpecificHobby = props => {
           </SafeAreaView>
     );
 };
-
-const none = StyleSheet.create({
-    header: {
-        fontSize:50,
-        marginLeft: width * 0.34,
-        color: "white",
-        fontFamily: 'timeburner',
-    },
-    headerFont: {
-        fontFamily: 'timeburner',
-        fontSize:17,
-        color: "black",
-    },
-    quizFont: {
-        fontFamily: 'timeburner',
-        fontSize:17,
-        color: "black"  
-    },
-    leftFont: {
-        fontFamily: 'timeburner',
-        fontSize:12,
-        color: "black",  
-        marginLeft: width*0.11,
-    },
-  });
 
 export default SpecificHobby;

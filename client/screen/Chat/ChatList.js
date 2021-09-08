@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 
-import {View, TouchableOpacity, StyleSheet, Button, Image, Dimensions, SafeAreaView, FlatList, Text, TouchableHighlight, BackHandler} from 'react-native'
+import {View, TouchableOpacity, StyleSheet, Image, Dimensions, SafeAreaView, FlatList, Text, BackHandler} from 'react-native'
 
 import Swipeable from 'react-native-swipeable-row';
 

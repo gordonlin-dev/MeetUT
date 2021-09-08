@@ -65,7 +65,7 @@ const SignupScreen = props => {
     return (
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
             <ScrollView>
-                <KeyboardAvoidingView  style={customStyles.Main} behavior={"padding"} keyboardVerticalOffset = {useHeaderHeight()}>
+                <KeyboardAvoidingView  style={styles.Main} behavior={"padding"} keyboardVerticalOffset = {useHeaderHeight()}>
                     <Text style={styles.signUpHeader}>
                         {texts.Global.Common.SignUp}
                     </Text>
@@ -120,12 +120,5 @@ const SignupScreen = props => {
         </ImageBackground>
     );
 };
-
-const {height, width} = Dimensions.get('window');
-const customStyles = StyleSheet.create({
-    Main : {
-        paddingTop: height*0.05
-    }
-})
 
 export default SignupScreen;

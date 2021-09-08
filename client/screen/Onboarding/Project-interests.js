@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Dimensions, TouchableOpacity, Text} from 'react-native';
+import { View, TouchableOpacity, Text} from 'react-native';
 import MultiSelect from 'react-native-multiple-select';
-const {height, width} = Dimensions.get('window');
 import {styles} from '../styles'
 const items = [{
     id: '1',

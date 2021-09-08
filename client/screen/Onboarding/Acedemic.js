@@ -1,5 +1,5 @@
-import React, { Component, useState } from 'react';
-import { View, SafeAreaView, Dimensions, TouchableOpacity, Text, ScrollView} from 'react-native';
+import React, { useState } from 'react';
+import { View, SafeAreaView, TouchableOpacity, Text, ScrollView} from 'react-native';
 import { styles } from '../styles'; 
 import NestedListView from 'react-native-nested-listview'
 const secureStore = require('../../SecureStore')
