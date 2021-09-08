@@ -1,39 +1,27 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {styles} from '../styles';
-const presenter = require('../Presenter')
-const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png');
-const handler = require('../Handler')
 const fixer = require('../Fixer')
-const headers = require('../Headers')
-
-const secureStore = require('../../SecureStore')
+const texts = require("../../assets/Texts.json");
+const handler = require('../Handler')
+const endpoints = require('../../API_endpoints.json')
 
 
 const emailSubmit = async (email, props) => {
-    try {
-        email = fixer.email(email)
-        const url = cfg.domain + cfg.forgotPasswordResend;
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: headers.unauthorized(),
-            body: JSON.stringify({
-                _id: email,
-            })
-        });
-
-        if (response.status === 201) {
-            await secureStore.Save('UserId', email) // TODO: Find a way to remove dependency on secureStore for this segment
-            props.navigation.navigate({
-                routeName: 'ForgotPassword'
-            })
-        } else {
-            await handler.handle(response, props)
-        }
-    } catch (error) {
-        console.log(error)
-        Alert.alert(presenter.internalError())
+    const body = {
+        _id : email
+    }
+    const response = await handler.sendRequest(
+        endpoints.Server.User.User.ResendPasswordCode,
+        texts.HTTP.Post,
+        body,
+        false,
+        props
+    )
+    if(response.ok){
+        props.navigation.navigate('ForgotPassword',{
+        })
     }
 }
 const GetEmailScreen = props => {
@@ -50,17 +38,18 @@ const GetEmailScreen = props => {
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View>
                     <Text style={styles.verificationHeader}>
-                        Verification
+                        {texts.Screens.Verification.Verification}
                     </Text>
                     <View style={styles.pickerHeader}>
-                        <Text style={[styles.quizFont, {color: "white"}]}>Please Enter your email:</Text>
+                        <Text style={[styles.quizFont, {color: "white"}]}>{texts.Screens.Verification.EnterEmail}</Text>
                     </View>
-                    
+
                     <TextInput
                         style={styles.Input}
                         onChangeText={onChangeEmail}
                         value={email}
-                        placeholder="email"
+                        autoCapitalize='none'
+                        placeholder={texts.Global.Common.Email}
                         placeholderTextColor="white"
                     />
                     <TouchableOpacity
@@ -68,7 +57,7 @@ const GetEmailScreen = props => {
                             emailSubmit(email, props).then()
                         }}
                         style={styles.Button}>
-                        <Text style={styles.font}>Submit</Text>
+                        <Text style={styles.font}>{texts.Global.Common.Submit}</Text>
                     </TouchableOpacity>
                 </View>
             </ImageBackground>

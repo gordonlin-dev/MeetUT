@@ -1,13 +1,11 @@
 import React, {useState, useEffect} from 'react'
 import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native'
 import {styles} from '../styles';
-const presenter = require('../Presenter')
-const cfg = require('../cfg.json')
 const image = require('../../assets/bg.png');
+const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
-const headers = require('../Headers')
+const endpoints = require('../../API_endpoints.json')
 
-const secureStore = require('../../SecureStore')
 
 
 const emailSubmit = async (code, props) => {
@@ -77,14 +75,14 @@ const ForgotPasswordScreen = props => {
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View>
                     <Text style={styles.verificationHeader}>
-                        Verification
+                        {texts.Screens.Verification}
                     </Text>
-                    
+
                     <TextInput
                         style={styles.Input}
                         onChangeText={onChangeCode}
                         value={code}
-                        placeholder="code"
+                        placeholder={texts.Global.Common.Code}
                         placeholderTextColor="white"
                     />
                     <TouchableOpacity
@@ -92,14 +90,14 @@ const ForgotPasswordScreen = props => {
                             resend(props).then()
                         }}
                         style={styles.Button}>
-                        <Text style={styles.font}>Resend Code</Text>
+                        <Text style={styles.font}>{texts.Global.Common.ResendCode}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
                             emailSubmit(code, props).then()
                         }}
                         style={styles.Button}>
-                        <Text style={styles.font}>Submit</Text>
+                        <Text style={styles.font}>{texts.Global.Common.Submit}</Text>
                     </TouchableOpacity>
                 </View>
             </ImageBackground>

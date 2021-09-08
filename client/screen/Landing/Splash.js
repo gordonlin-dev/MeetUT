@@ -7,6 +7,7 @@ import {
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
 import {styles} from '../styles';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const texts = require("../../assets/Texts.json");
 const image = require("../../assets/Splash.png");
 
@@ -16,15 +17,19 @@ const Splash = props => {
       const response = await handler.sendRequest(endpoints.Server.User.Auth.ValidateJWT,
           texts.HTTP.Get,
           null,
-          false,
+          true,
           props)
       if(response.ok){
           setTimeout(() => {props.navigation.navigate('Home')}, 500)
-      }else{
+      } else if(response.status === 403){
+          await handler.handleResponse(response)
+      }
+      else{
           setTimeout(() => {setShowButtons(true)}, 500)
       }
     }
     useEffect(() => {
+        //AsyncStorage.setItem('accessToken', "123")
         validateJWT()
     }, []);
 

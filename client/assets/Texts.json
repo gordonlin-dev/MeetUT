@@ -34,7 +34,8 @@
   },
   "Screens": {
     "Verification" : {
-      "Verification" : "Verification"
+      "Verification" : "Verification",
+      "EnterEmail": "Please enter your email address:"
     }
   },
   "HTTP": {
