@@ -24,6 +24,7 @@ exports.passwordMatch = (req, res, next) =>{
 
 exports.jwtValid = (req, res, next) => {
     try {
+        console.log(req.body)
         let authorization = req.headers['authorization'].split(' ')
         req.jwt = jwt.verify(authorization[1], jwtSecret)
         req.body._id = req.jwt._id;
