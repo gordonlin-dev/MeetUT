@@ -2,12 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const {Alert, DevSettings} = require("react-native");
 const texts = require("../assets/Texts.json");
 
-exports.handleResponse = async (response, props) => {
+const handleResponse = async (response, props) => {
     if (response.status === 400) {
         const responseJson = await response.json();
         Alert.alert(texts.Alert.Title.UnableToProcess,
             responseJson,
             [{text: texts.Alert.Buttons.OK}])
+        return 0
 
     } else if (response.status === 401) {
         props.navigation.navigate({
@@ -18,29 +19,30 @@ exports.handleResponse = async (response, props) => {
             [{text: texts.Alert.Buttons.OK, onPress: () => props.navigation.navigate({
                     routeName: "Login"
                 })}])
-
+        return 0
     } else if (response.status === 403) {
         Alert.alert(texts.Alert.Title.Verification,
             texts.Alert.Message.Verification,
             [{text: texts.Alert.Buttons.OK, onPress: () => props.navigation.navigate({
                     routeName: "Verification"
                 })}])
-
+        return 0
     } else if (response.status === 404) {
         Alert.alert(texts.Alert.Title.Error,
             texts.Alert.Message.NotFound,
             [{text: texts.Alert.Buttons.OK, onPress: () => props.navigation.navigate({
                     routeName: "Login"
                 })}])
-
+        return 0
     } else {
         Alert.alert(texts.Alert.Title.Error,
             texts.Alert.Message.RestartApp,
             [{text: texts.Alert.Buttons.OK, onPress: () => DevSettings.reload()}])
+        return 0
     }
 }
 
-exports.sendRequest = async (url, method, body, unhandled, props) => {
+const sendRequest = async (url, method, body, unhandled, props) => {
     try {
         const token = await AsyncStorage.getItem('accessToken')
         let requestObject = {
@@ -57,19 +59,15 @@ exports.sendRequest = async (url, method, body, unhandled, props) => {
         if(unhandled || response.ok){
             return response
         }
-        await this.handleResponse(response, props)
+        console.log(response.status)
+        return await handleResponse(response, props)
     } catch(e) {
         console.log(e)
         Alert.alert(texts.Alert.Title.Error,
             texts.Alert.Message.RestartApp,
-            [{text: texts.Alert.Button.OK, onPress: () => DevSettings.reload()}])
+            [{text: texts.Alert.Buttons.OK, onPress: () => DevSettings.reload()}])
     }
 
 }
 
-exports.HTTP = {
-    Method : {
-        Get : 'Get',
-        Post : 'Post'
-    }
-}
+export {handleResponse,sendRequest}

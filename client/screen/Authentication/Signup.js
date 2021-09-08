@@ -1,21 +1,17 @@
 import React, {useState, useEffect} from 'react'
 import {
-    View,
     Text,
     BackHandler,
     TextInput,
     TouchableOpacity,
     ImageBackground,
-    Platform,
     KeyboardAvoidingView, ScrollView, StyleSheet, Dimensions
 } from 'react-native'
-import {Header, useHeaderHeight} from 'react-navigation-stack';
+import {useHeaderHeight} from 'react-navigation-stack';
 
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const presenter = require('../Presenter')
-const secureStore = require('../../SecureStore')
 const image = require('../../assets/bg.png');
 const handler = require('../Handler')
 const fixer = require('../Fixer')
@@ -71,27 +67,27 @@ const SignupScreen = props => {
             <ScrollView>
                 <KeyboardAvoidingView  style={customStyles.Main} behavior={"padding"} keyboardVerticalOffset = {useHeaderHeight()}>
                     <Text style={styles.signUpHeader}>
-                        Sign Up
+                        {texts.Global.Common.SignUp}
                     </Text>
                     <TextInput
                         style={styles.Input}
                         onChangeText={onChangeFirstName}
                         value={firstName}
-                        placeholder="first name"
+                        placeholder= {texts.Global.Common.Firstname}
                         placeholderTextColor="white"
                     />
                     <TextInput
                         style={styles.Input}
                         onChangeText={onChangeLastName}
                         value={lastName}
-                        placeholder="last name"
+                        placeholder={texts.Global.Common.Lastname}
                         placeholderTextColor="white"
                     />
                     <TextInput
                         style={styles.Input}
                         onChangeText={onChangeEmail}
                         value={email}
-                        placeholder="email"
+                        placeholder={texts.Global.Common.Email}
                         placeholderTextColor="white"
                         autoCapitalize='none'
                     />
@@ -100,7 +96,7 @@ const SignupScreen = props => {
                         onChangeText={onChangePassword}
                         value={password}
                         secureTextEntry={true}
-                        placeholder="password"
+                        placeholder={texts.Global.Common.Password}
                         placeholderTextColor="white"
                     />
 
@@ -109,7 +105,7 @@ const SignupScreen = props => {
                         onChangeText={onChangeNumber}
                         value={confirm}
                         secureTextEntry={true}
-                        placeholder="confirm password"
+                        placeholder={texts.Global.Common.ConfirmPassword}
                         placeholderTextColor="white"
                     />
                     <TouchableOpacity
@@ -117,7 +113,7 @@ const SignupScreen = props => {
                             await signupSubmit(firstName, lastName, email, password, confirm, props)
                         }}
                         style={styles.Button}>
-                        <Text style={styles.font}>Sign Up</Text>
+                        <Text style={styles.font}>{texts.Global.Common.SignUp}</Text>
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
             </ScrollView>

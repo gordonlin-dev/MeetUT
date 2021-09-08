@@ -19,9 +19,9 @@ const Splash = props => {
           true,
           props)
       if(response.ok){
-          setTimeout(() => {props.navigation.navigate('Home')}, 1000)
+          setTimeout(() => {props.navigation.navigate('Home')}, 500)
       }else{
-          setTimeout(() => {setShowButtons(true)}, 1000)
+          setTimeout(() => {setShowButtons(true)}, 500)
       }
     }
     useEffect(() => {
@@ -36,12 +36,12 @@ const Splash = props => {
                         <TouchableOpacity style={styles.Button}  onPress={() => {
                             props.navigation.navigate({routeName: 'Login'})
                         }}>
-                            <Text style={styles.font}>{texts.Splash.Buttons.Login}</Text>
+                            <Text style={styles.font}>{texts.Global.Common.Login}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.Button} onPress={() => {
                             props.navigation.navigate({routeName: 'Signup'})
                         }}>
-                            <Text style={styles.font}>{texts.Splash.Buttons.SignUp}</Text>
+                            <Text style={styles.font}>{texts.Global.Common.SignUp}</Text>
                         </TouchableOpacity>
                     </View>
                 </ImageBackground>

@@ -16,10 +16,16 @@
       "OK": "OK"
     }
   },
-  "Splash": {
-    "Buttons": {
+  "Global" : {
+    "Common" : {
       "Login": "Log in",
-      "SignUp": "Sign up"
+      "SignUp": "Sign up",
+      "Firstname" : "First name",
+      "Lastname" : "Last name",
+      "Email": "Email",
+      "Password": "Password",
+      "ConfirmPassword": "Confirm password",
+      "ForgotPassword": "Forgot password"
     }
   },
   "HTTP": {
