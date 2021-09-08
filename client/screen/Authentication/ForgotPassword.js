@@ -10,7 +10,9 @@ const endpoints = require('../../API_endpoints.json')
 
 
 const emailSubmit = async (code, props) => {
+    const email = await AsyncStorage.getItem('resetPasswordEmail')
     const body = {
+        _id:email,
         verification: code
     }
     const response = await handler.sendRequest(
