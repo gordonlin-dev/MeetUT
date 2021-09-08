@@ -115,6 +115,8 @@ exports.verifyForgot = (req, res, next) => { // TODO: Set max times
     UserModel.getPasswordCode(req.body._id).then((result) => {
         console.log(req.body)
         req.body.verification = getHash(cfg.codeSalt, req.body.verification)
+        console.log(result)
+        console.log(req.body.verification)
         if (req.body.verification === result) {
             req.body.active = true
             UserModel.activateUser(req.body._id).then(() => { return next() })
