@@ -7,7 +7,7 @@ const handleResponse = async (response, props) => {
         const responseJson = await response.json();
         console.log(responseJson)
         Alert.alert(texts.Alert.Title.UnableToProcess,
-            responseJson,
+            responseJson.error,
             [{text: texts.Alert.Buttons.OK}])
 
     } else if (response.status === 401) {

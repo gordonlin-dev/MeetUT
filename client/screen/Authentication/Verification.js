@@ -20,8 +20,7 @@ const verificationSubmit = async (code, props) => {
         props
     )
     if(response.ok){
-        const responseJson = response.json()
-        console.log(responseJson)
+        const responseJson = await response.json()
         await AsyncStorage.setItem('accessToken', responseJson.accessToken)
         props.navigation.navigate({
             routeName: 'Home'
