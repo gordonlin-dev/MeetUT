@@ -18,7 +18,7 @@ const resetSubmit = async (password, confirm, props) => {
         endpoints.Server.User.User.ResetPassword,
         texts.HTTP.Put,
         body,
-        true,
+        false,
         props
     )
     if(response.ok){

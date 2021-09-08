@@ -49,7 +49,7 @@ const sendRequest = async (url, method, body, unhandled, props) => {
                 'authorization': 'Bearer ' + token
             }
         }
-        if(method === texts.HTTP.Post) {
+        if(method !== texts.HTTP.Get) {
             requestObject.body = JSON.stringify(body)
         }
         const response = await fetch(url, requestObject);
