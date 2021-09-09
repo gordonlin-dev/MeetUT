@@ -3,8 +3,6 @@ import {Image, StyleSheet, Dimensions, BackHandler} from 'react-native'
 import socketClient  from "socket.io-client";
 import { GiftedChat } from 'react-native-gifted-chat';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const secureStore = require('../../SecureStore')
-const headers = require('../Headers')
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
@@ -16,12 +14,10 @@ const example_profilepic =  require('../../assets/logo.png')
 const ChatScreen = props => {
 
     const [messages, setMessages] = useState([]);
-    //const {chatID} = props.navigation.navigate.route.params;
     const roomID = props.navigation.state.params;
 
     const sendMessage = async (message) => {
-        const token = await AsyncStorage.getItem('accessToken')
-        socket.emit('message', {token: token, roomID: roomID, chatMessage:message})
+        socket.emit('message', {roomID: roomID, chatMessage:message})
     }
 
     const onSend = useCallback(async (message = []) => {
@@ -55,11 +51,6 @@ const ChatScreen = props => {
             getMessages()
             socket.emit('joinRoom', roomID)
         })
-        /*
-        socket.on('connection', () => {
-            getMessages()
-            socket.emit('joinRoom', roomID)
-        })*/
         socket.on('broadcast', (message) =>{
             console.log(message)
             message[0].user._id = 2

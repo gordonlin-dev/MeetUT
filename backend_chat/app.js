@@ -4,7 +4,6 @@ const bodyParser = require('body-parser')
 const ChatRouter = require('./routes.config')
 const ChatModel = require('./chat.model')
 const app = express();
-const socketioJwt = require('socketio-jwt');
 const jwtSecret = require("./env.config").jwt_secret
 const jwt = require('jsonwebtoken')
 
@@ -34,20 +33,3 @@ io.on('connection', async (socket) => {
         }
     })
 });
-
-/*
-io.on('connection', socketioJwt.authorize({
-        secret: jwtSecret,
-        timeout: 5000
-    })).on('authenticated', async (socket) => {
-        socket.on('joinRoom', (data) => {
-        socket.join(data)
-        })
-        socket.on('message', async (data) => {
-            const jwtToken = jwt.verify(data.token, jwtSecret)
-            const userId = jwtToken._id;
-            await ChatModel.addMessage(userId, data.roomID, data.chatMessage)
-            socket.in(data.roomID).emit('broadcast', data.chatMessage)
-        })
-    });
-*/
