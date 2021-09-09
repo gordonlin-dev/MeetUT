@@ -2,13 +2,37 @@ import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, Touchabl
 
 const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
+    detailContainer: {
+        position: "absolute",
+        paddingBottom: height * 0.1,
+        left: width * 0.03,
+        top: height *0.31
+    },
+
+    infoContainer: {
+        backgroundColor: '#9DD6EB',
+        height: height * 0.28,
+        width: width,
+        position: "absolute",
+        top: 0,
+        alignItems: 'center',
+    },
+    homeButton: {
+        width: width * 0.4,
+        height: height * 0.06,
+        marginBottom: height * 0.04,
+        marginLeft: width*0.05,
+        marginRight: width*0.05,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        backgroundColor: 'white',
     ButtonView : {
         position: 'absolute',
         bottom:0
     },
     Main : {
         paddingTop: height*0.05,
-
     },
     onboardEmpty: {
 
@@ -101,7 +125,7 @@ const styles = StyleSheet.create({
 
     buttonContainer:{
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         marginTop: height * 0.02,
         marginBottom: height * 0.02
     },
@@ -122,7 +146,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         position: "absolute",
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         alignItems: 'stretch',
         backgroundColor: '#3590F2',
         height: height * 0.1,
@@ -132,12 +156,12 @@ const styles = StyleSheet.create({
     footerButton:{
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginTop: height * 0.005
+        marginTop: height * 0.025
     },
     wrapper: {},
     text: {
-        color: '#fff',
-        fontSize: 30,
+        color: '#000',
+        fontSize: 25,
         fontWeight: 'bold'
     },
     icon: {
@@ -253,7 +277,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#9DD6EB',
+        backgroundColor: 'white',
         flexDirection: 'row',
     },
     buttonText: {
