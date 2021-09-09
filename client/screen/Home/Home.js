@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {View, Image, StyleSheet, Button, BackHandler, Dimensions, SafeAreaView, TouchableOpacity} from 'react-native'
+import Footer from "../Footer";
 import ProfileCard from "./ProfileCard";
 import { styles } from '../styles';
 const home =  require('../../assets/home-icon.png');
@@ -20,6 +21,18 @@ const HomeScreen = props => {
     const [users, setUsers] = useState([])
 
     const loadUser = async () => {
+        const matchResponse = await handler.sendRequest(
+            endpoints.Server.User.User.baseURL,
+            texts.HTTP.Get,
+            {},
+            false,
+            props
+        )
+        if(matchResponse.ok){
+            const responseJson = await matchResponse.json();
+            console.log(responseJson)
+        }
+        /*Don't have match user from the responseJson for now */
         const body = {
             excludedUsers:[]
         }
@@ -43,32 +56,8 @@ const HomeScreen = props => {
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.empty}>
-                {/* <ProfileCard style={styles.homeBg} users={users}/> */}
-
-
-                <View style={styles.footer}>
-                <View style={styles.footerButton}>
-                <TouchableOpacity onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'Setting'
-                        })
-                    }}>
-                    <Image style={styles.icon} source={setting}/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => {}}>
-                    <Image style={styles.icon} source={home}/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'ChatList'
-                        })
-                    }}>
-                    <Image style={styles.icon} source={chat}/>
-                </TouchableOpacity>
-
-                </View>
-
-            </View>
+                {/*<ProfileCard style={styles.homeBg} users={users}/>*/}
+            <Footer navigation={props.navigation}/>
             </View>
         </SafeAreaView>
     )

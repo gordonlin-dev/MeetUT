@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, BackHandler, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native'
+import {View, Text, BackHandler, TextInput, TouchableOpacity, ImageBackground, Dimensions} from 'react-native'
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+const {height, width} = Dimensions.get('window');
 const image = require('../../assets/bg.png');
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
@@ -42,7 +42,7 @@ const ResetPasswordScreen = props => {
     return (
         <View style={styles.empty}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-                <Text style={styles.header}>
+                <Text style={[styles.header, {fontSize: 41, marginLeft: width*0.1}]}>
                     {texts.Screens.ResetPassword.ResetPassword}
                 </Text>
                 <View>

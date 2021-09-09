@@ -17,7 +17,11 @@ const Footer = props => {
                 }}>
                 <Image style={styles.icon} source={setting}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => {
+                    props.navigation.navigate({
+                        routeName: 'Home'
+                    })
+                }}>
                 <Image style={styles.icon} source={home}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {

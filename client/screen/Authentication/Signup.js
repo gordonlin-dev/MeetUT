@@ -17,7 +17,7 @@ const handler = require('../Handler')
 const fixer = require('../Fixer')
 const endpoints = require('../../API_endpoints.json')
 const texts = require("../../assets/Texts.json");
-
+const {height, width} = Dimensions.get('window');
 const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
     try {
         const body = {
@@ -65,8 +65,8 @@ const SignupScreen = props => {
     return (
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
             <ScrollView>
-                <KeyboardAvoidingView  style={styles.Main} behavior={"padding"} keyboardVerticalOffset = {useHeaderHeight()}>
-                    <Text style={styles.signUpHeader}>
+                <KeyboardAvoidingView  style={{paddingTop: height*0.05}} behavior={"padding"} keyboardVerticalOffset = {useHeaderHeight()}>
+                    <Text style={inpageStyle.signUpHeader}>
                         {texts.Global.Common.SignUp}
                     </Text>
                     <TextInput
@@ -120,5 +120,13 @@ const SignupScreen = props => {
         </ImageBackground>
     );
 };
-
+const inpageStyle = StyleSheet.create({
+    signUpHeader: {
+        fontSize: 50,
+        marginLeft: width * 0.27,
+        marginBottom: height * 0.03,
+        color: "white",
+        fontFamily: 'timeburner',
+    },
+})
 export default SignupScreen;

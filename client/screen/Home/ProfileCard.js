@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react'
-import {View, Text, TouchableOpacity, Image, Dimensions, SafeAreaView, Alert} from 'react-native'
+import {View, Text, TouchableOpacity, Image, Dimensions, StyleSheet, SafeAreaView, Alert} from 'react-native'
 import Swiper from 'react-native-swiper'
 import {styles} from '../styles';
 const presenter = require('../Presenter')
 const secureStore = require('../../SecureStore')
 const headers = require('../Headers')
 const logo =  require('../../assets/logo.png');
+const {height, width} = Dimensions.get('window');
 const ProfileCard = props => {
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -13,7 +14,7 @@ const ProfileCard = props => {
     const ref = useRef(null)
     const [ index, setIndex ] = useState ( 0 )
     const matches = props.users;
-
+    console.log(matches)
     const nextUser = async (props) => {
         for (let i = 0; i < matches.length; i++) {
             if (matches[i] == props) {
@@ -24,7 +25,7 @@ const ProfileCard = props => {
                     /* Need to handle when reach last user
                     */
                     return (
-                        <View style={styles.infoContainer}>
+                        <View style={inpageStyle.infoContainer}>
                             <Text style={styles.quizFont}>You've reached the end of the list</Text>
                         </View>
                     );
@@ -73,16 +74,16 @@ const ProfileCard = props => {
     return(
         <SafeAreaView style={styles.homeBg}>
             
-            <Swiper style={styles.wrapper} loop={false}
+            <Swiper style={{}} loop={false}
               ref={ref}
               showsButtons={false}
               showsPagination={false}
               index={index}
               >
-                {matches.map((props) => {
+                {props.users.map((props) => {
                     return (
-                        <View style={styles.slide} key={props.userId}>
-                            <View style={styles.infoContainer}>
+                        <View style={inpageStyle.slide} key={props.userId}>
+                            <View style={inpageStyle.infoContainer}>
                                 <Image style={styles.avatar} source={logo}/>
 
                                 <View >
@@ -90,17 +91,17 @@ const ProfileCard = props => {
                                     <Text style={styles.quizFont}> Similarity: </Text>
                                 </View>
 
-                                <View style={styles.buttonContainer}>
-                                    <TouchableOpacity style={styles.homeButton} onPress={async () => {await nextUser(props)}}> 
+                                <View style={inpageStyle.buttonContainer}>
+                                    <TouchableOpacity style={inpageStyle.homeButton} onPress={async () => {await nextUser(props)}}> 
                                         <Text style={styles.quizFont}>Archive</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.homeButton} onPress={async () => {await sendLike(props)}}> 
+                                    <TouchableOpacity style={inpageStyle.homeButton} onPress={async () => {await sendLike(props)}}> 
                                         <Text style={styles.quizFont}>Chat</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
                             
-                            <View style={styles.detailContainer}>
+                            <View style={inpageStyle.detailContainer}>
                                 <Text style={styles.text}> Education </Text>
                                 {props.programs.map((props) => {
                                     return (
@@ -124,4 +125,44 @@ const ProfileCard = props => {
     )
 }
 
+const inpageStyle = StyleSheet.create({
+    detailContainer: {
+        position: "absolute",
+        paddingBottom: height * 0.1,
+        left: width * 0.03,
+        top: height *0.31
+    },
+    infoContainer: {
+        backgroundColor: '#9DD6EB',
+        height: height * 0.28,
+        width: width,
+        position: "absolute",
+        top: 0,
+        alignItems: 'center',
+    },
+    homeButton: {
+        width: width * 0.4,
+        height: height * 0.06,
+        marginBottom: height * 0.04,
+        marginLeft: width * 0.05,
+        marginRight: width * 0.05,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        backgroundColor: 'white',
+    },
+    buttonContainer:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: height * 0.02,
+        marginBottom: height * 0.02
+    },
+    slide: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        flexDirection: 'row'
+    },
+ })
 export default ProfileCard

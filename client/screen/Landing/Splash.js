@@ -37,7 +37,7 @@ const Splash = props => {
         return (
             <View style={styles.empty}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-                    <View style={styles.ButtonView}>
+                    <View style={{position: 'absolute', bottom:0}}>
                         <TouchableOpacity style={styles.Button}  onPress={() => {
                             props.navigation.navigate({routeName: 'Login'})
                         }}>

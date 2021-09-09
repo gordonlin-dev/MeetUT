@@ -71,8 +71,8 @@ const Demographics = props => {
                 </View>
 
             <SafeAreaView style={styles.scrollViewContainer}>
-                <ScrollView style={styles.scrollView}>
-                    <Image style={styles.avator} source={logo}/>
+                <ScrollView style={{marginTop: height*0.05,}}>
+                    <Image style={{height: height*0.08, width: width*0.12}} source={logo}/>
                 </ScrollView>
             </SafeAreaView>
 

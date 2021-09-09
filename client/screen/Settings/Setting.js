@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, Image, BackHandler, ImageBackground, TouchableOpacity, Alert, DevSettings} from 'react-native'
+import {View, Text, Image, BackHandler, ImageBackground, TouchableOpacity, Dimensions, StyleSheet, DevSettings} from 'react-native'
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const home =  require('../../assets/home-icon.png');
-const setting =  require('../../assets/setting-icon.png');
-const chat =  require('../../assets/chat-icon.png');
+import Footer from '../Footer';
 const image =  require('../../assets/bg.png');
 const logo = require('../../assets/logo.png')
 
@@ -12,6 +10,7 @@ const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
 
+const {height, width} = Dimensions.get('window')
 const signOutSubmit = async (props) => {
     await AsyncStorage.setItem('accessToken', "")
     DevSettings.reload()
@@ -53,15 +52,15 @@ const SettingScreen = props => {
     return (
         <View style={styles.empty}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image} >
-                <View style={styles.profile}>
+                <View style={inpageStyle.profile}>
                     <Image style={styles.avatar} source={logo}/>
-                <View style={styles.chat}>
+                <View style={{height: height*0.1, marginLeft: width*0.02}}>
                     <Text style={styles.font}>{firstName + ' ' + lastName}</Text>
                     <Text style={styles.font}>{email}</Text>
                 </View>
 
                 </View>
-                <View style={styles.buttonInRow}>
+                <View style={{marginTop: 0}}>
                 <TouchableOpacity
                     onPress={() => {
                         signOutSubmit(props)
@@ -86,33 +85,7 @@ const SettingScreen = props => {
                     <Text style={styles.font}>{texts.Screens.Settings.Delete}</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={styles.footer}>
-                    <View style={styles.footerButton}>
-                    <TouchableOpacity onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'Setting'
-                        })
-                    }}>
-                        <Image style={styles.icon} source={setting}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'Home'
-                        })
-                    }}>
-                        <Image style={styles.icon} source={home}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'ChatList'
-                        })
-                    }}>
-                        <Image style={styles.icon} source={chat}/>
-                    </TouchableOpacity>
-
-                    </View>
-
-                </View>
+                <Footer navigation={props.navigation}/>
             </ImageBackground>
 
         </View>
@@ -121,5 +94,14 @@ const SettingScreen = props => {
         );
 };
 
-
+const inpageStyle = StyleSheet.create({
+    profile: {
+        position: "absolute",
+        height: height*0.1,
+        width: width,
+        top: 0,
+        backgroundColor: "white",
+        flexDirection: 'row'
+    },
+})
 export default SettingScreen;

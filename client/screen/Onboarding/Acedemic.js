@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, SafeAreaView, TouchableOpacity, Text, ScrollView} from 'react-native';
+import { View, SafeAreaView, TouchableOpacity, Text, ScrollView, StyleSheet, Dimensions} from 'react-native';
 import { styles } from '../styles'; 
 import NestedListView from 'react-native-nested-listview'
 const secureStore = require('../../SecureStore')
 const headers = require('../Headers')
-
+const {height, width} = Dimensions.get('window');
 const Acedemic = (props) => {
     const [programs, setPrograms] = useState([]);
     const [chosen, setChosen] = useState([]);
@@ -134,7 +134,7 @@ const Acedemic = (props) => {
                 </ScrollView>
             </View>
             
-                <View style={styles.quizeFooter}>
+                <View style={inpageStyle.quizeFooter}>
                 <TouchableOpacity 
                     style={styles.quizLeftButton}
                     onPress={() => {
@@ -161,4 +161,13 @@ const Acedemic = (props) => {
   
 }
 
+const inpageStyle = StyleSheet.create ({
+    quizeFooter: {
+        position: "absolute",
+        backgroundColor: '#e1e1ea',
+        height: height * 0.1,
+        width: width,
+        top: height*0.82
+    },
+})
 export default Acedemic;

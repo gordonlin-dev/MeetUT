@@ -2,39 +2,6 @@ import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, Touchabl
 
 const {height, width} = Dimensions.get('window');
 const styles = StyleSheet.create({
-    detailContainer: {
-        position: "absolute",
-        paddingBottom: height * 0.1,
-        left: width * 0.03,
-        top: height *0.31
-    },
-
-    infoContainer: {
-        backgroundColor: '#9DD6EB',
-        height: height * 0.28,
-        width: width,
-        position: "absolute",
-        top: 0,
-        alignItems: 'center',
-    },
-    homeButton: {
-        width: width * 0.4,
-        height: height * 0.06,
-        marginBottom: height * 0.04,
-        marginLeft: width * 0.05,
-        marginRight: width * 0.05,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        backgroundColor: 'white',
-    },
-    ButtonView : {
-        position: 'absolute',
-        bottom:0
-    },
-    Main : {
-        paddingTop: height*0.05,
-    },
     onboardEmpty: {
 
     },
@@ -120,16 +87,6 @@ const styles = StyleSheet.create({
         height: height*0.08,
         flexDirection: 'row',
     },
-    buttonInRow: {
-        marginTop: 0
-    },
-
-    buttonContainer:{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: height * 0.02,
-        marginBottom: height * 0.02
-    },
     empty:{
         flex:1,
     },
@@ -138,13 +95,7 @@ const styles = StyleSheet.create({
         height: height*0.85,
         width: width,
     },
-    quizeFooter: {
-        position: "absolute",
-        backgroundColor: '#e1e1ea',
-        height: height * 0.1,
-        width: width,
-        top: height*0.82
-    },
+    
     footer: {
         position: "absolute",
         justifyContent: 'space-between',
@@ -159,7 +110,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         marginTop: height * 0.025
     },
-    wrapper: {},
     text: {
         color: '#000',
         fontSize: 25,
@@ -234,13 +184,7 @@ const styles = StyleSheet.create({
         color: "white",
         fontFamily: 'timeburner',
     },
-    signUpHeader: {
-        fontSize: 50,
-        marginLeft: width * 0.27,
-        marginBottom: height * 0.03,
-        color: "white",
-        fontFamily: 'timeburner',
-    },
+    
     verificationHeader: {
         fontSize: 50,
         marginLeft: width * 0.15,
@@ -259,57 +203,12 @@ const styles = StyleSheet.create({
         marginLeft: width * 0.39,
         marginBottom: height * 0.03
     },
-    rightButton:{
-        position: "absolute",
-        right: 0,
-    },
-    leftButton:{
-        position: "absolute",
-        left: 0
-    },
-    profilebg: {
-        marginTop: height * 0.05,
-        marginBottom: height * 0.08,
-        marginLeft: width * 0.1,
-        height: height * 0.6,
-        width: width * 0.8
-    },
-    slide: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        flexDirection: 'row'
-    },
-    buttonText: {
-        color: '#3590F2',
-        fontSize: 50,
-        fontWeight: 'bold'
-    },
-    profile: {
-        position: "absolute",
-        height: height*0.1,
-        width: width,
-        top: 0,
-        backgroundColor: "white",
-        flexDirection: 'row'
-    },
     avatar: {
         marginTop: height*0.01,
         marginLeft: width*0.01,
         height: height*0.08,
         width: width*0.16,
         borderRadius: 400/ 2,
-    },
-
-    avator: {
-        height: height*0.08,
-        width: width*0.12
-    },
-    chat: {
-        height: height*0.1,
-        marginLeft: width*0.02
-
     },
     headerFont: {
         fontFamily: 'timeburner',
@@ -351,9 +250,6 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderColor: "black",
         backgroundColor: 'white'
-    },
-    scrollView: {
-        marginTop: height*0.05,
     },
     leftFont: {
         fontFamily: 'timeburner',
