@@ -21,12 +21,13 @@ const styles = StyleSheet.create({
         width: width * 0.4,
         height: height * 0.06,
         marginBottom: height * 0.04,
-        marginLeft: width*0.05,
-        marginRight: width*0.05,
+        marginLeft: width * 0.05,
+        marginRight: width * 0.05,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 15,
         backgroundColor: 'white',
+    },
     ButtonView : {
         position: 'absolute',
         bottom:0
@@ -278,7 +279,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
-        flexDirection: 'row',
+        flexDirection: 'row'
     },
     buttonText: {
         color: '#3590F2',
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 15,
         borderColor: "black",
-        backgroundColor: 'white',
+        backgroundColor: 'white'
     },
     quizRightButton: {
         position: 'absolute',
@@ -349,7 +350,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 15,
         borderColor: "black",
-        backgroundColor: 'white',
+        backgroundColor: 'white'
     },
     scrollView: {
         marginTop: height*0.05,
@@ -358,8 +359,8 @@ const styles = StyleSheet.create({
         fontFamily: 'timeburner',
         fontSize:12,
         color: "black",
-        left: width*0.11,
-    },
+        left: width*0.11
+    }
 });
 
 export { styles };

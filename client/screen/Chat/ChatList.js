@@ -4,16 +4,19 @@ import {View, TouchableOpacity, StyleSheet, Image, Dimensions, SafeAreaView, Fla
 
 import Swipeable from 'react-native-swipeable-row';
 
-const secureStore = require('../../SecureStore')
-const headers = require('../Headers')
 
 const logo = require('../../assets/logo.png');
 const home =  require('../../assets/home-icon.png');
 const setting =  require('../../assets/setting-icon.png');
 const chat =  require('../../assets/chat-icon.png');
 const {height, width} = Dimensions.get('window');
+const texts = require("../../assets/Texts.json");
+const handler = require('../Handler')
+const endpoints = require('../../API_endpoints.json')
+
 const ChatListScreen = props => {
     useEffect(() => {
+        loadChat()
         BackHandler.addEventListener('hardwareBackPress', () => true)
         return () =>
           BackHandler.removeEventListener('hardwareBackPress', () => true)
@@ -21,31 +24,22 @@ const ChatListScreen = props => {
     const [chatList, setChatList] = useState([])
 
     const loadChat = async () => {
-        try {
-            const userId = await secureStore.GetValue('UserId'); // TODO: Find a way to remove dependency on UserId
-            const accessToken = await secureStore.GetValue('JWT')
-            let url = 'https://meet-ut-3.herokuapp.com/chat'
-            url = url + "/" + userId
-            const response = await fetch(url, {
-                method : 'GET',
-                headers: headers.authorized(accessToken),
-            });
+        const response = await handler.sendRequest(
+            endpoints.Server.Chat.GetChatList,
+            texts.HTTP.Get,
+            {},
+            false,
+            props
+        )
+        if (response.ok){
             const responseJson = await response.json();
             setChatList(responseJson)
-        }catch (e) {
-            console.log(e)
         }
     }
-    useEffect( () => {
-        loadChat()
-    }, []);
 
     const rightButtons = [
     <TouchableOpacity style={styles.Button}>
-        <Text style={styles.font}>Block</Text>
-    </TouchableOpacity>,
-    <TouchableOpacity style={styles.Button}>
-        <Text style={styles.font}>Archive</Text>
+        <Text style={styles.font}>Delete</Text>
     </TouchableOpacity>
     ];
     console.log(chatList)
@@ -53,7 +47,7 @@ const ChatListScreen = props => {
         <SafeAreaView>
             <View>
             <FlatList data={chatList}
-                        renderItem={({item}) => 
+                        renderItem={({item}) =>
                             <Swipeable leftContent={<Text style={styles.font}>Read</Text>} rightButtons={rightButtons}>
                                 <View style={styles.list}>
                                     <Image style={styles.avatar} source={logo}/>
@@ -66,20 +60,15 @@ const ChatListScreen = props => {
                                         <View>
                                         <Text style={styles.name}>{item.participants[0]}</Text>
                                         </View>
-                                        
-                                        
-
                                     </TouchableOpacity>
-                                
+
                                 </View>
-                                
+
                             </Swipeable>
-                             
+
                         }
                         keyExtractor={(item, _id) => _id.toString()}
                     />
-            
-                
             </View>
             <View style={styles.footer}>
                 <View style={styles.footerButton}>
@@ -104,9 +93,9 @@ const ChatListScreen = props => {
                   }}>
                       <Image style={styles.icon} source={chat}/>
                   </TouchableOpacity>
-                    
+
                 </View>
-                
+
             </View>
         </SafeAreaView>
     )
@@ -163,7 +152,7 @@ const styles = StyleSheet.create({
     chat: {
         height: height*0.1,
         marginLeft: width*0.02
-        
+
     }
 });
 export default ChatListScreen

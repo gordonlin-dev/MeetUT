@@ -64,7 +64,7 @@ const HomeScreen = props => {
 
     useEffect(() => {
         //loadData();
-        loadUser()
+        //loadUser()
     }, []);
 
     useEffect(() => {
@@ -73,7 +73,7 @@ const HomeScreen = props => {
             setFirstName(users[curUser].firstName)
             setLastName(users[curUser].lastName)
         }
-        
+
     }, [users, curUser]);
 
     return(
