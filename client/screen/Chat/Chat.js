@@ -39,8 +39,7 @@ const ChatScreen = props => {
             setMessages(previousMessages => GiftedChat.append(previousMessages, messages, false))
         }
     }
-
-    useEffect(async () => {
+    const connectToSocket = async () => {
         const token = await AsyncStorage.getItem('accessToken')
         socket = socketClient(endpoints.Server.Chat.baseURL)
         socket.on('connect', () =>{
@@ -56,17 +55,22 @@ const ChatScreen = props => {
             message[0].user._id = 2
             setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
         })
+    }
+    useEffect(() => {
+        connectToSocket().then()
     }, []);
 
     useEffect( () => () => {
         console.log('disconnect')
         socket.disconnect()
+
     }, [] );
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', () => true)
-        return () =>
-          BackHandler.removeEventListener('hardwareBackPress', () => true)
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', () => true)
+        }
     }, [])
     return (
         <GiftedChat

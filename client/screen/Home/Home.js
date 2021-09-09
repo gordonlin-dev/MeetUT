@@ -2,13 +2,14 @@ import React, {useState, useEffect} from 'react'
 import {View, Image, StyleSheet, Button, BackHandler, Dimensions, SafeAreaView, TouchableOpacity} from 'react-native'
 import ProfileCard from "./ProfileCard";
 import { styles } from '../styles';
-const handler = require('../Handler')
 const home =  require('../../assets/home-icon.png');
 const setting =  require('../../assets/setting-icon.png');
 const chat =  require('../../assets/chat-icon.png');
-const headers = require('../Headers')
 
-const secureStore = require('../../SecureStore')
+const texts = require("../../assets/Texts.json");
+const handler = require('../Handler')
+const endpoints = require('../../API_endpoints.json')
+
 const HomeScreen = props => {
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', () => true)
@@ -16,70 +17,34 @@ const HomeScreen = props => {
           BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
 
-    const [email, setEmail] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [curUser, setCurUser] = useState(0);
     const [users, setUsers] = useState([])
 
-    const loadData = async () => {
-        try{
-            const accessToken = await secureStore.GetValue('JWT');
-            const userId = await secureStore.GetValue('UserId');
-            const url = 'https://meet-ut-2.herokuapp.com/users/' + userId;
-            const response = await fetch(url, {
-                method : 'GET',
-                headers: headers.authorized(accessToken),
-            });
-            const responseJson = await response.json();
-            setEmail(responseJson.email);
-            setFirstName(responseJson.firstName);
-            setLastName(responseJson.lastName);
-
-        }catch (e){
-            console.log(e)
-        }
-    }
-
     const loadUser = async () => {
-        try{
-            const userID = await secureStore.GetValue('UserId');
-            const accessToken = await secureStore.GetValue('JWT')
-            const url = 'https://meet-ut-1.herokuapp.com/user/recommendations'
-            const response = await fetch(url, {
-                method : 'POST',
-                headers: headers.authorized(accessToken),
-                body:JSON.stringify({
-                    curUser: userID,
-                    excludedUsers:[]
-                })
-            });
+        const body = {
+            excludedUsers:[]
+        }
+        const response = await handler.sendRequest(
+            endpoints.Server.Onboarding.Recommendations,
+            texts.HTTP.Post,
+            body,
+            false,
+            props
+        )
+        if(response.ok){
             const responseJson = await response.json();
             setUsers(responseJson)
-
-        }catch (e) {
-            console.log(e)
         }
     }
 
     useEffect(() => {
-        //loadData();
-        //loadUser()
+        loadUser()
     }, []);
-
-    useEffect(() => {
-        //loadData();
-        if(users.length > 0){
-            setFirstName(users[curUser].firstName)
-            setLastName(users[curUser].lastName)
-        }
-
-    }, [users, curUser]);
 
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.empty}>
-                <ProfileCard style={styles.homeBg} users={users}/>
+                {/* <ProfileCard style={styles.homeBg} users={users}/> */}
+
 
                 <View style={styles.footer}>
                 <View style={styles.footerButton}>
