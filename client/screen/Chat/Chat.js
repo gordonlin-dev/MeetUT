@@ -2,8 +2,12 @@ import React, {useState, useEffect, useCallback} from 'react'
 import {Image, StyleSheet, Dimensions, BackHandler} from 'react-native'
 import socketClient  from "socket.io-client";
 import { GiftedChat } from 'react-native-gifted-chat';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const secureStore = require('../../SecureStore')
 const headers = require('../Headers')
+const texts = require("../../assets/Texts.json");
+const handler = require('../Handler')
+const endpoints = require('../../API_endpoints.json')
 
 let socket;
 const {height, width} = Dimensions.get('window');
@@ -16,9 +20,8 @@ const ChatScreen = props => {
     const roomID = props.navigation.state.params;
 
     const sendMessage = async (message) => {
-        const userID = await secureStore.GetValue('UserId');
-        console.log(message)
-        socket.emit('message', {userID: userID, roomID: roomID, chatMessage:message})
+        const token = await AsyncStorage.getItem('accessToken')
+        socket.emit('message', {token: token, roomID: roomID, chatMessage:message})
     }
 
     const onSend = useCallback(async (message = []) => {
@@ -27,30 +30,25 @@ const ChatScreen = props => {
     }, [])
 
     const getMessages = async () => {
-        try{
-            const userID = await secureStore.GetValue('UserId'); // TODO: Find a way to remove dependency on UserId
-            const accessToken = await secureStore.GetValue('JWT')
-            let url = 'https://meet-ut-3.herokuapp.com/chat'
-            url = url + "/" + userID
-            url = url + "/room/" + roomID
-            const response = await fetch(url, {
-                method : 'GET',
-                headers: headers.authorized(accessToken),
-            });
+        const response = await handler.sendRequest(
+            endpoints.Server.Chat.GetChatRoom + roomID,
+            texts.HTTP.Get,
+            {},
+            false,
+            props
+        )
+        if(response.ok){
             const responseJson = await response.json();
             const messages = responseJson.messages
             setMessages(previousMessages => GiftedChat.append(previousMessages, messages, false))
-
-        }catch (e) {
-            console.log(e)
         }
     }
 
     useEffect(async () => {
-        const jwt = await secureStore.GetValue('JWT');
-        socket = socketClient("https://meet-ut-3.herokuapp.com/")
+        const token = await AsyncStorage.getItem('accessToken')
+        socket = socketClient(endpoints.Server.Chat.baseURL)
         socket.on('connect', () =>{
-                socket.emit('authenticate', {jwt})
+                socket.emit('authenticate', token)
             }
         );
         socket.on('authenticated', () =>{

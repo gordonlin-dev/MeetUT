@@ -19,7 +19,9 @@
       }
     },
     "Chat": {
-      "GetChatList": "https://meet-ut-3.herokuapp.com/chat"
+      "baseURL": "https://meet-ut-3.herokuapp.com/",
+      "GetChatList": "https://meet-ut-3.herokuapp.com/chat",
+      "GetChatRoom": "https://meet-ut-3.herokuapp.com/chat/room/"
     },
     "Onboarding": {
 

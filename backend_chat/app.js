@@ -6,6 +6,7 @@ const ChatModel = require('./chat.model')
 const app = express();
 const socketioJwt = require('socketio-jwt');
 const jwtSecret = require("./env.config").jwt_secret
+const jwt = require('jsonwebtoken')
 
 app.use(bodyParser.json())
 
@@ -14,18 +15,27 @@ const server = app.listen(process.env.PORT || 4000,
 ChatRouter.routesConfig(app)
 const io = socket(server);
 
-/*
-io.on('connection', async (socket) => {
-    socket.emit('connection', null);
-    socket.on('joinRoom', (data) => {
-        socket.join(data)
-    })
-    socket.on('message', async (data) => {
-        await ChatModel.addMessage(data.userID, data.roomID, data.chatMessage)
-        socket.in(data.roomID).emit('broadcast', data.chatMessage)
-    })
-});*/
 
+io.on('connection', async (socket) => {
+    socket.on('authenticate', (token) => {
+        try {
+            const jwtToken = jwt.verify(token, jwtSecret)
+            const userId = jwtToken._id;
+            socket.emit("authenticated", null)
+            socket.on('joinRoom', (data) => {
+                socket.join(data)
+            })
+            socket.on('message', async (data) => {
+                await ChatModel.addMessage(userId, data.roomID, data.chatMessage)
+                socket.in(data.roomID).emit('broadcast', data.chatMessage)
+            })
+        }catch{
+            socket.disconnect()
+        }
+    })
+});
+
+/*
 io.on('connection', socketioJwt.authorize({
         secret: jwtSecret,
         timeout: 5000
@@ -34,7 +44,10 @@ io.on('connection', socketioJwt.authorize({
         socket.join(data)
         })
         socket.on('message', async (data) => {
-            await ChatModel.addMessage(data.userID, data.roomID, data.chatMessage)
+            const jwtToken = jwt.verify(data.token, jwtSecret)
+            const userId = jwtToken._id;
+            await ChatModel.addMessage(userId, data.roomID, data.chatMessage)
             socket.in(data.roomID).emit('broadcast', data.chatMessage)
         })
     });
+*/
