@@ -11,7 +11,8 @@
       "NotFound": "Resource not found",
       "Verification": "Please verify your email",
       "Authenticate": "Please log in",
-      "SentCode": "A new code has been sent to your email address"
+      "SentCode": "A new code has been sent to your email address",
+      "Deleted": "User has been permanently deleted"
     },
     "Buttons": {
       "OK": "OK"

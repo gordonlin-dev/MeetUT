@@ -42,7 +42,7 @@ const deleteButton = async (props) => {
 
         if (response.ok) {
             console.log(response.status)
-            Alert.alert("Successfully deleted user")
+            Alert.alert("", texts.Alert.Message.Deleted)
             await AsyncStorage.setItem('accessToken', "")
             DevSettings.reload()
         } else {
