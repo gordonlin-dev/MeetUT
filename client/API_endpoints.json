@@ -12,7 +12,8 @@
         "ResendCode": "https://meet-ut-2.herokuapp.com/users/verify/resend",
         "ResendPasswordCode": "https://meet-ut-2.herokuapp.com/users/forgotPassword/resend",
         "ForgotPassword": "https://meet-ut-2.herokuapp.com/users/forgotPassword",
-        "ResetPassword": "https://meet-ut-2.herokuapp.com/users/updatePassword"
+        "ResetPassword": "https://meet-ut-2.herokuapp.com/users/updatePassword",
+        "Delete": "https://meet-ut-2.herokuap.com/users/delete"
       },
       "Match" : {
 

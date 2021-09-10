@@ -49,6 +49,7 @@
   "HTTP": {
     "Get": "Get",
     "Post": "Post",
-    "Put": "Put"
+    "Put": "Put",
+    "Delete": "Delete"
   }
 }

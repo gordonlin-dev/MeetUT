@@ -1,8 +1,20 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, Image, BackHandler, ImageBackground, TouchableOpacity, Dimensions, StyleSheet, DevSettings} from 'react-native'
+import {
+    View,
+    Text,
+    Image,
+    BackHandler,
+    ImageBackground,
+    TouchableOpacity,
+    Dimensions,
+    StyleSheet,
+    DevSettings,
+    Alert
+} from 'react-native'
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from '../Footer';
+import fixer from "../Fixer";
 const image =  require('../../assets/bg.png');
 const logo = require('../../assets/logo.png')
 
@@ -19,7 +31,27 @@ const signOutSubmit = async (props) => {
 /* Delete user function here, saw the function in controller, not sure how to call it
 */
 const deleteButton = async (props) => {
-    // TODO
+    try {
+        const response = await handler.sendRequest(
+            endpoints.Server.User.User.Delete,
+            texts.HTTP.Delete,
+            {},
+            true,
+            props
+        )
+
+        if (response.ok) {
+            console.log(response.status)
+            Alert.alert("Successfully deleted user")
+            props.navigation.navigate({
+                routeName: 'Splash'
+            })
+        } else {
+            await handler.handleResponse(response, props)
+        }
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 const SettingScreen = props => {
@@ -79,7 +111,7 @@ const SettingScreen = props => {
                     </TouchableOpacity>
                     <TouchableOpacity
                     onPress={() => {
-                        deleteButton(props)
+                        deleteButton(props).then()
                     }}
                     style={styles.Button}>
                     <Text style={styles.font}>{texts.Screens.Settings.Delete}</Text>
