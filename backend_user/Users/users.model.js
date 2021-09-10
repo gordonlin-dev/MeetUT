@@ -115,9 +115,10 @@ exports.archiveUser = (id) => {
 exports.deleteUser = (id) => {
     return User.findById(id).then((result) => {
         if (result == null) {
-            return null
+            return false
         } else {
             result.deleteOne()
+            return true
         }
     })
 }
