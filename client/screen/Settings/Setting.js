@@ -43,9 +43,8 @@ const deleteButton = async (props) => {
         if (response.ok) {
             console.log(response.status)
             Alert.alert("Successfully deleted user")
-            props.navigation.navigate({
-                routeName: 'Splash'
-            })
+            await AsyncStorage.setItem('accessToken', "")
+            DevSettings.reload()
         } else {
             await handler.handleResponse(response, props)
         }
