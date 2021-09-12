@@ -73,6 +73,7 @@ namespace API.Controllers
                     LastName = input.LastName
                 });
             }
+            _context.SaveChanges();
             return new JsonResult("");
         }
 
