@@ -162,8 +162,13 @@ exports.getById = (req, res) => {
  * @return status 200 redirect if request is valid, or status 404 if user does not exist
  */
 exports.deleteUser = (req, res) => {
-    UserModel.deleteUser(req.body._id).then()
-    res.status(200).send()
+    UserModel.deleteUser(req.body._id).then((result) => {
+        if (result) {
+            res.status(200).send()
+        } else {
+            res.status(401).send()
+        }
+    })
 }
 
 /**
