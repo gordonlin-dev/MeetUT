@@ -5,6 +5,10 @@ exports.createChat = async (req, res)=>{
     res.status(200).send()
 }
 
+exports.createUser = async (req,res)=>{
+    await ChatModel.findOrCreateUsers(req.body._id)
+    res.status(200).send()
+}
 exports.getChatRooms = async (req, res) => {
     const chatRooms = await ChatModel.getChatRooms(req.body._id)
     res.status(200).send(chatRooms)

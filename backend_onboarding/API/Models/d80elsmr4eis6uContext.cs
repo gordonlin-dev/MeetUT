@@ -135,6 +135,10 @@ namespace API.Models
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Email).IsRequired();
+
+                entity.Property(e => e.FirstName).IsRequired();
+
+                entity.Property(e => e.LastName).IsRequired();
             });
 
             modelBuilder.Entity<UserCompatability>(entity =>

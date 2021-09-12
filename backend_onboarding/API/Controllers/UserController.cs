@@ -27,11 +27,6 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public string GetUser()
-        {
-            return "1234";
-        }
 
         private List<QuestionnaireHobby> GetUserHobbies(int userId)
         {
@@ -53,6 +48,33 @@ namespace API.Controllers
                 ).ToList();
         }
 
+        [HttpPost]
+        public ActionResult CreateUser(CreateUserInput input)
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            if (authorizationToken.ToString().Length == 0)
+            {
+                return Unauthorized();
+            }
+            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
+            if (curUserEmail == null)
+            {
+                return Unauthorized();
+            }
+
+            var curUserQuery = _context.Users.Where(x => x.Email == curUserEmail);
+
+            if (!curUserQuery.Any())
+            {
+                _context.Users.Add(new User() {
+                    Email = curUserEmail,
+                    FirstName = input.FirstName,
+                    LastName = input.LastName
+                });
+            }
+            return new JsonResult("");
+        }
 
         [HttpPost]
         [Route("Recommendations")]
@@ -291,6 +313,16 @@ namespace API.Controllers
                 }
             }
             return dict;
+        }
+    }
+
+    public class CreateUserInput
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public CreateUserInput()
+        {
+
         }
     }
 

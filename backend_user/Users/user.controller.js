@@ -6,13 +6,15 @@ const validator = require("email-validator");
 const presenter = require("../presenter")
 const cfg = require("./user.config.json");
 const mail = require("nodemailer")
+const axios = require("axios");
+const endpoints = require('../EndPoints.json')
 
 /**
  * @name createUser
  * @description Create the user requested given that all request data is valid
  * @return status 200 redirect with the tokens required
  */
-exports.createUser = (req, res, next) => {
+exports.createUser = async (req, res, next) => {
     let userData = {}
     userData.firstName = req.body.firstName
     userData.lastName = req.body.lastName
@@ -21,9 +23,25 @@ exports.createUser = (req, res, next) => {
     userData.password = getPasswordHash(req.body.password)
     userData.active = false
 
-    UserModel.createUser(userData).then(() => {
-        return next()
+    let token = jwt.sign({_id: userData._id, active: userData.active}, jwtSecret)
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    }
+    const response1 = await axios.post(endpoints.Chat.CreateUser, {
+    }, {headers : headers})
+
+    const response2 = await axios.post(endpoints.Onboarding.CreateUser, {
+        FirstName:userData.firstName,
+        LastName: userData.lastName
+    },{
+        headers : headers
     })
+    if(response1.status === 200 && response2.status === 200){
+        await UserModel.createUser(userData)
+        next()
+    }
+    res.status(500).send()
 }
 
 /**
