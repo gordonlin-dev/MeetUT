@@ -6,7 +6,7 @@ exports.createChat = async (req, res)=>{
 }
 
 exports.createUser = async (req,res)=>{
-    await ChatModel.findOrCreateUsers(req.body._id)
+    await ChatModel.findOrCreateUsers([req.body._id])
     res.status(200).send()
 }
 exports.getChatRooms = async (req, res) => {
