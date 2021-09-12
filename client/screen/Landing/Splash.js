@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {
-    View,
-    ImageBackground, Text, TouchableOpacity,
+    View, Dimensions,ImageBackground, Text, TouchableOpacity, Image, StyleSheet
 } from 'react-native'
 
 const handler = require('../Handler')
@@ -9,7 +8,10 @@ const endpoints = require('../../API_endpoints.json')
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const texts = require("../../assets/Texts.json");
-const image = require("../../assets/Splash.png");
+const image = require("../../assets/bg.png");
+const logo = require("../../assets/Logo-Transparent.png");
+const title = require("../../assets/Title.png");
+const {height, width} = Dimensions.get("window");
 
 const Splash = props => {
     const [showButtons, setShowButtons] = useState(false);
@@ -37,7 +39,8 @@ const Splash = props => {
         return (
             <View style={styles.empty}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-                    <View style={{position: 'absolute', bottom:0}}>
+                    <Image style={styles.logo} source={logo}/>
+                    <View>
                         <TouchableOpacity style={styles.Button}  onPress={() => {
                             props.navigation.navigate({routeName: 'Login'})
                         }}>
@@ -49,6 +52,7 @@ const Splash = props => {
                             <Text style={styles.font}>{texts.Global.Common.SignUp}</Text>
                         </TouchableOpacity>
                     </View>
+                    <Image style={inpageStyle.title} source={title}/>
                 </ImageBackground>
             </View>
         )
@@ -56,11 +60,19 @@ const Splash = props => {
         return (
             <View style={styles.empty}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                    <Image style={styles.logo} source={logo}/>
+                    <Image style={inpageStyle.title} source={title}/>
                 </ImageBackground>
             </View>
         )
     }
 
 }
-
+const inpageStyle = StyleSheet.create({
+    title: {
+        width: width, 
+        height: height * 0.15,
+        marginLeft: width * 0.15
+    }
+})
 export default Splash;

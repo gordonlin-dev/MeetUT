@@ -28,8 +28,7 @@ const signOutSubmit = async (props) => {
     DevSettings.reload()
 }
 
-/* Delete user function here, saw the function in controller, not sure how to call it
-*/
+
 const deleteButton = async (props) => {
     try {
         const response = await handler.sendRequest(
