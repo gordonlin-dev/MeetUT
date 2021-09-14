@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
-import {View, Image, TextInput, TouchableOpacity, ScrollView, Text, SafeAreaView} from 'react-native'
+import {View, Image, TextInput, TouchableOpacity, ScrollView, Text, SafeAreaView, Dimensions} from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import {styles} from '../styles'
 const logo =  require('../../assets/logo.png');
+const {height, width} = Dimensions.get('window');
 const Demographics = props => {
     const [firstName, onChangeFirstName] = useState("");
     const [lastName, onChangeLastName] = useState("");
@@ -30,10 +31,10 @@ const Demographics = props => {
               placeholder="last name"
               placeholderTextColor="black"
             />
-            
+
             <View style={styles.pickerHeader}>
                 <Text style={styles.onboardHeaderFont}>Gender</Text>
-            
+
             <Picker
                 style={styles.picker}
                 selectedValue={selectedValue}
@@ -46,8 +47,8 @@ const Demographics = props => {
                 <Picker.Item label="Other" value="other" />
                 <Picker.Item label="Prefer not to say" value="no" />
             </Picker>
-            
-                    
+
+
                     <Text style={styles.onboardHeaderFont}>Year of Study</Text>
                     <Picker
                         style={styles.picker}
@@ -76,7 +77,7 @@ const Demographics = props => {
                 </ScrollView>
             </SafeAreaView>
 
-            <TouchableOpacity 
+            <TouchableOpacity
                 style={styles.quizRightButton}
                 onPress={() => {
                 props.navigation.navigate({

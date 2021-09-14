@@ -1,5 +1,15 @@
 import React, {useState, useEffect} from 'react'
-import {View, Image, StyleSheet, Button, BackHandler, Dimensions, SafeAreaView, TouchableOpacity} from 'react-native'
+import {
+    View,
+    Image,
+    StyleSheet,
+    Button,
+    BackHandler,
+    Dimensions,
+    SafeAreaView,
+    TouchableOpacity,
+    Alert
+} from 'react-native'
 import Footer from "../Footer";
 import ProfileCard from "./ProfileCard";
 import { styles } from '../styles';
@@ -28,24 +38,31 @@ const HomeScreen = props => {
             false,
             props
         )
+        
         if(matchResponse.ok){
             const responseJson = await matchResponse.json();
-            console.log(responseJson)
-        }
-        /*Don't have match user from the responseJson for now */
-        const body = {
-            excludedUsers:[]
-        }
-        const response = await handler.sendRequest(
-            endpoints.Server.Onboarding.Recommendations,
-            texts.HTTP.Post,
-            body,
-            false,
-            props
-        )
-        if(response.ok){
-            const responseJson = await response.json();
-            setUsers(responseJson)
+            if(! responseJson.completedOnboarding){
+                Alert.alert(texts.Alert.Title.CompleteSignUp,
+                    "",
+                    [{text: texts.Alert.Buttons.OK, onPress: () => props.navigation.navigate({
+                            routeName: "Demographics"
+                        })}])
+            }else{
+                const body = {
+                    excludedUsers: responseJson.matched
+                }
+                const response = await handler.sendRequest(
+                    endpoints.Server.Onboarding.Recommendations,
+                    texts.HTTP.Post,
+                    body,
+                    false,
+                    props
+                )
+                if(response.ok){
+                    const responseJson = await response.json();
+                    setUsers(responseJson)
+                }
+            }
         }
     }
 

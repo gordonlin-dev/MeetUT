@@ -22,6 +22,7 @@ exports.createUser = async (req, res, next) => {
     userData.code = req.body.code
     userData.password = getPasswordHash(req.body.password)
     userData.active = false
+    userData.completedOnboarding = false
 
     let token = jwt.sign({_id: userData._id, active: true}, jwtSecret)
     const headers = {

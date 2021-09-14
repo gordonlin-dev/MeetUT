@@ -4,7 +4,8 @@
       "Unauthorized": "Unauthorized",
       "Error": "An error has occurred",
       "Verification": "Verification needed",
-      "UnableToProcess": "Unable to process request"
+      "UnableToProcess": "Unable to process request",
+      "CompleteSignUp": "Please complete sign up"
     },
     "Message": {
       "RestartApp": "Restarting the app.",
