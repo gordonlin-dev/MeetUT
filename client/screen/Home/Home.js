@@ -38,7 +38,7 @@ const HomeScreen = props => {
             false,
             props
         )
-        
+
         if(matchResponse.ok){
             const responseJson = await matchResponse.json();
             if(! responseJson.completedOnboarding){

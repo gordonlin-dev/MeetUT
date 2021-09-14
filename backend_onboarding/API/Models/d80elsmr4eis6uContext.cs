@@ -21,12 +21,16 @@ namespace API.Models
         public virtual DbSet<LookupProgramOfStudyCategory> LookupProgramOfStudyCategories { get; set; }
         public virtual DbSet<QuestionnaireHobby> QuestionnaireHobbies { get; set; }
         public virtual DbSet<QuestionnaireHobbyCategory> QuestionnaireHobbyCategories { get; set; }
+        public virtual DbSet<QuestionnaireLanguage> QuestionnaireLanguages { get; set; }
         public virtual DbSet<QuestionnaireProgramOfStudy> QuestionnaireProgramOfStudies { get; set; }
         public virtual DbSet<QuestionnaireProgramOfStudyCategory> QuestionnaireProgramOfStudyCategories { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserCompatability> UserCompatabilities { get; set; }
+        public virtual DbSet<UserDemographic> UserDemographics { get; set; }
         public virtual DbSet<UserHobby> UserHobbies { get; set; }
+        public virtual DbSet<UserLanguage> UserLanguages { get; set; }
         public virtual DbSet<UserProgramOfStudy> UserProgramOfStudies { get; set; }
+        public virtual DbSet<UserReligion> UserReligions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -89,6 +93,13 @@ namespace API.Models
                     .HasForeignKey(d => d.HobbyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_QuestionnaireHobby");
+            });
+
+            modelBuilder.Entity<QuestionnaireLanguage>(entity =>
+            {
+                entity.ToTable("Questionnaire_Language");
+
+                entity.Property(e => e.Value).IsRequired();
             });
 
             modelBuilder.Entity<QuestionnaireProgramOfStudy>(entity =>
@@ -160,6 +171,19 @@ namespace API.Models
                     .HasConstraintName("FK_User2");
             });
 
+            modelBuilder.Entity<UserDemographic>(entity =>
+            {
+                entity.ToTable("User_Demographics");
+
+                entity.Property(e => e.DateOfBirth).HasColumnType("date");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserDemographics)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User");
+            });
+
             modelBuilder.Entity<UserHobby>(entity =>
             {
                 entity.ToTable("User_Hobby");
@@ -183,6 +207,23 @@ namespace API.Models
                     .HasConstraintName("FK_User");
             });
 
+            modelBuilder.Entity<UserLanguage>(entity =>
+            {
+                entity.ToTable("User_Language");
+
+                entity.HasOne(d => d.Language)
+                    .WithMany(p => p.UserLanguages)
+                    .HasForeignKey(d => d.LanguageId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Language");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserLanguages)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User");
+            });
+
             modelBuilder.Entity<UserProgramOfStudy>(entity =>
             {
                 entity.ToTable("User_ProgramOfStudy");
@@ -201,6 +242,19 @@ namespace API.Models
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserProgramOfStudies)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User");
+            });
+
+            modelBuilder.Entity<UserReligion>(entity =>
+            {
+                entity.ToTable("User_Religion");
+
+                entity.Property(e => e.Value).IsRequired();
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserReligions)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_User");
