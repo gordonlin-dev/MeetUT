@@ -47,6 +47,33 @@ namespace API.Controllers
                     (userProgram, program) => program
                 ).ToList();
         }
+        /*
+        [HttpGet]
+        [Route("Load")]
+        public void Load()
+        {
+            string filePath = "DataSource/languages.xlsx";
+            using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (SpreadsheetDocument doc = SpreadsheetDocument.Open(fs, false))
+                {
+                    WorkbookPart workbookPart = doc.WorkbookPart;
+                    SharedStringTablePart sstpart = workbookPart.GetPartsOfType<SharedStringTablePart>().First();
+                    SharedStringTable sst = sstpart.SharedStringTable;
+
+                    foreach(var item in sst)
+                    {
+                        _context.QuestionnaireLanguages.Add(new QuestionnaireLanguage()
+                        {
+                            Value = item.InnerText
+                        });
+                    }
+                    _context.SaveChanges();
+                }
+            }
+
+        }
+        */
 
         [HttpPost]
         public ActionResult CreateUser(CreateUserInput input)
