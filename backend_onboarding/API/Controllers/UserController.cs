@@ -75,6 +75,29 @@ namespace API.Controllers
         }
         */
 
+        [HttpGet]
+        public ActionResult GetUser()
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            if (authorizationToken.ToString().Length == 0)
+            {
+                return Unauthorized();
+            }
+            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
+            if (curUserEmail == null)
+            {
+                return Unauthorized();
+            }
+
+            var curUserQuery = _context.Users.Where(x => x.Email == curUserEmail);
+
+            if (!curUserQuery.Any())
+            {
+                return NotFound();
+            }
+            return new JsonResult(curUserQuery.First());
+        }
         [HttpPost]
         public ActionResult CreateUser(CreateUserInput input)
         {
