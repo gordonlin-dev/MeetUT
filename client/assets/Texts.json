@@ -46,6 +46,19 @@
     "Settings": {
       "SignOut": "Sign out",
       "Delete": "Delete this account"
+    },
+    "Demographics": {
+      "Religions": {
+        "Catholic": "Roman Catholic",
+        "Protestant": "Protestant",
+        "Anglican": "Anglican",
+        "NotReligious": "No religious affiliation",
+        "Muslim": "Muslim",
+        "Hindu": "Hindu",
+        "Sikh": "Sikh",
+        "Buddhist": "Buddhist",
+        "Jewish": "Jewish"
+      }
     }
   },
   "HTTP": {

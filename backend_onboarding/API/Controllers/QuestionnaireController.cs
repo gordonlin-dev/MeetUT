@@ -194,9 +194,104 @@ namespace API.Controllers
             _context.SaveChanges();
             return new JsonResult("");
         }
+
+        [HttpPost]
+        [Route("Demographics")]
+        public ActionResult UpdateUserDemoprahics(UserDemographicsModel model)
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            var user = ValidateTokenAndGetUser(authorizationToken);
+            if(user == null)
+            {
+                return Unauthorized();
+            }
+
+            var query = _context.UserDemographics.Where(x => x.UserId == user.Id).ToList();
+            if (query.Any())
+            {
+                var result = query.First();
+                result.DateOfBirth = model.DateOfBirth;
+                result.Gender = model.Gender;
+                _context.UserDemographics.Update(result);
+            }
+            else
+            {
+                _context.UserDemographics.Add(new UserDemographic() {
+                    UserId = user.Id,
+                    DateOfBirth = model.DateOfBirth,
+                    Gender = model.Gender
+                });
+            }
+
+            var query2 = _context.UserReligions.Where(x => x.UserId == user.Id).ToList();
+            if (query2.Any())
+            {
+                _context.UserReligions.RemoveRange(query2);
+            }
+            foreach(var religion in model.Religions)
+            {
+                _context.UserReligions.Add(new UserReligion() {
+                    UserId = user.Id,
+                    Value = religion
+                });
+            }
+
+            var query3 = _context.UserLanguages.Where(x => x.UserId == user.Id).ToList();
+            if (query3.Any())
+            {
+                _context.UserLanguages.RemoveRange(query3);
+            }
+            foreach(var language in model.Languages)
+            {
+                _context.UserLanguages.Add(new UserLanguage() {
+                    UserId = user.Id,
+                    LanguageId = language.Id
+                });
+            }
+            _context.SaveChanges();
+
+            return new JsonResult("");
+        }
+
+        private User ValidateTokenAndGetUser(StringValues token)
+        {
+            
+            if (token.ToString().Length == 0)
+            {
+                return null;
+            }
+            var curUserEmail = AuthService.AuthService.DecodeJWT(token.ToString().Split(" ")[1]);
+            if (curUserEmail == null)
+            {
+                return null;
+            }
+            var query = _context.Users.Where(x => x.Email == curUserEmail);
+            var curUser = query.FirstOrDefault();
+            if (!query.Any())
+            {
+                var newUser = new User()
+                {
+                    Email = curUserEmail
+                };
+                _context.Users.Add(newUser);
+                _context.SaveChanges();
+                curUser = newUser;
+            }
+            return curUser;
+        }
     }
 
 
+
+
+    public class UserDemographicsModel
+    {
+        public string Gender { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public List<QuestionnaireLanguage> Languages { get; set; }
+        public List<string> Religions { get; set; }
+    }
     public class UserProgramModel
     {
         public List<ProgramResults> Programs { get; set; }
