@@ -40,6 +40,7 @@ const Splash = props => {
             <View style={styles.empty}>
                 <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                     <Image style={styles.logo} source={logo}/>
+                    <Image style={inpageStyle.title} source={title}/>
                     <View>
                         <TouchableOpacity style={styles.Button}  onPress={() => {
                             props.navigation.navigate({routeName: 'Login'})
@@ -52,7 +53,7 @@ const Splash = props => {
                             <Text style={styles.font}>{texts.Global.Common.SignUp}</Text>
                         </TouchableOpacity>
                     </View>
-                    <Image style={inpageStyle.title} source={title}/>
+
                 </ImageBackground>
             </View>
         )
@@ -70,7 +71,7 @@ const Splash = props => {
 }
 const inpageStyle = StyleSheet.create({
     title: {
-        width: width, 
+        width: width,
         height: height * 0.15,
         marginLeft: width * 0.15
     }

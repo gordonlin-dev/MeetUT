@@ -1,13 +1,37 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {View, Image, TextInput, TouchableOpacity, ScrollView, Text, SafeAreaView, Dimensions} from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import {styles} from '../styles'
 const logo =  require('../../assets/logo.png');
 const {height, width} = Dimensions.get('window');
+
+const texts = require("../../assets/Texts.json");
+const handler = require('../Handler')
+const endpoints = require('../../API_endpoints.json')
+
 const Demographics = props => {
-    const [firstName, onChangeFirstName] = useState("");
-    const [lastName, onChangeLastName] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [selectedValue, setSelectedValue] = useState("--");
+
+    const loadUser = async () =>{
+        const response = await handler.sendRequest(
+            endpoints.Server.Onboarding.User.baseURL,
+            texts.HTTP.Get,
+            {},
+            false,
+            props
+        )
+        if(response.ok){
+            const responseJson = await response.json()
+            console.log(responseJson)
+            setFirstName(responseJson.firstName);
+            setLastName(responseJson.lastName)
+        }
+    }
+    useEffect(() => {
+        loadUser()
+    }, []);
 
     return (
           <View style={styles.onboardContainer}>
@@ -16,7 +40,7 @@ const Demographics = props => {
             </View>
             <TextInput
                 style={styles.onboardInput}
-                onChangeText={onChangeFirstName}
+                onChangeText={setFirstName}
                 value={firstName}
                 placeholder="first name"
                 placeholderTextColor="black"
@@ -26,7 +50,7 @@ const Demographics = props => {
             </View>
             <TextInput
               style={styles.onboardInput}
-              onChangeText={onChangeLastName}
+              onChangeText={setLastName}
               value={lastName}
               placeholder="last name"
               placeholderTextColor="black"

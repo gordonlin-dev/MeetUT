@@ -206,7 +206,9 @@ namespace API.Controllers
             {
                 return Unauthorized();
             }
-
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            _context.Users.Update(user);
             var query = _context.UserDemographics.Where(x => x.UserId == user.Id).ToList();
             if (query.Any())
             {
@@ -287,6 +289,8 @@ namespace API.Controllers
 
     public class UserDemographicsModel
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public List<QuestionnaireLanguage> Languages { get; set; }

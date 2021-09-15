@@ -25,7 +25,13 @@
       "GetChatRoom": "https://meet-ut-3.herokuapp.com/chat/room/"
     },
     "Onboarding": {
-      "Recommendations": "https://meet-ut-1.herokuapp.com/user/recommendations"
+      "User": {
+        "baseURL": "https://meet-ut-1.herokuapp.com/user",
+        "Recommendations": "https://meet-ut-1.herokuapp.com/user/recommendations"
+      },
+      "Questionnaire": {
+
+      }
     }
   }
 }
