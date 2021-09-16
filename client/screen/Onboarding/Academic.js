@@ -52,7 +52,7 @@ const Academic = (props) => {
         }
     }
 
-    loadPrograms();
+    //loadPrograms();
     const sortedPrograms = [];
     for (let i = 0; i < programs.length; i++) {
         const temp = {};

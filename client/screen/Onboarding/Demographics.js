@@ -14,7 +14,9 @@ const Demographics = props => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [genderValue, setGenderValue] = useState("");
+    const [genderOtherValue, setGenderOtherValue] = useState("");
     const [religionValue, setReligionValue] = useState("");
+    const [religionOtherValue, setReligionOtherValue] = useState("");
     const [languageValues, setLanguageValues] = useState([]);
     const [languageOptions, setLanguageOptions] = useState([]);
 
@@ -77,7 +79,7 @@ const Demographics = props => {
                     <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Specify}</Text>
                     <TextInput
                         style={styles.picker}
-                        onChangeText={setGenderValue}
+                        onChangeText={setGenderOtherValue}
                     />
                 </View>
             )
@@ -90,7 +92,7 @@ const Demographics = props => {
                     <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Specify}</Text>
                     <TextInput
                         style={styles.picker}
-                        onChangeText={setReligionValue}
+                        onChangeText={setReligionOtherValue}
                     />
                 </View>
             )
@@ -98,24 +100,31 @@ const Demographics = props => {
     }
 
     const save = async () => {
+        const languages = []
+        for (let i = 0; i < languageValues.length; i ++){
+            if(languages.indexOf(languageValues[i].id) === -1){
+                languages.push(languageValues[i].id)
+            }
+        }
+        console.log(languages)
         const body = {
             FirstName : firstName,
             LastName : lastName,
             Gender : genderValue,
             Religion: religionValue,
-            Languages : languageValues,
+            Languages : languages,
             DateOfBirth : new Date()
         }
-        const response = handler.sendRequest(
+        const response = await handler.sendRequest(
             endpoints.Server.Onboarding.Questionnaire.Demographics,
             texts.HTTP.Post,
             body,
-            false
+            false,
+            props
         )
+        console.log(response.status)
         if(response.ok){
-            props.navigation.navigate({
-                routeName: 'Academic'
-            })
+            props.navigation.navigate('Academic')
         }
     }
     useEffect(() => {
@@ -170,7 +179,6 @@ const Demographics = props => {
                   itemsContainerStyle={{ maxHeight: 140 }}
                   textInputProps={
                       {
-                          placeholder: "placeholder",
                           underlineColorAndroid: "transparent",
                           style: {
                               padding: 12,
