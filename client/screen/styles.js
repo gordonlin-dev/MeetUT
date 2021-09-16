@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         height: height*0.85,
         width: width,
     },
-    
+
     footer: {
         position: "absolute",
         justifyContent: 'space-between',
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
         color: "white",
         fontFamily: 'timeburner',
     },
-    
+
     verificationHeader: {
         fontSize: 50,
         marginLeft: width * 0.15,
@@ -240,7 +240,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     quizRightButton: {
-        position: 'absolute',
         width: width * 0.45,
         height: height * 0.06,
         bottom: height*0.01,

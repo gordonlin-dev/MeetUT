@@ -245,24 +245,21 @@ namespace API.Controllers
             {
                 _context.UserReligions.RemoveRange(query2);
             }
-            foreach(var religion in model.Religions)
+            _context.UserReligions.Add(new UserReligion()
             {
-                _context.UserReligions.Add(new UserReligion() {
-                    UserId = user.Id,
-                    Value = religion
-                });
-            }
-
+                UserId = user.Id,
+                Value = model.Religion
+            });
             var query3 = _context.UserLanguages.Where(x => x.UserId == user.Id).ToList();
             if (query3.Any())
             {
                 _context.UserLanguages.RemoveRange(query3);
             }
-            foreach(var language in model.Languages)
+            foreach(var languageId in model.Languages)
             {
                 _context.UserLanguages.Add(new UserLanguage() {
                     UserId = user.Id,
-                    LanguageId = language.Id
+                    LanguageId = languageId
                 });
             }
             _context.SaveChanges();
@@ -307,8 +304,8 @@ namespace API.Controllers
         public string LastName { get; set; }
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public List<QuestionnaireLanguage> Languages { get; set; }
-        public List<string> Religions { get; set; }
+        public List<int> Languages { get; set; }
+        public string Religion { get; set; }
     }
     public class UserProgramModel
     {

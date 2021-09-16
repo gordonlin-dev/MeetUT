@@ -15,8 +15,27 @@ const Demographics = props => {
     const [lastName, setLastName] = useState("");
     const [genderValue, setGenderValue] = useState("");
     const [religionValue, setReligionValue] = useState("");
+    const [languageValues, setLanguageValues] = useState([]);
+    const [languageOptions, setLanguageOptions] = useState([]);
 
     const loadUser = async () =>{
+        const languageResponse = await handler.sendRequest(
+            endpoints.Server.Onboarding.Questionnaire.Languages,
+            texts.HTTP.Get,
+            {},
+            false,
+            props
+        )
+        if (languageResponse.ok){
+            const languageJson = await languageResponse.json()
+            const languages = []
+            for (let i = 0; i < languageJson.length; i++){
+                const languageObject = languageJson[i]
+                languages.push({id: languageObject.id, name: languageObject.value})
+            }
+            setLanguageOptions(languages)
+            console.log(languageOptions)
+        }
         const response = await handler.sendRequest(
             endpoints.Server.Onboarding.User.baseURL,
             texts.HTTP.Get,
@@ -26,7 +45,6 @@ const Demographics = props => {
         )
         if(response.ok){
             const responseJson = await response.json()
-            console.log(responseJson)
             setFirstName(responseJson.firstName);
             setLastName(responseJson.lastName)
         }
@@ -78,6 +96,28 @@ const Demographics = props => {
             )
         }
     }
+
+    const save = async () => {
+        const body = {
+            FirstName : firstName,
+            LastName : lastName,
+            Gender : genderValue,
+            Religion: religionValue,
+            Languages : languageValues,
+            DateOfBirth : new Date()
+        }
+        const response = handler.sendRequest(
+            endpoints.Server.Onboarding.Questionnaire.Demographics,
+            texts.HTTP.Post,
+            body,
+            false
+        )
+        if(response.ok){
+            props.navigation.navigate({
+                routeName: 'Academic'
+            })
+        }
+    }
     useEffect(() => {
         loadUser()
     }, []);
@@ -104,7 +144,49 @@ const Demographics = props => {
               placeholder={texts.Global.Common.Lastname}
               placeholderTextColor="black"
             />
-
+              <SearchableDropdown
+                  multi={true}
+                  selectedItems={languageValues}
+                  onItemSelect={(item) => {
+                      const items = languageValues
+                      items.push(item)
+                      setLanguageValues(items)
+                  }}
+                  onRemoveItem={(item, index) => {
+                      const items = languageValues.filter(x => x.id !== item.id)
+                      setLanguageValues(items)
+                  }}
+                  items={languageOptions}
+                  itemStyle={{
+                      padding: 10,
+                      marginTop: 2,
+                      backgroundColor: '#ddd',
+                      borderColor: '#bbb',
+                      borderWidth: 1,
+                      borderRadius: 5,
+                  }}
+                  containerStyle={{ padding: 5 }}
+                  itemTextStyle={{ color: '#222' }}
+                  itemsContainerStyle={{ maxHeight: 140 }}
+                  textInputProps={
+                      {
+                          placeholder: "placeholder",
+                          underlineColorAndroid: "transparent",
+                          style: {
+                              padding: 12,
+                              borderWidth: 1,
+                              borderColor: '#ccc',
+                              borderRadius: 5,
+                          },
+                          onTextChange: {}
+                      }
+                  }
+                  listProps={
+                      {
+                          nestedScrollEnabled: true,
+                      }
+                  }
+              />
             <View style={styles.pickerHeader}>
                 <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Gender}</Text>
                 <Picker
@@ -127,18 +209,10 @@ const Demographics = props => {
                 </Picker>
             </View>
               {renderReligionOtherInput()}
-            <View>
-                <SearchableDropdown>
-
-                </SearchableDropdown>
-            </View>
             <TouchableOpacity
                 style={styles.quizRightButton}
-                onPress={() => {
-                props.navigation.navigate({
-                    routeName: 'Academic'
-                })
-            }}>
+                onPress={() => save()
+                }>
                 <Text style={styles.quizFont}>{texts.Screens.Demographics.Buttons.SaveAndContinue}</Text>
             </TouchableOpacity>
         </View>

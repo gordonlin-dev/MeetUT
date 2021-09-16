@@ -30,7 +30,8 @@
         "Recommendations": "https://meet-ut-1.herokuapp.com/user/recommendations"
       },
       "Questionnaire": {
-
+        "Demographics": "https://meet-ut-1.herokuapp.com/questionnaire/demographics",
+        "Languages": "https://meet-ut-1.herokuapp.com/questionnaire/demographics/languages"
       }
     }
   }
