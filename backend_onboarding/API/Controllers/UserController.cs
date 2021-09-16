@@ -47,7 +47,7 @@ namespace API.Controllers
                     (userProgram, program) => program
                 ).ToList();
         }
-        /*
+        
         [HttpGet]
         [Route("Load")]
         public void Load()
@@ -73,7 +73,7 @@ namespace API.Controllers
             }
 
         }
-        */
+        
 
         [HttpGet]
         public ActionResult GetUser()
@@ -98,6 +98,7 @@ namespace API.Controllers
             }
             return new JsonResult(curUserQuery.First());
         }
+
         [HttpPost]
         public ActionResult CreateUser(CreateUserInput input)
         {

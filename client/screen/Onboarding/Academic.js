@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, SafeAreaView, TouchableOpacity, Text, ScrollView, StyleSheet, Dimensions} from 'react-native';
-import { styles } from '../styles'; 
+import { styles } from '../styles';
 import NestedListView from 'react-native-nested-listview'
 const secureStore = require('../../SecureStore')
 const headers = require('../Headers')
 const {height, width} = Dimensions.get('window');
-const Acedemic = (props) => {
+const Academic = (props) => {
     const [programs, setPrograms] = useState([]);
     const [chosen, setChosen] = useState([]);
     const colorLevels = {
@@ -30,8 +30,8 @@ const Acedemic = (props) => {
             props.navigation.navigate({
                 routeName: 'Personal'
             })
-            
-    
+
+
         }catch (e) {
             console.log(e);
         }
@@ -46,7 +46,7 @@ const Acedemic = (props) => {
             });
             const responseJson = await response.json();
             setPrograms(responseJson)
-            
+
         }catch (e) {
             console.log(e);
         }
@@ -70,14 +70,14 @@ const Acedemic = (props) => {
         } else {
             chosen.push({programId: node.id, value: node.title})
         }
-    } 
+    }
 
     const unselect = (props) => {
         for (let i = 0; i < chosen.length; i++) {
             if (chosen[i].value === props.value) {
                 chosen.splice(i, 1)
             }
-        } 
+        }
     }
     const renderNode = (node, level) => {
         const paddingLeft = (level ?? 0 + 1) * 30;
@@ -88,23 +88,23 @@ const Acedemic = (props) => {
                     <Text style={styles.headerFont}>{node.title}</Text>
                 </View>
             );
-            
+
         } else {
             return (
                 <View style={[styles.row, { backgroundColor, paddingLeft }]}>
                     <Text style={styles.headerFont}>{node.title}</Text>
-                    <TouchableOpacity style={styles.selectButton} onPress={() => toggleChecked(node)}> 
+                    <TouchableOpacity style={styles.selectButton} onPress={() => toggleChecked(node)}>
                     <Text style={styles.headerFont}>select</Text>
                     </TouchableOpacity>
                 </View>
             );
         }
-        
+
     };
-    
+
     return (
         <SafeAreaView style={styles.quizContainer} >
-            
+
             <View style={styles.scrollContainer} >
                 <Text style={styles.headerFont}>Programs</Text>
                 <NestedListView
@@ -115,7 +115,7 @@ const Acedemic = (props) => {
             <View style={styles.selectedContainer}>
             <Text style={styles.headerFont}>chosen Programs ({chosen.length})</Text>
                 <ScrollView style={styles.outputContainer}>
-                    
+
                     {chosen.map((props) => {
                         return(
                             <View style={{flexDirection: 'row',}} key={props.programId}>
@@ -126,16 +126,16 @@ const Acedemic = (props) => {
                                         <Text style={styles.headerFont}>Unselect</Text>
                                 </TouchableOpacity>
                             </View>
-                            
-                            
+
+
                         )
-                        
+
                     })}
                 </ScrollView>
             </View>
-            
+
                 <View style={inpageStyle.quizeFooter}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={styles.quizLeftButton}
                     onPress={() => {
                     props.navigation.navigate({
@@ -144,21 +144,21 @@ const Acedemic = (props) => {
                 }}>
                     <Text style={styles.quizFont}>Back</Text>
                 </TouchableOpacity>
-                
-                <TouchableOpacity 
+
+                <TouchableOpacity
                     style={styles.quizRightButton}
                     onPress={() => {
-                        submit(props, chosen) 
-                    
+                        submit(props, chosen)
+
                 }}>
                     <Text style={styles.quizFont}>Next</Text>
                 </TouchableOpacity>
             </View>
-            
-            
+
+
         </SafeAreaView>
     );
-  
+
 }
 
 const inpageStyle = StyleSheet.create ({
@@ -170,4 +170,4 @@ const inpageStyle = StyleSheet.create ({
         top: height*0.82
     },
 })
-export default Acedemic;
+export default Academic;

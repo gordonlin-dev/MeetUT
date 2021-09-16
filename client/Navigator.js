@@ -14,7 +14,7 @@ import GetEmailScreen from './screen/Authentication/GetEmail';
 
 import DemographicsScreen from "./screen/Onboarding/Demographics";
 import PersonalScreen from "./screen/Onboarding/Personal";
-import AcedemicScreen from "./screen/Onboarding/Acedemic";
+import AcademicScreen from "./screen/Onboarding/Academic";
 import ReasonScreen from "./screen/Onboarding/Reason";
 import HobbiesScreen from "./screen/Onboarding/Hobbies";
 import SpecificHobbyScreen from "./screen/Onboarding/SpecificHobby"
@@ -72,8 +72,8 @@ const Navigator = createStackNavigator({
         }
 
     },
-    Acedemic:{
-        screen: AcedemicScreen,
+    Academic:{
+        screen: AcademicScreen,
         navigationOptions:{
             title:"Onboarding",
             headerStyle: {

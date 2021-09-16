@@ -31,7 +31,10 @@
       "ForgotPassword": "Forgot password",
       "ResendCode": "Resend code",
       "Code": "Code",
-      "Submit" : "Submit"
+      "Submit" : "Submit",
+      "Gender": "Gender",
+      "Religion": "Religion",
+      "Specify": "Please specify"
     }
   },
   "Screens": {
@@ -57,7 +60,16 @@
         "Hindu": "Hindu",
         "Sikh": "Sikh",
         "Buddhist": "Buddhist",
-        "Jewish": "Jewish"
+        "Jewish": "Jewish",
+        "Other": "Other"
+      },
+      "Gender": {
+        "Male": "Male",
+        "Female": "Female",
+        "Other": "Other"
+      },
+      "Buttons": {
+        "SaveAndContinue": "Save and continue"
       }
     }
   },

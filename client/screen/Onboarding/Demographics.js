@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {View, Image, TextInput, TouchableOpacity, ScrollView, Text, SafeAreaView, Dimensions} from 'react-native'
+import SearchableDropdown from 'react-native-searchable-dropdown';
 import {Picker} from '@react-native-picker/picker';
 import {styles} from '../styles'
 const logo =  require('../../assets/logo.png');
@@ -12,7 +13,8 @@ const endpoints = require('../../API_endpoints.json')
 const Demographics = props => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [selectedValue, setSelectedValue] = useState("--");
+    const [genderValue, setGenderValue] = useState("");
+    const [religionValue, setReligionValue] = useState("");
 
     const loadUser = async () =>{
         const response = await handler.sendRequest(
@@ -29,6 +31,53 @@ const Demographics = props => {
             setLastName(responseJson.lastName)
         }
     }
+
+    const generateGenderPicker = () => {
+        let items = []
+        const options = texts.Screens.Demographics.Gender
+        items.push(<Picker.Item key ={""} value={""} label={""} />)
+        for (const option in options) {
+            const value = options[option]
+            items.push(<Picker.Item key ={value} value={value} label={value} />)
+        }
+        return items
+    }
+    const generateReligionPicker = () => {
+        let items = []
+        const options = texts.Screens.Demographics.Religions
+        items.push(<Picker.Item key ={""} value={""} label={""} />)
+        for (const option in options) {
+            const value = options[option]
+            items.push(<Picker.Item key ={value} value={value} label={value} />)
+        }
+        return items
+    }
+    const renderGenderOtherInput = () => {
+        if(genderValue === texts.Screens.Demographics.Gender.Other){
+            return (
+                <View style={styles.pickerHeader}>
+                    <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Specify}</Text>
+                    <TextInput
+                        style={styles.picker}
+                        onChangeText={setGenderValue}
+                    />
+                </View>
+            )
+        }
+    }
+    const renderReligionOtherInput = () => {
+        if(religionValue === texts.Screens.Demographics.Religions.Other){
+            return (
+                <View style={styles.pickerHeader}>
+                    <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Specify}</Text>
+                    <TextInput
+                        style={styles.picker}
+                        onChangeText={setReligionValue}
+                    />
+                </View>
+            )
+        }
+    }
     useEffect(() => {
         loadUser()
     }, []);
@@ -36,79 +85,61 @@ const Demographics = props => {
     return (
           <View style={styles.onboardContainer}>
             <View style={styles.inputHeader}>
-                <Text style={styles.onboardHeaderFont}>First Name</Text>
+                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Firstname}</Text>
             </View>
             <TextInput
                 style={styles.onboardInput}
                 onChangeText={setFirstName}
                 value={firstName}
-                placeholder="first name"
+                placeholder={texts.Global.Common.Firstname}
                 placeholderTextColor="black"
             />
             <View style={styles.inputHeader}>
-                <Text style={styles.onboardHeaderFont}>Last Name</Text>
+                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Lastname}</Text>
             </View>
             <TextInput
               style={styles.onboardInput}
               onChangeText={setLastName}
               value={lastName}
-              placeholder="last name"
+              placeholder={texts.Global.Common.Lastname}
               placeholderTextColor="black"
             />
 
             <View style={styles.pickerHeader}>
-                <Text style={styles.onboardHeaderFont}>Gender</Text>
+                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Gender}</Text>
+                <Picker
+                    style={styles.picker}
+                    selectedValue={genderValue}
+                    ColorValue="black"
+                    onValueChange={(itemValue, itemIndex) => setGenderValue(itemValue)}>
+                    {generateGenderPicker()}
+                </Picker>
+            </View>
+              {renderGenderOtherInput()}
+            <View style={styles.pickerHeader}>
+                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Religion}</Text>
+                <Picker
+                    style={styles.picker}
+                    selectedValue={religionValue}
+                    ColorValue="black"
+                    onValueChange={(itemValue, itemIndex) => setReligionValue(itemValue)}>
+                    {generateReligionPicker()}
+                </Picker>
+            </View>
+              {renderReligionOtherInput()}
+            <View>
+                <SearchableDropdown>
 
-            <Picker
-                style={styles.picker}
-                selectedValue={selectedValue}
-                ColorValue="black"
-                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-            >
-                <Picker.Item label="--" value="--" />
-                <Picker.Item label="Female" value="Female" />
-                <Picker.Item label="Male" value="Male" />
-                <Picker.Item label="Other" value="other" />
-                <Picker.Item label="Prefer not to say" value="no" />
-            </Picker>
-
-
-                    <Text style={styles.onboardHeaderFont}>Year of Study</Text>
-                    <Picker
-                        style={styles.picker}
-                        selectedValue={selectedValue}
-                        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                    >
-                        <Picker.Item label="--" value="--" />
-                        <Picker.Item label="Other" value="other" />
-                        <Picker.Item label="Prefer not to say" value="no" />
-                    </Picker>
-                    <Text style={styles.onboardHeaderFont}>College</Text>
-                    <Picker
-                        style={styles.picker}
-                        selectedValue={selectedValue}
-                        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                    >
-                        <Picker.Item label="--" value="--" />
-                        <Picker.Item label="Other" value="other" />
-                        <Picker.Item label="Prefer not to say" value="no" />
-                    </Picker>
-                </View>
-
-            <SafeAreaView style={styles.scrollViewContainer}>
-                <ScrollView style={{marginTop: height*0.05,}}>
-                    <Image style={{height: height*0.08, width: width*0.12}} source={logo}/>
-                </ScrollView>
-            </SafeAreaView>
-
+                </SearchableDropdown>
+            </View>
             <TouchableOpacity
                 style={styles.quizRightButton}
                 onPress={() => {
                 props.navigation.navigate({
-                    routeName: 'Acedemic'
+                    routeName: 'Academic'
                 })
             }}>
-                <Text style={styles.quizFont}>Next</Text>
+                <Text style={styles.quizFont}>{texts.Screens.Demographics.Buttons.SaveAndContinue}</Text>
             </TouchableOpacity>
         </View>
     );

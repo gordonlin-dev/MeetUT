@@ -194,6 +194,20 @@ namespace API.Controllers
             _context.SaveChanges();
             return new JsonResult("");
         }
+        [HttpGet]
+        [Route("Demographics/Languages")]
+        public ActionResult GetLanguages()
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            var user = ValidateTokenAndGetUser(authorizationToken);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var result = _context.QuestionnaireLanguages.ToList();
+            return new JsonResult(result);
+        }
 
         [HttpPost]
         [Route("Demographics")]
