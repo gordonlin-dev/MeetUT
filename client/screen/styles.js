@@ -240,6 +240,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     quizRightButton: {
+        position: 'absolute',
         width: width * 0.45,
         height: height * 0.06,
         bottom: height*0.01,

@@ -153,6 +153,9 @@ const Demographics = props => {
               placeholder={texts.Global.Common.Lastname}
               placeholderTextColor="black"
             />
+            <View style={styles.inputHeader}>
+                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Languages}</Text>
+            </View>
               <SearchableDropdown
                   multi={true}
                   selectedItems={languageValues}
@@ -168,13 +171,14 @@ const Demographics = props => {
                   items={languageOptions}
                   itemStyle={{
                       padding: 10,
-                      marginTop: 2,
+                      marginTop: height * 0.01,
                       backgroundColor: '#ddd',
                       borderColor: '#bbb',
                       borderWidth: 1,
                       borderRadius: 5,
+
                   }}
-                  containerStyle={{ padding: 5 }}
+                  containerStyle={{ padding: 5, width: width*0.73, marginLeft: width*0.145}}
                   itemTextStyle={{ color: '#222' }}
                   itemsContainerStyle={{ maxHeight: 140 }}
                   textInputProps={
@@ -182,8 +186,9 @@ const Demographics = props => {
                           underlineColorAndroid: "transparent",
                           style: {
                               padding: 12,
-                              borderWidth: 1,
-                              borderColor: '#ccc',
+                              height: height * 0.06,
+                              borderWidth: 2,
+                              borderColor: 'black',
                               borderRadius: 5,
                           },
                           onTextChange: {}
