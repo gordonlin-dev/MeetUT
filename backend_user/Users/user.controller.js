@@ -23,6 +23,7 @@ exports.createUser = async (req, res, next) => {
     userData.password = getPasswordHash(req.body.password)
     userData.active = false
     userData.completedOnboarding = false
+    userData.avatar = 0
 
     let token = jwt.sign({_id: userData._id, active: true}, jwtSecret)
     const headers = {
@@ -170,6 +171,26 @@ exports.deleteUser = (req, res) => {
             res.status(401).send()
         }
     })
+}
+
+exports.getAvatar = (req, res) => {
+    UserModel.getAvatar(req.body._id).then((result) => {
+        if (result) {
+            res.status(200).send(result)
+        } else {
+            res.status(500).send()
+        }
+    })
+}
+
+exports.setAvatar = (req, res) => {
+    UserModel.setAvatar(req.body._id, req.body.avatar).then((result => {
+        if (result) {
+            res.status(200)
+        } else {
+            res.status()
+        }
+    }))
 }
 
 /**
