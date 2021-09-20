@@ -210,6 +210,13 @@ const styles = StyleSheet.create({
         width: width*0.16,
         borderRadius: 400/ 2,
     },
+    changeAvatar:{
+        marginTop: height*0.01,
+        marginLeft: width*0.01,
+        height: height*0.15,
+        width: width*0.3,
+        borderRadius: 400/ 2,
+    },
     headerFont: {
         fontFamily: 'timeburner',
         fontSize:17,

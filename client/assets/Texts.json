@@ -73,7 +73,8 @@
         "Other": "Other"
       },
       "Buttons": {
-        "SaveAndContinue": "Save and continue"
+        "SaveAndContinue": "Save and continue",
+        "Save": "Save"
       }
     }
   },
