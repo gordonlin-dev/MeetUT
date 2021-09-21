@@ -19,19 +19,25 @@ namespace API.Models
 
         public virtual DbSet<LookupHobbyCategory> LookupHobbyCategories { get; set; }
         public virtual DbSet<LookupProgramOfStudyCategory> LookupProgramOfStudyCategories { get; set; }
+        public virtual DbSet<QuestionnaireCountry> QuestionnaireCountries { get; set; }
         public virtual DbSet<QuestionnaireHobby> QuestionnaireHobbies { get; set; }
         public virtual DbSet<QuestionnaireHobbyCategory> QuestionnaireHobbyCategories { get; set; }
         public virtual DbSet<QuestionnaireIndustryExperience> QuestionnaireIndustryExperiences { get; set; }
         public virtual DbSet<QuestionnaireLanguage> QuestionnaireLanguages { get; set; }
         public virtual DbSet<QuestionnaireProgramOfStudy> QuestionnaireProgramOfStudies { get; set; }
         public virtual DbSet<QuestionnaireProgramOfStudyCategory> QuestionnaireProgramOfStudyCategories { get; set; }
+        public virtual DbSet<QuestionnaireProjectInterest> QuestionnaireProjectInterests { get; set; }
+        public virtual DbSet<QuestionnaireReasonsToJoin> QuestionnaireReasonsToJoins { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserCompatability> UserCompatabilities { get; set; }
+        public virtual DbSet<UserCountry> UserCountries { get; set; }
         public virtual DbSet<UserDemographic> UserDemographics { get; set; }
         public virtual DbSet<UserHobby> UserHobbies { get; set; }
         public virtual DbSet<UserIndustryExperience> UserIndustryExperiences { get; set; }
         public virtual DbSet<UserLanguage> UserLanguages { get; set; }
         public virtual DbSet<UserProgramOfStudy> UserProgramOfStudies { get; set; }
+        public virtual DbSet<UserProjectInterest> UserProjectInterests { get; set; }
+        public virtual DbSet<UserReasonsToJoin> UserReasonsToJoins { get; set; }
         public virtual DbSet<UserReligion> UserReligions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -61,6 +67,13 @@ namespace API.Models
                 entity.ToTable("Lookup_ProgramOfStudyCategories");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Value).IsRequired();
+            });
+
+            modelBuilder.Entity<QuestionnaireCountry>(entity =>
+            {
+                entity.ToTable("Questionnaire_Countries");
 
                 entity.Property(e => e.Value).IsRequired();
             });
@@ -145,6 +158,20 @@ namespace API.Models
                     .HasConstraintName("FK_ProgramOfStudy");
             });
 
+            modelBuilder.Entity<QuestionnaireProjectInterest>(entity =>
+            {
+                entity.ToTable("Questionnaire_ProjectInterest");
+
+                entity.Property(e => e.Value).IsRequired();
+            });
+
+            modelBuilder.Entity<QuestionnaireReasonsToJoin>(entity =>
+            {
+                entity.ToTable("Questionnaire_ReasonsToJoin");
+
+                entity.Property(e => e.Value).IsRequired();
+            });
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("User");
@@ -178,6 +205,23 @@ namespace API.Models
                     .HasForeignKey(d => d.User2Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_User2");
+            });
+
+            modelBuilder.Entity<UserCountry>(entity =>
+            {
+                entity.ToTable("User_Countries");
+
+                entity.HasOne(d => d.Country)
+                    .WithMany(p => p.UserCountries)
+                    .HasForeignKey(d => d.CountryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Country");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserCountries)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User");
             });
 
             modelBuilder.Entity<UserDemographic>(entity =>
@@ -268,6 +312,40 @@ namespace API.Models
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserProgramOfStudies)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User");
+            });
+
+            modelBuilder.Entity<UserProjectInterest>(entity =>
+            {
+                entity.ToTable("User_ProjectInterest");
+
+                entity.HasOne(d => d.ProjectInterest)
+                    .WithMany(p => p.UserProjectInterests)
+                    .HasForeignKey(d => d.ProjectInterestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProjectInterest");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserProjectInterests)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User");
+            });
+
+            modelBuilder.Entity<UserReasonsToJoin>(entity =>
+            {
+                entity.ToTable("User_ReasonsToJoin");
+
+                entity.HasOne(d => d.Reason)
+                    .WithMany(p => p.UserReasonsToJoins)
+                    .HasForeignKey(d => d.ReasonId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Reason");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserReasonsToJoins)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_User");

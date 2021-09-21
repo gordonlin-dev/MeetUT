@@ -281,6 +281,52 @@ namespace API.Controllers
             return new JsonResult(result);
 
         }
+
+        [HttpGet]
+        [Route("Personal/ProjectInterest")]
+        public ActionResult GetProjectInterest()
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            var user = ValidateTokenAndGetUser(authorizationToken);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var result = _context.QuestionnaireProjectInterests.ToList();
+            return new JsonResult(result);
+        }
+
+        [HttpGet]
+        [Route("Personal/Reasons")]
+        public ActionResult GetReasons()
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            var user = ValidateTokenAndGetUser(authorizationToken);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var result = _context.QuestionnaireReasonsToJoins.ToList();
+            return new JsonResult(result);
+        }
+
+        [HttpGet]
+        [Route("Personal/Countries")]
+        public ActionResult GetCountries()
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            var user = ValidateTokenAndGetUser(authorizationToken);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var result = _context.QuestionnaireCountries.ToList();
+            return new JsonResult(result);
+        }
+
         private User ValidateTokenAndGetUser(StringValues token)
         {
             
@@ -308,9 +354,6 @@ namespace API.Controllers
             return curUser;
         }
     }
-
-
-
 
     public class UserDemographicsModel
     {

@@ -48,12 +48,12 @@ namespace API.Controllers
                 ).ToList();
         }
 
-        
+        /*
         [HttpGet]
         [Route("Load")]
         public void Load()
         {
-            string filePath = "DataSource/IndustryExperience.xlsx";
+            string filePath = "DataSource/Countries.xlsx";
             using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 using (SpreadsheetDocument doc = SpreadsheetDocument.Open(fs, false))
@@ -64,7 +64,7 @@ namespace API.Controllers
 
                     foreach(var item in sst)
                     {
-                        _context.QuestionnaireIndustryExperiences.Add(new QuestionnaireIndustryExperience()
+                        _context.QuestionnaireCountries.Add(new QuestionnaireCountry()
                         {
                             Value = item.InnerText
                         });
@@ -73,7 +73,7 @@ namespace API.Controllers
                 }
             }
 
-        }
+        }*/
         
 
         [HttpGet]
