@@ -13,7 +13,7 @@ import {
 } from 'react-native'
 import {styles} from '../styles';
 const texts = require("../../assets/Texts.json");
-const avatarMap = require("../../Avatars.json")
+const avatar = require("../../Avatar")
 
 const {height, width} = Dimensions.get('window')
 
@@ -24,12 +24,11 @@ const ChangeAvatarScreen = props => {
             BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
 
-
+    // TODO: Does not show avatar
     return (
         <View style={styles.onboardContainer}>
             <ScrollView>
-                <Image source={image1} style={styles.changeAvatar}/>
-
+                <Image source={{uri:avatar.getAvatar(0)}} style={styles.changeAvatar}/>
             </ScrollView>
             <TouchableOpacity
                 style={styles.quizRightButton}>
