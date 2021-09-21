@@ -266,7 +266,21 @@ namespace API.Controllers
 
             return new JsonResult("");
         }
+        [HttpGet]
+        [Route("Personal/IndustryExperience")]
+        public ActionResult GetIndustryExperience()
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            var user = ValidateTokenAndGetUser(authorizationToken);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var result = _context.QuestionnaireIndustryExperiences.ToList();
+            return new JsonResult(result);
 
+        }
         private User ValidateTokenAndGetUser(StringValues token)
         {
             

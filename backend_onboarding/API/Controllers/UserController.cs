@@ -48,7 +48,7 @@ namespace API.Controllers
                 ).ToList();
         }
 
-        /*
+        
         [HttpGet]
         [Route("Load")]
         public void Load()
@@ -64,7 +64,7 @@ namespace API.Controllers
 
                     foreach(var item in sst)
                     {
-                        _context.QuestionnaireLanguages.Add(new QuestionnaireLanguage()
+                        _context.QuestionnaireIndustryExperiences.Add(new QuestionnaireIndustryExperience()
                         {
                             Value = item.InnerText
                         });
@@ -73,7 +73,7 @@ namespace API.Controllers
                 }
             }
 
-        }*/
+        }
         
 
         [HttpGet]
