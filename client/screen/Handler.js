@@ -42,6 +42,7 @@ const handleResponse = async (response, props) => {
 const sendRequest = async (url, method, body, unhandled, props) => {
     try {
         const token = await AsyncStorage.getItem('accessToken')
+        console.log(token)
         let requestObject = {
             method : method,
             headers: {
