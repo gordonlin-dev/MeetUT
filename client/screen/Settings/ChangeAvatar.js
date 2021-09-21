@@ -13,7 +13,7 @@ import {
 } from 'react-native'
 import {styles} from '../styles';
 const texts = require("../../assets/Texts.json");
-const image1 = require("../../assets/Avatars/apple-cartoon.png");
+const avatarMap = require("./Avatars.json")
 
 const {height, width} = Dimensions.get('window')
 
