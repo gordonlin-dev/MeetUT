@@ -35,7 +35,10 @@
         "Programs": "https://meet-ut-1.herokuapp.com/questionnaire/programs",
         "Personal": {
           "baseURL": "",
-          "IndustryExperience": "https://meet-ut-1.herokuapp.com/questionnaire/personal/industryexperience"
+          "IndustryExperience": "https://meet-ut-1.herokuapp.com/questionnaire/personal/industryexperience",
+          "ProjectInterest": "https://meet-ut-1.herokuapp.com/questionnaire/personal/projectinterest",
+          "Countries": "https://meet-ut-1.herokuapp.com/questionnaire/personal/countries",
+          "ReasonsToJoin": "https://meet-ut-1.herokuapp.com/questionnaire/personal/reasons"
         }
       }
     }
