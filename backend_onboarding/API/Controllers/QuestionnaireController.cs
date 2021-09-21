@@ -183,7 +183,7 @@ namespace API.Controllers
             }
 
             var userPrograms = new List<UserProgramOfStudy>();
-            foreach(var program in model.Programs)
+            foreach (var program in model.Programs)
             {
                 userPrograms.Add(new UserProgramOfStudy() {
                     UserId = curUser.Id,
@@ -216,7 +216,7 @@ namespace API.Controllers
             StringValues authorizationToken;
             Request.Headers.TryGetValue("Authorization", out authorizationToken);
             var user = ValidateTokenAndGetUser(authorizationToken);
-            if(user == null)
+            if (user == null)
             {
                 return Unauthorized();
             }
@@ -255,7 +255,7 @@ namespace API.Controllers
             {
                 _context.UserLanguages.RemoveRange(query3);
             }
-            foreach(var languageId in model.Languages)
+            foreach (var languageId in model.Languages)
             {
                 _context.UserLanguages.Add(new UserLanguage() {
                     UserId = user.Id,
@@ -327,6 +327,72 @@ namespace API.Controllers
             return new JsonResult(result);
         }
 
+        [HttpPost]
+        [Route("Personal")]
+        public ActionResult UpdatePersonalExperiencesAndInterests(UserPersonalExperiencesAndInterestsModel model)
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            var user = ValidateTokenAndGetUser(authorizationToken);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            var queryIndursty = _context.UserIndustryExperiences.Where(x => x.UserId == user.Id);
+            if (queryIndursty.Any())
+            {
+                _context.UserIndustryExperiences.RemoveRange(queryIndursty);
+            }
+            foreach(var industryExperienceId in model.IndustryExperiences)
+            {
+                _context.UserIndustryExperiences.Add(new UserIndustryExperience() {
+                    UserId = user.Id,
+                    IndustryExperienceId = industryExperienceId
+                });
+            }
+
+            var queryReasons = _context.UserReasonsToJoins.Where(x => x.UserId == user.Id);
+            if (queryReasons.Any())
+            {
+                _context.UserReasonsToJoins.RemoveRange(queryReasons);
+            }
+            foreach(var reasonId in model.ReasonsToJoin)
+            {
+                _context.UserReasonsToJoins.Add(new UserReasonsToJoin() {
+                    UserId = user.Id,
+                    ReasonId = reasonId
+                });
+            }
+
+            var queryCountries = _context.UserCountries.Where(x => x.UserId == user.Id);
+            if (queryCountries.Any())
+            {
+                _context.UserCountries.RemoveRange(queryCountries);
+            }
+            foreach(var countryId in model.CountriesLivedIn)
+            {
+                _context.UserCountries.Add(new UserCountry() {
+                    UserId = user.Id,
+                    CountryId = countryId
+                });
+            }
+
+            var queryProjectInterest = _context.UserProjectInterests.Where(x => x.UserId == user.Id);
+            if (queryProjectInterest.Any())
+            {
+                _context.UserProjectInterests.RemoveRange(queryProjectInterest);
+            }
+            foreach(var interestId in model.ProjectInterests)
+            {
+                _context.UserProjectInterests.Add(new UserProjectInterest() {
+                    UserId = user.Id,
+                    ProjectInterestId = interestId
+                });
+            }
+            _context.SaveChanges();
+            return new JsonResult("");
+        }
+
         private User ValidateTokenAndGetUser(StringValues token)
         {
             
@@ -355,6 +421,13 @@ namespace API.Controllers
         }
     }
 
+    public class UserPersonalExperiencesAndInterestsModel
+    {
+        public List<int> ReasonsToJoin { get; set; }
+        public List<int> IndustryExperiences { get; set; }
+        public List<int> CountriesLivedIn { get; set; }
+        public List<int> ProjectInterests { get; set; }
+    }
     public class UserDemographicsModel
     {
         public string FirstName { get; set; }
