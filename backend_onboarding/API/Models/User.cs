@@ -13,6 +13,7 @@ namespace API.Models
             UserCompatabilityUser2s = new HashSet<UserCompatability>();
             UserDemographics = new HashSet<UserDemographic>();
             UserHobbies = new HashSet<UserHobby>();
+            UserIndustryExperiences = new HashSet<UserIndustryExperience>();
             UserLanguages = new HashSet<UserLanguage>();
             UserProgramOfStudies = new HashSet<UserProgramOfStudy>();
             UserReligions = new HashSet<UserReligion>();
@@ -28,6 +29,7 @@ namespace API.Models
         public virtual ICollection<UserCompatability> UserCompatabilityUser2s { get; set; }
         public virtual ICollection<UserDemographic> UserDemographics { get; set; }
         public virtual ICollection<UserHobby> UserHobbies { get; set; }
+        public virtual ICollection<UserIndustryExperience> UserIndustryExperiences { get; set; }
         public virtual ICollection<UserLanguage> UserLanguages { get; set; }
         public virtual ICollection<UserProgramOfStudy> UserProgramOfStudies { get; set; }
         public virtual ICollection<UserReligion> UserReligions { get; set; }

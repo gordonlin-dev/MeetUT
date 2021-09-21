@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, SafeAreaView, TouchableOpacity, Text, ScrollView, StyleSheet, Dimensions} from 'react-native';
 import { styles } from '../styles';
 import NestedListView from 'react-native-nested-listview'
 const secureStore = require('../../SecureStore')
 const headers = require('../Headers')
 const {height, width} = Dimensions.get('window');
+
+const texts = require("../../assets/Texts.json");
+const handler = require('../Handler')
+const endpoints = require('../../API_endpoints.json')
+
 const Academic = (props) => {
     const [programs, setPrograms] = useState([]);
     const [chosen, setChosen] = useState([]);
@@ -37,22 +42,24 @@ const Academic = (props) => {
         }
     }
     const loadPrograms = async () => {
-        try{
-            const url = 'https://meet-ut-1.herokuapp.com/questionnaire/programs'
-            const accessToken = await secureStore.GetValue('JWT')
-            const response = await fetch(url, {
-                method : 'GET',
-                headers: headers.authorized(accessToken),
-            });
+        const response = await handler.sendRequest(
+            endpoints.Server.Onboarding.Questionnaire.Programs,
+            texts.HTTP.Get,
+            {},
+            false,
+            props
+        )
+        if(response.ok){
             const responseJson = await response.json();
+            console.log(responseJson)
             setPrograms(responseJson)
-
-        }catch (e) {
-            console.log(e);
         }
     }
+    useEffect(() => {
+        console.log(123)
+        loadPrograms()
+    }, []);
 
-    //loadPrograms();
     const sortedPrograms = [];
     for (let i = 0; i < programs.length; i++) {
         const temp = {};

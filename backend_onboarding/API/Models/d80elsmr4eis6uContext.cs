@@ -21,6 +21,7 @@ namespace API.Models
         public virtual DbSet<LookupProgramOfStudyCategory> LookupProgramOfStudyCategories { get; set; }
         public virtual DbSet<QuestionnaireHobby> QuestionnaireHobbies { get; set; }
         public virtual DbSet<QuestionnaireHobbyCategory> QuestionnaireHobbyCategories { get; set; }
+        public virtual DbSet<QuestionnaireIndustryExperience> QuestionnaireIndustryExperiences { get; set; }
         public virtual DbSet<QuestionnaireLanguage> QuestionnaireLanguages { get; set; }
         public virtual DbSet<QuestionnaireProgramOfStudy> QuestionnaireProgramOfStudies { get; set; }
         public virtual DbSet<QuestionnaireProgramOfStudyCategory> QuestionnaireProgramOfStudyCategories { get; set; }
@@ -28,6 +29,7 @@ namespace API.Models
         public virtual DbSet<UserCompatability> UserCompatabilities { get; set; }
         public virtual DbSet<UserDemographic> UserDemographics { get; set; }
         public virtual DbSet<UserHobby> UserHobbies { get; set; }
+        public virtual DbSet<UserIndustryExperience> UserIndustryExperiences { get; set; }
         public virtual DbSet<UserLanguage> UserLanguages { get; set; }
         public virtual DbSet<UserProgramOfStudy> UserProgramOfStudies { get; set; }
         public virtual DbSet<UserReligion> UserReligions { get; set; }
@@ -93,6 +95,13 @@ namespace API.Models
                     .HasForeignKey(d => d.HobbyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_QuestionnaireHobby");
+            });
+
+            modelBuilder.Entity<QuestionnaireIndustryExperience>(entity =>
+            {
+                entity.ToTable("Questionnaire_IndustryExperience");
+
+                entity.Property(e => e.Value).IsRequired();
             });
 
             modelBuilder.Entity<QuestionnaireLanguage>(entity =>
@@ -202,6 +211,23 @@ namespace API.Models
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UserHobbies)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User");
+            });
+
+            modelBuilder.Entity<UserIndustryExperience>(entity =>
+            {
+                entity.ToTable("User_IndustryExperience");
+
+                entity.HasOne(d => d.IndustryExperience)
+                    .WithMany(p => p.UserIndustryExperiences)
+                    .HasForeignKey(d => d.IndustryExperienceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_IndustryExperience");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserIndustryExperiences)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_User");

@@ -47,12 +47,13 @@ namespace API.Controllers
                     (userProgram, program) => program
                 ).ToList();
         }
-        
+
+        /*
         [HttpGet]
         [Route("Load")]
         public void Load()
         {
-            string filePath = "DataSource/languages.xlsx";
+            string filePath = "DataSource/IndustryExperience.xlsx";
             using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 using (SpreadsheetDocument doc = SpreadsheetDocument.Open(fs, false))
@@ -72,7 +73,7 @@ namespace API.Controllers
                 }
             }
 
-        }
+        }*/
         
 
         [HttpGet]
