@@ -4,7 +4,7 @@ import {
     Text,
     Image,
     BackHandler,
-    ImageBackground,
+    FlatList,
     TouchableOpacity,
     Dimensions,
     StyleSheet,
@@ -23,10 +23,18 @@ const ChangeAvatarScreen = props => {
             BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
 
+    const renderItem = ({ item }) => (
+        <Image key={item.id} source={item.source} style={styles.changeAvatar}/>
+    );
+
     return (
         <View style={styles.onboardContainer}>
-            <ScrollView>
-                {avatars.map(({id, source}) => <Image key={id} source={source} style={styles.changeAvatar}/>)}
+            <ScrollView style={{marginLeft: width * 0.03, marginTop: height * 0.02}}>
+                <FlatList
+                    data={avatars}
+                    numColumns={3}
+                    renderItem={renderItem}
+                />
             </ScrollView>
             <TouchableOpacity
                 style={styles.quizRightButton}>

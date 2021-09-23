@@ -63,7 +63,7 @@ const SettingScreen = props => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [avatar, setAvatar] = useState("");
+    const [avatar, setAvatar] = useState(0);
     const getProfile = async () => {
         const response = await handler.sendRequest(
             endpoints.Server.User.User.baseURL,
@@ -77,16 +77,21 @@ const SettingScreen = props => {
             setLastName(responseJson.lastName)
             setFirstName(responseJson.firstName)
             setEmail(responseJson._id)
-            setAvatar(responseJson.avatar)
+            if (typeof responseJson.avatar !== 'undefined'){
+                setAvatar(responseJson.avatar)
+            }
+            
+            
         }
     }
+
+    
 
     return (
         <View style={styles.empty}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View style={inpageStyle.profile}>
-                    {/* TODO: Use id */}
-                    <Image style={styles.avatar} source={avatars[0].source}/>
+                    <Image style={styles.avatar} source={avatars[avatar].source}/>
                     <View style={{height: height * 0.1, marginLeft: width * 0.02}}>
                         <Text style={styles.font}>{firstName + ' ' + lastName}</Text>
                         <Text style={styles.font}>{email}</Text>
