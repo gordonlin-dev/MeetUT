@@ -15,10 +15,9 @@ import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from '../Footer';
 import fixer from "../Fixer";
-
+import Avatar from '../../Avatar';
 const image = require('../../assets/bg.png');
 const logo = require('../../assets/logo.png')
-
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
@@ -64,6 +63,7 @@ const SettingScreen = props => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
+    const [avatar, setAvatar] = useState("");
     const getProfile = async () => {
         const response = await handler.sendRequest(
             endpoints.Server.User.User.baseURL,
@@ -77,6 +77,7 @@ const SettingScreen = props => {
             setLastName(responseJson.lastName)
             setFirstName(responseJson.firstName)
             setEmail(responseJson._id)
+            setAvatar(responseJson.avatar)
         }
     }
 
@@ -84,7 +85,7 @@ const SettingScreen = props => {
         <View style={styles.empty}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View style={inpageStyle.profile}>
-                    <Image style={styles.avatar} source={logo}/>
+                    <Image style={styles.avatar} source={Avatar.getAvatar(avatar)}/>
                     <View style={{height: height * 0.1, marginLeft: width * 0.02}}>
                         <Text style={styles.font}>{firstName + ' ' + lastName}</Text>
                         <Text style={styles.font}>{email}</Text>
