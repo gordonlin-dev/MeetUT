@@ -15,12 +15,12 @@ import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from '../Footer';
 import fixer from "../Fixer";
-import Avatar from '../../Avatar';
 const image = require('../../assets/bg.png');
 const logo = require('../../assets/logo.png')
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
+import avatars from '../../Avatars'
 
 const {height, width} = Dimensions.get('window')
 const signOutSubmit = async (props) => {
@@ -85,7 +85,8 @@ const SettingScreen = props => {
         <View style={styles.empty}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View style={inpageStyle.profile}>
-                    <Image style={styles.avatar} source={Avatar.getAvatar(avatar)}/>
+                    {/* TODO: Use id */}
+                    <Image style={styles.avatar} source={avatars[0].source}/>
                     <View style={{height: height * 0.1, marginLeft: width * 0.02}}>
                         <Text style={styles.font}>{firstName + ' ' + lastName}</Text>
                         <Text style={styles.font}>{email}</Text>
