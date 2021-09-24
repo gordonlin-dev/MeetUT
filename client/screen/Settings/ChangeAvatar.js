@@ -31,6 +31,7 @@ const ChangeAvatarScreen = props => {
             props
         )
     }
+
     const renderItem = ({item}) => (
         <TouchableOpacity onPress={() => {
             selectAvatar(item.id).then()
