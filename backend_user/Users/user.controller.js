@@ -186,9 +186,11 @@ exports.getAvatar = (req, res) => {
 exports.setAvatar = (req, res) => {
     UserModel.setAvatar(req.body._id, req.body.avatar).then((result => {
         if (result) {
+            console.log("Avatar set.")
             res.status(200)
         } else {
-            res.status()
+            console.log("Avatar set error: " + req.body._id + " " + req.body.avatar)
+            res.status(400)
         }
     }))
 }
