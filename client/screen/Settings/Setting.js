@@ -39,7 +39,6 @@ const deleteButton = async (props) => {
         )
 
         if (response.ok) {
-            console.log(response.status)
             Alert.alert("", texts.Alert.Message.Deleted)
             await AsyncStorage.setItem('accessToken', "")
             DevSettings.reload()
@@ -71,6 +70,7 @@ const SettingScreen = props => {
             false,
             props
         )
+
         if (response.ok) {
             const responseJson = await response.json();
             setLastName(responseJson.lastName)

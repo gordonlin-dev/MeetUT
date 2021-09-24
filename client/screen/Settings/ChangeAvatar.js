@@ -23,17 +23,13 @@ const ChangeAvatarScreen = props => {
             BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
     const selectAvatar = async (id) => {
-        const response = await handler.sendRequest(
+        await handler.sendRequest(
             endpoints.Server.User.User.SetAvatar,
             texts.HTTP.Put,
             {avatar: id},
             false,
             props
         )
-        console.log(response)
-        if (response.ok) {
-            console.log(response.status)
-        }
     }
     const renderItem = ({item}) => (
         <TouchableOpacity onPress={() => {
