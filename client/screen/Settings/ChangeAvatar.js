@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {
     View,
     Text,
@@ -6,13 +6,13 @@ import {
     BackHandler,
     FlatList,
     TouchableOpacity,
-    Dimensions,
-    ScrollView,
-    Alert
+    Dimensions
 } from 'react-native'
 import {styles} from '../styles';
+
 const texts = require("../../assets/Texts.json");
 import avatars from '../../Avatars'
+
 const {height, width} = Dimensions.get('window')
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
@@ -31,20 +31,22 @@ const ChangeAvatarScreen = props => {
             props
         )
         console.log(response)
-        if (response.ok){
+        if (response.ok) {
             console.log(response.status)
         }
     }
-    const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() =>{selectAvatar(item.id)}}>
+    const renderItem = ({item}) => (
+        <TouchableOpacity onPress={() => {
+            selectAvatar(item.id).then()
+        }}>
             <Image key={item.id} source={item.source} style={styles.changeAvatar}/>
         </TouchableOpacity>
-        
+
     );
 
     return (
         <View style={styles.onboardContainer}>
-            <View style={{marginLeft: width * 0.03, marginTop: height * 0.02}} >
+            <View style={{marginLeft: width * 0.03, marginTop: height * 0.02}}>
                 <FlatList
                     data={avatars}
                     numColumns={3}
