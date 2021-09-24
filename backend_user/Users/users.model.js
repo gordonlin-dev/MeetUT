@@ -8,6 +8,7 @@ const userSchema = new Schema({
     passwordCode: String,
     firstName: String,
     lastName: String,
+    avatar: Number,
     _id: String,
     password: String,
     isArchived: Boolean,
@@ -82,6 +83,25 @@ exports.getPasswordCode = (id) => {
             return null
         } else {
             return result.passwordCode
+        }
+    })
+}
+
+exports.getAvatar = (id) => {
+    return User.findById(id).then((result) => {
+        if (result == null) {
+            return null
+        } else {
+            return result.avatar
+        }
+    })
+}
+
+exports.setAvatar = (id, avatar) => {
+    return User.findById(id).then((result) => {
+        if (result != null) {
+            result.avatar = avatar
+            return result.save()
         }
     })
 }

@@ -51,6 +51,9 @@
       "SignOut": "Sign out",
       "Delete": "Delete this account"
     },
+    "Avatar": {
+      "ChangeAvatar": "Change avatar"
+    },
     "Demographics": {
       "Religions": {
         "Catholic": "Roman Catholic",
@@ -70,7 +73,8 @@
         "Other": "Other"
       },
       "Buttons": {
-        "SaveAndContinue": "Save and continue"
+        "SaveAndContinue": "Save and continue",
+        "Save": "Save"
       }
     }
   },

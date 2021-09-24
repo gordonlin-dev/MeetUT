@@ -14,16 +14,15 @@ import {
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from '../Footer';
-import fixer from "../Fixer";
-const image =  require('../../assets/bg.png');
-const logo = require('../../assets/logo.png')
 
+const image = require('../../assets/bg.png');
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
+import avatars from '../../Avatars'
 
 const {height, width} = Dimensions.get('window')
-const signOutSubmit = async (props) => {
+const signOutSubmit = async () => {
     await AsyncStorage.setItem('accessToken', "")
     DevSettings.reload()
 }
@@ -40,7 +39,6 @@ const deleteButton = async (props) => {
         )
 
         if (response.ok) {
-            console.log(response.status)
             Alert.alert("", texts.Alert.Message.Deleted)
             await AsyncStorage.setItem('accessToken', "")
             DevSettings.reload()
@@ -54,15 +52,16 @@ const deleteButton = async (props) => {
 
 const SettingScreen = props => {
     useEffect(() => {
-        getProfile()
+        getProfile().then()
         BackHandler.addEventListener('hardwareBackPress', () => true)
         return () =>
-          BackHandler.removeEventListener('hardwareBackPress', () => true)
+            BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
+    const [avatar, setAvatar] = useState(0);
     const getProfile = async () => {
         const response = await handler.sendRequest(
             endpoints.Server.User.User.baseURL,
@@ -71,48 +70,64 @@ const SettingScreen = props => {
             false,
             props
         )
-        if (response.ok){
+
+        if (response.ok) {
             const responseJson = await response.json();
             setLastName(responseJson.lastName)
             setFirstName(responseJson.firstName)
             setEmail(responseJson._id)
+            if (typeof responseJson.avatar !== 'undefined') {
+                setAvatar(responseJson.avatar)
+            }
+
+
         }
     }
 
+
     return (
         <View style={styles.empty}>
-            <ImageBackground source={image} resizeMode="cover" style={styles.image} >
+            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View style={inpageStyle.profile}>
-                    <Image style={styles.avatar} source={logo}/>
-                <View style={{height: height*0.1, marginLeft: width*0.02}}>
-                    <Text style={styles.font}>{firstName + ' ' + lastName}</Text>
-                    <Text style={styles.font}>{email}</Text>
-                </View>
+                    <Image style={styles.avatar} source={avatars[avatar].source}/>
+                    <View style={{height: height * 0.1, marginLeft: width * 0.02}}>
+                        <Text style={styles.font}>{firstName + ' ' + lastName}</Text>
+                        <Text style={styles.font}>{email}</Text>
+                    </View>
 
                 </View>
                 <View style={{marginTop: 0}}>
-                <TouchableOpacity
-                    onPress={() => {
-                        signOutSubmit(props)
-                    }}
-                    style={styles.Button}>
-                    <Text style={styles.font}>{texts.Screens.Settings.SignOut}</Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            signOutSubmit(props).then()
+                        }}
+                        style={styles.Button}>
+                        <Text style={styles.font}>{texts.Screens.Settings.SignOut}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                    onPress={() => {
-                        props.navigation.navigate({
-                        routeName: 'ResetPassword'
-                        })
-                    }}
-                    style={styles.Button}>
-                    <Text style={styles.font}>{texts.Screens.ResetPassword.ResetPassword}</Text>
+                        onPress={() => {
+                            props.navigation.navigate({
+                                routeName: 'ResetPassword'
+                            })
+                        }}
+                        style={styles.Button}>
+                        <Text style={styles.font}>{texts.Screens.ResetPassword.ResetPassword}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                    onPress={() => {
-                        deleteButton(props).then()
-                    }}
-                    style={styles.Button}>
-                    <Text style={styles.font}>{texts.Screens.Settings.Delete}</Text>
+                        onPress={() => {
+                            props.navigation.navigate({
+                                routeName: 'ChangeAvatar'
+                            })
+                        }}
+                        style={styles.Button}>
+                        <Text style={styles.font}>{texts.Screens.Avatar.ChangeAvatar}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            deleteButton(props).then()
+                        }}
+                        style={styles.Button}>
+                        <Text style={styles.font}>{texts.Screens.Settings.Delete}</Text>
                     </TouchableOpacity>
                 </View>
                 <Footer navigation={props.navigation}/>
@@ -121,13 +136,13 @@ const SettingScreen = props => {
         </View>
 
 
-        );
+    );
 };
 
 const inpageStyle = StyleSheet.create({
     profile: {
         position: "absolute",
-        height: height*0.1,
+        height: height * 0.1,
         width: width,
         top: 0,
         backgroundColor: "white",

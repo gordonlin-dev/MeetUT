@@ -96,7 +96,7 @@ class Hobbies extends Component {
                 style={styles.quizRightButton}
                 onPress={() => {
                 this.props.navigation.navigate({
-                    routeName: 'Industry'
+                    routeName: 'Home'
                 })
             }}>
                 <Text style={styles.quizFont}>Next</Text>

@@ -11,6 +11,7 @@ import SettingScreen from './screen/Settings/Setting';
 import VerificationScreen from './screen/Authentication/Verification'
 import ForgotPasswordScreen from './screen/Authentication/ForgotPassword';
 import GetEmailScreen from './screen/Authentication/GetEmail';
+import ChangeAvatarScreen from './screen/Settings/ChangeAvatar';
 
 import DemographicsScreen from "./screen/Onboarding/Demographics";
 import PersonalScreen from "./screen/Onboarding/Personal";
@@ -199,6 +200,21 @@ const Navigator = createStackNavigator({
                 alignSelf: 'center',
                 fontFamily: "timeburner",
                 fontSize: 30,
+            },
+        }
+    },
+    ChangeAvatar: {
+        screen:ChangeAvatarScreen,
+        navigationOptions:{
+            title:"Change Avatar",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerTintColor: '#ffff',
+            headerTitleStyle: {
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.01
             },
         }
     },
