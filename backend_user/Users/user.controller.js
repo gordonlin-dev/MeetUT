@@ -186,9 +186,9 @@ exports.getAvatar = (req, res) => {
 exports.setAvatar = (req, res) => {
     UserModel.setAvatar(req.body._id, req.body.avatar).then((result => {
         if (result) {
-            res.status(200)
+            res.status(200).send()
         } else {
-            res.status(400)
+            res.status(400).send()
         }
     }))
 }
