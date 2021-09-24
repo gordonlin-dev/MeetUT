@@ -30,12 +30,13 @@ const ChangeAvatarScreen = props => {
             false,
             props
         )
+        console.log(response)
         if (response.ok){
             console.log(response.status)
         }
     }
     const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={(item) =>{selectAvatar(item.id)}}>
+        <TouchableOpacity onPress={() =>{selectAvatar(item.id)}}>
             <Image key={item.id} source={item.source} style={styles.changeAvatar}/>
         </TouchableOpacity>
         
@@ -43,13 +44,13 @@ const ChangeAvatarScreen = props => {
 
     return (
         <View style={styles.onboardContainer}>
-            <ScrollView style={{marginLeft: width * 0.03, marginTop: height * 0.02}} >
+            <View style={{marginLeft: width * 0.03, marginTop: height * 0.02}} >
                 <FlatList
                     data={avatars}
                     numColumns={3}
                     renderItem={renderItem}
                 />
-            </ScrollView>
+            </View>
             <TouchableOpacity
                 style={styles.quizRightButton}>
                 <Text style={styles.quizFont}>{texts.Screens.Demographics.Buttons.Save}</Text>
