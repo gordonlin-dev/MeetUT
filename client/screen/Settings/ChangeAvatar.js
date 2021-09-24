@@ -24,7 +24,7 @@ const ChangeAvatarScreen = props => {
     }, [])
     const selectAvatar = async (id) => {
         const response = await handler.sendRequest(
-            endpoints.Server.User.User.baseURL,
+            endpoints.Server.User.User.SetAvatar,
             texts.HTTP.Put,
             {avatar: id},
             false,

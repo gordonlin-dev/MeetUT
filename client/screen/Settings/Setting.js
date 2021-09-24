@@ -118,7 +118,7 @@ const SettingScreen = props => {
                     <TouchableOpacity
                         onPress={() => {
                             props.navigation.navigate({
-                                routeName: 'ChangeAvatar'  // TODO: Create route and screen for ChangeAvatar
+                                routeName: 'ChangeAvatar'
                             })
                         }}
                         style={styles.Button}>
