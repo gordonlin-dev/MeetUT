@@ -14,16 +14,15 @@ import {
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from '../Footer';
-import fixer from "../Fixer";
+
 const image = require('../../assets/bg.png');
-const logo = require('../../assets/logo.png')
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
 import avatars from '../../Avatars'
 
 const {height, width} = Dimensions.get('window')
-const signOutSubmit = async (props) => {
+const signOutSubmit = async () => {
     await AsyncStorage.setItem('accessToken', "")
     DevSettings.reload()
 }
@@ -54,7 +53,7 @@ const deleteButton = async (props) => {
 
 const SettingScreen = props => {
     useEffect(() => {
-        getProfile()
+        getProfile().then()
         BackHandler.addEventListener('hardwareBackPress', () => true)
         return () =>
             BackHandler.removeEventListener('hardwareBackPress', () => true)
@@ -77,15 +76,14 @@ const SettingScreen = props => {
             setLastName(responseJson.lastName)
             setFirstName(responseJson.firstName)
             setEmail(responseJson._id)
-            if (typeof responseJson.avatar !== 'undefined'){
+            if (typeof responseJson.avatar !== 'undefined') {
                 setAvatar(responseJson.avatar)
             }
-            
-            
+
+
         }
     }
 
-    
 
     return (
         <View style={styles.empty}>
@@ -101,7 +99,7 @@ const SettingScreen = props => {
                 <View style={{marginTop: 0}}>
                     <TouchableOpacity
                         onPress={() => {
-                            signOutSubmit(props)
+                            signOutSubmit(props).then()
                         }}
                         style={styles.Button}>
                         <Text style={styles.font}>{texts.Screens.Settings.SignOut}</Text>
