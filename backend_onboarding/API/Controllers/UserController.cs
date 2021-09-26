@@ -74,8 +74,25 @@ namespace API.Controllers
             }
 
         }*/
-        
-
+        /*
+        [HttpGet]
+        [Route("Delete")]
+        public void Delete()
+        {            
+            _context.UserCompatabilities.RemoveRange(_context.UserCompatabilities);
+            _context.UserCountries.RemoveRange(_context.UserCountries);
+            _context.UserDemographics.RemoveRange(_context.UserDemographics);
+            _context.UserHobbies.RemoveRange(_context.UserHobbies);
+            _context.UserIndustryExperiences.RemoveRange(_context.UserIndustryExperiences);            
+            _context.UserLanguages.RemoveRange(_context.UserLanguages);
+            _context.UserProgramOfStudies.RemoveRange(_context.UserProgramOfStudies);
+            _context.UserProjectInterests.RemoveRange(_context.UserProjectInterests);
+            _context.UserReasonsToJoins.RemoveRange(_context.UserReasonsToJoins);
+            _context.UserReligions.RemoveRange(_context.UserReligions);
+            _context.Users.RemoveRange(_context.Users);
+            _context.SaveChanges();
+        }
+        */
         [HttpGet]
         public ActionResult GetUser()
         {

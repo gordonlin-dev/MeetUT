@@ -67,6 +67,7 @@ namespace API.Controllers
         [Route("Programs")]
         public ActionResult GetPrograms()
         {
+            /*
             StringValues authorizationToken;
             Request.Headers.TryGetValue("Authorization", out authorizationToken);
             if (authorizationToken.ToString().Length == 0)
@@ -77,7 +78,7 @@ namespace API.Controllers
             if (curUserEmail == null)
             {
                 return Unauthorized();
-            }
+            }*/
             var results = new List<ProgramCategoryResults>();
             var categories = _context.LookupProgramOfStudyCategories.ToList();
             foreach (var category in categories)
@@ -91,7 +92,8 @@ namespace API.Controllers
                         (programCategory, program) => new ProgramResults()
                         {
                             Value = program.Value,
-                            ProgramId = program.Id
+                            ProgramId = program.Id,
+                            CategoryIds = program.QuestionnaireProgramOfStudyCategories.Select(x => x.CategoryId).ToList()
                         }
                     );
                 results.Add(new ProgramCategoryResults() {
@@ -471,6 +473,7 @@ namespace API.Controllers
     {
         public int ProgramId { get; set; }
         public string Value { get; set; }
+        public List<int> CategoryIds { get; set; }
         public ProgramResults()
         {
 

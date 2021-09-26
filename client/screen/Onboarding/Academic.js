@@ -1,5 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import { View, SafeAreaView, TouchableOpacity, Text, ScrollView, StyleSheet, Dimensions} from 'react-native';
+import {
+    View,
+    SafeAreaView,
+    TouchableOpacity,
+    Text,
+    ScrollView,
+    StyleSheet,
+    Dimensions,
+    ListView,
+    SectionList, FlatList
+} from 'react-native';
 import { styles } from '../styles';
 import NestedListView from 'react-native-nested-listview'
 const secureStore = require('../../SecureStore')
@@ -13,6 +23,7 @@ const endpoints = require('../../API_endpoints.json')
 const Academic = (props) => {
     const [programs, setPrograms] = useState([]);
     const [chosen, setChosen] = useState([]);
+    const [forceUpdate, setForceUpdate] = useState(true);
     const colorLevels = {
         [0]: '#d0d0d9',
         [1]: '#abe1f5',
@@ -51,104 +62,92 @@ const Academic = (props) => {
         )
         if(response.ok){
             const responseJson = await response.json();
-            console.log(responseJson)
             setPrograms(responseJson)
+            generateProgramSection()
         }
     }
+
+    const generateProgramSection = () => {
+        let sections = []
+        for (let i = 0; i < programs.length; i++){
+            let section = {
+                title:programs[i].categoryValue,
+                data:programs[i].content
+            }
+            sections.push(section)
+        }
+        return sections
+    }
+
+    const generateChosenSection = () => {
+        let sections = []
+        sections.push({
+            title:"Selected",
+            data:chosen
+        })
+        return sections
+    }
+
+    const programsListPress = (program) => {
+        const filtered = chosen.filter(element => element.programId === program.programId)
+        if(filtered.length === 0){
+            chosen.push(program)
+            setChosen(chosen)
+            removeProgram(program.programId)
+            setForceUpdate(!forceUpdate)
+        }
+    }
+
+    const removeProgram = (programId) =>{
+        for(let i = 0; i < programs.length; i++){
+            programs[i].content = programs[i].content.filter(element => element.programId !== programId)
+        }
+        setPrograms(programs)
+    }
+    const chosenListPress = (program) =>{
+        setChosen(chosen.filter(element => element.programId !== program.programId))
+    }
+
     useEffect(() => {
-        console.log(123)
         loadPrograms()
     }, []);
 
-    const sortedPrograms = [];
-    for (let i = 0; i < programs.length; i++) {
-        const temp = {};
-        temp.title = programs[i].categoryValue;
-        temp.items = [];
-        for (let j = 0; j < programs[i].content.length; j++) {
-            temp.items.push({title: programs[i].content[j].value, id: programs[i].content[j].programId})
-        }
-        sortedPrograms.push(temp)
-    }
-    const toggleChecked = (node) => {
-        if (chosen.some(el => el.value === node.title)) {
-            const newSelected = chosen.filter((id) => id !== node.id);
-            setChosen(newSelected);
-        } else {
-            chosen.push({programId: node.id, value: node.title})
-        }
-    }
-
-    const unselect = (props) => {
-        for (let i = 0; i < chosen.length; i++) {
-            if (chosen[i].value === props.value) {
-                chosen.splice(i, 1)
-            }
-        }
-    }
-    const renderNode = (node, level) => {
-        const paddingLeft = (level ?? 0 + 1) * 30;
-        const backgroundColor = colorLevels[level ?? 0] || 'white';
-        if (level === 1) {
-            return (
-                <View style={[styles.row, { backgroundColor, paddingLeft }]}>
-                    <Text style={styles.headerFont}>{node.title}</Text>
-                </View>
-            );
-
-        } else {
-            return (
-                <View style={[styles.row, { backgroundColor, paddingLeft }]}>
-                    <Text style={styles.headerFont}>{node.title}</Text>
-                    <TouchableOpacity style={styles.selectButton} onPress={() => toggleChecked(node)}>
-                    <Text style={styles.headerFont}>select</Text>
-                    </TouchableOpacity>
-                </View>
-            );
-        }
-
-    };
 
     return (
         <SafeAreaView style={styles.quizContainer} >
 
             <View style={styles.scrollContainer} >
                 <Text style={styles.headerFont}>Programs</Text>
-                <NestedListView
-                    data={sortedPrograms}
-                    renderNode={renderNode}
-                />
+                <SectionList sections={generateProgramSection()}
+                             renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
+                                 programsListPress(item)
+                             }}>{item.value}</Text>}
+                             renderSectionHeader={({section}) => <Text style={inpageStyle.sectionHeader}>{section.title}</Text>}
+                             keyExtractor={(item, index) => index}
+                >
+
+                </SectionList>
             </View>
             <View style={styles.selectedContainer}>
-            <Text style={styles.headerFont}>chosen Programs ({chosen.length})</Text>
-                <ScrollView style={styles.outputContainer}>
+                <Text style={styles.headerFont}>Chosen Programs ({chosen.length})</Text>
+                <SectionList sections={generateChosenSection()}
+                             renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
+                                 chosenListPress(item)
+                             }}>{item.value}</Text>}
+                             renderSectionHeader={({section}) => <Text style={inpageStyle.sectionHeader}>{section.title}</Text>}
+                             keyExtractor={(item, index) => index}
+                >
 
-                    {chosen.map((props) => {
-                        return(
-                            <View style={{flexDirection: 'row',}} key={props.programId}>
-                                <View style={styles.outputCard}>
-                                    <Text style={styles.quizFont}>{props.value}</Text>
-                                </View>
-                                <TouchableOpacity style={styles.swipeButton} onPress={() => unselect(props)}>
-                                        <Text style={styles.headerFont}>Unselect</Text>
-                                </TouchableOpacity>
-                            </View>
-
-
-                        )
-
-                    })}
-                </ScrollView>
+                </SectionList>
             </View>
-
-                <View style={inpageStyle.quizeFooter}>
+            <View style={inpageStyle.quizeFooter}>
                 <TouchableOpacity
                     style={styles.quizLeftButton}
                     onPress={() => {
-                    props.navigation.navigate({
-                        routeName: 'Demographics'
-                    })
-                }}>
+                        props.navigation.navigate({
+                            routeName: 'Demographics'
+                        })
+                    }}>
                     <Text style={styles.quizFont}>Back</Text>
                 </TouchableOpacity>
 
@@ -156,13 +155,10 @@ const Academic = (props) => {
                     style={styles.quizRightButton}
                     onPress={() => {
                         submit(props, chosen)
-
-                }}>
+                    }}>
                     <Text style={styles.quizFont}>Next</Text>
                 </TouchableOpacity>
             </View>
-
-
         </SafeAreaView>
     );
 
@@ -175,6 +171,20 @@ const inpageStyle = StyleSheet.create ({
         height: height * 0.1,
         width: width,
         top: height*0.82
+    },
+    sectionHeader: {
+        paddingTop: 2,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 2,
+        fontSize: 14,
+        fontWeight: 'bold',
+        backgroundColor: 'rgba(247,247,247,1.0)',
+    },
+    item: {
+        padding: 10,
+        fontSize: 18,
+        height: 44,
     },
 })
 export default Academic;
