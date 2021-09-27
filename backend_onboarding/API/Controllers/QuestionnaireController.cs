@@ -337,9 +337,32 @@ namespace API.Controllers
             return new JsonResult(result);
         }
 
+        #region Personal
         [HttpPost]
         [Route("Personal")]
-        public ActionResult UpdatePersonalExperiencesAndInterests(UserPersonalExperiencesAndInterestsModel model)
+        public ActionResult GetPersonal()
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            var user = ValidateTokenAndGetUser(authorizationToken);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var model = new UserPersonalModel()
+            {
+                ReasonsToJoin = _context.QuestionnaireReasonsToJoins.ToList(),
+                CountriesLivedIn = _context.QuestionnaireCountries.ToList(),
+                IndustryExperiences = _context.QuestionnaireIndustryExperiences.ToList(),
+                ProjectInterests = _context.QuestionnaireProjectInterests.ToList()
+            };
+            return new JsonResult(model);
+        }
+        #endregion
+        [HttpPost]
+        [Route("Personal1")]
+        public ActionResult UpdatePersonalExperiencesAndInterests(UserPersonalModel model)
         {
             StringValues authorizationToken;
             Request.Headers.TryGetValue("Authorization", out authorizationToken);
@@ -357,7 +380,7 @@ namespace API.Controllers
             {
                 _context.UserIndustryExperiences.Add(new UserIndustryExperience() {
                     UserId = user.Id,
-                    IndustryExperienceId = industryExperienceId
+                    IndustryExperienceId = industryExperienceId.Id
                 });
             }
 
@@ -370,7 +393,7 @@ namespace API.Controllers
             {
                 _context.UserReasonsToJoins.Add(new UserReasonsToJoin() {
                     UserId = user.Id,
-                    ReasonId = reasonId
+                    ReasonId = reasonId.Id
                 });
             }
 
@@ -383,7 +406,7 @@ namespace API.Controllers
             {
                 _context.UserCountries.Add(new UserCountry() {
                     UserId = user.Id,
-                    CountryId = countryId
+                    CountryId = countryId.Id
                 });
             }
 
@@ -396,7 +419,7 @@ namespace API.Controllers
             {
                 _context.UserProjectInterests.Add(new UserProjectInterest() {
                     UserId = user.Id,
-                    ProjectInterestId = interestId
+                    ProjectInterestId = interestId.Id
                 });
             }
             _context.SaveChanges();
@@ -431,13 +454,7 @@ namespace API.Controllers
         }
     }
 
-    public class UserPersonalExperiencesAndInterestsModel
-    {
-        public List<int> ReasonsToJoin { get; set; }
-        public List<int> IndustryExperiences { get; set; }
-        public List<int> CountriesLivedIn { get; set; }
-        public List<int> ProjectInterests { get; set; }
-    }
+
     public class UserDemographicsModel
     {
         public string FirstName { get; set; }
@@ -458,6 +475,7 @@ namespace API.Controllers
         }
     }
 
+    #region Academics
     public class UserAcademicsModel
     {
         public List<ProgramCategoryResults> Programs { get; set; }
@@ -488,6 +506,17 @@ namespace API.Controllers
 
         }
     }
+    #endregion
+
+    #region Personal
+    public class UserPersonalModel
+    {
+        public List<QuestionnaireReasonsToJoin> ReasonsToJoin { get; set; }
+        public List<QuestionnaireIndustryExperience> IndustryExperiences { get; set; }
+        public List<QuestionnaireCountry> CountriesLivedIn { get; set; }
+        public List<QuestionnaireProjectInterest> ProjectInterests { get; set; }
+    }
+    #endregion
 
     public class HobbyCategoryResults
     {

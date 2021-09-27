@@ -9,10 +9,7 @@ import {
     SectionList
 } from 'react-native';
 import { styles } from '../styles';
-import NestedListView from 'react-native-nested-listview'
 import {Picker} from "@react-native-picker/picker";
-const secureStore = require('../../SecureStore')
-const headers = require('../Headers')
 const {height, width} = Dimensions.get('window');
 
 const texts = require("../../assets/Texts.json");
@@ -34,29 +31,6 @@ const Academic = (props) => {
         [2]: '#f2f2fc',
     };
 
-    const submit = async (props, chosen) => {
-
-        try{
-            const accessToken = await secureStore.GetValue('JWT')
-            const url = 'https://meet-ut-1.herokuapp.com/questionnaire/programs'
-            const response = await fetch(url, {
-                method : 'POST',
-                headers: headers.authorized(accessToken),
-                body: JSON.stringify({
-                    Programs: chosen
-                })
-            });
-            const responseJson = await response.json();
-            props.navigation.navigate({
-                routeName: 'Personal'
-            })
-
-
-        }catch (e) {
-            console.log(e);
-        }
-    }
-
     const save = async () => {
         const body = {
             Programs: [],
@@ -76,7 +50,7 @@ const Academic = (props) => {
             props.navigation.navigate('Personal')
         }
     }
-    const loadPrograms = async () => {
+    const getData = async () => {
         const response = await handler.sendRequest(
             endpoints.Server.Onboarding.Questionnaire.Academics,
             texts.HTTP.Get,
@@ -234,7 +208,6 @@ const Academic = (props) => {
                                      renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
                                          chosenListPress(item)
                                      }}>{item.value}</Text>}
-                                     renderSectionHeader={({section}) => <Text style={inpageStyle.sectionHeader}>{section.title}</Text>}
                                      keyExtractor={(item, index) => index}
                         >
 
@@ -246,7 +219,7 @@ const Academic = (props) => {
     }
 
     useEffect(() => {
-        loadPrograms()
+        getData()
     }, []);
 
 
