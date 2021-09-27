@@ -27,6 +27,9 @@ namespace API.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Description { get; set; }
+        public int? YearOfStudy { get; set; }
+        public int? College { get; set; }
+        public int? DegreeType { get; set; }
 
         public virtual ICollection<UserCompatability> UserCompatabilityUser1s { get; set; }
         public virtual ICollection<UserCompatability> UserCompatabilityUser2s { get; set; }

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {
     View,
     SafeAreaView,
@@ -19,11 +19,16 @@ const {height, width} = Dimensions.get('window');
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
+const lookups = require('../Lookups.json')
 
 const Academic = (props) => {
     const [programs, setPrograms] = useState([]);
     const [chosen, setChosen] = useState([]);
     const [forceUpdate, setForceUpdate] = useState(true);
+    const [renderStage, setRenderStage] = useState(0);
+    const [degreeType, setDegreeType] = useState(0)
+    const [yearOfStudy, setYearOfStudy] = useState(0)
+    const [college, setCollege] = useState(0)
     const colorLevels = {
         [0]: '#d0d0d9',
         [1]: '#abe1f5',
@@ -52,6 +57,10 @@ const Academic = (props) => {
             console.log(e);
         }
     }
+
+    const save = () => {
+
+    }
     const loadPrograms = async () => {
         const response = await handler.sendRequest(
             endpoints.Server.Onboarding.Questionnaire.Programs,
@@ -72,7 +81,7 @@ const Academic = (props) => {
         for (let i = 0; i < programs.length; i++){
             let section = {
                 title:programs[i].categoryValue,
-                data:programs[i].content
+                data:programs[i].content.sort((a,b) => {return a.programId - b.programId})
             }
             sections.push(section)
         }
@@ -104,8 +113,57 @@ const Academic = (props) => {
         }
         setPrograms(programs)
     }
+    const addProgram = (program) => {
+        for(let i = 0; i < programs.length; i ++){
+            if(program.categoryIds.filter(element => element === programs[i].categoryId).length > 0){
+                if(programs[i].content.filter(element => element.programId === program.programId).length === 0){
+                    programs[i].content.push(program)
+                    programs[i].content.sort((a,b) => {return a.programId - b.programId})
+                }
+            }
+        }
+        setPrograms(programs)
+    }
     const chosenListPress = (program) =>{
         setChosen(chosen.filter(element => element.programId !== program.programId))
+        addProgram(program)
+        setForceUpdate(!forceUpdate)
+    }
+
+    const renderBody = () => {
+        if(renderStage === 0) {
+            //render degree type, year of study, college
+        }else if(renderStage === 1){
+            //render programs
+            return (
+                <Fragment>
+                    <View style={styles.scrollContainer} >
+                        <Text style={styles.headerFont}>Programs</Text>
+                        <SectionList sections={generateProgramSection()}
+                                     renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
+                                         programsListPress(item)
+                                     }}>{item.value}</Text>}
+                                     renderSectionHeader={({section}) => <Text style={inpageStyle.sectionHeader}>{section.title}</Text>}
+                                     keyExtractor={(item, index) => index}
+                        >
+
+                        </SectionList>
+                    </View>
+                    <View style={styles.selectedContainer}>
+                        <Text style={styles.headerFont}>Chosen Programs ({chosen.length})</Text>
+                        <SectionList sections={generateChosenSection()}
+                                     renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
+                                         chosenListPress(item)
+                                     }}>{item.value}</Text>}
+                                     renderSectionHeader={({section}) => <Text style={inpageStyle.sectionHeader}>{section.title}</Text>}
+                                     keyExtractor={(item, index) => index}
+                        >
+
+                        </SectionList>
+                    </View>
+                </Fragment>
+            )
+        }
     }
 
     useEffect(() => {
@@ -115,38 +173,19 @@ const Academic = (props) => {
 
     return (
         <SafeAreaView style={styles.quizContainer} >
+            {renderBody()}
 
-            <View style={styles.scrollContainer} >
-                <Text style={styles.headerFont}>Programs</Text>
-                <SectionList sections={generateProgramSection()}
-                             renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
-                                 programsListPress(item)
-                             }}>{item.value}</Text>}
-                             renderSectionHeader={({section}) => <Text style={inpageStyle.sectionHeader}>{section.title}</Text>}
-                             keyExtractor={(item, index) => index}
-                >
-
-                </SectionList>
-            </View>
-            <View style={styles.selectedContainer}>
-                <Text style={styles.headerFont}>Chosen Programs ({chosen.length})</Text>
-                <SectionList sections={generateChosenSection()}
-                             renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
-                                 chosenListPress(item)
-                             }}>{item.value}</Text>}
-                             renderSectionHeader={({section}) => <Text style={inpageStyle.sectionHeader}>{section.title}</Text>}
-                             keyExtractor={(item, index) => index}
-                >
-
-                </SectionList>
-            </View>
             <View style={inpageStyle.quizeFooter}>
                 <TouchableOpacity
                     style={styles.quizLeftButton}
                     onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'Demographics'
-                        })
+                        if(renderStage == 0){
+                            props.navigation.navigate({
+                                routeName: 'Demographics'
+                            })
+                        }else{
+                            setRenderStage(renderStage - 1)
+                        }
                     }}>
                     <Text style={styles.quizFont}>Back</Text>
                 </TouchableOpacity>
@@ -154,7 +193,11 @@ const Academic = (props) => {
                 <TouchableOpacity
                     style={styles.quizRightButton}
                     onPress={() => {
-                        submit(props, chosen)
+                        if(renderStage === 1){
+                            save()
+                        }else{
+                            setRenderStage(renderStage + 1)
+                        }
                     }}>
                     <Text style={styles.quizFont}>Next</Text>
                 </TouchableOpacity>
