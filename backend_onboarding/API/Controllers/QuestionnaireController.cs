@@ -63,22 +63,50 @@ namespace API.Controllers
             return new JsonResult(results.ToList());
         }
 
+        #region Academic
         [HttpGet]
-        [Route("Programs")]
-        public ActionResult GetPrograms()
+        [Route("Academics")]
+        public ActionResult GetAcademics()
         {
-            /*
             StringValues authorizationToken;
             Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            if (authorizationToken.ToString().Length == 0)
+            var user = ValidateTokenAndGetUser(authorizationToken);
+            if (user == null)
             {
                 return Unauthorized();
             }
-            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
-            if (curUserEmail == null)
+
+            var model = new UserAcademicsModel()
+            {
+                DegreeType = user.DegreeType,
+                YearOfStudy = user.YearOfStudy,
+                College = user.College,
+                Programs = GetPrograms()
+            };
+            return new JsonResult(model);
+        }
+
+        [HttpPost]
+        [Route("Academics")]
+        public ActionResult UpdateAcademics(UserAcademicsModel model)
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            var user = ValidateTokenAndGetUser(authorizationToken);
+            if (user == null)
             {
                 return Unauthorized();
-            }*/
+            }
+            user.DegreeType = model.DegreeType;
+            user.YearOfStudy = model.YearOfStudy;
+            user.College = model.College;
+            UpdateUserPrograms(user, model);
+
+            return new JsonResult("");
+        }
+
+        private List<ProgramCategoryResults> GetPrograms()
+        {        
             var results = new List<ProgramCategoryResults>();
             var categories = _context.LookupProgramOfStudyCategories.ToList();
             foreach (var category in categories)
@@ -96,14 +124,39 @@ namespace API.Controllers
                             CategoryIds = program.QuestionnaireProgramOfStudyCategories.Select(x => x.CategoryId).ToList()
                         }
                     );
-                results.Add(new ProgramCategoryResults() {
+                results.Add(new ProgramCategoryResults()
+                {
                     CategoryId = category.Id,
                     CategoryValue = category.Value,
                     Content = query.ToList()
                 });
             }
-            return new JsonResult(results);
+            return results;
         }
+
+        private void UpdateUserPrograms(User curUser, UserAcademicsModel model)
+        {
+            var query2 = _context.UserProgramOfStudies.Where(x => x.UserId == curUser.Id);
+            if (query2.Any())
+            {
+                _context.UserProgramOfStudies.RemoveRange(query2);
+                _context.SaveChanges();
+            }
+
+            var userPrograms = new List<UserProgramOfStudy>();
+            foreach (var program in model.SelectedPrograms)
+            {
+                userPrograms.Add(new UserProgramOfStudy()
+                {
+                    UserId = curUser.Id,
+                    ProgramId = program.ProgramId
+                });
+            }
+            _context.UserProgramOfStudies.AddRange(userPrograms);
+            _context.SaveChanges();
+        }
+        #endregion
+
 
         [HttpPost]
         [Route("Hobbies")]
@@ -150,52 +203,7 @@ namespace API.Controllers
             _context.SaveChanges();
             return new JsonResult("");
         }
-        [HttpPost]
-        [Route("Programs")]
-        public ActionResult UpdateUserPrograms(UserProgramModel model)
-        {
-            StringValues authorizationToken;
-            Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            if (authorizationToken.ToString().Length == 0)
-            {
-                return Unauthorized();
-            }
-            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
-            if (curUserEmail == null)
-            {
-                return Unauthorized();
-            }
-            var query = _context.Users.Where(x => x.Email == curUserEmail);
-            var curUser = query.FirstOrDefault();
-            if (!query.Any())
-            {
-                var newUser = new User()
-                {
-                    Email = curUserEmail
-                };
-                _context.Users.Add(newUser);
-                _context.SaveChanges();
-                curUser = newUser;
-            }
-            var query2 = _context.UserProgramOfStudies.Where(x => x.UserId == curUser.Id);
-            if (query2.Any())
-            {
-                _context.UserProgramOfStudies.RemoveRange(query2);
-                _context.SaveChanges();
-            }
 
-            var userPrograms = new List<UserProgramOfStudy>();
-            foreach (var program in model.Programs)
-            {
-                userPrograms.Add(new UserProgramOfStudy() {
-                    UserId = curUser.Id,
-                    ProgramId = program.ProgramId
-                });
-            }
-            _context.UserProgramOfStudies.AddRange(userPrograms);
-            _context.SaveChanges();
-            return new JsonResult("");
-        }
         [HttpGet]
         [Route("Demographics/Languages")]
         public ActionResult GetLanguages()
@@ -439,14 +447,6 @@ namespace API.Controllers
         public List<int> Languages { get; set; }
         public string Religion { get; set; }
     }
-    public class UserProgramModel
-    {
-        public List<ProgramResults> Programs { get; set; }
-        public UserProgramModel()
-        {
-
-        }
-    }
 
     public class UserHobbyModel
     {
@@ -456,6 +456,15 @@ namespace API.Controllers
         {
 
         }
+    }
+
+    public class UserAcademicsModel
+    {
+        public List<ProgramCategoryResults> Programs { get; set; }
+        public int? DegreeType { get; set; }
+        public int? YearOfStudy { get; set; }
+        public int? College { get; set; }
+        public List<ProgramResults> SelectedPrograms { get; set; }
     }
 
     public class ProgramCategoryResults

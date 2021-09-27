@@ -4,14 +4,13 @@ import {
     SafeAreaView,
     TouchableOpacity,
     Text,
-    ScrollView,
     StyleSheet,
     Dimensions,
-    ListView,
-    SectionList, FlatList
+    SectionList
 } from 'react-native';
 import { styles } from '../styles';
 import NestedListView from 'react-native-nested-listview'
+import {Picker} from "@react-native-picker/picker";
 const secureStore = require('../../SecureStore')
 const headers = require('../Headers')
 const {height, width} = Dimensions.get('window');
@@ -58,12 +57,28 @@ const Academic = (props) => {
         }
     }
 
-    const save = () => {
-
+    const save = async () => {
+        const body = {
+            Programs: [],
+            DegreeType: degreeType,
+            YearOfStudy: yearOfStudy,
+            College : college,
+            SelectedPrograms: chosen
+        }
+        const response = await handler.sendRequest(
+            endpoints.Server.Onboarding.Questionnaire.Academics,
+            texts.HTTP.Post,
+            body,
+            false,
+            props
+        )
+        if(response.ok){
+            props.navigation.navigate('Personal')
+        }
     }
     const loadPrograms = async () => {
         const response = await handler.sendRequest(
-            endpoints.Server.Onboarding.Questionnaire.Programs,
+            endpoints.Server.Onboarding.Questionnaire.Academics,
             texts.HTTP.Get,
             {},
             false,
@@ -71,7 +86,10 @@ const Academic = (props) => {
         )
         if(response.ok){
             const responseJson = await response.json();
-            setPrograms(responseJson)
+            setPrograms(responseJson.programs)
+            setDegreeType(responseJson.DegreeType)
+            setYearOfStudy(responseJson.YearOfStudy)
+            setCollege(responseJson.College)
             generateProgramSection()
         }
     }
@@ -130,9 +148,70 @@ const Academic = (props) => {
         setForceUpdate(!forceUpdate)
     }
 
+    const generateDegreePicker = () =>{
+        let items = []
+        const options = lookups.Academic.DegreeType
+        for (const option in options) {
+            const obj = options[option]
+            items.push(<Picker.Item key ={obj.Value} value={obj.Value} label={obj.DisplayValue} />)
+        }
+        return items
+    }
+    const generateYearPicker = () =>{
+        let items = []
+        const options = lookups.Academic.YearOfStudy
+        for (const option in options) {
+            const obj = options[option]
+            items.push(<Picker.Item key ={obj.Value} value={obj.Value} label={obj.DisplayValue} />)
+        }
+        return items
+    }
+    const generateCollegePicker = () =>{
+        let items = []
+        const options = lookups.Academic.College
+        for (const option in options) {
+            const obj = options[option]
+            items.push(<Picker.Item key ={obj.Value} value={obj.Value} label={obj.DisplayValue} />)
+        }
+        return items
+    }
     const renderBody = () => {
         if(renderStage === 0) {
             //render degree type, year of study, college
+            return(
+                <Fragment>
+                    <View style={styles.pickerHeader}>
+                        <Text style={styles.onboardHeaderFont}>Degree</Text>
+                        <Picker
+                            style={styles.picker}
+                            selectedValue={degreeType}
+                            ColorValue="black"
+                            onValueChange={(itemValue, itemIndex) => setDegreeType(itemValue)}>
+                            {generateDegreePicker()}
+                        </Picker>
+                    </View>
+                    <View style={styles.pickerHeader}>
+                        <Text style={styles.onboardHeaderFont}>Year</Text>
+                        <Picker
+                            style={styles.picker}
+                            selectedValue={yearOfStudy}
+                            ColorValue="black"
+                            onValueChange={(itemValue, itemIndex) => setYearOfStudy(itemValue)}>
+                            {generateYearPicker()}
+                        </Picker>
+                    </View>
+                    <View style={styles.pickerHeader}>
+                        <Text style={styles.onboardHeaderFont}>College</Text>
+                        <Picker
+                            style={styles.picker}
+                            selectedValue={college}
+                            ColorValue="black"
+                            onValueChange={(itemValue, itemIndex) => setCollege(itemValue)}>
+                            {generateCollegePicker()}
+                        </Picker>
+                    </View>
+                </Fragment>
+            )
         }else if(renderStage === 1){
             //render programs
             return (
@@ -184,6 +263,7 @@ const Academic = (props) => {
                                 routeName: 'Demographics'
                             })
                         }else{
+
                             setRenderStage(renderStage - 1)
                         }
                     }}>

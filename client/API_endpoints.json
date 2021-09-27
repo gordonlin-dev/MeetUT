@@ -34,7 +34,7 @@
       "Questionnaire": {
         "Demographics": "https://meet-ut-1.herokuapp.com/questionnaire/demographics",
         "Languages": "https://meet-ut-1.herokuapp.com/questionnaire/demographics/languages",
-        "Programs": "https://meet-ut-1.herokuapp.com/questionnaire/programs",
+        "Academics": "https://meet-ut-1.herokuapp.com/questionnaire/academics",
         "Personal": {
           "baseURL": "https://meet-ut-1.herokuapp.com/questionnaire/personal",
           "IndustryExperience": "https://meet-ut-1.herokuapp.com/questionnaire/personal/industryexperience",
