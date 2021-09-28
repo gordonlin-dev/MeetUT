@@ -35,13 +35,7 @@
         "Demographics": "https://meet-ut-1.herokuapp.com/questionnaire/demographics",
         "Languages": "https://meet-ut-1.herokuapp.com/questionnaire/demographics/languages",
         "Academics": "https://meet-ut-1.herokuapp.com/questionnaire/academics",
-        "Personal": {
-          "baseURL": "https://meet-ut-1.herokuapp.com/questionnaire/personal",
-          "IndustryExperience": "https://meet-ut-1.herokuapp.com/questionnaire/personal/industryexperience",
-          "ProjectInterest": "https://meet-ut-1.herokuapp.com/questionnaire/personal/projectinterest",
-          "Countries": "https://meet-ut-1.herokuapp.com/questionnaire/personal/countries",
-          "ReasonsToJoin": "https://meet-ut-1.herokuapp.com/questionnaire/personal/reasons"
-        }
+        "Personal": "https://meet-ut-1.herokuapp.com/questionnaire/personal"
       }
     }
   }

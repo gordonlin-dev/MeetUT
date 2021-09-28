@@ -338,7 +338,7 @@ namespace API.Controllers
         }
 
         #region Personal
-        [HttpPost]
+        [HttpGet]
         [Route("Personal")]
         public ActionResult GetPersonal()
         {

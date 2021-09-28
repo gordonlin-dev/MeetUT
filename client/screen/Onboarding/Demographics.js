@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import {View, Image, TextInput, TouchableOpacity, ScrollView, Text, SafeAreaView, Dimensions} from 'react-native'
+import {View, Image, TextInput, TouchableOpacity, ScrollView, Text, SafeAreaView, Dimensions, Picker} from 'react-native'
 import SearchableDropdown from 'react-native-searchable-dropdown';
-import {Picker} from '@react-native-picker/picker';
 import {styles} from '../styles'
 const logo =  require('../../assets/logo.png');
 const {height, width} = Dimensions.get('window');
@@ -36,7 +35,6 @@ const Demographics = props => {
                 languages.push({id: languageObject.id, name: languageObject.value})
             }
             setLanguageOptions(languages)
-            console.log(languageOptions)
         }
         const response = await handler.sendRequest(
             endpoints.Server.Onboarding.User.baseURL,
@@ -55,7 +53,7 @@ const Demographics = props => {
     const generateGenderPicker = () => {
         let items = []
         const options = texts.Screens.Demographics.Gender
-        items.push(<Picker.Item key ={""} value={""} label={""} />)
+        items.push(<Picker.Item key= {""} value={""} label={""} />)
         for (const option in options) {
             const value = options[option]
             items.push(<Picker.Item key ={value} value={value} label={value} />)
@@ -106,7 +104,6 @@ const Demographics = props => {
                 languages.push(languageValues[i].id)
             }
         }
-        console.log(languages)
         const body = {
             FirstName : firstName,
             LastName : lastName,
@@ -122,7 +119,7 @@ const Demographics = props => {
             false,
             props
         )
-        console.log(response.status)
+        
         if(response.ok){
             props.navigation.navigate('Academic')
         }
@@ -132,7 +129,7 @@ const Demographics = props => {
     }, []);
 
     return (
-          <View style={styles.onboardContainer}>
+          <ScrollView style={styles.onboardContainer}>
             <View style={styles.inputHeader}>
                 <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Firstname}</Text>
             </View>
@@ -203,9 +200,7 @@ const Demographics = props => {
             <View style={styles.pickerHeader}>
                 <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Gender}</Text>
                 <Picker
-                    style={styles.picker}
                     selectedValue={genderValue}
-                    ColorValue="black"
                     onValueChange={(itemValue, itemIndex) => setGenderValue(itemValue)}>
                     {generateGenderPicker()}
                 </Picker>
@@ -214,7 +209,6 @@ const Demographics = props => {
             <View style={styles.pickerHeader}>
                 <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Religion}</Text>
                 <Picker
-                    style={styles.picker}
                     selectedValue={religionValue}
                     ColorValue="black"
                     onValueChange={(itemValue, itemIndex) => setReligionValue(itemValue)}>
@@ -228,7 +222,7 @@ const Demographics = props => {
                 }>
                 <Text style={styles.quizFont}>{texts.Screens.Demographics.Buttons.SaveAndContinue}</Text>
             </TouchableOpacity>
-        </View>
+        </ScrollView>
     );
 };
 
