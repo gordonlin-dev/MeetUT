@@ -119,7 +119,7 @@ const Demographics = props => {
             false,
             props
         )
-        
+
         if(response.ok){
             props.navigation.navigate('Academic')
         }

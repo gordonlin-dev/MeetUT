@@ -6,10 +6,10 @@ import {
     Text,
     StyleSheet,
     Dimensions,
-    SectionList
+    Picker,
+    SectionList, ScrollView
 } from 'react-native';
 import { styles } from '../styles';
-import {Picker} from "@react-native-picker/picker";
 const {height, width} = Dimensions.get('window');
 
 const texts = require("../../assets/Texts.json");
@@ -153,11 +153,10 @@ const Academic = (props) => {
         if(renderStage === 0) {
             //render degree type, year of study, college
             return(
-                <Fragment>
+                <ScrollView>
                     <View style={styles.pickerHeader}>
                         <Text style={styles.onboardHeaderFont}>Degree</Text>
                         <Picker
-                            style={styles.picker}
                             selectedValue={degreeType}
                             ColorValue="black"
                             onValueChange={(itemValue, itemIndex) => setDegreeType(itemValue)}>
@@ -167,7 +166,6 @@ const Academic = (props) => {
                     <View style={styles.pickerHeader}>
                         <Text style={styles.onboardHeaderFont}>Year</Text>
                         <Picker
-                            style={styles.picker}
                             selectedValue={yearOfStudy}
                             ColorValue="black"
                             onValueChange={(itemValue, itemIndex) => setYearOfStudy(itemValue)}>
@@ -177,14 +175,13 @@ const Academic = (props) => {
                     <View style={styles.pickerHeader}>
                         <Text style={styles.onboardHeaderFont}>College</Text>
                         <Picker
-                            style={styles.picker}
                             selectedValue={college}
                             ColorValue="black"
                             onValueChange={(itemValue, itemIndex) => setCollege(itemValue)}>
                             {generateCollegePicker()}
                         </Picker>
                     </View>
-                </Fragment>
+                </ScrollView>
             )
         }else if(renderStage === 1){
             //render programs
