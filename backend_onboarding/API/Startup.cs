@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace API
 {
@@ -28,7 +29,8 @@ namespace API
         {
 
             services.AddControllers();
-            services.AddDbContext<d80elsmr4eis6uContext>();
+            //services.AddScoped<d80elsmr4eis6uContext>();
+            services.AddDbContext<d80elsmr4eis6uContext>(opt => { opt.EnableSensitiveDataLogging(); });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,8 +44,6 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

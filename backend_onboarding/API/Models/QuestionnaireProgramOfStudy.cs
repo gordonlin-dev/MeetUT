@@ -9,14 +9,14 @@ namespace API.Models
     {
         public QuestionnaireProgramOfStudy()
         {
-            QuestionnaireProgramOfStudyCategoriies = new HashSet<QuestionnaireProgramOfStudyCategoriie>();
+            QuestionnaireProgramOfStudyCategories = new HashSet<QuestionnaireProgramOfStudyCategory>();
             UserProgramOfStudies = new HashSet<UserProgramOfStudy>();
         }
 
         public int Id { get; set; }
         public string Value { get; set; }
 
-        public virtual ICollection<QuestionnaireProgramOfStudyCategoriie> QuestionnaireProgramOfStudyCategoriies { get; set; }
+        public virtual ICollection<QuestionnaireProgramOfStudyCategory> QuestionnaireProgramOfStudyCategories { get; set; }
         public virtual ICollection<UserProgramOfStudy> UserProgramOfStudies { get; set; }
     }
 }

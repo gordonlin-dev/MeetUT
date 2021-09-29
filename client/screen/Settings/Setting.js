@@ -1,140 +1,152 @@
-import React, {useState} from 'react'
-import {View, Text, StyleSheet, Image, Dimensions, ImageBackground, TouchableOpacity} from 'react-native'
-const secureStore = require('../../SecureStore')
+import React, {useState, useEffect} from 'react'
+import {
+    View,
+    Text,
+    Image,
+    BackHandler,
+    ImageBackground,
+    TouchableOpacity,
+    Dimensions,
+    StyleSheet,
+    DevSettings,
+    Alert
+} from 'react-native'
+import {styles} from '../styles';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Footer from '../Footer';
 
-const home =  require('../../assets/home-icon.png');
-const setting =  require('../../assets/setting-icon.png');
-const chat =  require('../../assets/chat-icon.png');
-const image =  require('../../assets/bg.png');
-const {height, width} = Dimensions.get('window');
-const signoutSubmit = async (props) => {
+const image = require('../../assets/bg.png');
+const texts = require("../../assets/Texts.json");
+const handler = require('../Handler')
+const endpoints = require('../../API_endpoints.json')
+import avatars from '../../Avatars'
+
+const {height, width} = Dimensions.get('window')
+const signOutSubmit = async () => {
+    await AsyncStorage.setItem('accessToken', "")
+    DevSettings.reload()
+}
+
+
+const deleteButton = async (props) => {
     try {
-        await secureStore.Delete('UserId');
-        await secureStore.Delete('JWT');
-        props.navigation.navigate({
-            routeName: 'Landing'
-        })        
-    }catch (error){
+        const response = await handler.sendRequest(
+            endpoints.Server.User.User.Delete,
+            texts.HTTP.Delete,
+            {},
+            true,
+            props
+        )
+
+        if (response.ok) {
+            Alert.alert("", texts.Alert.Message.Deleted)
+            await AsyncStorage.setItem('accessToken', "")
+            DevSettings.reload()
+        } else {
+            await handler.handleResponse(response, props)
+        }
+    } catch (error) {
         console.log(error)
     }
 }
+
 const SettingScreen = props => {
+    useEffect(() => {
+        getProfile().then()
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+            BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
+
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [avatar, setAvatar] = useState(0);
+    const getProfile = async () => {
+        const response = await handler.sendRequest(
+            endpoints.Server.User.User.baseURL,
+            texts.HTTP.Get,
+            {},
+            false,
+            props
+        )
+
+        if (response.ok) {
+            const responseJson = await response.json();
+            setLastName(responseJson.lastName)
+            setFirstName(responseJson.firstName)
+            setEmail(responseJson._id)
+            if (typeof responseJson.avatar !== 'undefined') {
+                setAvatar(responseJson.avatar)
+            }
+
+
+        }
+    }
+
 
     return (
-        <View style={styles.bg}>
-          <ImageBackground source={image} resizeMode="cover" style={styles.image} >
-          <View style={styles.buttonContainer}>
-          <TouchableOpacity
-              onPress={() => {
-                signoutSubmit(props)
-              }}
-              style={styles.Button}>
-              <Text style={styles.font}>Sign Out</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                props.navigation.navigate({
-                  routeName: 'ResetPassword'
-                })
-              }}
-              style={styles.Button}>
-              <Text style={styles.font}>Reset Password</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.footer}>
-                <View style={styles.footerButton}>
-                  <TouchableOpacity onPress={() => {
-                      props.navigation.navigate({
-                          routeName: 'Setting'
-                      })
-                  }}>
-                      <Image style={styles.icon} source={setting}/>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => {
-                      props.navigation.navigate({
-                          routeName: 'Home'
-                      })
-                  }}>
-                      <Image style={styles.icon} source={home}/>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => {
-                      props.navigation.navigate({
-                          routeName: 'ChatList'
-                      })
-                  }}>
-                      <Image style={styles.icon} source={chat}/>
-                  </TouchableOpacity>
-                    
+        <View style={styles.empty}>
+            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                <View style={inpageStyle.profile}>
+                    <Image style={styles.avatar} source={avatars[avatar].source}/>
+                    <View style={{height: height * 0.1, marginLeft: width * 0.02}}>
+                        <Text style={styles.font}>{firstName + ' ' + lastName}</Text>
+                        <Text style={styles.font}>{email}</Text>
+                    </View>
+
                 </View>
-                
-            </View>
-          </ImageBackground>
-      
+                <View style={{marginTop: 0}}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            signOutSubmit(props).then()
+                        }}
+                        style={styles.Button}>
+                        <Text style={styles.font}>{texts.Screens.Settings.SignOut}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            props.navigation.navigate({
+                                routeName: 'ResetPassword'
+                            })
+                        }}
+                        style={styles.Button}>
+                        <Text style={styles.font}>{texts.Screens.ResetPassword.ResetPassword}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            props.navigation.navigate({
+                                routeName: 'ChangeAvatar'
+                            })
+                        }}
+                        style={styles.Button}>
+                        <Text style={styles.font}>{texts.Screens.Avatar.ChangeAvatar}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            deleteButton(props).then()
+                        }}
+                        style={styles.Button}>
+                        <Text style={styles.font}>{texts.Screens.Settings.Delete}</Text>
+                    </TouchableOpacity>
+                </View>
+                <Footer navigation={props.navigation}/>
+            </ImageBackground>
+
         </View>
-          
-          
-        );
+
+
+    );
 };
 
-const styles = StyleSheet.create({
-    bg: {
-      flex: 1,
-    },
-    image: {
-      flex: 1,
-      justifyContent: "center"
-    },
-    Input: {
-      marginTop: height * 0.03,
-      marginLeft: width * 0.15,
-      height: height * 0.06,
-      width: width * 0.7,
-      borderRadius: 5,
-      borderWidth: 2,
-      padding: 10,
-      borderColor: "white",
-      color: "white"
-    },
-    Button: {
-      width: width * 0.6,
-      height: height * 0.06,
-      marginTop: height * 0.04,
-      marginLeft: width * 0.2,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 15,
-      backgroundColor: 'white',
-    },
-    header: {
-      fontSize:50,
-      marginLeft: width * 0.34,
-      color: "white",
-      fontFamily: 'timeburner',
-    },
-    font: {
-      fontFamily: 'timeburner',
-      fontSize:18,
-      color: "#0E0EA1",
-      fontWeight: "500"
-    },
-    footer: {
-        justifyContent: 'space-around',
-        alignItems: 'stretch',
-        backgroundColor: '#3590F2',
+const inpageStyle = StyleSheet.create({
+    profile: {
+        position: "absolute",
         height: height * 0.1,
-        marginTop: height * 0.52
+        width: width,
+        top: 0,
+        backgroundColor: "white",
+        flexDirection: 'row'
     },
-    footerButton:{
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-    },
-    buttonContainer: {
-      marginTop: height * 0.1
-    },
-    icon: {
-      height: height*0.05,
-      width: width*0.1
-  }
-  });
-
+})
 export default SettingScreen;

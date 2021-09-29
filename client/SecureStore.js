@@ -1,12 +1,11 @@
 import * as SecureStore from 'expo-secure-store';
 
-exports.Save = async (key, value) =>{
+exports.Save = async (key, value) => {
     await SecureStore.setItemAsync(key, value);
 };
 
 exports.GetValue = async (key) => {
-    let result = await SecureStore.getItemAsync(key);
-    return result;
+    return await SecureStore.getItemAsync(key);
 }
 
 exports.Delete = async (key) => {
@@ -17,5 +16,4 @@ exports.Delete = async (key) => {
     } catch (error) {
         console.log(error);
     }
-
 }

@@ -1,29 +1,18 @@
 const jwt = require('jsonwebtoken')
-const crypto = require('crypto')
 const jwtSecret = require("../env.config").jwt_secret
 
-exports.auth = (req,res) => {
-    try{
-        let refreshId = req.body.email + jwtSecret
-        let salt = crypto.randomBytes(16).toString('base64')
-        let hash = crypto.createHmac('sha512', salt).update(refreshId).digest('base64')
-        req.body.refreshKey = salt
-        let token = jwt.sign(req.body.email, jwtSecret)
-        let b = Buffer.from(hash)
-        let refresh_token = b.toString('base64')
-        res.status(201).send({accessToken:token, refreshToken: refresh_token})
-    }catch (e) {
-        res.status(500).send()
-    }
-}
+exports.auth = (req, res) => {
+    try {
+        let token = jwt.sign({_id: req.body._id, active: req.body.active}, jwtSecret)
+        if (req.body.active) {
+            res.status(200).send({accessToken: token})
+        } else {
+            res.status(403).send({accessToken: token})
+        }
 
-exports.refresh = (req, res) => {
-    try{
-        req.body = req.jwt
-        let token = jwt.sign(req.body, jwtSecret)
-        res.status(201).send({id: token})
-    }catch (e) {
+    } catch (error) {
         res.status(500).send()
+        console.log(error)
     }
 }
 

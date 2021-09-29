@@ -1,161 +1,158 @@
-import React, { Component } from 'react';
-import { View, StyleSheet, Dimensions, TouchableOpacity, Text} from 'react-native';
-import MultiSelect from 'react-native-multiple-select';
-const {height, width} = Dimensions.get('window');
-const items = [{
-    id: '1',
-    name: 'Film/Theater'
-  }, {
-    id: '2',
-    name: 'Sports'
-  }, {
-    id: '3',
-    name: 'Reading'
-  }, {
-    id: '4',
-    name: 'Travel'
-  }, {
-    id: '5',
-    name: '5'
-  }, {
-    id: '6',
-    name: '6'
-  }, {
-    id: '7',
-    name: '7'
-  }, {
-    id: '8',
-    name: '8'
-  }, {
-    id: '9',
-    name: '9'
-    }
-];
- 
-class Hobbies extends Component {
- 
-    state = {
-        selectedItems : []
-    };
-    
-  
-    onSelectedItemsChange = selectedItems => {
-        this.setState({ selectedItems });
-    };
-    
-    render() {
-        const { selectedItems } = this.state;
- 
-    return (
-        <View style={styles.container} >
-            <Text style={styles.headerFont}>Activities</Text>
-            <MultiSelect
-                style={styles.select}
-                hideTags
-                items={items}
-                uniqueKey="id"
-                ref={(component) => { this.multiSelect = component }}
-                onSelectedItemsChange={this.onSelectedItemsChange}
-                selectedItems={selectedItems}
-                searchInputPlaceholderText="Search Items..."
-                onChangeInput={ (text)=> console.log(text)}
-                altFontFamily="timeburner"
-                itemFontFamily="timeburner"
-                tagRemoveIconColor="black"
-                tagBorderColor="black"
-                tagTextColor="black"
-                selectedItemTextColor="#CCC"
-                selectedItemIconColor="#CCC"
-                selectedItemFontFamily="timeburner"
-                itemTextColor="#000"
-                displayKey="name"
-                searchInputStyle={{ color: '#CCC' }}
-                submitButtonColor="#CCC"
-                submitButtonText="Submit"
-            >
-            </MultiSelect>
-            <View style={styles.quizHeader}>
-                <Text style={styles.quizFont}>Added Activities</Text>
-            </View>
-            <View>
-                 {this.multiSelect && this.multiSelect.getSelectedItemsExt(selectedItems)}
-            </View>
-            <TouchableOpacity 
-                style={styles.leftButton}
-                onPress={() => {
-                this.props.navigation.navigate({
-                    routeName: 'Reason'
-                })
-            }}>
-                <Text style={styles.font}>Back</Text>
-            </TouchableOpacity>
+import React, { useState } from 'react';
+import { View, SafeAreaView, TouchableOpacity, Text, ScrollView} from 'react-native';
+import { styles } from '../styles'; 
+import NestedListView from 'react-native-nested-listview'
+const secureStore = require('../../SecureStore')
+const headers = require('../Headers')
 
-            <TouchableOpacity 
-                style={styles.Button}
-                onPress={() => {
-                this.props.navigation.navigate({
-                    routeName: 'SpecificHobby'
+const Hobbies = (props) => {
+    const [hobbies, setHobbies] = useState([]);
+    const [selected, setSelected] = useState([]);
+    const colorLevels = {
+        [0]: '#d0d0d9',
+        [1]: '#abe1f5',
+        [2]: '#f2f2fc',
+    };
+
+    const submit = async (props, selected) => {
+        try{
+            const accessToken = await secureStore.GetValue('JWT')
+            const url = 'https://meet-ut-1.herokuapp.com/questionnaire/hobbies'
+            const response = await fetch(url, {
+                method : 'POST',
+                headers: headers.authorized(accessToken),
+                body: JSON.stringify({
+                    Hobbies: selected
                 })
-            }}>
-                <Text style={styles.font}>Next</Text>
-            </TouchableOpacity>
+            });
+            const responseJson = await response.json();
+            props.navigation.navigate({
+                routeName: 'SpecificHobby'
+            })
             
-        </View>
+    
+        }catch (e) {
+            console.log(e);
+        }
+    }
+    const loadHobbies = async () => {
+        try{
+            const url = 'https://meet-ut-1.herokuapp.com/questionnaire/hobbies'
+            const accessToken = secureStore.GetValue('JWT')
+            const response = await fetch(url, {
+                method : 'GET',
+                headers: headers.authorized(accessToken),
+            });
+            const responseJson = await response.json();
+            setHobbies(responseJson)
+      
+        }catch (e) {
+            console.log(e);
+        }
+    }
+
+    loadHobbies();
+    const sortedHobbies = [];
+    for (let i = 0; i < hobbies.length; i++) {
+        const temp = {};
+        temp.title = hobbies[i].categoryValue;
+        temp.items = [];
+        for (let j = 0; j < hobbies[i].content.length; j++) {
+            temp.items.push({title: hobbies[i].content[j].value, id: hobbies[i].content[j].hobbyId})
+        }
+        sortedHobbies.push(temp)
+    }
+    const toggleChecked = (node) => {
+        if (selected.some(el => el.value === node.title)) {
+            const newSelected = selected.filter((id) => id !== node.id);
+            setSelected(newSelected);
+        } else {
+            selected.push({hobbyId: node.id, value: node.title})
+        }
+    } 
+
+    const unselect = (props) => {
+        for (let i = 0; i < selected.length; i++) {
+            if (selected[i].value === props.value) {
+                selected.splice(i, 1)
+            }
+        } 
+    }
+    const renderNode = (node, level) => {
+        const paddingLeft = (level ?? 0 + 1) * 30;
+        const backgroundColor = colorLevels[level ?? 0] || 'white';
+        if (level === 1) {
+            return (
+                <View style={[styles.row, { backgroundColor, paddingLeft }]}>
+                    <Text style={styles.headerFont}>{node.title}</Text>
+                </View>
+            );
+            
+        } else {
+            return (
+                <View style={[styles.row, { backgroundColor, paddingLeft }]}>
+                    <Text style={styles.headerFont}>{node.title}</Text>
+                    <TouchableOpacity style={styles.selectButton} onPress={() => toggleChecked(node)}> 
+                    <Text style={styles.headerFont}>select</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }
+        
+    };
+    
+    return (
+        <SafeAreaView style={styles.quizContainer} >
+            <View style={styles.scrollContainer} >
+                <Text style={styles.headerFont}>Activities</Text>
+                <NestedListView
+                    data={sortedHobbies}
+                    renderNode={renderNode}
+                />
+            </View>
+            <View style={styles.selectedContainer}>
+            <Text style={styles.headerFont}>Selected Activities ({selected.length})</Text>
+                <ScrollView style={styles.outputContainer}>
+                    
+                    {selected.map((props) => {
+                        return(
+                            <View style={{flexDirection: 'row',}}  key={props.hobbyId}>
+                                <View style={styles.outputCard}>
+                                    <Text style={styles.quizFont}>{props.value}</Text>
+                                </View>
+                                <TouchableOpacity style={styles.swipeButton} onPress={() => unselect(props)}>
+                                        <Text style={styles.headerFont}>Unselect</Text>
+                                </TouchableOpacity>
+                            </View>
+                            
+                            
+                        )
+                        
+                    })}
+                </ScrollView>
+            </View>
+                <TouchableOpacity 
+                    style={styles.quizLeftButton}
+                    onPress={() => {
+                    props.navigation.navigate({
+                        routeName: 'Reason'
+                    })
+                }}>
+                    <Text style={styles.quizFont}>Back</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                    style={styles.quizRightButton}
+                    onPress={() => {
+                        submit(props, selected)
+                }}>
+                    <Text style={styles.quizFont}>Next</Text>
+                </TouchableOpacity>
+            
+            
+        </SafeAreaView>
     );
-  }
+  
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: height*0.05,
-        paddingLeft: width*0.15,
-        paddingRight: width*0.15,
-        backgroundColor: "#e1e1ea"
-    },
-    leftButton: {
-        position: 'absolute',
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        left: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-    },
-    Button: {
-        position: 'absolute',
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        right: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-    },
-    font: {
-        fontFamily: 'timeburner',
-        fontSize:18,
-        color: "black",
-        fontWeight: "500"
-    },
-    headerFont: {
-        fontFamily: 'timeburner',
-        fontSize:17,
-        color: "black",
-        marginBottom: height * 0.01
-    },
-    quizHeader: {
-      marginTop: height * 0.02,
-      alignItems: 'center',
-    },
-    quizFont: {
-        fontFamily: 'timeburner',
-        fontSize:17,
-        color: "black"  
-    },
-  });
+
 export default Hobbies;

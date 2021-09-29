@@ -1,0 +1,87 @@
+{
+  "Alert" : {
+    "Title": {
+      "Unauthorized": "Unauthorized",
+      "Error": "An error has occurred",
+      "Verification": "Verification needed",
+      "UnableToProcess": "Unable to process request",
+      "CompleteSignUp": "Please complete sign up"
+    },
+    "Message": {
+      "RestartApp": "Restarting the app.",
+      "NotFound": "Resource not found",
+      "Verification": "Please verify your email",
+      "Authenticate": "Please log in",
+      "SentCode": "A new code has been sent to your email address",
+      "Deleted": "User has been permanently deleted"
+    },
+    "Buttons": {
+      "OK": "OK"
+    }
+  },
+  "Global" : {
+    "Common" : {
+      "Login": "Log in",
+      "SignUp": "Sign up",
+      "Firstname" : "First name",
+      "Lastname" : "Last name",
+      "Languages": "Languages",
+      "Email": "Email",
+      "Password": "Password",
+      "ConfirmPassword": "Confirm password",
+      "ForgotPassword": "Forgot password",
+      "ResendCode": "Resend code",
+      "Code": "Code",
+      "Submit" : "Submit",
+      "Gender": "Gender",
+      "Religion": "Religion",
+      "Specify": "Please specify"
+    }
+  },
+  "Screens": {
+    "Verification" : {
+      "Verification" : "Verification",
+      "EnterEmail": "Please enter your email address:"
+    },
+    "ResetPassword": {
+      "ResetPassword": "Reset password",
+      "NewPassword": "New password"
+    },
+    "Settings": {
+      "SignOut": "Sign out",
+      "Delete": "Delete this account"
+    },
+    "Avatar": {
+      "ChangeAvatar": "Change avatar"
+    },
+    "Demographics": {
+      "Religions": {
+        "Catholic": "Roman Catholic",
+        "Protestant": "Protestant",
+        "Anglican": "Anglican",
+        "NotReligious": "No religious affiliation",
+        "Muslim": "Muslim",
+        "Hindu": "Hindu",
+        "Sikh": "Sikh",
+        "Buddhist": "Buddhist",
+        "Jewish": "Jewish",
+        "Other": "Other"
+      },
+      "Gender": {
+        "Male": "Male",
+        "Female": "Female",
+        "Other": "Other"
+      },
+      "Buttons": {
+        "SaveAndContinue": "Save and continue",
+        "Save": "Save"
+      }
+    }
+  },
+  "HTTP": {
+    "Get": "Get",
+    "Post": "Post",
+    "Put": "Put",
+    "Delete": "Delete"
+  }
+}

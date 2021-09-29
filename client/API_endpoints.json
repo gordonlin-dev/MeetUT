@@ -1,0 +1,42 @@
+{
+  "Server": {
+    "User": {
+      "Auth": {
+        "Login": "https://meet-ut-2.herokuapp.com/auth",
+        "ValidateJWT": "https://meet-ut-2.herokuapp.com/auth/validateJWT"
+      },
+      "User": {
+        "baseURL": "https://meet-ut-2.herokuapp.com/users",
+        "SignUp": "https://meet-ut-2.herokuapp.com/users/create",
+        "Verify": "https://meet-ut-2.herokuapp.com/users/verify",
+        "ResendCode": "https://meet-ut-2.herokuapp.com/users/verify/resend",
+        "ResendPasswordCode": "https://meet-ut-2.herokuapp.com/users/forgotPassword/resend",
+        "ForgotPassword": "https://meet-ut-2.herokuapp.com/users/forgotPassword",
+        "ResetPassword": "https://meet-ut-2.herokuapp.com/users/updatePassword",
+        "Delete": "https://meet-ut-2.herokuapp.com/users/delete",
+        "SetAvatar": "https://meet-ut-2.herokuapp.com/users/setAvatar",
+        "GetAvatar": "https://meet-ut-2.herokuapp.com/users/getAvatar"
+      },
+      "Match" : {
+
+      }
+    },
+    "Chat": {
+      "baseURL": "https://meet-ut-3.herokuapp.com/",
+      "GetChatList": "https://meet-ut-3.herokuapp.com/chat",
+      "GetChatRoom": "https://meet-ut-3.herokuapp.com/chat/room/"
+    },
+    "Onboarding": {
+      "User": {
+        "baseURL": "https://meet-ut-1.herokuapp.com/user",
+        "Recommendations": "https://meet-ut-1.herokuapp.com/user/recommendations"
+      },
+      "Questionnaire": {
+        "Demographics": "https://meet-ut-1.herokuapp.com/questionnaire/demographics",
+        "Languages": "https://meet-ut-1.herokuapp.com/questionnaire/demographics/languages",
+        "Academics": "https://meet-ut-1.herokuapp.com/questionnaire/academics",
+        "Personal": "https://meet-ut-1.herokuapp.com/questionnaire/personal"
+      }
+    }
+  }
+}

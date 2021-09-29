@@ -1,5 +1,4 @@
 import {createStackNavigator} from 'react-navigation-stack';
-import LandingScreen from './screen/Landing/Landing';
 import LoginScreen from "./screen/Authentication/Login";
 import SignupScreen from "./screen/Authentication/Signup";
 import HomeScreen from "./screen/Home/Home";
@@ -9,10 +8,14 @@ import ChatListScreen from "./screen/Chat/ChatList";
 import Splash from './screen/Landing/Splash';
 import ResetPasswordScreen from './screen/Authentication/ResetPassword';
 import SettingScreen from './screen/Settings/Setting';
+import VerificationScreen from './screen/Authentication/Verification'
+import ForgotPasswordScreen from './screen/Authentication/ForgotPassword';
+import GetEmailScreen from './screen/Authentication/GetEmail';
+import ChangeAvatarScreen from './screen/Settings/ChangeAvatar';
 
 import DemographicsScreen from "./screen/Onboarding/Demographics";
 import PersonalScreen from "./screen/Onboarding/Personal";
-import AcedemicScreen from "./screen/Onboarding/Acedemic";
+import AcademicScreen from "./screen/Onboarding/Academic";
 import ReasonScreen from "./screen/Onboarding/Reason";
 import HobbiesScreen from "./screen/Onboarding/Hobbies";
 import SpecificHobbyScreen from "./screen/Onboarding/SpecificHobby"
@@ -21,6 +24,7 @@ import IndustryScreen from "./screen/Onboarding/Industry"
 import {Dimensions} from 'react-native';
 
 import * as Font from 'expo-font';
+import { forestgreen } from 'color-name';
 const customFonts = {
     'timeburner': require('./assets/fonts/timeburner_regular.ttf'),
   };
@@ -69,8 +73,8 @@ const Navigator = createStackNavigator({
         }
 
     },
-    Acedemic:{
-        screen: AcedemicScreen,
+    Academic:{
+        screen: AcademicScreen,
         navigationOptions:{
             title:"Onboarding",
             headerStyle: {
@@ -171,13 +175,6 @@ const Navigator = createStackNavigator({
         }
 
     },
-    Landing: {
-        screen:LandingScreen,
-        navigationOptions:{
-            title:"",
-            headerShown: false
-        }
-    },
     Login: {
         screen: LoginScreen,
         navigationOptions:{
@@ -203,6 +200,21 @@ const Navigator = createStackNavigator({
                 alignSelf: 'center',
                 fontFamily: "timeburner",
                 fontSize: 30,
+            },
+        }
+    },
+    ChangeAvatar: {
+        screen:ChangeAvatarScreen,
+        navigationOptions:{
+            title:"Change Avatar",
+            headerStyle: {
+                backgroundColor: '#3590F2',
+            },
+            headerTintColor: '#ffff',
+            headerTitleStyle: {
+                fontFamily: "timeburner",
+                fontSize: 30,
+                marginLeft: width * 0.01
             },
         }
     },
@@ -250,15 +262,34 @@ const Navigator = createStackNavigator({
             headerStyle: {
                 backgroundColor: '#3590F2',
             },
+            headerLeft: ()=> null,
             headerTintColor: '#ffff',
             headerTitleStyle: {
                 fontFamily: "timeburner",
                 fontSize: 30,
-                marginLeft: width * 0.14
+                marginLeft: width * 0.3
             },
         }
     },
-    
+    Verification: {
+        screen: VerificationScreen,
+        navigationOptions:{
+            title:"",
+        }
+    },
+    ForgotPassword: {
+        screen: ForgotPasswordScreen,
+        navigationOptions:{
+            title:"",
+        }
+    },
+    GetEmail: {
+        screen: GetEmailScreen,
+        navigationOptions:{
+            title:"",
+        }
+    }
+
 });
 
 export default createAppContainer(Navigator);

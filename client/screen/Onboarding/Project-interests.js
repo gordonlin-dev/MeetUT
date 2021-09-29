@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Dimensions, TouchableOpacity, Text} from 'react-native';
+import { View, TouchableOpacity, Text} from 'react-native';
 import MultiSelect from 'react-native-multiple-select';
-const {height, width} = Dimensions.get('window');
+import {styles} from '../styles'
 const items = [{
     id: '1',
     name: 'Business'
@@ -47,7 +47,7 @@ class Hobbies extends Component {
         const { selectedItems } = this.state;
  
     return (
-        <View style={styles.container} >
+        <View style={styles.onboardContainer} >
             <Text style={styles.headerFont}>Project Interests</Text>
             <MultiSelect
                 style={styles.select}
@@ -81,81 +81,28 @@ class Hobbies extends Component {
                  {this.multiSelect && this.multiSelect.getSelectedItemsExt(selectedItems)}
             </View>
             <TouchableOpacity 
-                style={styles.leftButton}
+                style={styles.quizLeftButton}
                 onPress={() => {
                 this.props.navigation.navigate({
                     routeName: 'SpecificHobby'
                 })
             }}>
-                <Text style={styles.font}>Back</Text>
+                <Text style={styles.quizFont}>Back</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 
-                style={styles.Button}
+                style={styles.quizRightButton}
                 onPress={() => {
                 this.props.navigation.navigate({
                     routeName: 'Industry'
                 })
             }}>
-                <Text style={styles.font}>Next</Text>
+                <Text style={styles.quizFont}>Next</Text>
             </TouchableOpacity>
             
         </View>
     );
   }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: height*0.05,
-        paddingLeft: width*0.15,
-        paddingRight: width*0.15,
-        backgroundColor: "#e1e1ea"
-    },
-    leftButton: {
-        position: 'absolute',
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        left: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-    },
-    Button: {
-        position: 'absolute',
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        right: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-    },
-    font: {
-        fontFamily: 'timeburner',
-        fontSize:18,
-        color: "black",
-        fontWeight: "500"
-    },
-    headerFont: {
-        fontFamily: 'timeburner',
-        fontSize:17,
-        color: "black",
-        marginBottom: height * 0.01
-    },
-    quizHeader: {
-      marginTop: height * 0.02,
-      alignItems: 'center',
-    },
-    quizFont: {
-        fontFamily: 'timeburner',
-        fontSize:17,
-        color: "black"  
-    },
-  });
+
 export default Hobbies;

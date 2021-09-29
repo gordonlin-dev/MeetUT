@@ -1,146 +1,230 @@
-import React, {useState} from 'react'
-import {View, Image, StyleSheet, TextInput, Dimensions, TouchableOpacity, ScrollView, Text, SafeAreaView} from 'react-native'
-import {Picker} from '@react-native-picker/picker';
-
-const {height, width} = Dimensions.get('window');
+import React, {useEffect, useState} from 'react'
+import {View, Image, TextInput, TouchableOpacity, ScrollView, Text, SafeAreaView, Dimensions, Picker} from 'react-native'
+import SearchableDropdown from 'react-native-searchable-dropdown';
+import {styles} from '../styles'
 const logo =  require('../../assets/logo.png');
+const {height, width} = Dimensions.get('window');
+
+const texts = require("../../assets/Texts.json");
+const handler = require('../Handler')
+const endpoints = require('../../API_endpoints.json')
+
 const Demographics = props => {
-    const [firstName, onChangeFirstName] = useState("");
-    const [lastName, onChangeLastName] = useState("");
-    const [selectedValue, setSelectedValue] = useState("--");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [genderValue, setGenderValue] = useState("");
+    const [genderOtherValue, setGenderOtherValue] = useState("");
+    const [religionValue, setReligionValue] = useState("");
+    const [religionOtherValue, setReligionOtherValue] = useState("");
+    const [languageValues, setLanguageValues] = useState([]);
+    const [languageOptions, setLanguageOptions] = useState([]);
+
+    const loadUser = async () =>{
+        const languageResponse = await handler.sendRequest(
+            endpoints.Server.Onboarding.Questionnaire.Languages,
+            texts.HTTP.Get,
+            {},
+            false,
+            props
+        )
+        if (languageResponse.ok){
+            const languageJson = await languageResponse.json()
+            const languages = []
+            for (let i = 0; i < languageJson.length; i++){
+                const languageObject = languageJson[i]
+                languages.push({id: languageObject.id, name: languageObject.value})
+            }
+            setLanguageOptions(languages)
+        }
+        const response = await handler.sendRequest(
+            endpoints.Server.Onboarding.User.baseURL,
+            texts.HTTP.Get,
+            {},
+            false,
+            props
+        )
+        if(response.ok){
+            const responseJson = await response.json()
+            setFirstName(responseJson.firstName);
+            setLastName(responseJson.lastName)
+        }
+    }
+
+    const generateGenderPicker = () => {
+        let items = []
+        const options = texts.Screens.Demographics.Gender
+        items.push(<Picker.Item key= {""} value={""} label={""} />)
+        for (const option in options) {
+            const value = options[option]
+            items.push(<Picker.Item key ={value} value={value} label={value} />)
+        }
+        return items
+    }
+    const generateReligionPicker = () => {
+        let items = []
+        const options = texts.Screens.Demographics.Religions
+        items.push(<Picker.Item key ={""} value={""} label={""} />)
+        for (const option in options) {
+            const value = options[option]
+            items.push(<Picker.Item key ={value} value={value} label={value} />)
+        }
+        return items
+    }
+    const renderGenderOtherInput = () => {
+        if(genderValue === texts.Screens.Demographics.Gender.Other){
+            return (
+                <View style={styles.pickerHeader}>
+                    <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Specify}</Text>
+                    <TextInput
+                        style={styles.picker}
+                        onChangeText={setGenderOtherValue}
+                    />
+                </View>
+            )
+        }
+    }
+    const renderReligionOtherInput = () => {
+        if(religionValue === texts.Screens.Demographics.Religions.Other){
+            return (
+                <View style={styles.pickerHeader}>
+                    <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Specify}</Text>
+                    <TextInput
+                        style={styles.picker}
+                        onChangeText={setReligionOtherValue}
+                    />
+                </View>
+            )
+        }
+    }
+
+    const save = async () => {
+        const languages = []
+        for (let i = 0; i < languageValues.length; i ++){
+            if(languages.indexOf(languageValues[i].id) === -1){
+                languages.push(languageValues[i].id)
+            }
+        }
+        const body = {
+            FirstName : firstName,
+            LastName : lastName,
+            Gender : genderValue,
+            Religion: religionValue,
+            Languages : languages,
+            DateOfBirth : new Date()
+        }
+        const response = await handler.sendRequest(
+            endpoints.Server.Onboarding.Questionnaire.Demographics,
+            texts.HTTP.Post,
+            body,
+            false,
+            props
+        )
+
+        if(response.ok){
+            props.navigation.navigate('Academic')
+        }
+    }
+    useEffect(() => {
+        loadUser()
+    }, []);
 
     return (
-          <View style={styles.container}>
+          <ScrollView style={styles.onboardContainer}>
             <View style={styles.inputHeader}>
-                <Text style={styles.headerFont}>First Name</Text>
+                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Firstname}</Text>
             </View>
             <TextInput
-                style={styles.Input}
-                onChangeText={onChangeFirstName}
+                style={styles.onboardInput}
+                onChangeText={setFirstName}
                 value={firstName}
-                placeholder="first name"
+                placeholder={texts.Global.Common.Firstname}
                 placeholderTextColor="black"
             />
             <View style={styles.inputHeader}>
-                <Text style={styles.headerFont}>Last Name</Text>
+                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Lastname}</Text>
             </View>
             <TextInput
-              style={styles.Input}
-              onChangeText={onChangeLastName}
+              style={styles.onboardInput}
+              onChangeText={setLastName}
               value={lastName}
-              placeholder="last name"
+              placeholder={texts.Global.Common.Lastname}
               placeholderTextColor="black"
             />
-            <View style={styles.pickerHeader}>
-                <Text style={styles.headerFont}>Gender</Text>
+            <View style={styles.inputHeader}>
+                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Languages}</Text>
             </View>
-            <Picker
-                style={styles.picker}
-                selectedValue={selectedValue}
-                ColorValue="black"
-                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-            >
-                <Picker.Item label="--" value="--" />
-                <Picker.Item label="Female" value="Female" />
-                <Picker.Item label="Male" value="Male" />
-                <Picker.Item label="Other" value="other" />
-                <Picker.Item label="Prefer not to say" value="no" />
-            </Picker>
+              <SearchableDropdown
+                  multi={true}
+                  selectedItems={languageValues}
+                  onItemSelect={(item) => {
+                      const items = languageValues
+                      items.push(item)
+                      setLanguageValues(items)
+                  }}
+                  onRemoveItem={(item, index) => {
+                      const items = languageValues.filter(x => x.id !== item.id)
+                      setLanguageValues(items)
+                  }}
+                  items={languageOptions}
+                  itemStyle={{
+                      padding: 10,
+                      marginTop: height * 0.01,
+                      backgroundColor: '#ddd',
+                      borderColor: '#bbb',
+                      borderWidth: 1,
+                      borderRadius: 5,
 
-            <SafeAreaView style={styles.scrollViewContainer}>
-                <ScrollView style={styles.scrollView}>
-                    <Image style={styles.avator} source={logo}/>
-                </ScrollView>
-            </SafeAreaView>
-
-            <TouchableOpacity 
-                style={styles.Button}
-                onPress={() => {
-                props.navigation.navigate({
-                    routeName: 'Acedemic'
-                })
-            }}>
-                <Text style={styles.font}>Next</Text>
+                  }}
+                  containerStyle={{ padding: 5, width: width*0.73, marginLeft: width*0.145}}
+                  itemTextStyle={{ color: '#222' }}
+                  itemsContainerStyle={{ maxHeight: 140 }}
+                  textInputProps={
+                      {
+                          underlineColorAndroid: "transparent",
+                          style: {
+                              padding: 12,
+                              height: height * 0.06,
+                              borderWidth: 2,
+                              borderColor: 'black',
+                              borderRadius: 5,
+                          },
+                          onTextChange: {}
+                      }
+                  }
+                  listProps={
+                      {
+                          nestedScrollEnabled: true,
+                      }
+                  }
+              />
+            <View style={styles.pickerHeader}>
+                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Gender}</Text>
+                <Picker
+                    selectedValue={genderValue}
+                    onValueChange={(itemValue, itemIndex) => setGenderValue(itemValue)}>
+                    {generateGenderPicker()}
+                </Picker>
+            </View>
+              {renderGenderOtherInput()}
+            <View style={styles.pickerHeader}>
+                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Religion}</Text>
+                <Picker
+                    selectedValue={religionValue}
+                    ColorValue="black"
+                    onValueChange={(itemValue, itemIndex) => setReligionValue(itemValue)}>
+                    {generateReligionPicker()}
+                </Picker>
+            </View>
+              {renderReligionOtherInput()}
+            <TouchableOpacity
+                style={styles.quizRightButton}
+                onPress={() => save()
+                }>
+                <Text style={styles.quizFont}>{texts.Screens.Demographics.Buttons.SaveAndContinue}</Text>
             </TouchableOpacity>
-        </View>
+        </ScrollView>
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 40,
-        backgroundColor: "#e1e1ea"
-    },
-    scrollViewContainer: {
-        flex: 1,
-        alignItems: 'center',
-    },
-    Button: {
-        position: 'absolute',
-        width: width * 0.45,
-        height: height * 0.06,
-        bottom: height*0.01,
-        right: width*0.02,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        borderColor: "black",
-        backgroundColor: 'white',
-      },
-    pickerHeader: {
-        marginTop: height * 0.01,
-        left: width*0.16,
-    },
-    inputHeader: {
-        left: width*0.16,
-        marginTop: height * 0.01,
-    },
-    Input: {
-        left: width*0.16,
-        height: height * 0.06,
-        width: width * 0.7,
-        borderRadius: 5,
-        borderWidth: 2,
-        padding: 10,
-        borderColor: "black",
-        color: "black"
-    },
-    picker: {
-        left: width*0.16,
-        width: width * 0.7,
-        height: height * 0.06,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        backgroundColor: 'white',
-        color: "black"
-        
-    },
-    header: {
-        fontSize:50,
-        marginLeft: width * 0.34,
-        color: "white",
-        fontFamily: 'timeburner',
-    },
-    headerFont: {
-        fontFamily: 'timeburner',
-        fontSize:17,
-        color: "black"  
-    },
-    font: {
-        fontFamily: 'timeburner',
-        fontSize:18,
-        color: "black",
-        fontWeight: "500"
-    },
-    scrollView: {
-        marginTop: height*0.05,
-    },
-    avator: {
-        height: height*0.08,
-        width: width*0.12
-    }
-  });
 
 export default Demographics;

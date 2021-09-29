@@ -1,185 +1,83 @@
 import React, {useState, useEffect} from 'react'
-import {View, Image, StyleSheet, Button, ScrollView, Dimensions, SafeAreaView, TouchableOpacity} from 'react-native'
+import {
+    View,
+    Image,
+    StyleSheet,
+    Button,
+    BackHandler,
+    Dimensions,
+    SafeAreaView,
+    TouchableOpacity,
+    Alert
+} from 'react-native'
+import Footer from "../Footer";
 import ProfileCard from "./ProfileCard";
-import Swiper from 'react-native-swiper';
-
+import { styles } from '../styles';
 const home =  require('../../assets/home-icon.png');
 const setting =  require('../../assets/setting-icon.png');
 const chat =  require('../../assets/chat-icon.png');
 
-const secureStore = require('../../SecureStore')
-const {height, width} = Dimensions.get('window');
+const texts = require("../../assets/Texts.json");
+const handler = require('../Handler')
+const endpoints = require('../../API_endpoints.json')
+
 const HomeScreen = props => {
-    const [email, setEmail] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [curUser, setCurUser] = useState(0);
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+          BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
+
     const [users, setUsers] = useState([])
 
-    const loadData = async () => {
-        try{
-            const jwt = await secureStore.GetValue('JWT');
-            const userId = await secureStore.GetValue('UserId');
-            const url = 'https://meet-ut-2.herokuapp.com/users/' + userId;
-            const response = await fetch(url, {
-                method : 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': 'Bearer ' + jwt
-                },
-            });
-            const responseJson = await response.json();
-            setEmail(responseJson.email);
-            setFirstName(responseJson.firstName);
-            setLastName(responseJson.lastName);
-
-        }catch (e){
-
-        }
-    }
-
     const loadUser = async () => {
-        try{
-            const userID = await secureStore.GetValue('UserId');
-            const url = 'https://meet-ut-2.herokuapp.com/match' + '/' + userID
-            const response = await fetch(url, {
-                method : 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    //'authorization': 'Bearer ' + jwt
-                },
-            });
-            const responseJson = await response.json();
-            setUsers(responseJson)
+        const matchResponse = await handler.sendRequest(
+            endpoints.Server.User.User.baseURL,
+            texts.HTTP.Get,
+            {},
+            false,
+            props
+        )
 
-
-        }catch (e) {
-            console.log(e)
-        }
-    }
-
-    const nextUser = async () => {
-        await setCurUser(curUser + 1)
-    }
-
-    const sendLike = async () => {
-        try{
-            const jwt = await secureStore.GetValue('JWT');
-            const userId = await secureStore.GetValue('UserId');
-            const url = 'https://meet-ut-2.herokuapp.com/match/like';
-            const response = await fetch(url, {
-                method : 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    //'authorization': 'Bearer ' + jwt
-                },
-                body: JSON.stringify({
-                    curUser: userId,
-                    likedUser: users[curUser].email
-                })
-            });
-            if(response.status == 200){
-                await nextUser();
+        if(matchResponse.ok){
+            const responseJson = await matchResponse.json();
+            if(! responseJson.completedOnboarding){
+                Alert.alert(texts.Alert.Title.CompleteSignUp,
+                    "",
+                    [{text: texts.Alert.Buttons.OK, onPress: () => props.navigation.navigate({
+                            routeName: "Demographics"
+                        })}])
+            }else{
+                const body = {
+                    excludedUsers: responseJson.matched
+                }
+                const response = await handler.sendRequest(
+                    endpoints.Server.Onboarding.Recommendations,
+                    texts.HTTP.Post,
+                    body,
+                    false,
+                    props
+                )
+                if(response.ok){
+                    const responseJson = await response.json();
+                    setUsers(responseJson)
+                }
             }
-        }catch (e){
-            console.log(e)
         }
     }
 
     useEffect(() => {
-        //loadData();
         loadUser()
     }, []);
-
-    useEffect(() => {
-        //loadData();
-        if(users.length > 0){
-            setFirstName(users[curUser].firstName)
-            setLastName(users[curUser].lastName)
-        }
-    }, [users, curUser]);
 
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.empty}>
-                <ProfileCard style={styles.empty} firstName={firstName} lastName={lastName}/>
-                <View style={styles.buttonContainer}>
-                    <Button style={styles.Button} title={'Pass'} onPress={async () => {await nextUser()}}/>
-                    <Button style={styles.Button} title={'Like'} onPress={async () => {await sendLike()}}/>
-
-                </View>
-                <View style={styles.footer}>
-                <View style={styles.footerButton}>
-                <TouchableOpacity onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'Setting'
-                        })
-                    }}>
-                    <Image style={styles.icon} source={setting}/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => {}}>
-                    <Image style={styles.icon} source={home}/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
-                        props.navigation.navigate({
-                            routeName: 'ChatList'
-                        })
-                    }}>
-                    <Image style={styles.icon} source={chat}/>
-                </TouchableOpacity>
-
-                </View>
-
-            </View>
+                {/*<ProfileCard style={styles.homeBg} users={users}/>*/}
+            <Footer navigation={props.navigation}/>
             </View>
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        flexDirection: 'column',
-        justifyContent: 'space-between'
-    },
-
-    buttonContainer:{
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: height * 0.02,
-        marginBottom: height * 0.02
-    },
-    empty:{
-        flex:1,
-    },
-    footer: {
-        justifyContent: 'space-around',
-        alignItems: 'stretch',
-        backgroundColor: '#3590F2',
-        height: height * 0.1,
-    },
-    footerButton:{
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: height * 0.005
-    },
-    wrapper: {},
-    slide: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#9DD6EB'
-    },
-    text: {
-        color: '#fff',
-        fontSize: 30,
-        fontWeight: 'bold'
-    },
-    icon: {
-        height: height*0.05,
-        width: width*0.1
-    }
-});
-
 
 export default HomeScreen;

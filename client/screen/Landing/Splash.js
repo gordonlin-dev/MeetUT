@@ -1,93 +1,79 @@
-import React, {useEffect} from 'react'
-import {View, Text, StyleSheet, Button, Image, Dimensions, TouchableOpacity, ImageBackground} from 'react-native'
+import React, {useEffect, useState} from 'react'
+import {
+    View, Dimensions,ImageBackground, Text, TouchableOpacity, Image, StyleSheet
+} from 'react-native'
 
-
-const secureStore = require('../../SecureStore')
-
-const {height, width} = Dimensions.get('window');
-
-const image = require("../../assets/Splash.png");
+const handler = require('../Handler')
+const endpoints = require('../../API_endpoints.json')
+import {styles} from '../styles';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+const texts = require("../../assets/Texts.json");
+const image = require("../../assets/bg.png");
+const logo = require("../../assets/Logo-Transparent.png");
+const title = require("../../assets/Title.png");
+const {height, width} = Dimensions.get("window");
 
 const Splash = props => {
-
-  const validateJWT = async(jwt) => {
-      try {
-          const url = 'https://meet-ut-2.herokuapp.com/auth/validateJWT';
-
-          const response = await fetch(url, {
-              method : 'PUT',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'authorization': 'Bearer ' + jwt
-              }
-          });
-          return response.status === 200
-
-      } catch (error) {
-          console.log(error)
+    const [showButtons, setShowButtons] = useState(false);
+    const validateJWT = async() => {
+      const response = await handler.sendRequest(endpoints.Server.User.Auth.ValidateJWT,
+          texts.HTTP.Get,
+          null,
+          true,
+          props)
+      if(response.ok){
+          setTimeout(() => {props.navigation.navigate('Home')}, 500)
+      } else if(response.status === 403){
+          await handler.handleResponse(response)
       }
-  }
-  useEffect(() => {
-      secureStore.GetValue('JWT').then((jwt) =>{
-          validateJWT(jwt).then(
-              (result) => {
-                  if(result){
-                      props.navigation.navigate('Home')
-                  } else {
-                      props.navigation.navigate('Landing')
-                  }
-              }
-          )
-      })
+      else{
+          setTimeout(() => {setShowButtons(true)}, 500)
+      }
+    }
+    useEffect(() => {
+        //AsyncStorage.setItem('accessToken', "123")
+        validateJWT()
     }, []);
-    return (<View style={styles.bg}>
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-      </ImageBackground>
-    </View>)
+
+    if(showButtons){
+        return (
+            <View style={styles.empty}>
+                <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                    <Image style={styles.logo} source={logo}/>
+                    <Image style={inpageStyle.title} source={title}/>
+                    <View>
+                        <TouchableOpacity style={styles.Button}  onPress={() => {
+                            props.navigation.navigate({routeName: 'Login'})
+                        }}>
+                            <Text style={styles.font}>{texts.Global.Common.Login}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.Button} onPress={() => {
+                            props.navigation.navigate({routeName: 'Signup'})
+                        }}>
+                            <Text style={styles.font}>{texts.Global.Common.SignUp}</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                </ImageBackground>
+            </View>
+        )
+    }else{
+        return (
+            <View style={styles.empty}>
+                <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                    <Image style={styles.logo} source={logo}/>
+                    <Image style={inpageStyle.title} source={title}/>
+                </ImageBackground>
+            </View>
+        )
+    }
+
 }
-
-
-const styles = StyleSheet.create({
-  buttonContainer:{
-    flex:1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-},
-empty:{
-    flex:1
-},
-bg: {
-    flex: 1,
-},
-image: {
-    flex: 1,
-    justifyContent: "center"
-},
-container: {
-    paddingTop: 100,
-    paddingBottom: 45,
-    paddingLeft: 100,
-},
-logo: {
-    marginTop: height * 0.05,
-    marginLeft: width * 0.355,
-    width: 100,
-    height: 95,
-},
-button: {
-  width: width * 0.6,
-  height: height * 0.06,
-  marginTop: height * 0.03,
-  marginLeft: width * 0.2,
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderRadius: 15,
-  backgroundColor: 'white',
-},
-text: {
-    color: "#0748BB"
-}
-
-});
-
+const inpageStyle = StyleSheet.create({
+    title: {
+        width: width,
+        height: height * 0.15,
+        marginLeft: width * 0.15
+    }
+})
 export default Splash;

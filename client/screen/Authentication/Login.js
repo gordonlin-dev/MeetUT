@@ -1,80 +1,85 @@
-import React, {useState} from 'react'
-import {View, Text, StyleSheet, TextInput, Dimensions, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import {styles} from '../styles'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+const image = require('../../assets/bg.png')
+const handler = require('../Handler')
+const fixer = require('../Fixer')
+const endpoints = require('../../API_endpoints.json')
+const texts = require("../../assets/Texts.json");
 
-const secureStore = require('../../SecureStore')
-const cfg = require('../cfg.json')
-const image = require('../../assets/bg.png');
-const {height, width} = Dimensions.get('window');
 const loginSubmit = async (email, password, props) => {
-    try {
-        const url = cfg.domain + cfg.login;
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
-        });
+    const body = {
+        _id: fixer.email(email),
+        password: password
+    }
+    const response = await handler.sendRequest(
+        endpoints.Server.User.Auth.Login,
+        texts.HTTP.Post,
+        body,
+        false,
+        props
+    )
+
+    if(response.ok){
         const responseJson = await response.json();
-        await secureStore.Save('UserId', email);
-        await secureStore.Save('JWT', responseJson.accessToken);
-        await secureStore.Save('RefreshToken', responseJson.refreshToken);
+        await AsyncStorage.setItem('accessToken', responseJson.accessToken)
         props.navigation.navigate({
             routeName: 'Home'
         })
-    } catch (error) {
-        console.log(error)
-        Alert.alert(cfg.internalError)
     }
 }
 
 const LoginScreen = props => {
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () =>
+          BackHandler.removeEventListener('hardwareBackPress', () => true)
+    }, [])
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
 
     return (
-        <View style={styles.bg}>
+        <View style={styles.empty}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                 <View>
                     <Text style={styles.header}>
-                        Login
+                        {texts.Global.Common.Login}
                     </Text>
 
                     <TextInput
                         style={styles.Input}
                         onChangeText={onChangeEmail}
                         value={email}
-                        placeholder="email"
+                        placeholder={texts.Global.Common.Email}
                         placeholderTextColor="white"
+                        autoCapitalize='none'
                     />
                     <TextInput
                         style={styles.Input}
                         onChangeText={onChangePassword}
                         value={password}
                         secureTextEntry={true}
-                        placeholder="password"
+                        placeholder={texts.Global.Common.Password}
                         placeholderTextColor="white"
                     />
                     <TouchableOpacity
                         onPress={() => {
-                            loginSubmit(email, password, props)
+                            loginSubmit(email, password, props).then()
                         }}
                         style={styles.Button}>
-                        <Text style={styles.font}>Login</Text>
+                        <Text style={styles.font}>{texts.Global.Common.Login}</Text>
                     </TouchableOpacity>
                 </View>
                 <View>
                     <TouchableOpacity
                         onPress={() => {
                             props.navigation.navigate({
-                                routeName: 'ResetPassword'
+                                routeName: 'GetEmail'
                             })
                         }}
                         style={styles.Button}>
-                        <Text style={styles.font}>Reset Password</Text>
+                        <Text style={styles.font}>{texts.Global.Common.ForgotPassword}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -83,47 +88,5 @@ const LoginScreen = props => {
     );
 };
 
-const styles = StyleSheet.create({
-    bg: {
-        flex: 1,
-    },
-    image: {
-        flex: 1,
-        justifyContent: "center"
-    },
-    Input: {
-        marginTop: height * 0.03,
-        marginLeft: width * 0.15,
-        height: height * 0.06,
-        width: width * 0.7,
-        borderRadius: 5,
-        borderWidth: 2,
-        padding: 10,
-        borderColor: "white",
-        color: "white"
-    },
-    Button: {
-        width: width * 0.6,
-        height: height * 0.06,
-        marginTop: height * 0.04,
-        marginLeft: width * 0.2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 15,
-        backgroundColor: 'white',
-    },
-    header: {
-        fontSize: 50,
-        marginLeft: width * 0.34,
-        color: "white",
-        fontFamily: 'timeburner',
-    },
-    font: {
-        fontFamily: 'timeburner',
-        fontSize: 18,
-        color: "#0E0EA1",
-        fontWeight: "500"
-    }
-});
 
 export default LoginScreen;
