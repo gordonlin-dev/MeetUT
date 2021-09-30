@@ -23,45 +23,6 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        [Route("Hobbies")]
-        public ActionResult GetHobbies()
-        {
-            StringValues authorizationToken;
-            Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            if (authorizationToken.ToString().Length == 0)
-            {
-                return Unauthorized();
-            }
-            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
-            if (curUserEmail == null)
-            {
-                return Unauthorized();
-            }
-            var results = new List<HobbyCategoryResults>();
-
-            var categories = _context.LookupHobbyCategories.ToList();
-            foreach (var category in categories)
-            {
-                var query = _context.QuestionnaireHobbyCategories.
-                    Where(x => x.CategoryId == category.Id).Join(
-                        _context.QuestionnaireHobbies,
-                        hobbyCategory => hobbyCategory.HobbyId,
-                        hobby => hobby.Id,
-                        (hobbyCategory, hobby) => new HobbyResults()
-                        {
-                            HobbyId = hobby.Id,
-                            Value = hobby.Value
-                        }
-                    );
-                results.Add(new HobbyCategoryResults() {
-                    CategoryId = category.Id,
-                    CategoryValue = category.Value,
-                    Content = query.ToList()
-                });
-            }
-            return new JsonResult(results.ToList());
-        }
 
         #region Academic
         [HttpGet]
@@ -157,52 +118,6 @@ namespace API.Controllers
         }
         #endregion
 
-
-        [HttpPost]
-        [Route("Hobbies")]
-        public ActionResult UpdateUserHobbies(UserHobbyModel model)
-        {
-            StringValues authorizationToken;
-            Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            if (authorizationToken.ToString().Length == 0)
-            {
-                return Unauthorized();
-            }
-            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
-            if (curUserEmail == null)
-            {
-                return Unauthorized();
-            }
-            var query = _context.Users.Where(x => x.Email == curUserEmail);
-            var curUser = query.FirstOrDefault();
-            if (!query.Any())
-            {
-                var newUser = new User()
-                {
-                    Email = curUserEmail
-                };
-                _context.Users.Add(newUser);
-                _context.SaveChanges();
-                curUser = newUser;
-            }
-            var query2 = _context.UserHobbies.Where(x => x.UserId == curUser.Id);
-            if (query2.Any())
-            {
-                _context.UserHobbies.RemoveRange(query2);
-                _context.SaveChanges();
-            }
-            var userHobbies = new List<UserHobby>();
-            foreach (var hobby in model.Hobbies)
-            {
-                userHobbies.Add(new UserHobby() {
-                    HobbyId = hobby.HobbyId,
-                    UserId = curUser.Id
-                });
-            }
-            _context.UserHobbies.AddRange(userHobbies);
-            _context.SaveChanges();
-            return new JsonResult("");
-        }
 
         [HttpGet]
         [Route("Demographics/Languages")]
@@ -355,10 +270,90 @@ namespace API.Controllers
                 ReasonsToJoin = _context.QuestionnaireReasonsToJoins.ToList(),
                 CountriesLivedIn = _context.QuestionnaireCountries.ToList(),
                 IndustryExperiences = _context.QuestionnaireIndustryExperiences.ToList(),
-                ProjectInterests = _context.QuestionnaireProjectInterests.ToList()
+                ProjectInterests = _context.QuestionnaireProjectInterests.ToList(),
+                Hobbies = GetHobbies()
             };
             return new JsonResult(model);
+
         }
+
+        private List<HobbyCategoryResults> GetHobbies()
+        {
+            var results = new List<HobbyCategoryResults>();
+
+            var categories = _context.LookupHobbyCategories.ToList();
+            foreach (var category in categories)
+            {
+                var query = _context.QuestionnaireHobbyCategories.
+                    Where(x => x.CategoryId == category.Id).Join(
+                        _context.QuestionnaireHobbies,
+                        hobbyCategory => hobbyCategory.HobbyId,
+                        hobby => hobby.Id,
+                        (hobbyCategory, hobby) => new HobbyResults()
+                        {
+                            HobbyId = hobby.Id,
+                            Value = hobby.Value,
+                            CategoryIds = hobby.QuestionnaireHobbyCategories.Select(x => x.CategoryId).ToList()
+                        }
+                    );
+                results.Add(new HobbyCategoryResults()
+                {
+                    CategoryId = category.Id,
+                    CategoryValue = category.Value,
+                    Content = query.ToList()
+                });
+            }
+            return results;
+        }
+
+        [HttpPost]
+        [Route("Hobbies")]
+        public ActionResult UpdateUserHobbies(UserHobbyModel model)
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            if (authorizationToken.ToString().Length == 0)
+            {
+                return Unauthorized();
+            }
+            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
+            if (curUserEmail == null)
+            {
+                return Unauthorized();
+            }
+            var query = _context.Users.Where(x => x.Email == curUserEmail);
+            var curUser = query.FirstOrDefault();
+            if (!query.Any())
+            {
+                var newUser = new User()
+                {
+                    Email = curUserEmail
+                };
+                _context.Users.Add(newUser);
+                _context.SaveChanges();
+                curUser = newUser;
+            }
+            var query2 = _context.UserHobbies.Where(x => x.UserId == curUser.Id);
+            if (query2.Any())
+            {
+                _context.UserHobbies.RemoveRange(query2);
+                _context.SaveChanges();
+            }
+            var userHobbies = new List<UserHobby>();
+            foreach (var hobby in model.Hobbies)
+            {
+                userHobbies.Add(new UserHobby()
+                {
+                    HobbyId = hobby.HobbyId,
+                    UserId = curUser.Id
+                });
+            }
+            _context.UserHobbies.AddRange(userHobbies);
+            _context.SaveChanges();
+            return new JsonResult("");
+        }
+
+
         #endregion
         [HttpPost]
         [Route("Personal1")]
@@ -515,9 +510,8 @@ namespace API.Controllers
         public List<QuestionnaireIndustryExperience> IndustryExperiences { get; set; }
         public List<QuestionnaireCountry> CountriesLivedIn { get; set; }
         public List<QuestionnaireProjectInterest> ProjectInterests { get; set; }
+        public List<HobbyCategoryResults> Hobbies { get; set; }
     }
-    #endregion
-
     public class HobbyCategoryResults
     {
         public int CategoryId { get; set; }
@@ -533,9 +527,12 @@ namespace API.Controllers
     {
         public int HobbyId { get; set; }
         public string Value { get; set; }
+        public List<int> CategoryIds { get; set; }
         public HobbyResults()
         {
 
         }
     }
+    #endregion
+
 }
