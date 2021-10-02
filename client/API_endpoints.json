@@ -29,7 +29,8 @@
     "Onboarding": {
       "User": {
         "baseURL": "https://meet-ut-1.herokuapp.com/user",
-        "Recommendations": "https://meet-ut-1.herokuapp.com/user/recommendations"
+        "Recommendations": "https://meet-ut-1.herokuapp.com/user/recommendations",
+        "Compatibility": "https://meet-ut-1.herokuapp.com/user/compatibility"
       },
       "Questionnaire": {
         "Demographics": "https://meet-ut-1.herokuapp.com/questionnaire/demographics",

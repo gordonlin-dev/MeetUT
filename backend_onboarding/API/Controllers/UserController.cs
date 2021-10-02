@@ -28,26 +28,6 @@ namespace API.Controllers
         }
 
 
-        private List<QuestionnaireHobby> GetUserHobbies(int userId)
-        {
-            return _context.UserHobbies.Where(x => x.UserId == userId).Join(
-                    _context.QuestionnaireHobbies,
-                    userHobby => userHobby.HobbyId,
-                    hobby => hobby.Id,
-                    (userHobby, hobby) => hobby
-                ).ToList();
-        }
-
-        private List<QuestionnaireProgramOfStudy> GetUserPrograms(int userId)
-        {
-            return _context.UserProgramOfStudies.Where(x => x.UserId == userId).Join(
-                    _context.QuestionnaireProgramOfStudies,
-                    userProgram => userProgram.ProgramId,
-                    program => program.Id,
-                    (userProgram, program) => program
-                ).ToList();
-        }
-
         /*
         [HttpGet]
         [Route("Load")]
@@ -98,23 +78,12 @@ namespace API.Controllers
         {
             StringValues authorizationToken;
             Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            if (authorizationToken.ToString().Length == 0)
+            var user = ValidateTokenAndGetUser(authorizationToken);
+            if (user == null)
             {
                 return Unauthorized();
             }
-            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
-            if (curUserEmail == null)
-            {
-                return Unauthorized();
-            }
-
-            var curUserQuery = _context.Users.Where(x => x.Email == curUserEmail);
-
-            if (!curUserQuery.Any())
-            {
-                return NotFound();
-            }
-            return new JsonResult(curUserQuery.First());
+            return new JsonResult(user);
         }
 
         [HttpPost]
@@ -139,7 +108,8 @@ namespace API.Controllers
                 _context.Users.Add(new User() {
                     Email = curUserEmail,
                     FirstName = input.FirstName,
-                    LastName = input.LastName
+                    LastName = input.LastName,
+                    CompletedOnboarding = false
                 });
             }
             _context.SaveChanges();
@@ -152,23 +122,12 @@ namespace API.Controllers
         {
             StringValues authorizationToken;
             Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            if(authorizationToken.ToString().Length == 0)
+            var curUser = ValidateTokenAndGetUser(authorizationToken);
+            if (curUser == null)
             {
                 return Unauthorized();
             }
-            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
-            if (curUserEmail == null)
-            {
-                return Unauthorized();
-            }
-            var curUserQuery = _context.Users.Where(x => x.Email == curUserEmail);
 
-            if (!curUserQuery.Any())
-            {
-                return new JsonResult("");
-            }
-
-            var curUser = curUserQuery.First();
             var query1 = _context.UserCompatabilities.Where(x => x.User1Id == curUser.Id).ToList();
             var query2 = _context.UserCompatabilities.Where(x => x.User2Id == curUser.Id).ToList();
             var result1 = query1.Join(
@@ -220,8 +179,8 @@ namespace API.Controllers
             {
                 var recommendationResult = new RecommendationResult();
                 recommendationResult.UserId = user.RecommendedUserEmail;
-                recommendationResult.Hobbies = GetUserHobbies(user.RecommendedUserId);
-                recommendationResult.Programs = GetUserPrograms(user.RecommendedUserId);
+                //recommendationResult.Hobbies = GetUserHobbies(user.RecommendedUserId);
+                //recommendationResult.Programs = GetUserPrograms(user.RecommendedUserId);
                 result.Add(recommendationResult);
             }
             return new JsonResult(result);
@@ -233,30 +192,77 @@ namespace API.Controllers
         {
             StringValues authorizationToken;
             Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            if (authorizationToken.ToString().Length == 0)
+            var curUser = ValidateTokenAndGetUser(authorizationToken);
+            if (curUser == null)
             {
                 return Unauthorized();
             }
-            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
-            if (curUserEmail == null)
-            {
-                return Unauthorized();
-            }
-            var curUser = _context.Users.Where(x => x.Email == curUserEmail).First();
             CalculateCompatibility(curUser);
             return new JsonResult("");
         }
 
+        private void GetUserInfo(User user,
+            out List<int> languages,
+            out List<string> religions,
+            out int degreeType,
+            out int yearOfStudy,
+            out int college,
+            out List<QuestionnaireProgramOfStudy> programs,
+            out List<int> reasons,
+            out List<int> projectInterests,
+            out List<int> countries,
+            out List<int> industryExperience,
+            out List<QuestionnaireHobby> hobbies)
+        {
+
+            languages = _context.UserLanguages.Where(x => x.UserId == user.Id).Select(x => x.LanguageId).ToList();
+            religions = _context.UserReligions.Where(x => x.UserId == user.Id).Select(x => x.Value).ToList();
+
+            degreeType = user.DegreeType.HasValue? user.DegreeType.Value : 0;
+            yearOfStudy = user.YearOfStudy.HasValue ? user.YearOfStudy.Value : 0;
+            college = user.College.HasValue ? user.College.Value : 0;
+            programs = _context.UserProgramOfStudies.Where(x => x.UserId == user.Id).Join(
+                    _context.QuestionnaireProgramOfStudies,
+                    userProgram => userProgram.ProgramId,
+                    program => program.Id,
+                    (userProgram, program) => program
+                ).ToList();
+
+            reasons = _context.UserReasonsToJoins.Where(x => x.Id == user.Id).Select(x => x.ReasonId).ToList();
+            projectInterests = _context.UserProjectInterests.Where(x => x.Id == user.Id).Select(x => x.ProjectInterestId).ToList();
+            countries = _context.UserCountries.Where(x => x.Id == user.Id).Select(x => x.CountryId).ToList();
+            industryExperience = _context.UserIndustryExperiences.Where(x => x.Id == user.Id).Select(x => x.IndustryExperienceId).ToList();
+            hobbies = _context.UserHobbies.Where(x => x.UserId == user.Id).Join(
+                    _context.QuestionnaireHobbies,
+                    userHobby => userHobby.HobbyId,
+                    hobby => hobby.Id,
+                    (userHobby, hobby) => hobby
+                ).ToList();
+        }
+
         private void CalculateCompatibility(User user)
         {
+
             var insertList = new List<UserCompatability>();
             var updateList = new List<UserCompatability>();
-            var curUserPrograms = GetUserPrograms(user.Id);
-            var curUserHobbies = GetUserHobbies(user.Id);
+            GetUserInfo (user,
+                out List<int> curUserLanguages,
+                out List<string> curUserReligions,
+                out int curUserDegreeType,
+                out int curUserYearOfStudy,
+                out int curUserCollege,
+                out List<QuestionnaireProgramOfStudy> curUserPrograms,
+                out List<int> curUserReasons,
+                out List<int> curUserProjectInterests,
+                out List<int> curUserCountries,
+                out List<int> curUserIndustryExperience,
+                out List<QuestionnaireHobby> curUserHobbies);
+
             var compatabilityQuery = _context.UserCompatabilities.Where(x =>
                 x.User1Id == user.Id || x.User2Id == user.Id).ToList();
 
             var userQuery = _context.Users.Where(x => x.Id != user.Id).ToList();
+
             var hobbyCategories = _context.QuestionnaireHobbyCategories.ToList();
             var programCategories = _context.QuestionnaireProgramOfStudyCategories.ToList();
 
@@ -279,25 +285,67 @@ namespace API.Controllers
 
             foreach (var queriedUser in userQuery)
             {
-                var queriedUserPrograms = GetUserPrograms(queriedUser.Id);
-                var queriedUserHobbies = GetUserHobbies(queriedUser.Id);
+                GetUserInfo(
+                    queriedUser,
+                    out List<int> queriredUserLanguages,
+                    out List<string> queriedUserReligions,
+                    out int queriedUserDegreeType,
+                    out int queriedUserYearOfStudy,
+                    out int queriedUserCollege,
+                    out List<QuestionnaireProgramOfStudy> queriedUserPrograms,
+                    out List<int> queriedUserReasons,
+                    out List<int> queriedUserProjectInterests,
+                    out List<int> queriedUserCountries,
+                    out List<int> queriedUserIndustryExperience,
+                    out List<QuestionnaireHobby> queriedUserHobbies
+                );
 
                 var query = compatabilityQuery.Where(x => x.User1Id == queriedUser.Id || x.User2Id == queriedUser.Id);
 
                 var score = 0;
-            
-                var commonHobbies = curUserHobbies.Intersect(queriedUserHobbies).ToList();
-                score += commonHobbies.Count * 2;
-                score += CalculateHobbyCategoryCompatabilityScore(curUserHobbyCategoriesDict,
-                    hobbyCategories, queriedUserHobbies);
+
+                
+
+                var commonLanguages = curUserLanguages.Intersect(queriredUserLanguages).ToList();
+                score += commonLanguages.Count * 2;
+
+                var commonReligions = curUserReligions.Intersect(queriedUserReligions).ToList();
+                score += commonReligions.Count * 2;
 
 
+                if (curUserDegreeType == queriedUserDegreeType)
+                {
+                    score += 2;
+                }
+                if (curUserYearOfStudy == queriedUserYearOfStudy)
+                {
+                    score += 2;
+                }
+                if (curUserCollege == queriedUserCollege)
+                {
+                    score += 2;
+                }
                 var commonPrograms = curUserPrograms.Intersect(queriedUserPrograms).ToList();
                 score += commonPrograms.Count * 2;
                 score += CalculateProgramCategoryCompatabilityScore(curUserProgramCategoriesDict,
                     programCategories, queriedUserPrograms);
 
 
+                var commonReasons = curUserReasons.Intersect(queriedUserReasons).ToList();
+                score += commonReasons.Count * 2;
+                var commonProjects = curUserProjectInterests.Intersect(queriedUserProjectInterests).ToList();
+                score += commonProjects.Count * 2;
+                var commonIndustry = curUserIndustryExperience.Intersect(queriedUserIndustryExperience).ToList();
+                score += commonIndustry.Count * 2;
+                var commonCountries = curUserCountries.Intersect(queriedUserCountries).ToList();
+                score += commonCountries.Count * 2;
+                var commonHobbies = curUserHobbies.Intersect(queriedUserHobbies).ToList();
+                score += commonHobbies.Count * 2;
+                score += CalculateHobbyCategoryCompatabilityScore(curUserHobbyCategoriesDict,
+                    hobbyCategories, queriedUserHobbies);
+
+
+             
                 if (query.Any())
                 {
                     var result = query.First();
@@ -315,6 +363,8 @@ namespace API.Controllers
                 }
 
             }
+            user.CompletedOnboarding = true;
+            _context.Users.Update(user);
             _context.SaveChanges();
            
         }
@@ -383,6 +433,33 @@ namespace API.Controllers
                 }
             }
             return dict;
+        }
+
+        private User ValidateTokenAndGetUser(StringValues token)
+        {
+
+            if (token.ToString().Length == 0)
+            {
+                return null;
+            }
+            var curUserEmail = AuthService.AuthService.DecodeJWT(token.ToString().Split(" ")[1]);
+            if (curUserEmail == null)
+            {
+                return null;
+            }
+            var query = _context.Users.Where(x => x.Email == curUserEmail);
+            var curUser = query.FirstOrDefault();
+            if (!query.Any())
+            {
+                var newUser = new User()
+                {
+                    Email = curUserEmail
+                };
+                _context.Users.Add(newUser);
+                _context.SaveChanges();
+                curUser = newUser;
+            }
+            return curUser;
         }
     }
 

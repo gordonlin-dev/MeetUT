@@ -72,7 +72,16 @@ const Personal = props => {
             props
         )
         if(response.ok){
-            console.log(123)
+            const response2 = await handler.sendRequest(
+                endpoints.Server.Onboarding.User.Compatibility,
+                texts.HTTP.Post,
+                {},
+                false,
+                props
+            )
+            if(response2.ok){
+                props.navigation.navigate('Home')
+            }
         }
     }
     const generateReasonsSelection = () => {

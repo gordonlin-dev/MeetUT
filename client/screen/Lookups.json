@@ -2,67 +2,67 @@
   "Academic": {
     "DegreeType": {
       "Undergrad": {
-        "Value": 0,
+        "Value": 1,
         "DisplayValue": "Undergraduate"
       },
       "Grad": {
-        "Value": 1,
+        "Value": 2,
         "DisplayValue": "Graduate"
       }
     },
     "YearOfStudy": {
       "First": {
-        "Value": 0,
+        "Value": 1,
         "DisplayValue": "1"
       },
       "Second": {
-        "Value": 1,
+        "Value": 2,
         "DisplayValue": "2"
       },
       "Third": {
-        "Value": 2,
+        "Value": 3,
         "DisplayValue": "3"
       },
       "Fourth": {
-        "Value": 3,
+        "Value": 4,
         "DisplayValue": "4"
       },
       "Five" : {
-        "Value": 4,
+        "Value": 5,
         "DisplayValue": "5"
       },
       "SixPlus": {
-        "Value": 5,
+        "Value": 6,
         "DisplayValue": "6+"
       }
     },
     "College": {
       "UC": {
-        "Value": 0,
+        "Value": 1,
         "DisplayValue": "University College"
       },
       "Trinity": {
-        "Value": 1,
+        "Value": 2,
         "DisplayValue": "Trinity College"
       },
       "Innis": {
-        "Value": 2,
+        "Value": 3,
         "DisplayValue": "Innis College"
       },
       "New": {
-        "Value": 3,
+        "Value": 4,
         "DisplayValue": "New College"
       },
       "Victoria": {
-        "Value": 4,
+        "Value": 5,
         "DisplayValue": "Victoria College"
       },
       "Woodsworth": {
-        "Value": 5,
+        "Value": 6,
         "DisplayValue": "Woodsworth College"
       },
       "SMC": {
-        "Value": 6,
+        "Value": 7,
         "DisplayValue": "St Michael's College"
       }
     }

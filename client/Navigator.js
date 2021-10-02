@@ -16,11 +16,6 @@ import ChangeAvatarScreen from './screen/Settings/ChangeAvatar';
 import DemographicsScreen from "./screen/Onboarding/Demographics";
 import PersonalScreen from "./screen/Onboarding/Personal";
 import AcademicScreen from "./screen/Onboarding/Academic";
-import ReasonScreen from "./screen/Onboarding/Reason";
-import HobbiesScreen from "./screen/Onboarding/Hobbies";
-import SpecificHobbyScreen from "./screen/Onboarding/SpecificHobby"
-import ProjectInterestsScreen from "./screen/Onboarding/Project-interests"
-import IndustryScreen from "./screen/Onboarding/Industry"
 import {Dimensions} from 'react-native';
 
 import * as Font from 'expo-font';
@@ -75,91 +70,6 @@ const Navigator = createStackNavigator({
     },
     Academic:{
         screen: AcademicScreen,
-        navigationOptions:{
-            title:"Onboarding",
-            headerStyle: {
-                backgroundColor: '#3590F2',
-            },
-            headerLeft: ()=> null,
-            headerTintColor: '#ffff',
-            headerTitleStyle: {
-                fontFamily: "timeburner",
-                fontSize: 30,
-                marginLeft: width * 0.23
-            },
-        }
-
-    },
-    Reason:{
-        screen: ReasonScreen,
-        navigationOptions:{
-            title:"Onboarding",
-            headerStyle: {
-                backgroundColor: '#3590F2',
-            },
-            headerLeft: ()=> null,
-            headerTintColor: '#ffff',
-            headerTitleStyle: {
-                fontFamily: "timeburner",
-                fontSize: 30,
-                marginLeft: width * 0.23
-            },
-        }
-
-    },
-    Hobbies:{
-        screen: HobbiesScreen,
-        navigationOptions:{
-            title:"Onboarding",
-            headerStyle: {
-                backgroundColor: '#3590F2',
-            },
-            headerLeft: ()=> null,
-            headerTintColor: '#ffff',
-            headerTitleStyle: {
-                fontFamily: "timeburner",
-                fontSize: 30,
-                marginLeft: width * 0.23
-            },
-        }
-
-    },
-    SpecificHobby:{
-        screen: SpecificHobbyScreen,
-        navigationOptions:{
-            title:"Onboarding",
-            headerStyle: {
-                backgroundColor: '#3590F2',
-            },
-            headerLeft: ()=> null,
-            headerTintColor: '#ffff',
-            headerTitleStyle: {
-                fontFamily: "timeburner",
-                fontSize: 30,
-                marginLeft: width * 0.23
-            },
-        }
-
-    },
-    ProjectInterests:{
-        screen: ProjectInterestsScreen,
-        navigationOptions:{
-            title:"Onboarding",
-            headerStyle: {
-                backgroundColor: '#3590F2',
-            },
-            headerLeft: ()=> null,
-            headerTintColor: '#ffff',
-            headerTitleStyle: {
-                fontFamily: "timeburner",
-                fontSize: 30,
-                marginLeft: width * 0.23
-            },
-        }
-
-    },
-    Industry:{
-        screen: IndustryScreen,
         navigationOptions:{
             title:"Onboarding",
             headerStyle: {
