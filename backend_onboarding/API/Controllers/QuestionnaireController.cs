@@ -118,6 +118,7 @@ namespace API.Controllers
         }
         #endregion
 
+        #region Demographics
 
         [HttpGet]
         [Route("Demographics/Languages")]
@@ -191,66 +192,8 @@ namespace API.Controllers
 
             return new JsonResult("");
         }
-        [HttpGet]
-        [Route("Personal/IndustryExperience")]
-        public ActionResult GetIndustryExperience()
-        {
-            StringValues authorizationToken;
-            Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            var user = ValidateTokenAndGetUser(authorizationToken);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-            var result = _context.QuestionnaireIndustryExperiences.ToList();
-            return new JsonResult(result);
+        #endregion
 
-        }
-
-        [HttpGet]
-        [Route("Personal/ProjectInterest")]
-        public ActionResult GetProjectInterest()
-        {
-            StringValues authorizationToken;
-            Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            var user = ValidateTokenAndGetUser(authorizationToken);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-            var result = _context.QuestionnaireProjectInterests.ToList();
-            return new JsonResult(result);
-        }
-
-        [HttpGet]
-        [Route("Personal/Reasons")]
-        public ActionResult GetReasons()
-        {
-            StringValues authorizationToken;
-            Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            var user = ValidateTokenAndGetUser(authorizationToken);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-            var result = _context.QuestionnaireReasonsToJoins.ToList();
-            return new JsonResult(result);
-        }
-
-        [HttpGet]
-        [Route("Personal/Countries")]
-        public ActionResult GetCountries()
-        {
-            StringValues authorizationToken;
-            Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            var user = ValidateTokenAndGetUser(authorizationToken);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-            var result = _context.QuestionnaireCountries.ToList();
-            return new JsonResult(result);
-        }
 
         #region Personal
         [HttpGet]
@@ -277,6 +220,21 @@ namespace API.Controllers
 
         }
 
+        [HttpPost]
+        [Route("Personal")]
+        public ActionResult UpdatePersonal(UserPersonalModel model)
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            var user = ValidateTokenAndGetUser(authorizationToken);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            UpdateUserHobbies(user, model.SelectedHobbies);
+            UpdatePersonal(user, model);
+            return new JsonResult("");
+        }
         private List<HobbyCategoryResults> GetHobbies()
         {
             var results = new List<HobbyCategoryResults>();
@@ -306,41 +264,15 @@ namespace API.Controllers
             return results;
         }
 
-        [HttpPost]
-        [Route("Hobbies")]
-        public ActionResult UpdateUserHobbies(UserHobbyModel model)
+        private void UpdateUserHobbies(User curUser, List<HobbyResults> hobbies)
         {
-            StringValues authorizationToken;
-            Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            if (authorizationToken.ToString().Length == 0)
-            {
-                return Unauthorized();
-            }
-            var curUserEmail = AuthService.AuthService.DecodeJWT(authorizationToken.ToString().Split(" ")[1]);
-            if (curUserEmail == null)
-            {
-                return Unauthorized();
-            }
-            var query = _context.Users.Where(x => x.Email == curUserEmail);
-            var curUser = query.FirstOrDefault();
-            if (!query.Any())
-            {
-                var newUser = new User()
-                {
-                    Email = curUserEmail
-                };
-                _context.Users.Add(newUser);
-                _context.SaveChanges();
-                curUser = newUser;
-            }
             var query2 = _context.UserHobbies.Where(x => x.UserId == curUser.Id);
             if (query2.Any())
             {
                 _context.UserHobbies.RemoveRange(query2);
-                _context.SaveChanges();
             }
             var userHobbies = new List<UserHobby>();
-            foreach (var hobby in model.Hobbies)
+            foreach (var hobby in hobbies)
             {
                 userHobbies.Add(new UserHobby()
                 {
@@ -350,30 +282,20 @@ namespace API.Controllers
             }
             _context.UserHobbies.AddRange(userHobbies);
             _context.SaveChanges();
-            return new JsonResult("");
         }
 
-
-        #endregion
-        [HttpPost]
-        [Route("Personal1")]
-        public ActionResult UpdatePersonalExperiencesAndInterests(UserPersonalModel model)
+        private void UpdatePersonal(User user, UserPersonalModel model)
         {
-            StringValues authorizationToken;
-            Request.Headers.TryGetValue("Authorization", out authorizationToken);
-            var user = ValidateTokenAndGetUser(authorizationToken);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
+
             var queryIndursty = _context.UserIndustryExperiences.Where(x => x.UserId == user.Id);
             if (queryIndursty.Any())
             {
                 _context.UserIndustryExperiences.RemoveRange(queryIndursty);
             }
-            foreach(var industryExperienceId in model.IndustryExperiences)
+            foreach (var industryExperienceId in model.IndustryExperiences)
             {
-                _context.UserIndustryExperiences.Add(new UserIndustryExperience() {
+                _context.UserIndustryExperiences.Add(new UserIndustryExperience()
+                {
                     UserId = user.Id,
                     IndustryExperienceId = industryExperienceId.Id
                 });
@@ -384,9 +306,10 @@ namespace API.Controllers
             {
                 _context.UserReasonsToJoins.RemoveRange(queryReasons);
             }
-            foreach(var reasonId in model.ReasonsToJoin)
+            foreach (var reasonId in model.ReasonsToJoin)
             {
-                _context.UserReasonsToJoins.Add(new UserReasonsToJoin() {
+                _context.UserReasonsToJoins.Add(new UserReasonsToJoin()
+                {
                     UserId = user.Id,
                     ReasonId = reasonId.Id
                 });
@@ -397,9 +320,10 @@ namespace API.Controllers
             {
                 _context.UserCountries.RemoveRange(queryCountries);
             }
-            foreach(var countryId in model.CountriesLivedIn)
+            foreach (var countryId in model.CountriesLivedIn)
             {
-                _context.UserCountries.Add(new UserCountry() {
+                _context.UserCountries.Add(new UserCountry()
+                {
                     UserId = user.Id,
                     CountryId = countryId.Id
                 });
@@ -410,16 +334,18 @@ namespace API.Controllers
             {
                 _context.UserProjectInterests.RemoveRange(queryProjectInterest);
             }
-            foreach(var interestId in model.ProjectInterests)
+            foreach (var interestId in model.ProjectInterests)
             {
-                _context.UserProjectInterests.Add(new UserProjectInterest() {
+                _context.UserProjectInterests.Add(new UserProjectInterest()
+                {
                     UserId = user.Id,
                     ProjectInterestId = interestId.Id
                 });
             }
             _context.SaveChanges();
-            return new JsonResult("");
         }
+
+        #endregion
 
         private User ValidateTokenAndGetUser(StringValues token)
         {
@@ -449,7 +375,7 @@ namespace API.Controllers
         }
     }
 
-
+    #region Demographics
     public class UserDemographicsModel
     {
         public string FirstName { get; set; }
@@ -459,16 +385,7 @@ namespace API.Controllers
         public List<int> Languages { get; set; }
         public string Religion { get; set; }
     }
-
-    public class UserHobbyModel
-    {
-        public List<HobbyResults> Hobbies { get; set; }
-
-        public UserHobbyModel()
-        {
-
-        }
-    }
+    #endregion
 
     #region Academics
     public class UserAcademicsModel
@@ -511,6 +428,7 @@ namespace API.Controllers
         public List<QuestionnaireCountry> CountriesLivedIn { get; set; }
         public List<QuestionnaireProjectInterest> ProjectInterests { get; set; }
         public List<HobbyCategoryResults> Hobbies { get; set; }
+        public List<HobbyResults> SelectedHobbies { get; set; }
     }
     public class HobbyCategoryResults
     {

@@ -52,6 +52,27 @@ const Personal = props => {
             setProjects(responseJson.projectInterests)
             setIndustryExperience(responseJson.industryExperiences)
             setCountries(responseJson.countriesLivedIn)
+            setHobbies(responseJson.hobbies)
+        }
+    }
+
+    const save = async () => {
+        const body = {
+            ReasonsToJoin: selectedReasons,
+            IndustryExperiences: selectedIndustryExperience,
+            CountriesLivedIn: selectedCountries,
+            ProjectInterests: selectedProjects,
+            SelectedHobbies: selectedHobbies
+        }
+        const response = await handler.sendRequest(
+            endpoints.Server.Onboarding.Questionnaire.Personal,
+            texts.HTTP.Post,
+            body,
+            false,
+            props
+        )
+        if(response.ok){
+            console.log(123)
         }
     }
     const generateReasonsSelection = () => {
@@ -112,7 +133,6 @@ const Personal = props => {
             (selectedCountries.indexOf(x) === -1) &&
             (x.value.includes(countriesFiler))
         )
-        console.log(selectedCountries)
         let selectedSection = {
             title:"",
             data:selectedCountries.sort((a,b) => {return a.value > b.value})
@@ -122,6 +142,60 @@ const Personal = props => {
             data:notSelectedCountries.sort((a,b) => {return a.value > b.value})
         }
         return [selectedSection,section]
+    }
+
+    const generateHobbiesSelection = () => {
+        let sections = []
+        for (let i = 0; i < hobbies.length; i++){
+            let section = {
+                title:hobbies[i].categoryValue,
+                data:hobbies[i].content.sort((a,b) => {return a.value > b.value})
+            }
+            sections.push(section)
+        }
+        return sections
+    }
+
+    const generateSelectedHobbies = () => {
+        let section = {
+            title:"Selected",
+            data:selectedHobbies
+        }
+        return [section]
+    }
+
+    const hobbiesPress = (hobby) => {
+        const filtered = selectedHobbies.filter(element => element.hobbyId === hobby.hobbyId)
+        if(filtered.length === 0){
+            selectedHobbies.push(hobby)
+            setSelectedHobbies(selectedHobbies)
+            removeHobby(hobby.hobbyId)
+            setForceUpdate(!forceUpdate)
+        }
+    }
+    const selectedHobbiesPress = (hobby) => {
+        setSelectedHobbies(selectedHobbies.filter(element => element.hobbyId !== hobby.hobbyId))
+        addHobby(hobby)
+        setForceUpdate(!forceUpdate)
+    }
+
+    const removeHobby = (hobbyId) =>{
+        for(let i = 0; i < hobbies.length; i++){
+            hobbies[i].content = hobbies[i].content.filter(element => element.hobbyId !== hobbyId)
+        }
+        setHobbies(hobbies)
+    }
+
+    const addHobby = (hobby) => {
+        for(let i = 0; i < hobbies.length; i ++){
+            if(hobby.categoryIds.filter(element => element === hobbies[i].categoryId).length > 0){
+                if(hobbies[i].content.filter(element => element.hobbyId === hobby.hobbyId).length === 0){
+                    hobbies[i].content.push(hobby)
+                    hobbies[i].content.sort((a,b) => {return a.value > b.value})
+                }
+            }
+        }
+        setHobbies(hobbies)
     }
 
     const countrySelectPress = (item) => {
@@ -210,7 +284,29 @@ const Personal = props => {
         }else if (renderStage === 2){
             return(
                 <Fragment>
+                    <View style={styles.scrollContainer} >
+                        <Text style={styles.headerFont}>Hobbies</Text>
+                        <SectionList sections={generateHobbiesSelection()}
+                                     renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
+                                         hobbiesPress(item)
+                                     }}>{item.value}</Text>}
+                                     renderSectionHeader={({section}) => <Text style={inpageStyle.sectionHeader}>{section.title}</Text>}
+                                     keyExtractor={(item, index) => index}
+                        >
 
+                        </SectionList>
+                    </View>
+                    <View style={styles.selectedContainer}>
+                        <Text style={styles.headerFont}>Chosen Hobbies ({selectedHobbies.length})</Text>
+                        <SectionList sections={generateSelectedHobbies()}
+                                     renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
+                                         selectedHobbiesPress(item)
+                                     }}>{item.value}</Text>}
+                                     keyExtractor={(item, index) => index}
+                        >
+
+                        </SectionList>
+                    </View>
                 </Fragment>
             )
         }else if(renderStage === 3){
