@@ -127,7 +127,10 @@ namespace API.Controllers
             {
                 return Unauthorized();
             }
-
+            if(!curUser.CompletedOnboarding)
+            {
+                return StatusCode(403);
+            }
             var query1 = _context.UserCompatabilities.Where(x => x.User1Id == curUser.Id).ToList();
             var query2 = _context.UserCompatabilities.Where(x => x.User2Id == curUser.Id).ToList();
             var result1 = query1.Join(
@@ -261,7 +264,7 @@ namespace API.Controllers
             var compatabilityQuery = _context.UserCompatabilities.Where(x =>
                 x.User1Id == user.Id || x.User2Id == user.Id).ToList();
 
-            var userQuery = _context.Users.Where(x => x.Id != user.Id).ToList();
+            var userQuery = _context.Users.Where(x => x.Id != user.Id && x.CompletedOnboarding).ToList();
 
             var hobbyCategories = _context.QuestionnaireHobbyCategories.ToList();
             var programCategories = _context.QuestionnaireProgramOfStudyCategories.ToList();

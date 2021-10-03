@@ -12,7 +12,6 @@ const userSchema = new Schema({
     _id: String,
     password: String,
     isArchived: Boolean,
-    completedOnboarding: Boolean,
     likedBy: {},
     matched: {}
 }, {strict: false})

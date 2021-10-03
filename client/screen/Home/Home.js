@@ -38,30 +38,27 @@ const HomeScreen = props => {
             false,
             props
         )
-
         if(matchResponse.ok){
             const responseJson = await matchResponse.json();
-            if(! responseJson.completedOnboarding){
+            const body = {
+                excludedUsers: responseJson.matched
+            }
+            const response = await handler.sendRequest(
+                endpoints.Server.Onboarding.User.Recommendations,
+                texts.HTTP.Post,
+                body,
+                true,
+                props
+            )
+            if(response.status === 403){
                 Alert.alert(texts.Alert.Title.CompleteSignUp,
                     "",
                     [{text: texts.Alert.Buttons.OK, onPress: () => props.navigation.navigate({
                             routeName: "Demographics"
                         })}])
-            }else{
-                const body = {
-                    excludedUsers: responseJson.matched
-                }
-                const response = await handler.sendRequest(
-                    endpoints.Server.Onboarding.Recommendations,
-                    texts.HTTP.Post,
-                    body,
-                    false,
-                    props
-                )
-                if(response.ok){
-                    const responseJson = await response.json();
-                    setUsers(responseJson)
-                }
+            }else if(response.ok){
+                const responseJson = await response.json();
+                setUsers(responseJson)
             }
         }
     }
