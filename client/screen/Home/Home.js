@@ -58,6 +58,7 @@ const HomeScreen = props => {
                         })}])
             }else if(response.ok){
                 const responseJson = await response.json();
+                console.log(responseJson)
                 setUsers(responseJson)
             }
         }

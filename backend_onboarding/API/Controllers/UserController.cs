@@ -181,9 +181,32 @@ namespace API.Controllers
             foreach(var user in finalResult.Take(100))
             {
                 var recommendationResult = new RecommendationResult();
-                recommendationResult.UserId = user.RecommendedUserEmail;
-                //recommendationResult.Hobbies = GetUserHobbies(user.RecommendedUserId);
-                //recommendationResult.Programs = GetUserPrograms(user.RecommendedUserId);
+                var recommendedUser = _context.Users.Where(x => x.Id == user.RecommendedUserId).First();
+                GetUserInfo( recommendedUser,
+                    out List<QuestionnaireLanguage> languages,
+                    out List<string> religions,
+                    out int degreeType,
+                    out int yearOfStudy,
+                    out int college,
+                    out List<QuestionnaireProgramOfStudy> programs,
+                    out List<QuestionnaireReasonsToJoin> reasons,
+                    out List<QuestionnaireProjectInterest> projects,
+                    out List<QuestionnaireCountry> countries,
+                    out List<QuestionnaireIndustryExperience> industries,
+                    out List<QuestionnaireHobby> hobbies
+                    );
+                recommendationResult.Name = recommendedUser.FirstName + " " + recommendedUser.LastName;
+                recommendationResult.Religions = religions;
+                recommendationResult.Languages = languages;
+                recommendationResult.DegreeType = degreeType;
+                recommendationResult.YearOfStudy = yearOfStudy;
+                recommendationResult.College = college;
+                recommendationResult.Programs = programs;
+                recommendationResult.Reason = reasons;
+                recommendationResult.ProjectInterests = projects;
+                recommendationResult.Countries = countries;
+                recommendationResult.IndustryExperiences = industries;
+                recommendationResult.Hobbies = hobbies;
                 result.Add(recommendationResult);
             }
             return new JsonResult(result);
@@ -205,20 +228,25 @@ namespace API.Controllers
         }
 
         private void GetUserInfo(User user,
-            out List<int> languages,
+            out List<QuestionnaireLanguage> languages,
             out List<string> religions,
             out int degreeType,
             out int yearOfStudy,
             out int college,
             out List<QuestionnaireProgramOfStudy> programs,
-            out List<int> reasons,
-            out List<int> projectInterests,
-            out List<int> countries,
-            out List<int> industryExperience,
+            out List<QuestionnaireReasonsToJoin> reasons,
+            out List<QuestionnaireProjectInterest> projectInterests,
+            out List<QuestionnaireCountry> countries,
+            out List<QuestionnaireIndustryExperience> industryExperience,
             out List<QuestionnaireHobby> hobbies)
         {
 
-            languages = _context.UserLanguages.Where(x => x.UserId == user.Id).Select(x => x.LanguageId).ToList();
+            languages = _context.UserLanguages.Where(x => x.UserId == user.Id).Join(
+                    _context.QuestionnaireLanguages,
+                    userLanguage => userLanguage.LanguageId,
+                    language => language.Id,
+                    (userLanguage, language) => language
+                ).ToList();
             religions = _context.UserReligions.Where(x => x.UserId == user.Id).Select(x => x.Value).ToList();
 
             degreeType = user.DegreeType.HasValue? user.DegreeType.Value : 0;
@@ -231,10 +259,30 @@ namespace API.Controllers
                     (userProgram, program) => program
                 ).ToList();
 
-            reasons = _context.UserReasonsToJoins.Where(x => x.Id == user.Id).Select(x => x.ReasonId).ToList();
-            projectInterests = _context.UserProjectInterests.Where(x => x.Id == user.Id).Select(x => x.ProjectInterestId).ToList();
-            countries = _context.UserCountries.Where(x => x.Id == user.Id).Select(x => x.CountryId).ToList();
-            industryExperience = _context.UserIndustryExperiences.Where(x => x.Id == user.Id).Select(x => x.IndustryExperienceId).ToList();
+            reasons = _context.UserReasonsToJoins.Where(x => x.Id == user.Id).Join(
+                    _context.QuestionnaireReasonsToJoins,
+                    userReason => userReason.ReasonId,
+                    reason => reason.Id,
+                    (userReason, reason) => reason
+                ).ToList();
+            projectInterests = _context.UserProjectInterests.Where(x => x.Id == user.Id).Join(
+                    _context.QuestionnaireProjectInterests,
+                    userProject => userProject.ProjectInterestId,
+                    project => project.Id,
+                    (userProject, project) => project
+                ).ToList();
+            countries = _context.UserCountries.Where(x => x.Id == user.Id).Join(
+                    _context.QuestionnaireCountries,
+                    userCountry => userCountry.CountryId,
+                    country => country.Id,
+                    (userCountry, country) => country
+                ).ToList();
+            industryExperience = _context.UserIndustryExperiences.Where(x => x.Id == user.Id).Join(
+                    _context.QuestionnaireIndustryExperiences,
+                    userIndustry => userIndustry.IndustryExperienceId,
+                    industry => industry.Id,
+                    (userIndustry, industry) => industry
+                ).ToList();
             hobbies = _context.UserHobbies.Where(x => x.UserId == user.Id).Join(
                     _context.QuestionnaireHobbies,
                     userHobby => userHobby.HobbyId,
@@ -249,16 +297,16 @@ namespace API.Controllers
             var insertList = new List<UserCompatability>();
             var updateList = new List<UserCompatability>();
             GetUserInfo (user,
-                out List<int> curUserLanguages,
+                out List<QuestionnaireLanguage> curUserLanguages,
                 out List<string> curUserReligions,
                 out int curUserDegreeType,
                 out int curUserYearOfStudy,
                 out int curUserCollege,
                 out List<QuestionnaireProgramOfStudy> curUserPrograms,
-                out List<int> curUserReasons,
-                out List<int> curUserProjectInterests,
-                out List<int> curUserCountries,
-                out List<int> curUserIndustryExperience,
+                out List<QuestionnaireReasonsToJoin> curUserReasons,
+                out List<QuestionnaireProjectInterest> curUserProjectInterests,
+                out List<QuestionnaireCountry> curUserCountries,
+                out List<QuestionnaireIndustryExperience> curUserIndustryExperience,
                 out List<QuestionnaireHobby> curUserHobbies);
 
             var compatabilityQuery = _context.UserCompatabilities.Where(x =>
@@ -290,16 +338,16 @@ namespace API.Controllers
             {
                 GetUserInfo(
                     queriedUser,
-                    out List<int> queriredUserLanguages,
+                    out List<QuestionnaireLanguage> queriredUserLanguages,
                     out List<string> queriedUserReligions,
                     out int queriedUserDegreeType,
                     out int queriedUserYearOfStudy,
                     out int queriedUserCollege,
                     out List<QuestionnaireProgramOfStudy> queriedUserPrograms,
-                    out List<int> queriedUserReasons,
-                    out List<int> queriedUserProjectInterests,
-                    out List<int> queriedUserCountries,
-                    out List<int> queriedUserIndustryExperience,
+                    out List<QuestionnaireReasonsToJoin> queriedUserReasons,
+                    out List<QuestionnaireProjectInterest> queriedUserProjectInterests,
+                    out List<QuestionnaireCountry> queriedUserCountries,
+                    out List<QuestionnaireIndustryExperience> queriedUserIndustryExperience,
                     out List<QuestionnaireHobby> queriedUserHobbies
                 );
 
@@ -478,9 +526,19 @@ namespace API.Controllers
 
     public class RecommendationResult
     {
-        public string UserId { get; set; }
-        public List<QuestionnaireHobby> Hobbies { get; set; }
+        public string Name { get; set; }
+        public List<string> Religions { get; set; }
+        public List<QuestionnaireLanguage> Languages { get; set; }
+        public int DegreeType { get; set; }
+        public int YearOfStudy { get; set; }
+        public int College { get; set; }
         public List<QuestionnaireProgramOfStudy> Programs { get; set; }
+        public List<QuestionnaireReasonsToJoin> Reason { get; set; }
+        public List<QuestionnaireIndustryExperience> IndustryExperiences { get; set; }
+        public List<QuestionnaireProjectInterest> ProjectInterests { get; set; }
+        public List<QuestionnaireCountry> Countries { get; set; }
+        public List<QuestionnaireHobby> Hobbies { get; set; }
+        
         public RecommendationResult()
         {
 
