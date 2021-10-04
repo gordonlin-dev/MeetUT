@@ -24,7 +24,7 @@ const Splash = props => {
       if(response.ok){
           setTimeout(() => {props.navigation.navigate('Home')}, 500)
       } else if(response.status === 403){
-          await handler.handleResponse(response)
+          await handler.handleResponse(response, props)
       }
       else{
           setTimeout(() => {setShowButtons(true)}, 500)
