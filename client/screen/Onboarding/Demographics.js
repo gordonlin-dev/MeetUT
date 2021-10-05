@@ -19,6 +19,7 @@ const Demographics = props => {
     const [languageValues, setLanguageValues] = useState([]);
     const [languageOptions, setLanguageOptions] = useState([]);
     const [age, setAge] = useState("")
+    const [forceUpdate, setForceUpdate] = useState(true);
 
     const loadUser = async () =>{
         const languageResponse = await handler.sendRequest(
@@ -178,17 +179,15 @@ const Demographics = props => {
                 <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Languages}</Text>
             </View>
               <SearchableDropdown
-                  //chip={true}
                   multi={true}
                   selectedItems={languageValues}
                   onItemSelect={(item) => {
-                      const items = languageValues
-                      items.push(item)
-                      setLanguageValues(items)
+                      languageValues.push(item)
+                      setLanguageValues(languageValues)
+                      setForceUpdate(!forceUpdate)
                   }}
                   onRemoveItem={(item, index) => {
-                      const items = languageValues.filter(x => x.id !== item.id)
-                      setLanguageValues(items)
+                      setLanguageValues(languageValues.filter(x => x.id !== item.id))
                   }}
                   items={languageOptions}
                   itemStyle={{
