@@ -18,6 +18,7 @@ const Demographics = props => {
     const [religionOtherValue, setReligionOtherValue] = useState("");
     const [languageValues, setLanguageValues] = useState([]);
     const [languageOptions, setLanguageOptions] = useState([]);
+    const [age, setAge] = useState("")
 
     const loadUser = async () =>{
         const languageResponse = await handler.sendRequest(
@@ -104,13 +105,25 @@ const Demographics = props => {
                 languages.push(languageValues[i].id)
             }
         }
+        let genderSubmitValue
+        if(genderValue === texts.Screens.Demographics.Gender.Other){
+            genderSubmitValue = genderOtherValue
+        }else{
+            genderSubmitValue = genderValue
+        }
+        let religionSubmitValue
+        if(religionValue === texts.Screens.Demographics.Religions.Other){
+            religionSubmitValue = religionOtherValue
+        }else{
+            religionSubmitValue = religionValue
+        }
         const body = {
             FirstName : firstName,
             LastName : lastName,
-            Gender : genderValue,
-            Religion: religionValue,
+            Gender : genderSubmitValue,
+            Religion: religionSubmitValue,
             Languages : languages,
-            DateOfBirth : new Date()
+            DateOfBirth : new Date(new Date().getFullYear() - age, 0,1)
         }
         const response = await handler.sendRequest(
             endpoints.Server.Onboarding.Questionnaire.Demographics,
@@ -129,7 +142,7 @@ const Demographics = props => {
     }, []);
 
     return (
-          <ScrollView style={styles.onboardContainer}>
+          <View style={styles.onboardContainer}>
             <View style={styles.inputHeader}>
                 <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Firstname}</Text>
             </View>
@@ -150,10 +163,22 @@ const Demographics = props => {
               placeholder={texts.Global.Common.Lastname}
               placeholderTextColor="black"
             />
+              <View style={styles.inputHeader}>
+                  <Text style={styles.onboardHeaderFont}>Age</Text>
+              </View>
+              <TextInput
+                  style={styles.onboardInput}
+                  onChangeText={setAge}
+                  value={age}
+                  placeholder={"Age"}
+                  placeholderTextColor="black"
+                  keyboardType ="numeric"
+              />
             <View style={styles.inputHeader}>
                 <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Languages}</Text>
             </View>
               <SearchableDropdown
+                  //chip={true}
                   multi={true}
                   selectedItems={languageValues}
                   onItemSelect={(item) => {
@@ -197,32 +222,36 @@ const Demographics = props => {
                       }
                   }
               />
-            <View style={styles.pickerHeader}>
-                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Gender}</Text>
-                <Picker
-                    selectedValue={genderValue}
-                    onValueChange={(itemValue, itemIndex) => setGenderValue(itemValue)}>
-                    {generateGenderPicker()}
-                </Picker>
-            </View>
-              {renderGenderOtherInput()}
-            <View style={styles.pickerHeader}>
-                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Religion}</Text>
-                <Picker
-                    selectedValue={religionValue}
-                    ColorValue="black"
-                    onValueChange={(itemValue, itemIndex) => setReligionValue(itemValue)}>
-                    {generateReligionPicker()}
-                </Picker>
-            </View>
-              {renderReligionOtherInput()}
+
+              <ScrollView>
+                  <View style={styles.pickerHeader}>
+                      <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Gender}</Text>
+                      <Picker
+                          selectedValue={genderValue}
+                          onValueChange={(itemValue, itemIndex) => setGenderValue(itemValue)}>
+                          {generateGenderPicker()}
+                      </Picker>
+                  </View>
+                  {renderGenderOtherInput()}
+                  <View style={styles.pickerHeader}>
+                      <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Religion}</Text>
+                      <Picker
+                          selectedValue={religionValue}
+                          ColorValue="black"
+                          onValueChange={(itemValue, itemIndex) => setReligionValue(itemValue)}>
+                          {generateReligionPicker()}
+                      </Picker>
+                  </View>
+                  {renderReligionOtherInput()}
+              </ScrollView>
+
             <TouchableOpacity
                 style={styles.quizRightButton}
                 onPress={() => save()
                 }>
                 <Text style={styles.quizFont}>{texts.Screens.Demographics.Buttons.SaveAndContinue}</Text>
             </TouchableOpacity>
-        </ScrollView>
+        </View>
     );
 };
 

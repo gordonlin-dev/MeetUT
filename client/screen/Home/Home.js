@@ -40,8 +40,14 @@ const HomeScreen = props => {
         )
         if(matchResponse.ok){
             const responseJson = await matchResponse.json();
+            let matched
+            if(responseJson.matched){
+                matched = responseJson.matched
+            }else{
+                matched = []
+            }
             const body = {
-                excludedUsers: responseJson.matched
+                excludedUsers: matched
             }
             const response = await handler.sendRequest(
                 endpoints.Server.Onboarding.User.Recommendations,
@@ -58,7 +64,6 @@ const HomeScreen = props => {
                         })}])
             }else if(response.ok){
                 const responseJson = await response.json();
-                console.log(responseJson)
                 setUsers(responseJson)
             }
         }
@@ -71,7 +76,7 @@ const HomeScreen = props => {
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.empty}>
-                {/*<ProfileCard style={styles.homeBg} users={users}/>*/}
+                {<ProfileCard style={styles.homeBg} users={users}/>}
             <Footer navigation={props.navigation}/>
             </View>
         </SafeAreaView>
