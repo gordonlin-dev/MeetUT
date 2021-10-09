@@ -11,6 +11,7 @@ import {
     TextInput
 } from 'react-native'
 import {styles} from '../styles'
+import {NavigationActions, StackActions} from "react-navigation";
 const {height, width} = Dimensions.get('window');
 
 const texts = require("../../assets/Texts.json");
@@ -80,7 +81,11 @@ const Personal = props => {
                 props
             )
             if(response2.ok){
-                props.navigation.navigate('Home')
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'Home' })],
+                });
+                props.navigation.dispatch(resetAction)
             }
         }
     }

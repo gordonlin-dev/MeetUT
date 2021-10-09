@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {View, Text, BackHandler, TextInput, TouchableOpacity, ImageBackground, Dimensions} from 'react-native'
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {NavigationActions, StackActions} from "react-navigation";
 const {height, width} = Dimensions.get('window');
 const image = require('../../assets/bg.png');
 const texts = require("../../assets/Texts.json");
@@ -24,9 +25,11 @@ const resetSubmit = async (password, confirm, props) => {
     if(response.ok){
         const responseJson = await response.json();
         await AsyncStorage.setItem('accessToken', responseJson.accessToken)
-        props.navigation.navigate({
-            routeName: 'Home'
-        })
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Home' })],
+        });
+        props.navigation.dispatch(resetAction)
     }
 }
 

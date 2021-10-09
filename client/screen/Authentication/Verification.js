@@ -3,6 +3,7 @@ import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, A
 const endpoints = require('../../API_endpoints.json')
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {NavigationActions, StackActions} from "react-navigation";
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const image = require('../../assets/bg.png');
@@ -22,9 +23,11 @@ const verificationSubmit = async (code, props) => {
     if(response.ok){
         const responseJson = await response.json()
         await AsyncStorage.setItem('accessToken', responseJson.accessToken)
-        props.navigation.navigate({
-            routeName: 'Home'
-        })
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'Home' })],
+        });
+        props.navigation.dispatch(resetAction)
     }
 }
 
