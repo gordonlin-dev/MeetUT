@@ -7,6 +7,7 @@ const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {NavigationActions, StackActions} from "react-navigation";
 const texts = require("../../assets/Texts.json");
 const image = require("../../assets/bg.png");
 const logo = require("../../assets/Logo-Transparent.png");
@@ -22,7 +23,12 @@ const Splash = props => {
           true,
           props)
       if(response.ok){
-          setTimeout(() => {props.navigation.navigate('Home')}, 500)
+          setTimeout(() => {
+              const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'Home' })],
+              });
+              props.navigation.dispatch(resetAction)}, 500)
       } else if(response.status === 403){
           await handler.handleResponse(response, props)
       }

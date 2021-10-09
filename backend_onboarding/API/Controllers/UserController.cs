@@ -207,6 +207,7 @@ namespace API.Controllers
                 recommendationResult.Countries = countries;
                 recommendationResult.IndustryExperiences = industries;
                 recommendationResult.Hobbies = hobbies;
+                recommendationResult.UserId = recommendedUser.Id;
                 result.Add(recommendationResult);
             }
             return new JsonResult(result);
@@ -526,6 +527,7 @@ namespace API.Controllers
 
     public class RecommendationResult
     {
+        public int UserId { get; set; }
         public string Name { get; set; }
         public List<string> Religions { get; set; }
         public List<QuestionnaireLanguage> Languages { get; set; }

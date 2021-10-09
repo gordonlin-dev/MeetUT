@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef, Fragment} from 'react'
 import {
     View,
     Image,
@@ -8,10 +8,12 @@ import {
     Dimensions,
     SafeAreaView,
     TouchableOpacity,
+    Text,
     Alert
 } from 'react-native'
 import Footer from "../Footer";
 import ProfileCard from "./ProfileCard";
+import Swiper from 'react-native-swiper';
 import { styles } from '../styles';
 const home =  require('../../assets/home-icon.png');
 const setting =  require('../../assets/setting-icon.png');
@@ -28,7 +30,8 @@ const HomeScreen = props => {
           BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
 
-    const [users, setUsers] = useState([])
+    const [recommendations, setRecommendations] = useState([])
+    const [index, setIndex] = useState(0)
 
     const loadUser = async () => {
         const matchResponse = await handler.sendRequest(
@@ -65,7 +68,7 @@ const HomeScreen = props => {
             }else if(response.ok){
                 const responseJson = await response.json();
                 console.log(responseJson)
-                setUsers(responseJson)
+                setRecommendations(responseJson)
             }
         }
     }
@@ -74,14 +77,68 @@ const HomeScreen = props => {
         loadUser()
     }, []);
 
+    const renderSwiper = () => {
+        return(
+            <Fragment>
+
+                <View>
+                    <Text>1234</Text>
+                </View>
+
+                <View>
+                    <Text>4321</Text>
+                </View>
+            </Fragment>
+        )
+    }
     return(
         <SafeAreaView style={styles.container}>
-            <View style={styles.empty}>
-                {<ProfileCard style={styles.homeBg} users={users}/>}
-            <Footer navigation={props.navigation}/>
+            <View style={inpageStyles.flex3}>
+                <Swiper style={{}} loop={false}
+                        showsPagination={true}
+                        index={index}
+                        dot={
+                            <View
+                                style={{
+                                    backgroundColor: 'rgba(0,0,0,.3)',
+                                    width: 10,
+                                    height: 10,
+                                    borderRadius: 7,
+                                    marginLeft: 7,
+                                    marginRight: 7
+                                }}
+                            />
+                        }
+                        activeDot={
+                            <View
+                                style={{
+                                    backgroundColor: '#000',
+                                    width: 10,
+                                    height: 10,
+                                    borderRadius: 7,
+                                    marginLeft: 7,
+                                    marginRight: 7
+                                }}
+                            />}
+                >
+                    {recommendations.map((recommendation, i) => {return renderSwiper()})}
+                </Swiper>
+            </View>
+            <View style={inpageStyles.flex1}>
+                <Footer navigation={props.navigation}/>
             </View>
         </SafeAreaView>
     )
 }
 
+const inpageStyles = StyleSheet.create(
+    {
+        flex3:{
+            flex:9
+        },
+        flex1:{
+            flex:1
+        }
+    }
+)
 export default HomeScreen;
