@@ -129,6 +129,15 @@ const SettingScreen = props => {
                         style={styles.Button}>
                         <Text style={styles.font}>{texts.Screens.Settings.Delete}</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            props.navigation.navigate({
+                                routeName: 'Demographics'
+                            })
+                        }}
+                        style={styles.Button}>
+                        <Text style={styles.font}>Change preference</Text>
+                    </TouchableOpacity>
                 </View>
                 <Footer navigation={props.navigation}/>
             </ImageBackground>
