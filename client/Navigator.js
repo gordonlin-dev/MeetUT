@@ -46,7 +46,7 @@ const Navigator = createStackNavigator({
             headerTitleStyle: {
                 fontFamily: "timeburner",
                 fontSize: 30,
-                marginLeft: width * 0.23
+                marginLeft: width * 0.03
             },
         }
 
@@ -63,7 +63,7 @@ const Navigator = createStackNavigator({
             headerTitleStyle: {
                 fontFamily: "timeburner",
                 fontSize: 30,
-                marginLeft: width * 0.23
+                marginLeft: width * 0.03
             },
         }
 
@@ -80,7 +80,7 @@ const Navigator = createStackNavigator({
             headerTitleStyle: {
                 fontFamily: "timeburner",
                 fontSize: 30,
-                marginLeft: width * 0.23
+                marginLeft: width * 0.03
             },
         }
 
@@ -177,7 +177,7 @@ const Navigator = createStackNavigator({
             headerTitleStyle: {
                 fontFamily: "timeburner",
                 fontSize: 30,
-                marginLeft: width * 0.3
+                marginLeft: width * 0.03
             },
         }
     },

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import {View, Image, TextInput, TouchableOpacity, ScrollView, Text, SafeAreaView, Dimensions, Picker} from 'react-native'
+import {View, Image, TextInput, TouchableOpacity, ScrollView, Text, SafeAreaView, Dimensions} from 'react-native'
+import {Picker} from '@react-native-picker/picker';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import {styles} from '../styles'
 const logo =  require('../../assets/logo.png');
@@ -180,6 +181,7 @@ const Demographics = props => {
             </View>
               <SearchableDropdown
                   multi={true}
+                  chip={true}
                   selectedItems={languageValues}
                   onItemSelect={(item) => {
                       languageValues.push(item)
