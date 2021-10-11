@@ -82,6 +82,9 @@ const HomeScreen = props => {
             false,
             props
         )
+        if(response.ok){
+            setRecommendations(recommendations.filter(x => x.email !== email))
+        }
     }
     const getDegreeTypeValue = (value) => {
         for (const key in lookups.Academic.DegreeType) {
