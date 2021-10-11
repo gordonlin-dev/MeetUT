@@ -9,19 +9,20 @@ import {
     SafeAreaView,
     TouchableOpacity,
     Text,
-    Alert
+    Alert,
+    ScrollView
 } from 'react-native'
 import Footer from "../Footer";
 import ProfileCard from "./ProfileCard";
 import Swiper from 'react-native-swiper';
 import { styles } from '../styles';
-const home =  require('../../assets/home-icon.png');
-const setting =  require('../../assets/setting-icon.png');
-const chat =  require('../../assets/chat-icon.png');
+import logo from "../../assets/logo.png";
+const lookups = require("../Lookups.json")
 
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
+const {height, width} = Dimensions.get('window');
 
 const HomeScreen = props => {
     useEffect(() => {
@@ -31,7 +32,6 @@ const HomeScreen = props => {
     }, [])
 
     const [recommendations, setRecommendations] = useState([])
-    const [index, setIndex] = useState(0)
 
     const loadUser = async () => {
         const matchResponse = await handler.sendRequest(
@@ -45,12 +45,15 @@ const HomeScreen = props => {
             const responseJson = await matchResponse.json();
             let matched
             if(responseJson.matched){
-                matched = responseJson.matched
+                matched = []
+                for (const key in responseJson.matched) {
+                    matched.push(key)
+                }
             }else{
                 matched = []
             }
             const body = {
-                excludedUsers: matched
+                ExcludedUsers: matched
             }
             const response = await handler.sendRequest(
                 endpoints.Server.Onboarding.User.Recommendations,
@@ -67,36 +70,125 @@ const HomeScreen = props => {
                         })}])
             }else if(response.ok){
                 const responseJson = await response.json();
-                console.log(responseJson)
                 setRecommendations(responseJson)
             }
         }
     }
+    const connect = async (email) => {
+        const response = await handler.sendRequest(
+            endpoints.Server.User.Match.Like,
+            texts.HTTP.Post,
+            {likedUser: email},
+            false,
+            props
+        )
+    }
+    const getDegreeTypeValue = (value) => {
+        for (const key in lookups.Academic.DegreeType) {
+            if(lookups.Academic.DegreeType[key].Value == value){
+                return lookups.Academic.DegreeType[key].DisplayValue
+            }
+        }
+    }
 
+    const getYearOfStudyValue = (value) => {
+        for (const key in lookups.Academic.YearOfStudy) {
+            if(lookups.Academic.YearOfStudy[key].Value == value){
+                return lookups.Academic.YearOfStudy[key].DisplayValue
+            }
+        }
+    }
+
+    const getCollege = (value) => {
+        for (const key in lookups.Academic.College) {
+            if(lookups.Academic.College[key].Value == value){
+                return lookups.Academic.College[key].DisplayValue
+            }
+        }
+    }
     useEffect(() => {
         loadUser()
     }, []);
 
-    const renderSwiper = () => {
+    const renderProfileCard = (recommendation) => {
         return(
-            <Fragment>
+            <ScrollView contentContainerStyle={inpageStyle.slide}>
+                <View style={inpageStyle.infoContainer}>
+                    <Image style={styles.avatar} source={logo}/>
+                    <View >
+                        <Text style={styles.text}> {recommendation.name}</Text>
+                        <Text style={styles.text}> Wants to</Text>
+                        {recommendation.reason.map((reason) =>{
+                            return(
+                                <Text style={styles.quizFont} key={reason.id}>
+                                    {reason.value}
+                                </Text>
+                            )
+                        })}
+                    </View>
 
-                <View>
-                    <Text>1234</Text>
+                    <View style={inpageStyle.buttonContainer}>
+                        <TouchableOpacity style={inpageStyle.homeButton} onPress={() =>{connect(recommendation.email)}}>
+                            <Text style={styles.quizFont}>Connect</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
 
-                <View>
-                    <Text>4321</Text>
+                <View style={inpageStyle.detailContainer}>
+                    <Text style={styles.text}> {getDegreeTypeValue(recommendation.degreeType)} </Text>
+                    <Text style={styles.text}> Year: {getYearOfStudyValue(recommendation.yearOfStudy)} </Text>
+                    <Text style={styles.text}> {getCollege(recommendation.college)} </Text>
+                    <Text style={styles.text}> Program(s) </Text>
+                    {recommendation.programs.map((program)=>{
+                        return(
+                            <Text style={styles.quizFont} key={program.id}>
+                                {program.value}
+                            </Text>
+                        )
+                    })}
+                    <Text style={styles.text}> Industry Experiences </Text>
+                    {recommendation.industryExperiences.map((exp) =>{
+                        return(
+                            <Text style={styles.quizFont} key={exp.id}>
+                                {exp.value}
+                            </Text>
+                        )
+                    })}
+                    <Text style={styles.text}> Project Interests </Text>
+                    {recommendation.projectInterests.map((project) => {
+                        return(
+                            <Text style={styles.quizFont} key={project.id}>
+                                {project.value}
+                            </Text>
+                        )
+                    })}
+                    <Text style={styles.text}>Languages</Text>
+                    {recommendation.languages.map((language) => {
+                        return(
+                            <Text style={styles.quizFont} key={language.id}>
+                                {language.value}
+                            </Text>
+                        )
+                    })}
+                    <Text style={styles.text}>Has lived in</Text>
+                    {recommendation.countries.map((country) => {
+                        return(
+                            <Text style={styles.quizFont} key={country.id}>
+                                {country.value}
+                            </Text>
+                        )
+                    })}
                 </View>
-            </Fragment>
+            </ScrollView>
         )
     }
     return(
         <SafeAreaView style={styles.container}>
-            <View style={inpageStyles.flex3}>
+            <View style={inpageStyle.flex9}>
                 <Swiper style={{}} loop={false}
+                        key={recommendations.length}
                         showsPagination={true}
-                        index={index}
+                        showsButtons={true}
                         dot={
                             <View
                                 style={{
@@ -121,24 +213,55 @@ const HomeScreen = props => {
                                 }}
                             />}
                 >
-                    {recommendations.map((recommendation, i) => {return renderSwiper()})}
+                    {recommendations.map((recommendation) => {
+                        return(
+                            <View key={recommendation.userId}>
+                                {renderProfileCard(recommendation)}
+                            </View>
+                        )
+                    })}
                 </Swiper>
             </View>
-            <View style={inpageStyles.flex1}>
+            <View style={inpageStyle.flex1}>
                 <Footer navigation={props.navigation}/>
             </View>
         </SafeAreaView>
     )
 }
 
-const inpageStyles = StyleSheet.create(
-    {
-        flex3:{
-            flex:9
-        },
-        flex1:{
-            flex:1
-        }
+
+const inpageStyle = StyleSheet.create({
+    flex9:{
+        flex:9
+    },
+    flex1:{
+        flex:1
+    },
+    slide: {
+        backgroundColor: 'white'
+    },
+    infoContainer: {
+        backgroundColor: '#9DD6EB',
+        alignItems: 'center'
+    },
+    buttonContainer:{
+        marginTop: height * 0.02,
+        marginBottom: height * 0.02
+    },
+    homeButton: {
+        width: width * 0.4,
+        height: height * 0.06,
+        marginBottom: height * 0.04,
+        marginLeft: width * 0.05,
+        marginRight: width * 0.05,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        backgroundColor: 'white',
+    },
+    detailContainer: {
+        paddingBottom: height * 0.1,
+        left: width * 0.03,
     }
-)
+})
 export default HomeScreen;

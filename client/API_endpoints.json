@@ -18,6 +18,7 @@
         "GetAvatar": "https://meet-ut-2.herokuapp.com/users/getAvatar"
       },
       "Match" : {
+        "Like": "https://meet-ut-2.herokuapp.com/match/like"
 
       }
     },

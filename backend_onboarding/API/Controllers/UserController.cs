@@ -208,6 +208,7 @@ namespace API.Controllers
                 recommendationResult.IndustryExperiences = industries;
                 recommendationResult.Hobbies = hobbies;
                 recommendationResult.UserId = recommendedUser.Id;
+                recommendationResult.Email = recommendedUser.Email;
                 result.Add(recommendationResult);
             }
             return new JsonResult(result);
@@ -260,25 +261,25 @@ namespace API.Controllers
                     (userProgram, program) => program
                 ).ToList();
 
-            reasons = _context.UserReasonsToJoins.Where(x => x.Id == user.Id).Join(
+            reasons = _context.UserReasonsToJoins.Where(x => x.UserId == user.Id).Join(
                     _context.QuestionnaireReasonsToJoins,
                     userReason => userReason.ReasonId,
                     reason => reason.Id,
                     (userReason, reason) => reason
                 ).ToList();
-            projectInterests = _context.UserProjectInterests.Where(x => x.Id == user.Id).Join(
+            projectInterests = _context.UserProjectInterests.Where(x => x.UserId == user.Id).Join(
                     _context.QuestionnaireProjectInterests,
                     userProject => userProject.ProjectInterestId,
                     project => project.Id,
                     (userProject, project) => project
                 ).ToList();
-            countries = _context.UserCountries.Where(x => x.Id == user.Id).Join(
+            countries = _context.UserCountries.Where(x => x.UserId == user.Id).Join(
                     _context.QuestionnaireCountries,
                     userCountry => userCountry.CountryId,
                     country => country.Id,
                     (userCountry, country) => country
                 ).ToList();
-            industryExperience = _context.UserIndustryExperiences.Where(x => x.Id == user.Id).Join(
+            industryExperience = _context.UserIndustryExperiences.Where(x => x.UserId == user.Id).Join(
                     _context.QuestionnaireIndustryExperiences,
                     userIndustry => userIndustry.IndustryExperienceId,
                     industry => industry.Id,
@@ -527,6 +528,7 @@ namespace API.Controllers
 
     public class RecommendationResult
     {
+        public string Email { get; set; }
         public int UserId { get; set; }
         public string Name { get; set; }
         public List<string> Religions { get; set; }

@@ -4,8 +4,8 @@
       <File FileName="API/Models/UserCompatability.cs" Line="11" Column="41" IsPinned="True" />
       <File FileName="API/Startup.cs" />
       <File FileName="API/Program.cs" Line="1" Column="1" />
-      <File FileName="API/Controllers/UserController.cs" Line="113" Column="19" />
-      <File FileName="API/Controllers/QuestionnaireController.cs" Line="227" Column="13" />
+      <File FileName="API/Controllers/UserController.cs" Line="211" Column="68" />
+      <File FileName="API/Controllers/QuestionnaireController.cs" Line="384" Column="24" />
       <File FileName="API/Properties/launchSettings.json" />
       <File FileName="API/Util.cs" />
     </Files>
