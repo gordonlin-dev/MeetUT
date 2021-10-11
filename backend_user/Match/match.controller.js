@@ -7,8 +7,9 @@ exports.like = async (req, res) => {
     const curUser = await UserModel.like(curUserID,likedUserID)
     if(curUser.matched[likedUserID]){
         const url = endpoints.Chat.CreateChat
+        let authorization = req.headers['authorization'].split(' ')
         const config = {
-            headers: req.headers
+            headers: { Authorization: `Bearer ${authorization[1]}` }
         };
         const response = await axios.post(url, {
             participants: [curUserID, likedUserID]
