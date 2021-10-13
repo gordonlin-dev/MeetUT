@@ -6,9 +6,9 @@ import {
     Text,
     StyleSheet,
     Dimensions,
-    Picker,
     SectionList, ScrollView
 } from 'react-native';
+import {Picker} from '@react-native-picker/picker'
 import { styles } from '../styles';
 const {height, width} = Dimensions.get('window');
 
