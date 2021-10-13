@@ -10,10 +10,10 @@ import {
     TouchableOpacity,
     Text,
     Alert,
-    ScrollView
+    ScrollView,
+    ActivityIndicator
 } from 'react-native'
 import Footer from "../Footer";
-import ProfileCard from "./ProfileCard";
 import Swiper from 'react-native-swiper';
 import { styles } from '../styles';
 import logo from "../../assets/logo.png";
@@ -32,8 +32,10 @@ const HomeScreen = props => {
     }, [])
 
     const [recommendations, setRecommendations] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     const loadUser = async () => {
+        setIsLoading(true)
         const matchResponse = await handler.sendRequest(
             endpoints.Server.User.User.baseURL,
             texts.HTTP.Get,
@@ -63,18 +65,22 @@ const HomeScreen = props => {
                 props
             )
             if(response.status === 403){
+                setIsLoading(false)
                 Alert.alert(texts.Alert.Title.CompleteSignUp,
                     "",
                     [{text: texts.Alert.Buttons.OK, onPress: () => props.navigation.navigate({
                             routeName: "Demographics"
                         })}])
             }else if(response.ok){
+                setIsLoading(false)
                 const responseJson = await response.json();
                 setRecommendations(responseJson)
             }
+
         }
     }
     const connect = async (email) => {
+        setIsLoading(true)
         const response = await handler.sendRequest(
             endpoints.Server.User.Match.Like,
             texts.HTTP.Post,
@@ -83,6 +89,7 @@ const HomeScreen = props => {
             props
         )
         if(response.ok){
+            setIsLoading(false)
             setRecommendations(recommendations.filter(x => x.email !== email))
         }
     }
@@ -185,6 +192,14 @@ const HomeScreen = props => {
             </ScrollView>
         )
     }
+
+    const renderLoadingIcon = () => {
+        if(isLoading){
+            return(
+                <ActivityIndicator size="large" style={inpageStyle.loading} color="#0000ff" />
+            )
+        }
+    }
     return(
         <SafeAreaView style={styles.container}>
             <View style={inpageStyle.flex9}>
@@ -225,6 +240,7 @@ const HomeScreen = props => {
                     })}
                 </Swiper>
             </View>
+            {renderLoadingIcon()}
             <View style={inpageStyle.flex1}>
                 <Footer navigation={props.navigation}/>
             </View>
@@ -265,6 +281,15 @@ const inpageStyle = StyleSheet.create({
     detailContainer: {
         paddingBottom: height * 0.1,
         left: width * 0.03,
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })
 export default HomeScreen;
