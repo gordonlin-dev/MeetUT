@@ -56,12 +56,7 @@ exports.findOrCreateUsers = async (usernames) => {
     return users
 }
 exports.createChatRoom = async (participants) => {
-    let roomID = ""
-    for (let i = 0; i < participants.length; i++){
-        roomID = roomID + participants[i] + " "
-    }
-
-    roomID = roomID.trim()
+    let roomID = participants[0] + " " + participants[1]
     const newRoom = {
         _id: roomID,
         participants: participants,
@@ -70,7 +65,8 @@ exports.createChatRoom = async (participants) => {
     const users = await this.findOrCreateUsers(participants)
     for (let i = 0; i < users.length; i++){
         let user = users[i]
-        const roomQuery = user.chatRooms.find(room => room._id === roomID)
+        const roomQuery = user.chatRooms.find(room => room._id.includes(participants[0])
+            && room._id.includes(participants[1]))
         if(roomQuery == null){
             user.chatRooms.push(newRoom)
             await user.save()
