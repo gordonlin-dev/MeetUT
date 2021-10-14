@@ -3,7 +3,6 @@ import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, A
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const image = require('../../assets/bg.png');
-const fixer = require('../Fixer')
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
