@@ -1,5 +1,14 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import {
+    View,
+    Text,
+    BackHandler,
+    TextInput,
+    ImageBackground,
+    TouchableOpacity,
+    Alert,
+    ActivityIndicator, StyleSheet
+} from 'react-native'
 import {styles} from '../styles'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {NavigationActions, StackActions} from "react-navigation";
@@ -9,29 +18,7 @@ const fixer = require('../Fixer')
 const endpoints = require('../../API_endpoints.json')
 const texts = require("../../assets/Texts.json");
 
-const loginSubmit = async (email, password, props) => {
-    const body = {
-        _id: fixer.email(email),
-        password: password
-    }
-    const response = await handler.sendRequest(
-        endpoints.Server.User.Auth.Login,
-        texts.HTTP.Post,
-        body,
-        false,
-        props
-    )
 
-    if(response.ok){
-        const responseJson = await response.json();
-        await AsyncStorage.setItem('accessToken', responseJson.accessToken)
-        const resetAction = StackActions.reset({
-            index: 0,
-            actions: [NavigationActions.navigate({ routeName: 'Home' })],
-        });
-        props.navigation.dispatch(resetAction)
-    }
-}
 
 const LoginScreen = props => {
     useEffect(() => {
@@ -41,6 +28,40 @@ const LoginScreen = props => {
     }, [])
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
+    const renderLoadingIcon = () => {
+        if(isLoading){
+            return(
+                <ActivityIndicator size="large" style={inpageStyle.loading} color="#ffffff" />
+            )
+        }
+    }
+    const loginSubmit = async (email, password, props) => {
+        setIsLoading(true)
+        const body = {
+            _id: fixer.email(email),
+            password: password
+        }
+        const response = await handler.sendRequest(
+            endpoints.Server.User.Auth.Login,
+            texts.HTTP.Post,
+            body,
+            false,
+            props
+        )
+
+        if(response.ok){
+            const responseJson = await response.json();
+            await AsyncStorage.setItem('accessToken', responseJson.accessToken)
+            const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'Home' })],
+            });
+            props.navigation.dispatch(resetAction)
+            setIsLoading(false)
+        }
+        setIsLoading(false)
+    }
 
     return (
         <View style={styles.empty}>
@@ -73,8 +94,6 @@ const LoginScreen = props => {
                         style={styles.Button}>
                         <Text style={styles.font}>{texts.Global.Common.Login}</Text>
                     </TouchableOpacity>
-                </View>
-                <View>
                     <TouchableOpacity
                         onPress={() => {
                             props.navigation.navigate({
@@ -85,11 +104,22 @@ const LoginScreen = props => {
                         <Text style={styles.font}>{texts.Global.Common.ForgotPassword}</Text>
                     </TouchableOpacity>
                 </View>
-
+                {renderLoadingIcon()}
             </ImageBackground>
         </View>
     );
 };
 
+const inpageStyle = StyleSheet.create({
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+})
 
 export default LoginScreen;
