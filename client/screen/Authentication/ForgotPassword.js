@@ -1,5 +1,14 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text, BackHandler, TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import {
+    View,
+    Text,
+    BackHandler,
+    TextInput,
+    ImageBackground,
+    TouchableOpacity,
+    Alert,
+    ActivityIndicator
+} from 'react-native'
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const image = require('../../assets/bg.png');
@@ -7,45 +16,6 @@ const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
 
-
-
-const emailSubmit = async (code, props) => {
-    const email = await AsyncStorage.getItem('resetPasswordEmail')
-    const body = {
-        _id:email,
-        verification: code
-    }
-    const response = await handler.sendRequest(
-        endpoints.Server.User.User.ForgotPassword,
-        texts.HTTP.Post,
-        body,
-        false,
-        props
-    )
-    if(response.ok){
-        const responseJson = await response.json();
-        await AsyncStorage.setItem('accessToken', responseJson.accessToken)
-        props.navigation.navigate({
-            routeName: 'ResetPassword'
-        })
-    }
-}
-
-const resend = async (props) => {
-    const email = await AsyncStorage.getItem('resetPasswordEmail')
-    const response = await handler.sendRequest(
-        endpoints.Server.User.User.ResendPasswordCode,
-        texts.HTTP.Post,
-        {_id:email},
-        false,
-        props
-    )
-    if(response.ok){
-        Alert.alert("",
-            texts.Alert.Message.SentCode,
-            [{text: texts.Alert.Buttons.OK, onPress: () => {}}])
-    }
-}
 
 const ForgotPasswordScreen = props => {
     useEffect(() => {
@@ -55,6 +25,58 @@ const ForgotPasswordScreen = props => {
     }, [])
 
     const [code, onChangeCode] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
+
+    const renderLoadingIcon = () => {
+        if(isLoading){
+            return(
+                <ActivityIndicator size="large" style={styles.loading} color="#ffffff" />
+            )
+        }
+    }
+    const emailSubmit = async (code, props) => {
+        setIsLoading(true)
+        const email = await AsyncStorage.getItem('resetPasswordEmail')
+        const body = {
+            _id:email,
+            verification: code
+        }
+        const response = await handler.sendRequest(
+            endpoints.Server.User.User.ForgotPassword,
+            texts.HTTP.Post,
+            body,
+            false,
+            props
+        )
+        if(response.ok){
+            setIsLoading(false)
+            const responseJson = await response.json();
+            await AsyncStorage.setItem('accessToken', responseJson.accessToken)
+            props.navigation.navigate({
+                routeName: 'ResetPassword'
+            })
+        }
+        setIsLoading(false)
+    }
+
+    const resend = async (props) => {
+        setIsLoading(true)
+        const email = await AsyncStorage.getItem('resetPasswordEmail')
+        const response = await handler.sendRequest(
+            endpoints.Server.User.User.ResendPasswordCode,
+            texts.HTTP.Post,
+            {_id:email},
+            false,
+            props
+        )
+        if(response.ok){
+            setIsLoading(false)
+            Alert.alert("",
+                texts.Alert.Message.SentCode,
+                [{text: texts.Alert.Buttons.OK, onPress: () => {}}])
+        }
+        setIsLoading(false)
+    }
 
     return (
         <View style={styles.empty}>
@@ -86,6 +108,7 @@ const ForgotPasswordScreen = props => {
                         <Text style={styles.font}>{texts.Global.Common.Submit}</Text>
                     </TouchableOpacity>
                 </View>
+                {renderLoadingIcon()}
             </ImageBackground>
         </View>
     );
