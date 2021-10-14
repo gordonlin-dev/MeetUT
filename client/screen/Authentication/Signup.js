@@ -5,7 +5,7 @@ import {
     TextInput,
     TouchableOpacity,
     ImageBackground,
-    KeyboardAvoidingView, ScrollView, StyleSheet, Dimensions
+    KeyboardAvoidingView, ScrollView, StyleSheet, Dimensions, ActivityIndicator
 } from 'react-native'
 import {useHeaderHeight} from 'react-navigation-stack';
 
@@ -18,35 +18,7 @@ const fixer = require('../Fixer')
 const endpoints = require('../../API_endpoints.json')
 const texts = require("../../assets/Texts.json");
 const {height, width} = Dimensions.get('window');
-const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
-    try {
-        const body = {
-            firstName: firstName,
-            lastName: lastName,
-            _id: fixer.email(email),
-            password: password,
-            confirm: confirm
-        }
-        const response = await handler.sendRequest(
-            endpoints.Server.User.User.SignUp,
-            texts.HTTP.Post,
-            body,
-            true,
-            props
-        )
-        const responseJson = await response.json();
-        if (response.status == 403) {
-            await AsyncStorage.setItem('accessToken', responseJson.accessToken)
-            props.navigation.navigate({
-                routeName: 'Verification'
-            })
-        } else {
-            await handler.handleResponse(response, props)
-        }
-    } catch (error) {
-        console.log(error)
-    }
-}
+
 
 
 const SignupScreen = props => {
@@ -61,7 +33,46 @@ const SignupScreen = props => {
     const [confirm, onChangeNumber] = useState("");
     const [firstName, onChangeFirstName] = useState("");
     const [lastName, onChangeLastName] = useState("");
-
+    const [isLoading, setIsLoading] = useState(false)
+    const renderLoadingIcon = () => {
+        if(isLoading){
+            return(
+                <ActivityIndicator size="large" style={styles.loading} color="#ffffff" />
+            )
+        }
+    }
+    const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
+        try {
+            setIsLoading(true)
+            const body = {
+                firstName: firstName,
+                lastName: lastName,
+                _id: fixer.email(email),
+                password: password,
+                confirm: confirm
+            }
+            const response = await handler.sendRequest(
+                endpoints.Server.User.User.SignUp,
+                texts.HTTP.Post,
+                body,
+                true,
+                props
+            )
+            if (response.status == 403) {
+                const responseJson = await response.json();
+                setIsLoading(false)
+                await AsyncStorage.setItem('accessToken', responseJson.accessToken)
+                props.navigation.navigate({
+                    routeName: 'Verification'
+                })
+            } else {
+                setIsLoading(false)
+                await handler.handleResponse(response, props)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
             <ScrollView>
@@ -116,6 +127,7 @@ const SignupScreen = props => {
                         <Text style={styles.font}>{texts.Global.Common.SignUp}</Text>
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
+                {renderLoadingIcon()}
             </ScrollView>
         </ImageBackground>
     );
