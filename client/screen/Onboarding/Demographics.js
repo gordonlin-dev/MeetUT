@@ -227,16 +227,20 @@ const Demographics = props => {
               <ScrollView>
                   <View style={styles.pickerHeader}>
                       <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Gender}</Text>
-                      <Picker
-                          selectedValue={genderValue}
-                          onValueChange={(itemValue, itemIndex) => setGenderValue(itemValue)}>
-                          {generateGenderPicker()}
-                      </Picker>
+                  </View>
+                  <View>
+                  <Picker
+                        selectedValue={genderValue}
+                        onValueChange={(itemValue, itemIndex) => setGenderValue(itemValue)}>
+                        {generateGenderPicker()}
+                    </Picker>
                   </View>
                   {renderGenderOtherInput()}
                   <View style={styles.pickerHeader}>
                       <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Religion}</Text>
-                      <Picker
+                  </View>
+                  <View>
+                  <Picker
                           selectedValue={religionValue}
                           ColorValue="black"
                           onValueChange={(itemValue, itemIndex) => setReligionValue(itemValue)}>
