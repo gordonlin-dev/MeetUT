@@ -156,6 +156,8 @@ const Academic = (props) => {
                 <ScrollView>
                     <View style={styles.pickerHeader}>
                         <Text style={styles.onboardHeaderFont}>Degree</Text>
+                    </View>
+                    <View>
                         <Picker
                             selectedValue={degreeType}
                             ColorValue="black"
@@ -165,6 +167,8 @@ const Academic = (props) => {
                     </View>
                     <View style={styles.pickerHeader}>
                         <Text style={styles.onboardHeaderFont}>Year</Text>
+                    </View>
+                    <View>
                         <Picker
                             selectedValue={yearOfStudy}
                             ColorValue="black"
@@ -174,6 +178,8 @@ const Academic = (props) => {
                     </View>
                     <View style={styles.pickerHeader}>
                         <Text style={styles.onboardHeaderFont}>College</Text>
+                    </View>
+                    <View>
                         <Picker
                             selectedValue={college}
                             ColorValue="black"
