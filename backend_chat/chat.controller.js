@@ -8,8 +8,8 @@ exports.createChat = async (req, res)=>{
 exports.createUser = async (req,res)=>{
     let userObj = {
         _id:req.body._id,
-        firstName:req.body.firstName,
-        lastName: req.body.lastName
+        firstName:req.body.FirstName,
+        lastName: req.body.LastName
     }
     await ChatModel.findOrCreateUser(userObj)
     res.status(200).send()
