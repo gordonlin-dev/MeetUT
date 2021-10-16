@@ -11,7 +11,7 @@ exports.createUser = async (req,res)=>{
         firstName:req.body.FirstName,
         lastName: req.body.LastName
     }
-    await ChatModel.findOrCreateUser(userObj)
+    await ChatModel.createUser(userObj)
     res.status(200).send()
 }
 exports.getChatRooms = async (req, res) => {
