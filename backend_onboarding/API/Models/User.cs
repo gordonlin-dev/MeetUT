@@ -31,6 +31,7 @@ namespace API.Models
         public int? College { get; set; }
         public int? DegreeType { get; set; }
         public bool CompletedOnboarding { get; set; }
+        public int? Avatar { get; set; }
 
         public virtual ICollection<UserCompatability> UserCompatabilityUser1s { get; set; }
         public virtual ICollection<UserCompatability> UserCompatabilityUser2s { get; set; }

@@ -229,6 +229,22 @@ namespace API.Controllers
             return new JsonResult("");
         }
 
+        [HttpPost]
+        [Route("Avatar")]
+        public ActionResult UpdateAvatar(User user)
+        {
+            StringValues authorizationToken;
+            Request.Headers.TryGetValue("Authorization", out authorizationToken);
+            var curUser = ValidateTokenAndGetUser(authorizationToken);
+            if (curUser == null)
+            {
+                return Unauthorized();
+            }
+            curUser.Avatar = user.Avatar;
+            _context.Users.Update(curUser);
+            _context.SaveChanges();
+            return new JsonResult("");
+        }
         private void GetUserInfo(User user,
             out List<QuestionnaireLanguage> languages,
             out List<string> religions,

@@ -4681,7 +4681,7 @@
         "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/Users/gordonlin/.config/NuGet/NuGet.Config"
+        "/Users/gordonlin/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
