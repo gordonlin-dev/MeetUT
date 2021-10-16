@@ -3,8 +3,6 @@ const Schema = mongoose.Schema
 
 const userSchema = new Schema({
     _id : String,
-    firstName: String,
-    lastName: String,
     chatRooms: [{
         _id : String,
         participants: [String],
@@ -35,25 +33,25 @@ exports.findById = (id) => {
     })
 }
 
-exports.createUser = async (userObj) => {
+exports.createUser = async (email) => {
     const user = new User({
-        _id : userObj._id,
-        firstName:userObj.firstName,
-        lastName: userObj.lastName,
+        _id : email,
         chatRooms: []
     })
     await user.save()
     return user
 }
 
-exports.findOrCreateUser = async (userObj) => {
+exports.findOrCreateUsers = async (usernames) => {
     let users = []
-    const user = await User.findById(userObj._id)
-    if(user === null){
-        const newUser = await this.createUser(userObj)
-        users.push(newUser)
-    }else{
-        users.push(user)
+    for (let i = 0; i < usernames.length; i++){
+        const user = await User.findById(usernames[i])
+        if(user === null){
+            const newUser = await this.createUser(usernames[i])
+            users.push(newUser)
+        }else{
+            users.push(user)
+        }
     }
     return users
 }
@@ -78,7 +76,7 @@ exports.createChatRoom = async (participants) => {
 }
 
 exports.getChatRooms = async (userID) => {
-    let user = await this.findOrCreateUser(userID)
+    let user = await this.findOrCreateUsers([userID])
     user = user[0]
     for (let i = 0; i < user.chatRooms.length; i++){
         user.chatRooms[i].participants = user.chatRooms[i].participants.filter((value) => {return value !== userID})
