@@ -188,7 +188,23 @@ exports.getAvatar = (req, res) => {
 exports.setAvatar = async (req, res) => {
     let result = await UserModel.setAvatar(req.body._id, req.body.avatar)
     if (result) {
-        res.status(200).send()
+        const url = endpoints.Chat.UpdateAvatar
+        let authorization = req.headers['authorization'].split(' ')
+        const config = {
+            headers: { Authorization: `Bearer ${authorization[1]}` }
+        };
+        const response1 = await axios.post(url, {
+            avatarId:req.body.avatar
+        }, config)
+        let url2 = endpoints.Onboarding.UpdateAvatar
+        const response2 = await axios.post(url, {
+            Avatar:req.body.avatar
+        }, config)
+        if(response1.status === 200 && response2.status === 200){
+            res.status(200).send()
+        }else{
+            res.status(400).send()
+        }
     } else {
         res.status(400).send()
     }

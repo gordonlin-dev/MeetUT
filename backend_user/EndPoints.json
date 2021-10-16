@@ -1,9 +1,11 @@
 {
   "Onboarding": {
-    "CreateUser": "https://meet-ut-1.herokuapp.com/user"
+    "CreateUser": "https://meet-ut-1.herokuapp.com/user",
+    "UpdateAvatar": "https://meet-ut-1.herokuapp.com/user/avatar"
   },
   "Chat": {
     "CreateUser": "https://meet-ut-3.herokuapp.com/chat/user",
-    "CreateChat": "https://meet-ut-3.herokuapp.com/chat/create"
+    "CreateChat": "https://meet-ut-3.herokuapp.com/chat/create",
+    "UpdateAvatar": "https://meet-ut-3.herokuapp.com/chat/user/avatar"
   }
 }
