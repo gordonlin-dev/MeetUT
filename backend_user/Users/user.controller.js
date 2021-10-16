@@ -31,6 +31,8 @@ exports.createUser = async (req, res, next) => {
         'Authorization': 'Bearer ' + token
     }
     const response1 = await axios.post(endpoints.Chat.CreateUser, {
+        FirstName:userData.firstName,
+        LastName: userData.lastName
     }, {headers : headers})
 
     const response2 = await axios.post(endpoints.Onboarding.CreateUser, {

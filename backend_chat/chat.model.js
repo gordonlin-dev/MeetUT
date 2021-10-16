@@ -3,6 +3,8 @@ const Schema = mongoose.Schema
 
 const userSchema = new Schema({
     _id : String,
+    firstName: String,
+    lastName: String,
     chatRooms: [{
         _id : String,
         participants: [String],
@@ -33,25 +35,25 @@ exports.findById = (id) => {
     })
 }
 
-exports.createUser = async (email) => {
+exports.createUser = async (userObj) => {
     const user = new User({
-        _id : email,
+        _id : userObj._id,
+        firstName:userObj.firstName,
+        lastName: userObj.lastName,
         chatRooms: []
     })
     await user.save()
     return user
 }
 
-exports.findOrCreateUsers = async (usernames) => {
+exports.findOrCreateUser = async (userObj) => {
     let users = []
-    for (let i = 0; i < usernames.length; i++){
-        const user = await User.findById(usernames[i])
-        if(user === null){
-            const newUser = await this.createUser(usernames[i])
-            users.push(newUser)
-        }else{
-            users.push(user)
-        }
+    const user = await User.findById(userObj._id)
+    if(user === null){
+        const newUser = await this.createUser(userObj)
+        users.push(newUser)
+    }else{
+        users.push(user)
     }
     return users
 }
