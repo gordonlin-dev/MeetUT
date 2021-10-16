@@ -185,14 +185,13 @@ exports.getAvatar = (req, res) => {
     })
 }
 
-exports.setAvatar = (req, res) => {
-    UserModel.setAvatar(req.body._id, req.body.avatar).then((result => {
-        if (result) {
-            res.status(200).send()
-        } else {
-            res.status(400).send()
-        }
-    }))
+exports.setAvatar = async (req, res) => {
+    let result = await UserModel.setAvatar(req.body._id, req.body.avatar)
+    if (result) {
+        res.status(200).send()
+    } else {
+        res.status(400).send()
+    }
 }
 
 /**

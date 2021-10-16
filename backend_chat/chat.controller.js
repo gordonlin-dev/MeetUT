@@ -23,3 +23,8 @@ exports.getChatRoom = async (req, res) => {
     const chatRoom = await ChatModel.getChatRoomById(req.body._id, req.params.roomID)
     return res.status(200).send(chatRoom)
 }
+
+exports.updateAvatar = async (req, res) => {
+    await ChatModel.updateAvatar(req.body._id, req.body.avatarId)
+    return res.status(200).send()
+}

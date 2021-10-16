@@ -59,6 +59,10 @@ const ChatListScreen = props => {
         }
     }
 
+    const deleteChat = async () => {
+
+    }
+
     return(
         <SafeAreaView style={inpageStyle.container}>
             <SwipeListView
@@ -84,7 +88,7 @@ const ChatListScreen = props => {
                 renderHiddenItem={ (data, rowMap) => (
                     <TouchableOpacity
                         style={[inpageStyle.backRightBtn]}
-                        onPress={() => {123}}
+                        onPress={() => {deleteChat(data.item._id)}}
                     >
                         <View>
                             <Text>Delete</Text>

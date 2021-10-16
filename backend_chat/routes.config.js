@@ -6,4 +6,5 @@ exports.routesConfig = function(app){
     app.post('/chat/create', [AuthValidation.jwtValid,ChatController.createChat])
     app.get('/chat', [AuthValidation.jwtValid,ChatController.getChatRooms])
     app.get('/chat/room/:roomID', [AuthValidation.jwtValid,ChatController.getChatRoom])
+    app.post('/chat/user/avatar', [AuthValidation.jwtValid, ChatController.updateAvatar])
 }

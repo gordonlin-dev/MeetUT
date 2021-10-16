@@ -1,3 +1,4 @@
+const {findOrCreateUsers, findById} = require("./chat.model");
 const mongoose = require('./mongoose.service').mongoose
 const Schema = mongoose.Schema
 
@@ -5,6 +6,7 @@ const userSchema = new Schema({
     _id : String,
     firstName:String,
     lastName:String,
+    avatar: Number,
     chatRooms: [{
         _id : String,
         participants: [String],
@@ -45,7 +47,14 @@ exports.createUser = async (userObj) => {
     await user.save()
     return user
 }
-
+exports.updateAvatar = async (email, avatarId) => {
+    const user = await findById(email)
+    if(user !== null){
+        user.avatar = avatarId
+        user.save()
+    }
+    return user
+}
 exports.findOrCreateUsers = async (usernames) => {
     let users = []
     for (let i = 0; i < usernames.length; i++){
