@@ -67,7 +67,12 @@ const ChatListScreen = props => {
                 recalculateHiddenLayout={true}
                 renderItem={ (data, rowMap) => (
                     <TouchableHighlight
-                        onPress={()=>{console.log(data)}}
+                        onPress={()=>{
+                            props.navigation.navigate({
+                                routeName: 'Chat',
+                                params: data.item._id
+                            })
+                        }}
                     >
                         <View style={inpageStyle.rowFront}>
                             <Image style={inpageStyle.avatar} source={logo}/>
