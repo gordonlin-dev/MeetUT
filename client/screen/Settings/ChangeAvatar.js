@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
     View,
     Text,
@@ -6,7 +6,7 @@ import {
     BackHandler,
     FlatList,
     TouchableOpacity,
-    Dimensions
+    Dimensions, StyleSheet, ActivityIndicator
 } from 'react-native'
 import {styles} from '../styles';
 
@@ -22,24 +22,50 @@ const ChangeAvatarScreen = props => {
         return () =>
             BackHandler.removeEventListener('hardwareBackPress', () => true)
     }, [])
-    const selectAvatar = async (id) => {
-        await handler.sendRequest(
+    const [selectedAvatar, setSelectedAvatar] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
+    const selectAvatar = (id) => {
+        setSelectedAvatar(id)
+    }
+    const renderLoadingIcon = () => {
+        if(isLoading){
+            return(
+                <ActivityIndicator size="large" style={styles.loading} color="#0000ff" />
+            )
+        }
+    }
+    const save = async() => {
+        setIsLoading(true)
+        const response = await handler.sendRequest(
             endpoints.Server.User.User.SetAvatar,
             texts.HTTP.Put,
-            {avatar: id},
+            {avatar: selectedAvatar},
             false,
             props
         )
+        if(response.ok){
+            setIsLoading(false)
+        }
     }
-
-    const renderItem = ({item}) => (
-        <TouchableOpacity onPress={() => {
-            selectAvatar(item.id).then()
-        }}>
-            <Image key={item.id} source={item.source} style={styles.changeAvatar}/>
-        </TouchableOpacity>
-
-    );
+    const renderItem = ({item}) => {
+        if(item.id === selectedAvatar){
+            return(
+                <TouchableOpacity onPress={() => {
+                    selectAvatar(item.id)
+                }}>
+                    <Image key={item.id} source={item.source} style={inpageStyle.selectedAvatar}/>
+                </TouchableOpacity>
+            )
+        }else{
+            return(
+                <TouchableOpacity onPress={() => {
+                    selectAvatar(item.id)
+                }}>
+                    <Image key={item.id} source={item.source} style={styles.changeAvatar}/>
+                </TouchableOpacity>
+            )
+        }
+    }
 
     return (
         <View style={styles.onboardContainer}>
@@ -51,11 +77,24 @@ const ChangeAvatarScreen = props => {
                 />
             </View>
             <TouchableOpacity
-                style={styles.quizRightButton}>
+                style={styles.quizRightButton}
+                onPress={()=>{save()}}
+            >
                 <Text style={styles.quizFont}>{texts.Screens.Demographics.Buttons.Save}</Text>
             </TouchableOpacity>
+            {renderLoadingIcon()}
         </View>
     );
 };
-
+const inpageStyle = StyleSheet.create({
+    selectedAvatar: {
+        marginTop: height*0.01,
+        marginLeft: width*0.01,
+        height: height*0.15,
+        width: width*0.3,
+        borderRadius: 400/ 2,
+        borderWidth:6,
+        borderColor:"green"
+    }
+});
 export default ChangeAvatarScreen;

@@ -48,7 +48,7 @@ exports.createUser = async (userObj) => {
     return user
 }
 exports.updateAvatar = async (email, avatarId) => {
-    const user = await findById(email)
+    const user = await User.findById(email)
     if(user !== null){
         user.avatar = avatarId
         user.save()
