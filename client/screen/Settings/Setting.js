@@ -79,8 +79,6 @@ const SettingScreen = props => {
             if (typeof responseJson.avatar !== 'undefined') {
                 setAvatar(responseJson.avatar)
             }
-
-
         }
     }
 

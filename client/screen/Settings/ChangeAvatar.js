@@ -19,6 +19,7 @@ const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
 const ChangeAvatarScreen = props => {
     useEffect(() => {
+        getProfile()
         BackHandler.addEventListener('hardwareBackPress', () => true)
         return () =>
             BackHandler.removeEventListener('hardwareBackPress', () => true)
@@ -33,6 +34,22 @@ const ChangeAvatarScreen = props => {
             return(
                 <ActivityIndicator size="large" style={styles.loading} color="#0000ff" />
             )
+        }
+    }
+    const getProfile = async () => {
+        const response = await handler.sendRequest(
+            endpoints.Server.User.User.baseURL,
+            texts.HTTP.Get,
+            {},
+            false,
+            props
+        )
+
+        if (response.ok) {
+            const responseJson = await response.json();
+            if (typeof responseJson.avatar !== 'undefined') {
+                setSelectedAvatar(responseJson.avatar)
+            }
         }
     }
 
