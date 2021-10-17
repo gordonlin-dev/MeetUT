@@ -34,6 +34,7 @@ const ChangeAvatarScreen = props => {
             )
         }
     }
+    
     const save = async() => {
         setIsLoading(true)
         const response = await handler.sendRequest(
