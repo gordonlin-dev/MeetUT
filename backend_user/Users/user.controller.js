@@ -197,7 +197,7 @@ exports.setAvatar = async (req, res) => {
             avatarId:req.body.avatar
         }, config)
         let url2 = endpoints.Onboarding.UpdateAvatar
-        const response2 = await axios.post(url, {
+        const response2 = await axios.post(url2, {
             Avatar:req.body.avatar
         }, config)
         if(response1.status === 200 && response2.status === 200){
