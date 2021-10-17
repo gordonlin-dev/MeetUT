@@ -12,6 +12,7 @@ import {styles} from '../styles';
 
 const texts = require("../../assets/Texts.json");
 import avatars from '../../Avatars'
+import {NavigationActions, StackActions} from "react-navigation";
 
 const {height, width} = Dimensions.get('window')
 const handler = require('../Handler')
@@ -34,7 +35,7 @@ const ChangeAvatarScreen = props => {
             )
         }
     }
-    
+
     const save = async() => {
         setIsLoading(true)
         const response = await handler.sendRequest(
@@ -77,6 +78,18 @@ const ChangeAvatarScreen = props => {
                     renderItem={renderItem}
                 />
             </View>
+            <TouchableOpacity
+                style={styles.quizLeftButton}
+                onPress={()=>{
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({ routeName: 'Setting' })],
+                    });
+                    props.navigation.dispatch(resetAction)
+                }}
+            >
+                <Text style={styles.quizFont}>Back</Text>
+            </TouchableOpacity>
             <TouchableOpacity
                 style={styles.quizRightButton}
                 onPress={()=>{save()}}

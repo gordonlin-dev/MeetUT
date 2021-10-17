@@ -16,8 +16,8 @@ import ChangeAvatarScreen from './screen/Settings/ChangeAvatar';
 import DemographicsScreen from "./screen/Onboarding/Demographics";
 import PersonalScreen from "./screen/Onboarding/Personal";
 import AcademicScreen from "./screen/Onboarding/Academic";
-import {Dimensions} from 'react-native';
-
+import {Button, Dimensions} from 'react-native';
+import React, {useState, useEffect} from 'react'
 import * as Font from 'expo-font';
 import { forestgreen } from 'color-name';
 const customFonts = {
@@ -120,6 +120,7 @@ const Navigator = createStackNavigator({
             headerStyle: {
                 backgroundColor: '#3590F2',
             },
+            headerLeft: ()=> null,
             headerTintColor: '#ffff',
             headerTitleStyle: {
                 fontFamily: "timeburner",

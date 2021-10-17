@@ -11,6 +11,7 @@
     "@react-native-async-storage/async-storage": "^1.15.7",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-picker/picker": "^1.16.6",
+    "@react-navigation/native": "^3.8.4",
     "expo": "~42.0.1",
     "expo-cli": "^4.8.1",
     "expo-secure-store": "~10.2.0",

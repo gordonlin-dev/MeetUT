@@ -14,7 +14,7 @@ import {
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from '../Footer';
-
+import { withNavigation } from 'react-navigation';
 const image = require('../../assets/bg.png');
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
