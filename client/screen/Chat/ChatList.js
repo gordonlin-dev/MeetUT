@@ -97,8 +97,8 @@ const ChatListScreen = props => {
                 )}
                 rightOpenValue={-75}
             />
-            {renderLoadingIcon()}
             <Footer navigation={props.navigation}/>
+            {renderLoadingIcon()}
         </SafeAreaView>
     )
 }

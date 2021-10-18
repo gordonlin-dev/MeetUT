@@ -11,15 +11,7 @@ const Footer = props => {
     return (
         <View style={styles.footer}>
             <View style={styles.footerButton}>
-            <TouchableOpacity onPress={() => {
-                const resetAction = StackActions.reset({
-                    index: 0,
-                    actions: [NavigationActions.navigate({ routeName: 'Setting' })],
-                });
-                props.navigation.dispatch(resetAction)
-                }}>
-                <Image style={styles.icon} source={setting}/>
-            </TouchableOpacity>
+
             <TouchableOpacity onPress={() => {
                 const resetAction = StackActions.reset({
                     index: 0,
@@ -38,7 +30,15 @@ const Footer = props => {
                 }}>
                 <Image style={styles.icon} source={chat}/>
             </TouchableOpacity>
-
+                <TouchableOpacity onPress={() => {
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({ routeName: 'Setting' })],
+                    });
+                    props.navigation.dispatch(resetAction)
+                }}>
+                    <Image style={styles.icon} source={setting}/>
+                </TouchableOpacity>
             </View>
 
         </View>

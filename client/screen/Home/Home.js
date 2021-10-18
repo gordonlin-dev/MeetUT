@@ -240,10 +240,11 @@ const HomeScreen = props => {
                     })}
                 </Swiper>
             </View>
-            {renderLoadingIcon()}
+
             <View style={inpageStyle.flex1}>
                 <Footer navigation={props.navigation}/>
             </View>
+            {renderLoadingIcon()}
         </SafeAreaView>
     )
 }
