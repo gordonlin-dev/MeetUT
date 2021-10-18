@@ -17,6 +17,7 @@ import {
 import {SwipeListView} from 'react-native-swipe-list-view';
 import Footer from '../Footer';
 import { styles } from '../styles';
+import avatars from "../../Avatars";
 const logo = require('../../assets/logo.png');
 const {height, width} = Dimensions.get('window');
 const texts = require("../../assets/Texts.json");
@@ -64,6 +65,10 @@ const ChatListScreen = props => {
 
     }
 
+    const getAvatarSource = (id) =>{
+        return avatars.filter(x => x.id === id)[0].source
+    }
+
     return(
         <SafeAreaView style={inpageStyle.container}>
             <SwipeListView
@@ -80,8 +85,8 @@ const ChatListScreen = props => {
                         }}
                     >
                         <View style={inpageStyle.rowFront}>
-                            <Image style={inpageStyle.avatar} source={logo}/>
-                            <Text style={inpageStyle.name}>{data.item.participants[0]}</Text>
+                            <Image style={inpageStyle.avatar} source={getAvatarSource(data.item.displayAvatar)}/>
+                            <Text style={inpageStyle.name}>{data.item.displayName}</Text>
                         </View>
                     </TouchableHighlight>
 
