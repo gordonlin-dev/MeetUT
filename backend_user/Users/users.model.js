@@ -13,7 +13,8 @@ const userSchema = new Schema({
     password: String,
     isArchived: Boolean,
     likedBy: {},
-    matched: {}
+    matched: {},
+    dismissed : {}
 }, {strict: false})
 
 userSchema.virtual('email').get(function () {
@@ -103,6 +104,14 @@ exports.setAvatar = (id, avatar) => {
             return result.save()
         }
     })
+}
+
+exports.dismissUser = async (curUserId, Id) => {
+    let user = await User.findById(curUserId)
+    user.dismissed[Id] = true
+    user.markModified('dismissed')
+    user.save()
+    return user
 }
 
 exports.activateUser = (id) => {

@@ -123,6 +123,10 @@ const HomeScreen = props => {
     const getAvatarSource = (id) =>{
         return avatars.filter(x => x.id === id)[0].source
     }
+
+    const dismissUser = (id) => {
+
+    }
     const renderProfileCard = (recommendation) => {
         return(
             <ScrollView contentContainerStyle={inpageStyle.slide}>
@@ -191,6 +195,11 @@ const HomeScreen = props => {
                             </Text>
                         )
                     })}
+                </View>
+                <View style={inpageStyle.dismissButtonContainer}>
+                    <TouchableOpacity style={inpageStyle.dismissButton} onPress={() =>{dismissUser(recommendation.email)}}>
+                        <Text style={styles.quizFont}>Dismiss user</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         )
@@ -266,6 +275,20 @@ const inpageStyle = StyleSheet.create({
     infoContainer: {
         backgroundColor: '#9DD6EB',
         alignItems: 'center'
+    },
+    dismissButtonContainer: {
+        alignItems: 'center'
+    },
+    dismissButton: {
+        width: width * 0.4,
+        height: height * 0.06,
+        marginBottom: height * 0.04,
+        marginLeft: width * 0.05,
+        marginRight: width * 0.05,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        backgroundColor: 'red',
     },
     buttonContainer:{
         marginTop: height * 0.02,

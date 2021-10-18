@@ -226,6 +226,11 @@ exports.updatePassword = (req, res, next) => {
     })
 }
 
+exports.dismissUser = (req, res) =>{
+    let user = UserModel.dismissUser(req.body._id, req.body.dismissedId)
+    res.status(200).send()
+}
+
 /**
  * @name validatePassword
  * @description Validates password by checking if the password length is between cfg.passwordMin and cfg.passwordMax
