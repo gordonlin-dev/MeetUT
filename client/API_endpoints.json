@@ -15,7 +15,8 @@
         "ResetPassword": "https://meet-ut-2.herokuapp.com/users/updatePassword",
         "Delete": "https://meet-ut-2.herokuapp.com/users/delete",
         "SetAvatar": "https://meet-ut-2.herokuapp.com/users/setAvatar",
-        "GetAvatar": "https://meet-ut-2.herokuapp.com/users/getAvatar"
+        "GetAvatar": "https://meet-ut-2.herokuapp.com/users/getAvatar",
+        "DismissUser": "https://meet-ut-2.herokuapp.com/users/dismiss"
       },
       "Match" : {
         "Like": "https://meet-ut-2.herokuapp.com/match/like"
