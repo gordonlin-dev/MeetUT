@@ -209,6 +209,7 @@ namespace API.Controllers
                 recommendationResult.Hobbies = hobbies;
                 recommendationResult.UserId = recommendedUser.Id;
                 recommendationResult.Email = recommendedUser.Email;
+                recommendationResult.Avatar = recommendedUser.Avatar.HasValue ? recommendedUser.Avatar.Value : 0;
                 result.Add(recommendationResult);
             }
             return new JsonResult(result);
@@ -558,6 +559,7 @@ namespace API.Controllers
         public List<QuestionnaireProjectInterest> ProjectInterests { get; set; }
         public List<QuestionnaireCountry> Countries { get; set; }
         public List<QuestionnaireHobby> Hobbies { get; set; }
+        public int Avatar { get; set; }
         
         public RecommendationResult()
         {

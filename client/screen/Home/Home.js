@@ -16,7 +16,7 @@ import {
 import Footer from "../Footer";
 import Swiper from 'react-native-swiper';
 import { styles } from '../styles';
-import logo from "../../assets/logo.png";
+import avatars from '../../Avatars'
 const lookups = require("../Lookups.json")
 
 const texts = require("../../assets/Texts.json");
@@ -120,11 +120,14 @@ const HomeScreen = props => {
         loadUser()
     }, []);
 
+    const getAvatarSource = (id) =>{
+        return avatars.filter(x => x.id === id)[0].source
+    }
     const renderProfileCard = (recommendation) => {
         return(
             <ScrollView contentContainerStyle={inpageStyle.slide}>
                 <View style={inpageStyle.infoContainer}>
-                    <Image style={styles.avatar} source={logo}/>
+                    <Image style={styles.avatar} source={getAvatarSource(recommendation.avatar)}/>
                     <View >
                         <Text style={styles.text}> {recommendation.name}</Text>
                         <Text style={styles.text}> Wants to</Text>
