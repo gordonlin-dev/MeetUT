@@ -13,29 +13,35 @@ const Footer = props => {
             <View style={styles.footerButton}>
 
             <TouchableOpacity onPress={() => {
-                const resetAction = StackActions.reset({
-                    index: 0,
-                    actions: [NavigationActions.navigate({ routeName: 'Home' })],
-                });
-                props.navigation.dispatch(resetAction)
+                if(!props.isLoading){
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({ routeName: 'Home' })],
+                    });
+                    props.navigation.dispatch(resetAction)
+                }
                 }}>
                 <Image style={styles.icon} source={home}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-                const resetAction = StackActions.reset({
-                    index: 0,
-                    actions: [NavigationActions.navigate({ routeName: 'ChatList' })],
-                });
-                props.navigation.dispatch(resetAction)
+                if(!props.isLoading){
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({ routeName: 'ChatList' })],
+                    });
+                    props.navigation.dispatch(resetAction)
+                }
                 }}>
                 <Image style={styles.icon} source={chat}/>
             </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
-                    const resetAction = StackActions.reset({
-                        index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'Setting' })],
-                    });
-                    props.navigation.dispatch(resetAction)
+                    if(!props.isLoading){
+                        const resetAction = StackActions.reset({
+                            index: 0,
+                            actions: [NavigationActions.navigate({ routeName: 'Setting' })],
+                        });
+                        props.navigation.dispatch(resetAction)
+                    }
                 }}>
                     <Image style={styles.icon} source={setting}/>
                 </TouchableOpacity>

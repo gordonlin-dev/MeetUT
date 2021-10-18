@@ -196,7 +196,7 @@ const HomeScreen = props => {
     const renderLoadingIcon = () => {
         if(isLoading){
             return(
-                <ActivityIndicator size="large" style={inpageStyle.loading} color="#0000ff" />
+                <ActivityIndicator size="large" style={styles.loading} color="#0000ff" />
             )
         }
     }
@@ -242,7 +242,7 @@ const HomeScreen = props => {
             </View>
 
             <View style={inpageStyle.flex1}>
-                <Footer navigation={props.navigation}/>
+                <Footer navigation={props.navigation} isLoading={isLoading}/>
             </View>
             {renderLoadingIcon()}
         </SafeAreaView>
