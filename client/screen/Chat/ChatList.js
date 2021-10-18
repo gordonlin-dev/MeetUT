@@ -55,6 +55,7 @@ const ChatListScreen = props => {
             for (let i = 0; i < responseJson.length; i++){
                 responseJson[i]["key"]= responseJson[i]._id
             }
+            console.log(responseJson)
             setChatList(responseJson)
         }
     }
