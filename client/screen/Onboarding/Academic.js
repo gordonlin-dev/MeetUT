@@ -6,7 +6,7 @@ import {
     Text,
     StyleSheet,
     Dimensions,
-    SectionList, ScrollView
+    SectionList, ScrollView, ActivityIndicator
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker'
 import { styles } from '../styles';
@@ -25,13 +25,21 @@ const Academic = (props) => {
     const [degreeType, setDegreeType] = useState(0)
     const [yearOfStudy, setYearOfStudy] = useState(0)
     const [college, setCollege] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
     const colorLevels = {
         [0]: '#d0d0d9',
         [1]: '#abe1f5',
         [2]: '#f2f2fc',
     };
-
+    const renderLoadingIcon = () => {
+        if(isLoading){
+            return(
+                <ActivityIndicator size="large" style={styles.loading} color="#0000ff" />
+            )
+        }
+    }
     const save = async () => {
+        setIsLoading(true)
         const body = {
             Programs: [],
             DegreeType: degreeType,
@@ -47,10 +55,12 @@ const Academic = (props) => {
             props
         )
         if(response.ok){
+            setIsLoading(false)
             props.navigation.navigate('Personal')
         }
     }
     const getData = async () => {
+        setIsLoading(true)
         const response = await handler.sendRequest(
             endpoints.Server.Onboarding.Questionnaire.Academics,
             texts.HTTP.Get,
@@ -59,6 +69,7 @@ const Academic = (props) => {
             props
         )
         if(response.ok){
+            setIsLoading(false)
             const responseJson = await response.json();
             setPrograms(responseJson.programs)
             setDegreeType(responseJson.DegreeType)
@@ -258,6 +269,7 @@ const Academic = (props) => {
                     <Text style={styles.quizFont}>Next</Text>
                 </TouchableOpacity>
             </View>
+            {renderLoadingIcon()}
         </SafeAreaView>
     );
 

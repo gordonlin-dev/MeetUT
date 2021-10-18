@@ -37,6 +37,7 @@ const ChangeAvatarScreen = props => {
         }
     }
     const getProfile = async () => {
+        setIsLoading(true)
         const response = await handler.sendRequest(
             endpoints.Server.User.User.baseURL,
             texts.HTTP.Get,
@@ -46,6 +47,7 @@ const ChangeAvatarScreen = props => {
         )
 
         if (response.ok) {
+            setIsLoading(false)
             const responseJson = await response.json();
             if (typeof responseJson.avatar !== 'undefined') {
                 setSelectedAvatar(responseJson.avatar)

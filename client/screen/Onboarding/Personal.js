@@ -8,7 +8,7 @@ import {
     Text,
     StyleSheet,
     SectionList,
-    TextInput
+    TextInput, ActivityIndicator
 } from 'react-native'
 import {styles} from '../styles'
 import {NavigationActions, StackActions} from "react-navigation";
@@ -34,12 +34,20 @@ const Personal = props => {
     const [countriesFiler, setCountriesFilter] = useState("")
     const [renderStage, setRenderStage] = useState(0);
     const [forceUpdate, setForceUpdate] = useState(true);
-
+    const [isLoading, setIsLoading] = useState(false)
+    const renderLoadingIcon = () => {
+        if(isLoading){
+            return(
+                <ActivityIndicator size="large" style={styles.loading} color="#0000ff" />
+            )
+        }
+    }
     useEffect(() => {
         getData()
     }, []);
 
     const getData = async () => {
+        setIsLoading(true)
         const response = await handler.sendRequest(
             endpoints.Server.Onboarding.Questionnaire.Personal,
             texts.HTTP.Get,
@@ -48,6 +56,7 @@ const Personal = props => {
             props
         )
         if(response.ok){
+            setIsLoading(false)
             const responseJson = await response.json()
             setReasons(responseJson.reasonsToJoin)
             setProjects(responseJson.projectInterests)
@@ -58,6 +67,7 @@ const Personal = props => {
     }
 
     const save = async () => {
+        setIsLoading(true)
         const body = {
             ReasonsToJoin: selectedReasons,
             IndustryExperiences: selectedIndustryExperience,
@@ -81,6 +91,7 @@ const Personal = props => {
                 props
             )
             if(response2.ok){
+                setIsLoading(false)
                 const resetAction = StackActions.reset({
                     index: 0,
                     actions: [NavigationActions.navigate({ routeName: 'Home' })],

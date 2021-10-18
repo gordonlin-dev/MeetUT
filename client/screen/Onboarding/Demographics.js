@@ -1,5 +1,15 @@
 import React, {useEffect, useState} from 'react'
-import {View, Image, TextInput, TouchableOpacity, ScrollView, Text, SafeAreaView, Dimensions} from 'react-native'
+import {
+    View,
+    Image,
+    TextInput,
+    TouchableOpacity,
+    ScrollView,
+    Text,
+    SafeAreaView,
+    Dimensions,
+    ActivityIndicator
+} from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import {styles} from '../styles'
@@ -21,8 +31,17 @@ const Demographics = props => {
     const [languageOptions, setLanguageOptions] = useState([]);
     const [age, setAge] = useState("")
     const [forceUpdate, setForceUpdate] = useState(true);
+    const [isLoading, setIsLoading] = useState(false)
 
+    const renderLoadingIcon = () => {
+        if(isLoading){
+            return(
+                <ActivityIndicator size="large" style={styles.loading} color="#0000ff" />
+            )
+        }
+    }
     const loadUser = async () =>{
+        setIsLoading(true)
         const languageResponse = await handler.sendRequest(
             endpoints.Server.Onboarding.Questionnaire.Languages,
             texts.HTTP.Get,
@@ -47,6 +66,7 @@ const Demographics = props => {
             props
         )
         if(response.ok){
+            setIsLoading(false)
             const responseJson = await response.json()
             setFirstName(responseJson.firstName);
             setLastName(responseJson.lastName)
@@ -101,6 +121,7 @@ const Demographics = props => {
     }
 
     const save = async () => {
+        setIsLoading(true)
         const languages = []
         for (let i = 0; i < languageValues.length; i ++){
             if(languages.indexOf(languageValues[i].id) === -1){
@@ -136,6 +157,7 @@ const Demographics = props => {
         )
 
         if(response.ok){
+            setIsLoading(false)
             props.navigation.navigate('Academic')
         }
     }
@@ -256,6 +278,7 @@ const Demographics = props => {
                 }>
                 <Text style={styles.quizFont}>{texts.Screens.Demographics.Buttons.SaveAndContinue}</Text>
             </TouchableOpacity>
+              {renderLoadingIcon()}
         </View>
     );
 };
