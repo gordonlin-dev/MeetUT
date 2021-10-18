@@ -96,7 +96,7 @@ exports.getChatRooms = async (userID) => {
     for (let i = 0; i < user.chatRooms.length; i++){
         user.chatRooms[i].participants = user.chatRooms[i].participants.filter((value) => {return value !== userID})
         const otherUser = await User.findById(user.chatRooms[i].participants[0])
-        user.chatRooms[i].displayAvatar = otherUser.avatar
+        user.chatRooms[i].displayAvatar = otherUser.avatar? otherUser.avatar : 0
         user.chatRooms[i].displayName = otherUser.firstName + " " + otherUser.lastName
     }
     return user.chatRooms
