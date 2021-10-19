@@ -11,7 +11,7 @@ import {
     Text,
     BackHandler,
     ActivityIndicator,
-    TouchableHighlight
+    TouchableHighlight, Alert
 } from 'react-native'
 
 import {SwipeListView} from 'react-native-swipe-list-view';
@@ -61,14 +61,43 @@ const ChatListScreen = props => {
         }
     }
 
-    const deleteChat = async () => {
-
+    const deleteChat = async (roomId) => {
+        setIsLoading(true)
+        const response = await handler.sendRequest(
+            endpoints.Server.Chat.GetChatRoom,
+            texts.HTTP.Delete,
+            {roomId:roomId},
+            false,
+            props
+        )
+        if(response.ok){
+            setIsLoading(false)
+            setChatList(chatList.filter(x => x._id !== roomId))
+        }
     }
 
     const getAvatarSource = (id) =>{
         return avatars.filter(x => x.id === id)[0].source
     }
 
+    const chatRoomNavigation = (chatRoom) => {
+        if(!chatRoom.active){
+            Alert.alert("Chat inactive",
+                "The other user has left the chat.",
+                [{text: texts.Alert.Buttons.OK, onPress: () => {
+                        props.navigation.navigate({
+                            routeName: 'Chat',
+                            params: chatRoom._id
+                        })
+                    }}])
+
+        }else{
+            props.navigation.navigate({
+                routeName: 'Chat',
+                params: data.item._id
+            })
+        }
+    }
     return(
         <SafeAreaView style={inpageStyle.container}>
             <SwipeListView
@@ -78,10 +107,7 @@ const ChatListScreen = props => {
                 renderItem={ (data, rowMap) => (
                     <TouchableHighlight
                         onPress={()=>{
-                            props.navigation.navigate({
-                                routeName: 'Chat',
-                                params: data.item._id
-                            })
+                            chatRoomNavigation(data.item)
                         }}
                     >
                         <View style={inpageStyle.rowFront}>

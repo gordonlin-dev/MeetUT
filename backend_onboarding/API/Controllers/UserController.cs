@@ -54,7 +54,7 @@ namespace API.Controllers
             }
 
         }*/
-        /*
+        
         [HttpGet]
         [Route("Delete")]
         public void Delete()
@@ -72,7 +72,7 @@ namespace API.Controllers
             _context.Users.RemoveRange(_context.Users);
             _context.SaveChanges();
         }
-        */
+        
         [HttpGet]
         public ActionResult GetUser()
         {
