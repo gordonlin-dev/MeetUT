@@ -127,9 +127,9 @@ const HomeScreen = props => {
         return avatars.filter(x => x.id === id)[0].source
     }
 
-    const dismissUser = (id) => {
+    const dismissUser = async (id) => {
         setIsLoading(true)
-        const response = handler.sendRequest(
+        const response = await handler.sendRequest(
             endpoints.Server.User.User.DismissUser,
             texts.HTTP.Post,
             {dismissedId: id},
