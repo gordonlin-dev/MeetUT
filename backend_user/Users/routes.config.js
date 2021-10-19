@@ -14,4 +14,5 @@ exports.routesConfig = function(app){
     app.get('/users/getAvatar', [UserController.getAvatar])
     app.put('/users/setAvatar', [AuthValidation.jwtValid, UserController.setAvatar])
     app.post('/users/dismiss', [AuthValidation.jwtValid, UserController.dismissUser])
+    app.post('/users/name', [AuthValidation.jwtValid, UserController.updateUserName])
 }

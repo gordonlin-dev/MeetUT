@@ -33,3 +33,8 @@ exports.deleteChatRoom = async (req, res) =>{
     await ChatModel.deleteChatRoom(req.body._id, req.body.roomId)
     res.status(200).send()
 }
+
+exports.updateUserName = async (req,res) => {
+    await ChatModel.updateUserName(req.body._id, req.body.firstName, req.body.lastName)
+    res.status(200).send()
+}

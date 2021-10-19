@@ -226,8 +226,13 @@ exports.updatePassword = (req, res, next) => {
     })
 }
 
-exports.dismissUser = (req, res) =>{
-    let user = UserModel.dismissUser(req.body._id, req.body.dismissedId)
+exports.dismissUser = async (req, res) =>{
+    let user = await UserModel.dismissUser(req.body._id, req.body.dismissedId)
+    res.status(200).send()
+}
+
+exports.updateUserName = async (req, res) => {
+    let user = await UserModel.updateUserName(req.body._id, req.body.firstName, req.body.lastName)
     res.status(200).send()
 }
 

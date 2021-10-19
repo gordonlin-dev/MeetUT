@@ -1,4 +1,5 @@
 // TODO: Test and debug
+const {findById} = require("./users.model");
 const mongoose = require('../mongoose.service').mongoose
 const Schema = mongoose.Schema
 
@@ -115,6 +116,14 @@ exports.dismissUser = async (curUserId, Id) => {
     user.markModified('dismissed')
     user.save()
     return user
+}
+
+exports.updateUserName = async (curUserId, firstName, lastName) => {
+    let user = await findById(curUserId)
+    user.firstName = firstName
+    user.lastName = lastName
+    await user.save()
+    return 1
 }
 
 exports.activateUser = (id) => {

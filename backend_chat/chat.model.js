@@ -153,3 +153,11 @@ exports.deleteChatRoom = async (curUserId, roomId) => {
     await otherUser.save()
     return 1
 }
+
+exports.updateUserName = async (curUserId, firstName, lastName) => {
+    let user = await User.findById(curUserId)
+    user.firstName = firstName
+    user.lastName = lastName
+    await user.save()
+    return 1
+}
