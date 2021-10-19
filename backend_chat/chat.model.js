@@ -7,6 +7,7 @@ const userSchema = new Schema({
     firstName:String,
     lastName:String,
     avatar: Number,
+    active: Boolean,
     chatRooms: [{
         _id : String,
         displayAvatar: Number,
@@ -74,6 +75,7 @@ exports.createChatRoom = async (participants) => {
     let roomID = participants[0] + " " + participants[1]
     const newRoom = {
         _id: roomID,
+        active:true,
         participants: participants,
         messages: []
     }
@@ -139,4 +141,15 @@ exports.addMessage = async (userID, roomID, message) => {
         user.chatRooms[index].messages.push(newMessage)
         await user.save()
     }
+}
+
+exports.deleteChatRoom = async (curUserId, roomId) => {
+    let user = await User.findById(curUserId)
+    const otherUserId = roomId.split(" ").filter(x => x !== curUserId)
+    let otherUser = await User.findById(otherUserId)
+    user.chatRooms = user.chatRooms.filter(x => x._id !== roomId)
+    otherUser.chatRooms.filter(x => x._id === roomId)[0].active = false
+    await user.save()
+    await otherUser.save()
+    return 1
 }

@@ -28,3 +28,8 @@ exports.updateAvatar = async (req, res) => {
     await ChatModel.updateAvatar(req.body._id, req.body.avatarId)
     return res.status(200).send()
 }
+
+exports.deleteChatRoom = async (req, res) =>{
+    await ChatModel.deleteChatRoom(req.body._id, req.body.roomId)
+    res.status(200).send()
+}
