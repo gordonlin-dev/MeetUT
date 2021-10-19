@@ -108,6 +108,9 @@ exports.setAvatar = (id, avatar) => {
 
 exports.dismissUser = async (curUserId, Id) => {
     let user = await User.findById(curUserId)
+    if (user.dismissed == null) {
+        user.dismissed = {}
+    }
     user.dismissed[Id] = true
     user.markModified('dismissed')
     user.save()

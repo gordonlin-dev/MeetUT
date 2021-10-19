@@ -45,17 +45,20 @@ const HomeScreen = props => {
         )
         if(matchResponse.ok){
             const responseJson = await matchResponse.json();
-            let matched
+            let excluded
             if(responseJson.matched){
-                matched = []
+                excluded = []
                 for (const key in responseJson.matched) {
-                    matched.push(key)
+                    excluded.push(key)
+                }
+                for (const key in responseJson.dismissed){
+                    excluded.push(key)
                 }
             }else{
-                matched = []
+                excluded = []
             }
             const body = {
-                ExcludedUsers: matched
+                ExcludedUsers: excluded
             }
             const response = await handler.sendRequest(
                 endpoints.Server.Onboarding.User.Recommendations,
@@ -125,7 +128,18 @@ const HomeScreen = props => {
     }
 
     const dismissUser = (id) => {
-
+        setIsLoading(true)
+        const response = handler.sendRequest(
+            endpoints.Server.User.User.DismissUser,
+            texts.HTTP.Post,
+            {dismissedId: id},
+            false,
+            props
+        )
+        if(response.ok){
+            setIsLoading(false)
+            setRecommendations(recommendations.filter(x => x.email !== id))
+        }
     }
     const renderProfileCard = (recommendation) => {
         return(
