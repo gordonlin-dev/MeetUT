@@ -119,7 +119,7 @@ exports.dismissUser = async (curUserId, Id) => {
 }
 
 exports.updateUserName = async (curUserId, firstName, lastName) => {
-    let user = await findById(curUserId)
+    let user = await User.findById(curUserId)
     user.firstName = firstName
     user.lastName = lastName
     await user.save()

@@ -44,30 +44,32 @@ const SignupScreen = props => {
     const signupSubmit = async (firstName, lastName, email, password, confirm, props) => {
         try {
             setIsLoading(true)
-            const body = {
-                firstName: firstName,
-                lastName: lastName,
-                _id: fixer.email(email),
-                password: password,
-                confirm: confirm
-            }
-            const response = await handler.sendRequest(
-                endpoints.Server.User.User.SignUp,
-                texts.HTTP.Post,
-                body,
-                true,
-                props
-            )
-            if (response.status == 403) {
-                const responseJson = await response.json();
-                setIsLoading(false)
-                await AsyncStorage.setItem('accessToken', responseJson.accessToken)
-                props.navigation.navigate({
-                    routeName: 'Verification'
-                })
-            } else {
-                setIsLoading(false)
-                await handler.handleResponse(response, props)
+            if(!isLoading){
+                const body = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    _id: fixer.email(email),
+                    password: password,
+                    confirm: confirm
+                }
+                const response = await handler.sendRequest(
+                    endpoints.Server.User.User.SignUp,
+                    texts.HTTP.Post,
+                    body,
+                    true,
+                    props
+                )
+                if (response.status == 403) {
+                    const responseJson = await response.json();
+                    setIsLoading(false)
+                    await AsyncStorage.setItem('accessToken', responseJson.accessToken)
+                    props.navigation.navigate({
+                        routeName: 'Verification'
+                    })
+                } else {
+                    setIsLoading(false)
+                    await handler.handleResponse(response, props)
+                }
             }
         } catch (error) {
             console.log(error)
@@ -127,8 +129,8 @@ const SignupScreen = props => {
                         <Text style={styles.font}>{texts.Global.Common.SignUp}</Text>
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
-                {renderLoadingIcon()}
             </ScrollView>
+            {renderLoadingIcon()}
         </ImageBackground>
     );
 };
