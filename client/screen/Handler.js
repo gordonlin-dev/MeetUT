@@ -11,9 +11,7 @@ const handleResponse = async (response, props) => {
             [{text: texts.Alert.Buttons.OK}])
 
     } else if (response.status === 401) {
-        props.navigation.navigate({
-            routeName: "Login"
-        })
+        AsyncStorage.setItem('accessToken', " ")
         Alert.alert(texts.Alert.Title.Unauthorized,
             texts.Alert.Message.Authenticate,
             [{text: texts.Alert.Buttons.OK, onPress: () => props.navigation.navigate({
@@ -26,10 +24,11 @@ const handleResponse = async (response, props) => {
                     routeName: "Verification"
                 })}])
     } else if (response.status === 404) {
+        AsyncStorage.setItem('accessToken', " ")
         Alert.alert(texts.Alert.Title.Error,
             texts.Alert.Message.NotFound,
             [{text: texts.Alert.Buttons.OK, onPress: () => props.navigation.navigate({
-                    routeName: "Login"
+                    routeName: "Splash"
                 })}])
     } else {
         Alert.alert(texts.Alert.Title.Error,

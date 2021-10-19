@@ -155,8 +155,25 @@ const Demographics = props => {
             false,
             props
         )
-
-        if(response.ok){
+        const body2 = {
+            firstName : firstName,
+            lastName : lastName
+        }
+        const response2 = await handler.sendRequest(
+            endpoints.Server.User.User.UpdateName,
+            texts.HTTP.Post,
+            body2,
+            false,
+            props
+        )
+        const response3 = await handler.sendRequest(
+            endpoints.Server.Chat.UpdateName,
+            texts.HTTP.Post,
+            body2,
+            false,
+            props
+        )
+        if(response.ok && response2.ok && response3.ok){
             setIsLoading(false)
             props.navigation.navigate('Academic')
         }

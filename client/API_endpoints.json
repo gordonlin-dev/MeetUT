@@ -16,7 +16,8 @@
         "Delete": "https://meet-ut-2.herokuapp.com/users/delete",
         "SetAvatar": "https://meet-ut-2.herokuapp.com/users/setAvatar",
         "GetAvatar": "https://meet-ut-2.herokuapp.com/users/getAvatar",
-        "DismissUser": "https://meet-ut-2.herokuapp.com/users/dismiss"
+        "DismissUser": "https://meet-ut-2.herokuapp.com/users/dismiss",
+        "UpdateName": "https://meet-ut-2.herokuapp.com/users/name"
       },
       "Match" : {
         "Like": "https://meet-ut-2.herokuapp.com/match/like"
@@ -26,7 +27,8 @@
     "Chat": {
       "baseURL": "https://meet-ut-3.herokuapp.com/",
       "GetChatList": "https://meet-ut-3.herokuapp.com/chat",
-      "GetChatRoom": "https://meet-ut-3.herokuapp.com/chat/room/"
+      "GetChatRoom": "https://meet-ut-3.herokuapp.com/chat/room/",
+      "UpdateName": "https://meet-ut-3.herokuapp.com/chat/user/name"
     },
     "Onboarding": {
       "User": {
