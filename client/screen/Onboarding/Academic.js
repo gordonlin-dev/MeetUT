@@ -101,12 +101,14 @@ const Academic = (props) => {
     }
 
     const programsListPress = (program) => {
-        const filtered = chosen.filter(element => element.programId === program.programId)
-        if(filtered.length === 0){
-            chosen.push(program)
-            setChosen(chosen)
-            removeProgram(program.programId)
-            setForceUpdate(!forceUpdate)
+        if(chosen.length < 3){
+            const filtered = chosen.filter(element => element.programId === program.programId)
+            if(filtered.length === 0){
+                chosen.push(program)
+                setChosen(chosen)
+                removeProgram(program.programId)
+                setForceUpdate(!forceUpdate)
+            }
         }
     }
 
