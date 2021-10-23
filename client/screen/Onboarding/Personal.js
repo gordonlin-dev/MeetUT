@@ -25,6 +25,7 @@ const Personal = props => {
     const [selectedReasons, setSelectedReasons] = useState([]);
     const [projects, setProjects] = useState([]);
     const [selectedProjects, setSelectedProjects] = useState([]);
+    const [hasIndustryExperience, setHasIndustryExperience] = useState(false);
     const [industryExperience, setIndustryExperience] = useState([]);
     const [selectedIndustryExperience, setSelectedIndustryExperience] = useState([]);
     const [hobbies, setHobbies] = useState([])
@@ -290,22 +291,79 @@ const Personal = props => {
                 </Fragment>
             )
         }else if(renderStage === 1){
-            return(
-                <Fragment>
-                    <View>
-                        <Text style={styles.headerFont}>Industry Experience</Text>
-                        <SectionList
-                            style={inpageStyle.list}
-                            sections={generateIndustrySelection()}
-                            renderItem={({item}) => <Text style={getIndustryItemStyle(item)} onPress={() => {
-                                industrySelectPress(item)
-                            }}>{item.value}</Text>}
-                            keyExtractor={(item, index) => index}
-                        >
-                        </SectionList>
+            if(hasIndustryExperience){
+                return(
+                    <Fragment>
+                        <View>
+                            <Text style={styles.headerFont}>Industry Experience</Text>
+                            <SectionList
+                                style={inpageStyle.list}
+                                sections={generateIndustrySelection()}
+                                renderItem={({item}) => <Text style={getIndustryItemStyle(item)} onPress={() => {
+                                    industrySelectPress(item)
+                                }}>{item.value}</Text>}
+                                keyExtractor={(item, index) => index}
+                            >
+                            </SectionList>
+                        </View>
+                    </Fragment>
+                )
+            }else{
+                return (
+                    <View style = {
+                        {
+                            flex:1,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }
+                    }>
+                        <Text style={{
+                            fontFamily: 'timeburner',
+                            fontSize:20,
+                            color: "black",
+                            marginBottom: height * 0.01,
+                            marginTop: height*0.01
+                        }}> Do you have industry experience?</Text>
+                        <View style={{
+                            flexDirection:"row"
+                        }}>
+                            <TouchableOpacity
+                                style={{
+                                    width: width * 0.3,
+                                    height: height * 0.06,
+                                    marginBottom: height * 0.04,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderRadius: 15,
+                                    backgroundColor: 'white',
+                                }}
+                                onPress={() => {
+                                    setRenderStage(renderStage + 1)
+                                }}>
+                                <Text style={styles.quizFont}>No</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={{
+                                    width: width * 0.3,
+                                    height: height * 0.06,
+                                    marginBottom: height * 0.04,
+                                    marginLeft: width * 0.1,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderRadius: 15,
+                                    backgroundColor: 'white',
+                                }}
+                                onPress={() => {
+                                    {setHasIndustryExperience(true)}
+                                }}>
+                                <Text style={styles.quizFont}>Yes</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </Fragment>
-            )
+                )
+            }
+
         }else if (renderStage === 2){
             return(
                 <Fragment>
@@ -364,6 +422,7 @@ const Personal = props => {
                 <TouchableOpacity
                     style={styles.quizLeftButton}
                     onPress={() => {
+                        setHasIndustryExperience(false)
                         if(renderStage == 0){
                             props.navigation.navigate({
                                 routeName: 'Academic'
@@ -387,6 +446,7 @@ const Personal = props => {
                     <Text style={styles.quizFont}>Next</Text>
                 </TouchableOpacity>
             </View>
+            {renderLoadingIcon()}
         </SafeAreaView>
     );
 };
