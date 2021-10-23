@@ -8,7 +8,8 @@ import {
     Text,
     SafeAreaView,
     Dimensions,
-    ActivityIndicator
+    ActivityIndicator,
+    StyleSheet
 } from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import SearchableDropdown from 'react-native-searchable-dropdown';
@@ -32,6 +33,7 @@ const Demographics = props => {
     const [age, setAge] = useState("")
     const [forceUpdate, setForceUpdate] = useState(true);
     const [isLoading, setIsLoading] = useState(false)
+    const [renderStage, setRenderStage] = useState(0);
 
     const renderLoadingIcon = () => {
         if(isLoading){
@@ -182,123 +184,189 @@ const Demographics = props => {
         loadUser()
     }, []);
 
+    const renderBody = () => {
+        if (renderStage == 0) {
+            return (
+                <View style={styles.onboardContainer}>
+                    <ScrollView>
+                    <View style={styles.inputHeader}>
+                        <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Firstname}</Text>
+                    </View>
+                    <TextInput
+                        style={styles.onboardInput}
+                        onChangeText={setFirstName}
+                        value={firstName}
+                        placeholder={texts.Global.Common.Firstname}
+                        placeholderTextColor="black"
+                    />
+                    <View style={styles.inputHeader}>
+                        <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Lastname}</Text>
+                    </View>
+                    <TextInput
+                    style={styles.onboardInput}
+                    onChangeText={setLastName}
+                    value={lastName}
+                    placeholder={texts.Global.Common.Lastname}
+                    placeholderTextColor="black"
+                    />
+                    <View style={styles.inputHeader}>
+                        <Text style={styles.onboardHeaderFont}>Age</Text>
+                    </View>
+                    <TextInput
+                        style={styles.onboardInput}
+                        onChangeText={setAge}
+                        value={age}
+                        placeholder={"Age"}
+                        placeholderTextColor="black"
+                        keyboardType ="numeric"
+                    />
+                    
+                        <View style={styles.pickerHeader}>
+                            <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Gender}</Text>
+                        </View>
+                        <View>
+                        <Picker
+                                selectedValue={genderValue}
+                                onValueChange={(itemValue, itemIndex) => setGenderValue(itemValue)}>
+                                {generateGenderPicker()}
+                            </Picker>
+                        </View>
+                        {renderGenderOtherInput()}
+                        <View style={styles.pickerHeader}>
+                            <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Religion}</Text>
+                        </View>
+                        <View>
+                        <Picker
+                                selectedValue={religionValue}
+                                ColorValue="black"
+                                onValueChange={(itemValue, itemIndex) => setReligionValue(itemValue)}>
+                                {generateReligionPicker()}
+                            </Picker>
+                        </View>
+                        {renderReligionOtherInput()}
+                    </ScrollView>
+
+                </View>
+            );}
+            else {
+                return (
+                    <SafeAreaView>
+                    <View style={styles.inputHeader}>
+                        <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Languages}</Text>
+                    </View>
+                    <SearchableDropdown
+                        multi={true}
+                        chip={true}
+                        selectedItems={languageValues}
+                        onItemSelect={(item) => {
+                            languageValues.push(item)
+                            setLanguageValues(languageValues)
+                            setForceUpdate(!forceUpdate)
+                        }}
+                        onRemoveItem={(item, index) => {
+                            setLanguageValues(languageValues.filter(x => x.id !== item.id))
+                        }}
+                        items={languageOptions}
+                        itemStyle={{
+                            padding: 10,
+                            marginTop: height * 0.01,
+                            backgroundColor: '#ddd',
+                            borderColor: '#bbb',
+                            borderWidth: 1,
+                            borderRadius: 5,
+
+                        }}
+                        containerStyle={{ padding: 5, width: width*0.73, marginLeft: width*0.145}}
+                        itemTextStyle={{ color: '#222' }}
+                        itemsContainerStyle={{ maxHeight: 140 }}
+                        textInputProps={
+                            {
+                                underlineColorAndroid: "transparent",
+                                style: {
+                                    padding: 12,
+                                    height: height * 0.06,
+                                    borderWidth: 2,
+                                    borderColor: 'black',
+                                    borderRadius: 5,
+                                },
+                                onTextChange: {}
+                            }
+                        }
+                        listProps={
+                            {
+                                nestedScrollEnabled: true,
+                            }
+                        }
+                    />
+
+                    </SafeAreaView>
+                )
+            }
+    }
+    
+    const renderFooter = () => {
+        if (renderStage == 0) {
+            return(
+                <View style={inpageStyle.quizeFooter}>
+                <TouchableOpacity
+                    style={styles.quizRightButton}
+                    onPress={() => {setRenderStage(renderStage + 1)}}>
+                    <Text style={styles.quizFont}>Next</Text>
+                </TouchableOpacity>
+                </View>
+            )
+        } if (renderStage === 1) {
+            return(
+                <View style={inpageStyle.quizeFooter}>
+                <TouchableOpacity
+                    style={styles.quizLeftButton}
+                    onPress={() => {setRenderStage(renderStage - 1)}}>
+                    <Text style={styles.quizFont}>Back</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.quizRightButton}
+                    onPress={() => {save()}}>
+                    <Text style={styles.quizFont}>Next</Text>
+                </TouchableOpacity>
+                </View>
+            )
+        }
+    }
     return (
-          <View style={styles.onboardContainer}>
-            <View style={styles.inputHeader}>
-                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Firstname}</Text>
-            </View>
-            <TextInput
-                style={styles.onboardInput}
-                onChangeText={setFirstName}
-                value={firstName}
-                placeholder={texts.Global.Common.Firstname}
-                placeholderTextColor="black"
-            />
-            <View style={styles.inputHeader}>
-                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Lastname}</Text>
-            </View>
-            <TextInput
-              style={styles.onboardInput}
-              onChangeText={setLastName}
-              value={lastName}
-              placeholder={texts.Global.Common.Lastname}
-              placeholderTextColor="black"
-            />
-              <View style={styles.inputHeader}>
-                  <Text style={styles.onboardHeaderFont}>Age</Text>
-              </View>
-              <TextInput
-                  style={styles.onboardInput}
-                  onChangeText={setAge}
-                  value={age}
-                  placeholder={"Age"}
-                  placeholderTextColor="black"
-                  keyboardType ="numeric"
-              />
-            <View style={styles.inputHeader}>
-                <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Languages}</Text>
-            </View>
-              <SearchableDropdown
-                  multi={true}
-                  chip={true}
-                  selectedItems={languageValues}
-                  onItemSelect={(item) => {
-                      languageValues.push(item)
-                      setLanguageValues(languageValues)
-                      setForceUpdate(!forceUpdate)
-                  }}
-                  onRemoveItem={(item, index) => {
-                      setLanguageValues(languageValues.filter(x => x.id !== item.id))
-                  }}
-                  items={languageOptions}
-                  itemStyle={{
-                      padding: 10,
-                      marginTop: height * 0.01,
-                      backgroundColor: '#ddd',
-                      borderColor: '#bbb',
-                      borderWidth: 1,
-                      borderRadius: 5,
+        <SafeAreaView style={styles.quizContainer} >
 
-                  }}
-                  containerStyle={{ padding: 5, width: width*0.73, marginLeft: width*0.145}}
-                  itemTextStyle={{ color: '#222' }}
-                  itemsContainerStyle={{ maxHeight: 140 }}
-                  textInputProps={
-                      {
-                          underlineColorAndroid: "transparent",
-                          style: {
-                              padding: 12,
-                              height: height * 0.06,
-                              borderWidth: 2,
-                              borderColor: 'black',
-                              borderRadius: 5,
-                          },
-                          onTextChange: {}
-                      }
-                  }
-                  listProps={
-                      {
-                          nestedScrollEnabled: true,
-                      }
-                  }
-              />
-
-              <ScrollView>
-                  <View style={styles.pickerHeader}>
-                      <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Gender}</Text>
-                  </View>
-                  <View>
-                  <Picker
-                        selectedValue={genderValue}
-                        onValueChange={(itemValue, itemIndex) => setGenderValue(itemValue)}>
-                        {generateGenderPicker()}
-                    </Picker>
-                  </View>
-                  {renderGenderOtherInput()}
-                  <View style={styles.pickerHeader}>
-                      <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Religion}</Text>
-                  </View>
-                  <View>
-                  <Picker
-                          selectedValue={religionValue}
-                          ColorValue="black"
-                          onValueChange={(itemValue, itemIndex) => setReligionValue(itemValue)}>
-                          {generateReligionPicker()}
-                      </Picker>
-                  </View>
-                  {renderReligionOtherInput()}
-              </ScrollView>
-
-            <TouchableOpacity
-                style={styles.quizRightButton}
-                onPress={() => save()
-                }>
-                <Text style={styles.quizFont}>{texts.Screens.Demographics.Buttons.SaveAndContinue}</Text>
-            </TouchableOpacity>
-              {renderLoadingIcon()}
-        </View>
+            {renderBody()}
+            {renderFooter()}
+            {renderLoadingIcon()}
+        </SafeAreaView>
+            
     );
+
 };
 
+const inpageStyle = StyleSheet.create ({
+    quizeFooter: {
+        position: "absolute",
+        backgroundColor: '#e1e1ea',
+        height: height * 0.1,
+        width: width,
+        top: height*0.82
+    },
+    sectionHeader: {
+        paddingTop: 2,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 2,
+        fontSize: 14,
+        fontWeight: 'bold',
+        backgroundColor: 'rgba(247,247,247,1.0)',
+    },
+    item: {
+        padding: 10,
+        fontSize: 18,
+        height: 44,
+    },
+})
 
 export default Demographics;
