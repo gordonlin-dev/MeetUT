@@ -402,6 +402,13 @@ const Personal = props => {
                     <View>
                         <Text style={styles.headerFont}>Places lived in</Text>
                         <TextInput
+                            style={{
+                                fontSize: 18,
+                                color: 'black',
+                                marginBottom: 10,
+                                borderBottomColor: 'black',
+                                borderBottomWidth: 2
+                            }}
                             onChangeText={setCountriesFilter}
                         />
                         <SectionList
