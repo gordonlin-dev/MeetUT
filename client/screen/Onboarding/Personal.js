@@ -146,8 +146,10 @@ const Personal = props => {
 
     const industrySelectPress = (item) => {
         if(selectedIndustryExperience.filter(x => x.id === item.id).length === 0){
-            selectedIndustryExperience.push(item)
-            setSelectedIndustryExperience(selectedIndustryExperience)
+            if(selectedIndustryExperience.length < 3){
+                selectedIndustryExperience.push(item)
+                setSelectedIndustryExperience(selectedIndustryExperience)
+            }
         }else{
             setSelectedIndustryExperience(selectedIndustryExperience.filter(x => x.id !== item.id))
         }
@@ -191,12 +193,14 @@ const Personal = props => {
     }
 
     const hobbiesPress = (hobby) => {
-        const filtered = selectedHobbies.filter(element => element.hobbyId === hobby.hobbyId)
-        if(filtered.length === 0){
-            selectedHobbies.push(hobby)
-            setSelectedHobbies(selectedHobbies)
-            removeHobby(hobby.hobbyId)
-            setForceUpdate(!forceUpdate)
+        if(selectedHobbies.length < 3){
+            const filtered = selectedHobbies.filter(element => element.hobbyId === hobby.hobbyId)
+            if(filtered.length === 0){
+                selectedHobbies.push(hobby)
+                setSelectedHobbies(selectedHobbies)
+                removeHobby(hobby.hobbyId)
+                setForceUpdate(!forceUpdate)
+            }
         }
     }
     const selectedHobbiesPress = (hobby) => {
