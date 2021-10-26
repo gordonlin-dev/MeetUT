@@ -54,6 +54,7 @@ const Academic = (props) => {
             false,
             props
         )
+
         if(response.ok){
             setIsLoading(false)
             props.navigation.navigate('Personal')
