@@ -370,3 +370,4 @@ const inpageStyle = StyleSheet.create ({
 })
 
 export default Demographics;
+ 
