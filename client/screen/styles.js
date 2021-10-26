@@ -48,8 +48,6 @@ const styles = StyleSheet.create({
         height: height*0.92,
         width: width,
         paddingTop: height*0.05,
-        paddingLeft: width*0.15,
-        paddingRight: width*0.15,
         backgroundColor: "#e1e1ea"
     },
     scrollContainer: {
