@@ -489,6 +489,7 @@ const inpageStyle = StyleSheet.create ({
         padding: 10,
         fontSize: 18,
         height: 44,
+        color: 'rgba(0,0,0,1.0)',
         borderColor:"#3590F2",
         borderWidth:2
     },
