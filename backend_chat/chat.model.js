@@ -86,6 +86,7 @@ exports.createChatRoom = async (participants) => {
             && room._id.includes(participants[1]))
         if(roomQuery == null){
             user.chatRooms.push(newRoom)
+            console.log(newRoom)
             await user.save()
         }
     }
@@ -148,7 +149,9 @@ exports.deleteChatRoom = async (curUserId, roomId) => {
     const otherUserId = roomId.split(" ").filter(x => x !== curUserId)
     let otherUser = await User.findById(otherUserId)
     user.chatRooms = user.chatRooms.filter(x => x._id !== roomId)
-    otherUser.chatRooms.filter(x => x._id === roomId)[0].active = false
+    if(otherUser.chatRooms.filter(x => x._id === roomId)[0]){
+        otherUser.chatRooms.filter(x => x._id === roomId)[0].active = false
+    }
     await user.save()
     await otherUser.save()
     return 1
