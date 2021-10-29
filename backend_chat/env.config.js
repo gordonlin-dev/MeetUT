@@ -1,4 +1,20 @@
+const getConnectionString = () => {
+    if(process.env.Connection_String){
+        return process.env.Connection_String
+    }else{
+        return "mongodb+srv://meetUT:meetUT@cluster0.cwotf.mongodb.net/Cluster0?retryWrites=true&w=majority"
+    }
+}
+
+const getJWTSecret = () => {
+    if(process.env.JWT_Secret){
+        return process.env.JWT_Secret
+    }else{
+        return "wz36Yu9kywCWib68qQNZ5LVt4bqo8LuBu8PmzvNFFK9uSS67OLQQ37XToT3ZKuR"
+    }
+}
 module.exports = {
-    "jwt_secret" : "E48B0EE5E3988AE0018054A207E34CF818FDB5BC10CBCEDE41F46D28857A7654",
-    "jwt_expiration_in_hours": 6
+    "jwt_secret" : getJWTSecret(),
+    "jwt_expiration_in_hours": "24h",
+    "connection_string": getConnectionString()
 }

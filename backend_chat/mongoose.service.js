@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const uri = "mongodb+srv://meetUT:meetUT@chat.3mmja.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = require("./env.config").connection_string
 
 const connect = () => {
     mongoose.connect(uri).then(() => {
