@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-const uri = "mongodb+srv://meetUT:meetUT@cluster0.cwotf.mongodb.net/Cluster0?retryWrites=true&w=majority"
-
+const uri = require("./env.config").connection_string
+console.log(uri)
 const connect = () => {
     mongoose.connect(uri).then(() => {
 

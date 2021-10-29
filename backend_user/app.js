@@ -28,4 +28,3 @@ MatchRouter.routesConfig(app)
 // start the server listening for requests
 app.listen(process.env.PORT || 3000,
     () => console.log("Server is running..."));
-console.log(process.env.Connection_String)
