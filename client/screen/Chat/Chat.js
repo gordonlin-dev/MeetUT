@@ -51,7 +51,6 @@ const ChatScreen = props => {
             socket.emit('joinRoom', roomID)
         })
         socket.on('broadcast', (message) =>{
-            console.log(message)
             message[0].user._id = 2
             setMessages(previousMessages => GiftedChat.append(previousMessages, message, false))
         })
@@ -61,7 +60,6 @@ const ChatScreen = props => {
     }, []);
 
     useEffect( () => () => {
-        console.log('disconnect')
         socket.disconnect()
 
     }, [] );

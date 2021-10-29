@@ -2,7 +2,7 @@ const getConnectionString = () => {
     if(process.env.Connection_String){
         return process.env.Connection_String
     }else{
-        return "mongodb+srv://meetUT:meetUT@cluster0.cwotf.mongodb.net/Cluster0?retryWrites=true&w=majority"
+        return "mongodb+srv://meetUT:meetUT@chat.3mmja.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
     }
 }
 
