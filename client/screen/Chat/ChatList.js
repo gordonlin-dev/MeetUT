@@ -56,7 +56,6 @@ const ChatListScreen = props => {
             for (let i = 0; i < responseJson.length; i++){
                 responseJson[i]["key"]= responseJson[i]._id
             }
-            console.log(responseJson)
             setChatList(responseJson)
         }
     }
@@ -94,7 +93,7 @@ const ChatListScreen = props => {
         }else{
             props.navigation.navigate({
                 routeName: 'Chat',
-                params: data.item._id
+                params: chatRoom._id
             })
         }
     }
