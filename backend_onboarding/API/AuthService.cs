@@ -11,7 +11,12 @@ namespace API.AuthService
         public static string DecodeJWT(string token)
         {
             var handler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("E48B0EE5E3988AE0018054A207E34CF818FDB5BC10CBCEDE41F46D28857A7654");
+            var secret = Environment.GetEnvironmentVariable("JWT_Secret");
+            if(secret == null)
+            {
+                secret = "wz36Yu9kywCWib68qQNZ5LVt4bqo8LuBu8PmzvNFFK9uSS67OLQQ37XToT3ZKuR";
+            }
+            var key = Encoding.ASCII.GetBytes(secret);
             try
             {
                 handler.ValidateToken(
