@@ -7,9 +7,9 @@ const userSchema = new Schema({
     firstName:String,
     lastName:String,
     avatar: Number,
-    active: Boolean,
     chatRooms: [{
         _id : String,
+        active: Boolean,
         displayAvatar: Number,
         displayName: String,
         participants: [String],
