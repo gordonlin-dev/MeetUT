@@ -281,6 +281,7 @@ const Academic = (props) => {
 const inpageStyle = StyleSheet.create ({
     quizeFooter: {
         position: "absolute",
+        flexDirection:"row",
         backgroundColor: '#e1e1ea',
         height: height * 0.1,
         width: width,
