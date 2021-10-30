@@ -231,7 +231,7 @@ const HomeScreen = props => {
             <View style={inpageStyle.flex9}>
                 <Swiper style={{}} loop={false}
                         key={recommendations.length}
-                        showsPagination={true}
+                        showsPagination={false}
                         showsButtons={true}
                         dot={
                             <View
