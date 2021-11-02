@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
         color: "black"
     },
     quizLeftButton: {
-        position: 'absolute',
+        marginLeft: width * 0.02,
         width: width * 0.45,
         height: height * 0.06,
         bottom: height*0.01,
@@ -245,7 +245,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     quizRightButton: {
-        position: 'absolute',
+        marginLeft: width * 0.02,
+        left: width*0.02,
         width: width * 0.45,
         height: height * 0.06,
         bottom: height*0.01,

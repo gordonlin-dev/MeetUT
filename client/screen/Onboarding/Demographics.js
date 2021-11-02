@@ -308,6 +308,8 @@ const Demographics = props => {
         if (renderStage == 0) {
             return(
                 <View style={inpageStyle.quizeFooter}>
+                <View style={inpageStyle.leftButtonHolder}>
+                </View>
                 <TouchableOpacity
                     style={styles.quizRightButton}
                     onPress={() => {setRenderStage(renderStage + 1)}}>
@@ -348,10 +350,18 @@ const Demographics = props => {
 const inpageStyle = StyleSheet.create ({
     quizeFooter: {
         position: "absolute",
+        flexDirection:"row",
         backgroundColor: '#e1e1ea',
         height: height * 0.1,
         width: width,
         top: height*0.82
+    },
+    leftButtonHolder: {
+        marginLeft: width * 0.02,
+        width: width * 0.45,
+        height: height * 0.06,
+        bottom: height*0.01,
+        left: width*0.02
     },
     sectionHeader: {
         paddingTop: 2,
