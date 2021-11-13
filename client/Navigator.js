@@ -188,6 +188,7 @@ const Navigator = createStackNavigator({
         screen: VerificationScreen,
         navigationOptions:{
             title:"",
+            headerShown:false
         }
     },
     ForgotPassword: {
