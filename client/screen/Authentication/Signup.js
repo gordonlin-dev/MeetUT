@@ -5,10 +5,10 @@ import {
     TextInput,
     TouchableOpacity,
     ImageBackground,
-    KeyboardAvoidingView, ScrollView, StyleSheet, Dimensions, ActivityIndicator
+    KeyboardAvoidingView, ScrollView, StyleSheet, Dimensions, ActivityIndicator, View
 } from 'react-native'
 import {useHeaderHeight} from 'react-navigation-stack';
-
+import { Icon } from 'react-native-elements'
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -76,9 +76,23 @@ const SignupScreen = props => {
         }
     }
     return (
-        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <ImageBackground source={image}  defaultSource={image} resizeMode="cover" style={styles.image}>
             <ScrollView>
                 <KeyboardAvoidingView  style={{paddingTop: height*0.05}} behavior={"padding"} keyboardVerticalOffset = {useHeaderHeight()}>
+                    <View style={{
+                        alignItems:"flex-start"
+                    }}>
+                        <Icon name="chevron-left" size={35} color="white" type="fontawesome5" style={{
+                            marginLeft:width*0.02
+                        }}
+                              onPress={()=>{
+                                  props.navigation.navigate({
+                                      routeName: 'Splash'
+                                  })
+                              }}
+                        />
+                    </View>
+
                     <Text style={inpageStyle.signUpHeader}>
                         {texts.Global.Common.SignUp}
                     </Text>
@@ -125,8 +139,8 @@ const SignupScreen = props => {
                         onPress={async () => {
                             await signupSubmit(firstName, lastName, email, password, confirm, props)
                         }}
-                        style={styles.Button}>
-                        <Text style={styles.font}>{texts.Global.Common.SignUp}</Text>
+                        style={inpageStyle.Button}>
+                        <Text style={styles.font}>Submit</Text>
                     </TouchableOpacity>
                 </KeyboardAvoidingView>
             </ScrollView>
@@ -138,9 +152,21 @@ const inpageStyle = StyleSheet.create({
     signUpHeader: {
         fontSize: 50,
         marginLeft: width * 0.27,
+        marginTop : height * 0.06,
         marginBottom: height * 0.03,
         color: "white",
         fontFamily: 'timeburner',
     },
+    Button: {
+        width: width * 0.6,
+        height: height * 0.06,
+        marginTop: height * 0.04,
+        marginBottom: height * 0.04,
+        marginLeft: width * 0.2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        backgroundColor: 'white',
+    }
 })
 export default SignupScreen;

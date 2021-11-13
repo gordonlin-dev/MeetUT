@@ -95,6 +95,7 @@ const Navigator = createStackNavigator({
         screen:SignupScreen,
         navigationOptions:{
             title:"",
+            headerShown:false
         }
     },
     Setting: {
