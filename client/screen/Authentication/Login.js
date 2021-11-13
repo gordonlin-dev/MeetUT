@@ -7,9 +7,10 @@ import {
     ImageBackground,
     TouchableOpacity,
     Alert,
-    ActivityIndicator, StyleSheet
+    ActivityIndicator, StyleSheet, Dimensions, ScrollView
 } from 'react-native'
 import {styles} from '../styles'
+import { Icon } from 'react-native-elements'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {NavigationActions, StackActions} from "react-navigation";
 const image = require('../../assets/bg.png')
@@ -17,7 +18,7 @@ const handler = require('../Handler')
 const fixer = require('../Fixer')
 const endpoints = require('../../API_endpoints.json')
 const texts = require("../../assets/Texts.json");
-
+const {height, width} = Dimensions.get('window');
 
 
 const LoginScreen = props => {
@@ -64,10 +65,23 @@ const LoginScreen = props => {
     }
 
     return (
-        <View style={styles.empty}>
-            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <ImageBackground source={image} defaultSource={image} resizeMode="cover" style={styles.image}>
+            <ScrollView style={{paddingTop: height*0.05}}>
+                <View style={{
+                    alignItems:"flex-start"
+                }}>
+                    <Icon name="chevron-left" size={35} color="white" type="fontawesome5" style={{
+                        marginLeft:width*0.02
+                    }}
+                          onPress={()=>{
+                              props.navigation.navigate({
+                                  routeName: 'Splash'
+                              })
+                          }}
+                    />
+                </View>
                 <View>
-                    <Text style={styles.header}>
+                    <Text style={inpageStyle.Header}>
                         {texts.Global.Common.Login}
                     </Text>
 
@@ -91,7 +105,7 @@ const LoginScreen = props => {
                         onPress={() => {
                             loginSubmit(email, password, props).then()
                         }}
-                        style={styles.Button}>
+                        style={inpageStyle.Button}>
                         <Text style={styles.font}>{texts.Global.Common.Login}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -104,10 +118,31 @@ const LoginScreen = props => {
                         <Text style={styles.font}>{texts.Global.Common.ForgotPassword}</Text>
                     </TouchableOpacity>
                 </View>
-                {renderLoadingIcon()}
-            </ImageBackground>
-        </View>
+            </ScrollView>
+            {renderLoadingIcon()}
+        </ImageBackground>
     );
 };
 
+const inpageStyle = StyleSheet.create({
+    Header: {
+        fontSize: 50,
+        marginLeft: width * 0.28,
+        marginTop : height * 0.12,
+        marginBottom: height * 0.03,
+        color: "white",
+        fontFamily: 'timeburner',
+    },
+    Button: {
+        width: width * 0.6,
+        height: height * 0.06,
+        marginTop: height * 0.05,
+        marginBottom: height * 0.04,
+        marginLeft: width * 0.2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        backgroundColor: 'white',
+    }
+})
 export default LoginScreen;
