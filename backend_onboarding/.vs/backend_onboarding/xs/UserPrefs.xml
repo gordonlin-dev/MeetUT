@@ -1,10 +1,10 @@
 ﻿<Properties StartupConfiguration="{BDBB7248-0D29-44C5-90E5-14EBE6800E3E}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="API/Models/d80elsmr4eis6uContext.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="API/Startup.cs">
     <Files>
-      <File FileName="API/Startup.cs" Line="1" Column="1" />
-      <File FileName="API/Program.cs" Line="1" Column="1" />
-      <File FileName="API/AuthService.cs" Line="1" Column="1" />
-      <File FileName="API/Models/d80elsmr4eis6uContext.cs" Line="1" Column="1" />
+      <File FileName="API/Startup.cs" Line="32" Column="66" />
+      <File FileName="API/Program.cs" />
+      <File FileName="API/AuthService.cs" />
+      <File FileName="API/Models/d80elsmr4eis6uContext.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -14,9 +14,8 @@
             <Node name="API" expanded="True">
               <Node name="Controllers" expanded="True" />
               <Node name="DataSource" expanded="True" />
-              <Node name="Models" expanded="True">
-                <Node name="d80elsmr4eis6uContext.cs" selected="True" />
-              </Node>
+              <Node name="Models" expanded="True" />
+              <Node name="Startup.cs" selected="True" />
             </Node>
             <Node name="docker-compose" expanded="True" />
           </Node>
