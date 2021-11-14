@@ -6,10 +6,18 @@ import {NavigationActions, StackActions} from "react-navigation";
 const home =  require('../assets/home-icon.png');
 const setting =  require('../assets/setting-icon.png');
 const chat =  require('../assets/chat-icon.png');
-
+const {height, width} = Dimensions.get('window');
 const Footer = props => {
     return (
-        <View style={styles.footer}>
+        <View style={{
+            position: "absolute",
+            justifyContent: 'space-between',
+            alignItems: 'stretch',
+            backgroundColor: 'rgb(0,41,93)',
+            height: height * 0.1,
+            width: width,
+            bottom: 0
+        }}>
             <View style={styles.footerButton}>
 
             <TouchableOpacity onPress={() => {

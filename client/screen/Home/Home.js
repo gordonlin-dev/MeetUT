@@ -23,6 +23,7 @@ const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
 const {height, width} = Dimensions.get('window');
+import { Card } from 'react-native-elements'
 
 const HomeScreen = props => {
     useEffect(() => {
@@ -141,79 +142,324 @@ const HomeScreen = props => {
             setRecommendations(recommendations.filter(x => x.email !== id))
         }
     }
-    const renderProfileCard = (recommendation) => {
-        return(
-            <ScrollView contentContainerStyle={inpageStyle.slide}>
-                <View style={inpageStyle.infoContainer}>
-                    <Image style={styles.avatar} source={getAvatarSource(recommendation.avatar)}/>
-                    <View >
-                        <Text style={styles.text}> {recommendation.name}</Text>
-                        <Text style={styles.text}> Wants to</Text>
+    const renderGoalsCard = (recommendation) => {
+        if(recommendation.reason.length > 0){
+            return(
+                <Card containerStyle={{
+                    borderRadius:15
+                }}>
+                    <Card.Title style={{
+                        fontFamily: 'timeburner',
+                        fontSize:25,
+                        fontWeight:"bold",
+                        color:'rgb(0,41,93)'
+                    }}>Goals</Card.Title>
+                    <Card.Divider/>
+                    <View>
                         {recommendation.reason.map((reason) =>{
                             return(
-                                <Text style={styles.quizFont} key={reason.id}>
+                                <Text style={{
+                                    color: '#000',
+                                    fontSize: 16,
+                                    marginBottom:height * 0.02
+                                }} key={reason.id}>
                                     {reason.value}
                                 </Text>
                             )
                         })}
                     </View>
+                </Card>
+            )
+        }
+    }
+    const renderProgramOfStudy = (recommendation) => {
+        if(recommendation.programs.length > 0){
+            return(
+                <Fragment>
+                    <Text style={{
+                        color: '#000',
+                        fontSize: 16,
+                        marginBottom:height * 0.02,
+                        fontWeight:"bold"
+                    }}>{" Program of Study:"}</Text>
+                    <View style={{
+                        alignSelf:"center"
+                    }}>
+                        {recommendation.programs.map((program)=>{
+                            return(
+                                <Text style={{
+                                    color: '#000',
+                                    fontSize: 16,
+                                    marginBottom:height * 0.02
+                                }} key={program.id}>
+                                    {" " + program.value}
+                                </Text>
+                            )
+                        })}
+                    </View>
+                </Fragment>
+            )
+        }
+    }
+    const renderProgramCard = (recommendation) => {
+        if(recommendation){
+            return(
+                <Card containerStyle={{
+                    borderRadius:15
+                }}>
+                    <Card.Title style={{
+                        fontFamily: 'timeburner',
+                        fontSize:25,
+                        fontWeight:"bold",
+                        color:'rgb(0,41,93)'
+                    }}>Program</Card.Title>
+                    <Card.Divider/>
+                    <View style={{alignItems:"flex-start"}}>
+                        <Text style={{
+                            color: '#000',
+                            fontSize: 16,
+                            marginBottom:height * 0.02
+                        }}> {getDegreeTypeValue(recommendation.degreeType)} (Year {getYearOfStudyValue(recommendation.yearOfStudy)}) </Text>
+                        <Text style={{
+                            color: '#000',
+                            fontSize: 16,
+                            marginBottom:height * 0.02
+                        }}> {getCollege(recommendation.college)} </Text>
+                        {renderProgramOfStudy(recommendation)}
+                    </View>
+                </Card>
+            )
+        }
+    }
 
+    const renderHobbiesCard = (recommendation) => {
+        if(recommendation.hobbies.length > 0){
+            return(
+                <Card containerStyle={{
+                    borderRadius:15
+                }}>
+                    <Card.Title style={{
+                        fontFamily: 'timeburner',
+                        fontSize:25,
+                        fontWeight:"bold",
+                        color:'rgb(0,41,93)'
+                    }}>Interests</Card.Title>
+                    <Card.Divider/>
+                    <View style={{alignItems:"flex-start"}}>
+                        <View style={{
+                        }}>
+                            {recommendation.hobbies.map((hobby)=>{
+                                return(
+                                    <Text style={{
+                                        color: '#000',
+                                        fontSize: 16,
+                                        marginBottom:height * 0.02
+                                    }} key={hobby.id}>
+                                        {" " + hobby.value}
+                                    </Text>
+                                )
+                            })}
+                        </View>
+                    </View>
+                </Card>)
+        }
+    }
+    const renderProjectsCard = (recommendation) => {
+        if(recommendation.projectInterests.length > 0){
+            return(
+                <Card containerStyle={{
+                    borderRadius:15
+                }}>
+                    <Card.Title style={{
+                        fontFamily: 'timeburner',
+                        fontSize:25,
+                        fontWeight:"bold",
+                        color:'rgb(0,41,93)'
+                    }}>Projects</Card.Title>
+                    <Card.Divider/>
+                    <View style={{alignItems:"flex-start"}}>
+                        <View style={{
+                        }}>
+                            {recommendation.projectInterests.map((item)=>{
+                                return(
+                                    <Text style={{
+                                        color: '#000',
+                                        fontSize: 16,
+                                        marginBottom:height * 0.02
+                                    }} key={item.id}>
+                                        {" " + item.value}
+                                    </Text>
+                                )
+                            })}
+                        </View>
+                    </View>
+                </Card>
+            )
+        }
+    }
+    const renderExperienceCard = (recommendation) => {
+        if(recommendation.industryExperiences.length > 0){
+            return(
+                <Card containerStyle={{
+                    borderRadius:15
+                }}>
+                    <Card.Title style={{
+                        fontFamily: 'timeburner',
+                        fontSize:25,
+                        fontWeight:"bold",
+                        color:'rgb(0,41,93)'
+                    }}>Experience</Card.Title>
+                    <Card.Divider/>
+                    <View style={{alignItems:"flex-start"}}>
+                        <View style={{
+                        }}>
+                            {recommendation.industryExperiences.map((item)=>{
+                                return(
+                                    <Text style={{
+                                        color: '#000',
+                                        fontSize: 16,
+                                        marginBottom:height * 0.02
+                                    }} key={item.id}>
+                                        {" " + item.value}
+                                    </Text>
+                                )
+                            })}
+                        </View>
+                    </View>
+                </Card>
+            )
+        }
+    }
+
+    const renderLanguage = (recommendation) => {
+        if(recommendation.languages.length > 0){
+            return(
+                <Fragment>
+                    <Text style={{
+                        color: '#000',
+                        fontSize: 16,
+                        marginBottom:height * 0.02,
+                        fontWeight:"bold"
+                    }}>{" Languages:"}</Text>
+                    <View style={{
+                        alignSelf:"center"
+                    }}>
+                        {recommendation.languages.map((item)=>{
+                            return(
+                                <Text style={{
+                                    color: '#000',
+                                    fontSize: 16,
+                                    marginBottom:height * 0.02
+                                }} key={item.id}>
+                                    {" " + item.value}
+                                </Text>
+                            )
+                        })}
+                    </View>
+                </Fragment>
+            )
+        }
+    }
+    const renderPlaces = (recommendation) => {
+        if(recommendation.countries.length > 0){
+            return(
+                <Fragment>
+                    <Text style={{
+                        color: '#000',
+                        fontSize: 16,
+                        marginBottom:height * 0.02,
+                        fontWeight:"bold"
+                    }}>{" Has lived in:"}</Text>
+                    <View style={{
+                        alignSelf:"center"
+                    }}>
+                        {recommendation.languages.map((item)=>{
+                            return(
+                                <Text
+                                    style={{
+                                        color: '#000',
+                                        fontSize: 16,
+                                        opacity:0,
+                                        height:0
+                                    }} key={item.id}>
+                                    {" " + item.value}
+                                </Text>
+                            )
+                        })}
+                        {recommendation.countries.map((item)=>{
+                            return(
+                                <Text style={{
+                                    color: '#000',
+                                    fontSize: 16,
+                                    marginBottom:height * 0.02
+                                }} key={item.id}>
+                                    {" " + item.value}
+                                </Text>
+                            )
+                        })}
+                    </View>
+                </Fragment>
+            )
+        }
+    }
+    const renderPersonalCard = (recommendation) => {
+        if(recommendation.languages.length > 0 || recommendation.countries.length > 0){
+            return(
+                <Card containerStyle={{
+                    borderRadius:15
+                }}>
+                    <Card.Title style={{
+                        fontFamily: 'timeburner',
+                        fontSize:25,
+                        fontWeight:"bold",
+                        color:'rgb(0,41,93)'
+                    }}>Personal details</Card.Title>
+                    <Card.Divider/>
+                    <View style={{}}>
+                        {renderLanguage(recommendation)}
+                        {renderPlaces(recommendation)}
+                    </View>
+                </Card>
+            )
+        }
+    }
+    const renderProfileCard = (recommendation) => {
+        return(
+            <ScrollView contentContainerStyle={inpageStyle.slide}>
+                <View style={inpageStyle.infoContainer}>
+                    <Image style={inpageStyle.avatar} source={getAvatarSource(recommendation.avatar)}/>
+                    <View style={{
+                        alignItems:"center"
+                    }}>
+                        <Text style={inpageStyle.name}> {recommendation.name}</Text>
+                    </View>
                     <View style={inpageStyle.buttonContainer}>
                         <TouchableOpacity style={inpageStyle.homeButton} onPress={() =>{connect(recommendation.email)}}>
-                            <Text style={styles.quizFont}>Connect</Text>
+                            <Text style={inpageStyle.buttonFont}>Connect</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={inpageStyle.dismissButton} onPress={() =>{dismissUser(recommendation.email)}}>
+                            <Text style={inpageStyle.dismissFont}>Dismiss</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
 
                 <View style={inpageStyle.detailContainer}>
-                    <Text style={styles.text}> {getDegreeTypeValue(recommendation.degreeType)} </Text>
-                    <Text style={styles.text}> Year: {getYearOfStudyValue(recommendation.yearOfStudy)} </Text>
-                    <Text style={styles.text}> {getCollege(recommendation.college)} </Text>
-                    <Text style={styles.text}> Program(s) </Text>
-                    {recommendation.programs.map((program)=>{
-                        return(
-                            <Text style={styles.quizFont} key={program.id}>
-                                {program.value}
-                            </Text>
-                        )
-                    })}
-                    <Text style={styles.text}> Industry Experiences </Text>
-                    {recommendation.industryExperiences.map((exp) =>{
-                        return(
-                            <Text style={styles.quizFont} key={exp.id}>
-                                {exp.value}
-                            </Text>
-                        )
-                    })}
-                    <Text style={styles.text}> Project Interests </Text>
-                    {recommendation.projectInterests.map((project) => {
-                        return(
-                            <Text style={styles.quizFont} key={project.id}>
-                                {project.value}
-                            </Text>
-                        )
-                    })}
-                    <Text style={styles.text}>Languages</Text>
-                    {recommendation.languages.map((language) => {
-                        return(
-                            <Text style={styles.quizFont} key={language.id}>
-                                {language.value}
-                            </Text>
-                        )
-                    })}
-                    <Text style={styles.text}>Has lived in</Text>
-                    {recommendation.countries.map((country) => {
-                        return(
-                            <Text style={styles.quizFont} key={country.id}>
-                                {country.value}
-                            </Text>
-                        )
-                    })}
+                    {renderGoalsCard(recommendation)}
+                    {renderProgramCard(recommendation)}
+                    {renderHobbiesCard(recommendation)}
+                    {renderProjectsCard(recommendation)}
+                    {renderExperienceCard(recommendation)}
+                    {renderPersonalCard(recommendation)}
                 </View>
-                <View style={inpageStyle.dismissButtonContainer}>
-                    <TouchableOpacity style={inpageStyle.dismissButton} onPress={() =>{dismissUser(recommendation.email)}}>
-                        <Text style={styles.quizFont}>Dismiss user</Text>
-                    </TouchableOpacity>
+                <View style={{backgroundColor:"#d2d2d2"}}>
+                    <View style={inpageStyle.buttonContainer}>
+                        <TouchableOpacity style={inpageStyle.homeButton} onPress={() =>{connect(recommendation.email)}}>
+                            <Text style={inpageStyle.buttonFont}>Connect</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={inpageStyle.dismissButton} onPress={() =>{dismissUser(recommendation.email)}}>
+                            <Text style={inpageStyle.dismissFont}>Dismiss</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </ScrollView>
         )
@@ -233,6 +479,8 @@ const HomeScreen = props => {
                         key={recommendations.length}
                         showsPagination={false}
                         showsButtons={true}
+                        nextButton={<Text style={{color:'rgb(0,41,93)', fontSize:50}}>›</Text>}
+                        prevButton={<Text style={{color:'rgb(0,41,93)', fontSize:50}}>‹</Text>}
                         dot={
                             <View
                                 style={{
@@ -277,6 +525,20 @@ const HomeScreen = props => {
 
 
 const inpageStyle = StyleSheet.create({
+    avatar: {
+        marginTop: height*0.04,
+        height: height*0.25,
+        width: height*0.25,
+        borderRadius: height*0.25/ 2,
+        borderColor:'white',
+        borderWidth:3
+    },
+    name: {
+        color: 'white',
+        fontSize: 35,
+        marginTop:height * 0.03,
+        fontWeight: 'bold'
+    },
     flex9:{
         flex:9
     },
@@ -287,41 +549,43 @@ const inpageStyle = StyleSheet.create({
         backgroundColor: 'white'
     },
     infoContainer: {
-        backgroundColor: '#9DD6EB',
+        backgroundColor: 'rgb(49,119,183)',
         alignItems: 'center'
     },
     dismissButtonContainer: {
         alignItems: 'center'
     },
     dismissButton: {
-        width: width * 0.4,
+        width: width * 0.3,
         height: height * 0.06,
         marginBottom: height * 0.04,
-        marginLeft: width * 0.05,
+        marginLeft: width * 0.04,
         marginRight: width * 0.05,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 15,
-        backgroundColor: 'red',
+        backgroundColor: 'white'
     },
     buttonContainer:{
-        marginTop: height * 0.02,
-        marginBottom: height * 0.02
+        marginBottom: height * 0.02,
+        marginTop:height * 0.03,
+        flexDirection:"row",
+        alignSelf:"center"
     },
     homeButton: {
-        width: width * 0.4,
+        width: width * 0.3,
         height: height * 0.06,
         marginBottom: height * 0.04,
         marginLeft: width * 0.05,
-        marginRight: width * 0.05,
+        marginRight: width * 0.04,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 15,
         backgroundColor: 'white',
     },
     detailContainer: {
-        paddingBottom: height * 0.1,
-        left: width * 0.03,
+        paddingBottom: height * 0.01,
+        backgroundColor:'#d2d2d2'
     },
     loading: {
         position: 'absolute',
@@ -331,6 +595,16 @@ const inpageStyle = StyleSheet.create({
         bottom: 0,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    buttonFont: {
+        fontFamily: 'timeburner',
+        fontSize:17,
+        color: 'rgb(0,41,93)'
+    },
+    dismissFont: {
+        fontFamily: 'timeburner',
+        fontSize:17,
+        color: 'red'
     }
 })
 export default HomeScreen;
