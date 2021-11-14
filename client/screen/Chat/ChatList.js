@@ -11,7 +11,7 @@ import {
     Text,
     BackHandler,
     ActivityIndicator,
-    TouchableHighlight, Alert
+    TouchableHighlight, Alert, TouchableWithoutFeedback
 } from 'react-native'
 
 import {SwipeListView} from 'react-native-swipe-list-view';
@@ -23,6 +23,8 @@ const {height, width} = Dimensions.get('window');
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
+import { Icon } from 'react-native-elements'
+import {Touchable} from "react-native-web";
 
 const ChatListScreen = props => {
     useEffect(() => {
@@ -56,7 +58,6 @@ const ChatListScreen = props => {
             for (let i = 0; i < responseJson.length; i++){
                 responseJson[i]["key"]= responseJson[i]._id
             }
-            responseJson.push(responseJson[0])
             setChatList(responseJson)
         }
     }
@@ -105,7 +106,7 @@ const ChatListScreen = props => {
                 disableRightSwipe={true}
                 recalculateHiddenLayout={true}
                 renderItem={ (data, rowMap) => (
-                    <View
+                    <TouchableWithoutFeedback
                         onPress={()=>{
                             chatRoomNavigation(data.item)
                         }}
@@ -117,8 +118,19 @@ const ChatListScreen = props => {
                             }}>
                                 <Text style={inpageStyle.name}>{data.item.displayName}</Text>
                             </View>
+                            <View style={{
+                                flex:1,
+                                flexDirection:"column",
+                                alignSelf:"center"
+                            }}>
+                                <View style={{alignSelf:"flex-end"}}>
+                                    <Icon name="chevron-right" size={30} color="rgb(0,41,93)" type="fontawesome5" style={{
+                                    }}
+                                    />
+                                </View>
+                            </View>
                         </View>
-                    </View>
+                    </TouchableWithoutFeedback>
 
                 )}
                 renderHiddenItem={ (data, rowMap) => (
@@ -126,9 +138,9 @@ const ChatListScreen = props => {
                         style={[inpageStyle.backRightBtn]}
                         onPress={() => {deleteChat(data.item._id)}}
                     >
-                        <View>
-                            <Text>Delete</Text>
-                        </View>
+                        <Icon name="trash-outline" size={33} color="white" type="ionicon" style={{
+                        }}
+                        />
                     </TouchableOpacity>
                 )}
                 rightOpenValue={-75}
@@ -145,9 +157,7 @@ const inpageStyle = StyleSheet.create({
         flexDirection: 'row'
     },
     name: {
-        fontFamily: 'timeburner',
         fontSize: 20,
-        fontWeight: "500",
         marginTop:height*0.01,
     },
     Button: {
@@ -164,7 +174,6 @@ const inpageStyle = StyleSheet.create({
 
     },
     rowFront: {
-        flex:1,
         flexDirection:"row",
         backgroundColor: 'white',
         marginTop:height * 0.02
@@ -184,15 +193,15 @@ const inpageStyle = StyleSheet.create({
     avatar: {
         marginLeft: width * 0.05,
         marginRight: width*0.05,
-        marginTop:height*0.025,
-        marginBottom:height * 0.025,
-        height: height*0.11,
-        width: height*0.11,
-        borderRadius: height*0.12/ 2,
+        marginTop:height*0.02,
+        marginBottom:height * 0.02,
+        height: height*0.07,
+        width: height*0.07,
+        borderRadius: height*0.10/ 2,
     },
     container:{
         paddingTop:height * 0.01,
-        backgroundColor: '#e1e1ea',
+        backgroundColor: '#d2d2d2',
         flex: 1,
     }
 });
