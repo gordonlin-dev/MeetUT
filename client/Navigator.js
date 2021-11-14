@@ -140,7 +140,7 @@ const Navigator = createStackNavigator({
     Home:{
         screen:HomeScreen,
         navigationOptions:{
-            title:"Home",
+            title:"Profiles",
             headerStyle: {
                 backgroundColor: 'rgb(0,41,93)',
             },
@@ -171,9 +171,9 @@ const Navigator = createStackNavigator({
     ChatList:{
         screen: ChatListScreen,
         navigationOptions:{
-            title:"Chat List",
+            title:"Contacts",
             headerStyle: {
-                backgroundColor: '#3590F2',
+                backgroundColor: 'rgb(0,41,93)',
             },
             headerLeft: ()=> null,
             headerTintColor: '#ffff',

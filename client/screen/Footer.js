@@ -14,7 +14,7 @@ const Footer = props => {
             justifyContent: 'space-between',
             alignItems: 'stretch',
             backgroundColor: 'rgb(0,41,93)',
-            height: height * 0.1,
+            height: height * 0.10,
             width: width,
             bottom: 0
         }}>

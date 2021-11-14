@@ -56,6 +56,7 @@ const ChatListScreen = props => {
             for (let i = 0; i < responseJson.length; i++){
                 responseJson[i]["key"]= responseJson[i]._id
             }
+            responseJson.push(responseJson[0])
             setChatList(responseJson)
         }
     }
@@ -104,16 +105,20 @@ const ChatListScreen = props => {
                 disableRightSwipe={true}
                 recalculateHiddenLayout={true}
                 renderItem={ (data, rowMap) => (
-                    <TouchableHighlight
+                    <View
                         onPress={()=>{
                             chatRoomNavigation(data.item)
                         }}
                     >
                         <View style={inpageStyle.rowFront}>
                             <Image style={inpageStyle.avatar} source={getAvatarSource(data.item.displayAvatar)}/>
-                            <Text style={inpageStyle.name}>{data.item.displayName}</Text>
+                            <View style={{
+                                alignSelf:"center"
+                            }}>
+                                <Text style={inpageStyle.name}>{data.item.displayName}</Text>
+                            </View>
                         </View>
-                    </TouchableHighlight>
+                    </View>
 
                 )}
                 renderHiddenItem={ (data, rowMap) => (
@@ -162,9 +167,10 @@ const inpageStyle = StyleSheet.create({
         flex:1,
         flexDirection:"row",
         backgroundColor: 'white',
-        height: height*0.12
+        marginTop:height * 0.02
     },
     backRightBtn: {
+        marginTop:height * 0.02,
         flex:1,
         alignItems: 'center',
         bottom: 0,
@@ -176,13 +182,16 @@ const inpageStyle = StyleSheet.create({
         right: 0,
     },
     avatar: {
-        marginRight: width*0.10,
-        marginTop:height*0.01,
-        height: height*0.10,
-        width: width*0.20,
-        borderRadius: 400/ 2,
+        marginLeft: width * 0.05,
+        marginRight: width*0.05,
+        marginTop:height*0.025,
+        marginBottom:height * 0.025,
+        height: height*0.11,
+        width: height*0.11,
+        borderRadius: height*0.12/ 2,
     },
     container:{
+        paddingTop:height * 0.01,
         backgroundColor: '#e1e1ea',
         flex: 1,
     }

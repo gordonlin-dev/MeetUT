@@ -413,7 +413,7 @@ const HomeScreen = props => {
                         fontSize:25,
                         fontWeight:"bold",
                         color:'rgb(0,41,93)'
-                    }}>Personal details</Card.Title>
+                    }}>Personal Details</Card.Title>
                     <Card.Divider/>
                     <View style={{}}>
                         {renderLanguage(recommendation)}
@@ -473,7 +473,7 @@ const HomeScreen = props => {
         }
     }
     return(
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={inpageStyle.container}>
             <View style={inpageStyle.flex9}>
                 <Swiper style={{}} loop={false}
                         key={recommendations.length}
@@ -514,11 +514,10 @@ const HomeScreen = props => {
                     })}
                 </Swiper>
             </View>
-
-            <View style={inpageStyle.flex1}>
-                <Footer navigation={props.navigation} isLoading={isLoading}/>
-            </View>
             {renderLoadingIcon()}
+            <View style={inpageStyle.flex1}>
+            </View>
+            <Footer navigation={props.navigation} isLoading={isLoading}/>
         </SafeAreaView>
     )
 }
@@ -540,10 +539,11 @@ const inpageStyle = StyleSheet.create({
         fontWeight: 'bold'
     },
     flex9:{
-        flex:9
+        flex:14
     },
     flex1:{
-        flex:1
+        flex:1,
+        backgroundColor:'#d2d2d2'
     },
     slide: {
         backgroundColor: 'white'
@@ -605,6 +605,10 @@ const inpageStyle = StyleSheet.create({
         fontFamily: 'timeburner',
         fontSize:17,
         color: 'red'
+    },
+    container:{
+        flex:1,
+        backgroundColor:'#d2d2d2'
     }
 })
 export default HomeScreen;
