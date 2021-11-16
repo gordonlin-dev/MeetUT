@@ -97,24 +97,28 @@ const ChangeAvatarScreen = props => {
                     renderItem={renderItem}
                 />
             </View>
-            <TouchableOpacity
-                style={styles.quizLeftButton}
-                onPress={()=>{
-                    const resetAction = StackActions.reset({
-                        index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'Setting' })],
-                    });
-                    props.navigation.dispatch(resetAction)
-                }}
-            >
-                <Text style={styles.quizFont}>Back</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.quizRightButton}
-                onPress={()=>{save()}}
-            >
-                <Text style={styles.quizFont}>{texts.Screens.Demographics.Buttons.Save}</Text>
-            </TouchableOpacity>
+            <View style={inpageStyle.quizeFooter}>
+                <TouchableOpacity
+                    style={styles.quizLeftButton}
+                    onPress={()=>{
+                        const resetAction = StackActions.reset({
+                            index: 0,
+                            actions: [NavigationActions.navigate({ routeName: 'Setting' })],
+                        });
+                        props.navigation.dispatch(resetAction)
+                    }}
+                >
+                    <Text style={styles.quizFont}>Back</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.quizRightButton}
+                    onPress={()=>{save()}}
+                >
+                    <Text style={styles.quizFont}>{texts.Screens.Demographics.Buttons.Save}</Text>
+                </TouchableOpacity>
+            </View>
+            
+                
             {renderLoadingIcon()}
         </View>
     );
@@ -128,6 +132,10 @@ const inpageStyle = StyleSheet.create({
         borderRadius: 400/ 2,
         borderWidth:6,
         borderColor:"green"
+    },
+    quizeFooter: {
+        marginTop: height*0.03,
+        flexDirection:"row"
     }
 });
 export default ChangeAvatarScreen;
