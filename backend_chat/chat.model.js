@@ -127,7 +127,7 @@ exports.getChatRoomById = async (userID, chatRoomID) => {
 }
 
 exports.addMessage = async (userID, roomID, message) => {
-    const now = new Date()
+    const now = new Date(Date.now()).getUTCDate()
     let newMessage = {
         text : message[0].text,
         createdAt : now.getUTCDate(),

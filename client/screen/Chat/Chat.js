@@ -123,6 +123,7 @@ const ChatScreen = props => {
                 user={{
                     _id: 1,
                 }}
+                renderTime={() => {}}
                 renderBubble={renderBubble}
                 renderMessage={renderMessage}
             />
