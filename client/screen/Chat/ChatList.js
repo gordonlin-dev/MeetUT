@@ -88,14 +88,20 @@ const ChatListScreen = props => {
                 [{text: texts.Alert.Buttons.OK, onPress: () => {
                         props.navigation.navigate({
                             routeName: 'Chat',
-                            params: chatRoom._id
+                            params: {
+                                chatRoom :chatRoom._id,
+                                displayName: chatRoom.displayName
+                            }
                         })
                     }}])
 
         }else{
             props.navigation.navigate({
                 routeName: 'Chat',
-                params: chatRoom._id
+                params: {
+                    chatRoom :chatRoom._id,
+                    displayName: chatRoom.displayName
+                }
             })
         }
     }
@@ -125,6 +131,7 @@ const ChatListScreen = props => {
                             }}>
                                 <View style={{alignSelf:"flex-end"}}>
                                     <Icon name="chevron-right" size={30} color="rgb(0,41,93)" type="fontawesome5" style={{
+                                        marginRight: width*0.05
                                     }}
                                     />
                                 </View>

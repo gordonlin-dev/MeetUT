@@ -15,7 +15,7 @@ const userSchema = new Schema({
         participants: [String],
         messages : [{
             _id: String,
-            createdAt: String,
+            createdAt: Date,
             text: String,
             sender: String
         }]
@@ -130,7 +130,7 @@ exports.addMessage = async (userID, roomID, message) => {
 
     let newMessage = {
         text : message[0].text,
-        createdAt : message[0].createAt,
+        createdAt : new Date().getUTCDate(),
         _id : message[0]._id,
         sender: userID
     }

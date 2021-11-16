@@ -20,6 +20,7 @@ import {Button, Dimensions} from 'react-native';
 import React, {useState, useEffect} from 'react'
 import * as Font from 'expo-font';
 import { forestgreen } from 'color-name';
+import {Icon} from "react-native-elements";
 const customFonts = {
     'timeburner': require('./assets/fonts/timeburner_regular.ttf'),
   };
@@ -155,18 +156,30 @@ const Navigator = createStackNavigator({
     },
     Chat:{
         screen:ChatScreen,
-        navigationOptions:{
-            title:"",
-            headerStyle: {
-                backgroundColor: '#3590F2',
-            },
-            headerTintColor: '#ffff',
-            headerTitleStyle: {
-                alignSelf: 'center',
-                fontFamily: "timeburner",
-                fontSize: 30,
-            },
-        }
+        navigationOptions: (screenProps) => {
+            return {
+                title:screenProps.navigation.state.params.displayName,
+                headerStyle: {
+                    backgroundColor: 'rgb(0,41,93)'
+                },
+                headerTintColor: '#ffff',
+                headerTitleAlign:"center",
+                headerTitleStyle: {
+                    fontFamily: "timeburner",
+                    fontSize: 30,
+                },
+                headerLeft: () => (
+                    <Icon name="chevron-left" size={35} color="white" type="fontawesome5" style={{
+                    }}
+                          onPress={()=>{
+                              screenProps.navigation.navigate({
+                                  routeName: 'ChatList'
+                              })
+                          }}
+                    />
+                )
+            }
+        },
     },
     ChatList:{
         screen: ChatListScreen,
