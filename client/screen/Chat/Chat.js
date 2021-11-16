@@ -92,6 +92,9 @@ const ChatScreen = props => {
     }
     const renderMessage = props => {
         console.log(props.currentMessage)
+        const d1 = new Date(props.currentMessage.createdAt)
+        console.log(d1)
+        console.log(new Date(d1.getUTCDate()))
         return(
             <View>
                 <TouchableWithoutFeedback>
