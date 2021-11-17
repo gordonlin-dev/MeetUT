@@ -122,7 +122,8 @@ exports.getChatRoomById = async (userID, chatRoomID) => {
         messages[i] = messageCopy
     }
     delete room.messages
-    room.messages = messages
+    let otherUser = await User.findById(chatRoomID.split(" ").filter(x => x !== userID))
+    room[avatar] = otherUser.avatar
     return room
 }
 

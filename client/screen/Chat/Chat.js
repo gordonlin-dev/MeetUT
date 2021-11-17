@@ -46,6 +46,7 @@ const ChatScreen = props => {
         )
         if(response.ok){
             const responseJson = await response.json();
+            console.log(responseJson)
             const messages = responseJson.messages
             setMessages(previousMessages => GiftedChat.append(previousMessages, messages, false))
             //setMessages(messages)
