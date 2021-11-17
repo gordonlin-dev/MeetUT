@@ -86,56 +86,86 @@ const SettingScreen = props => {
     return (
         <View style={styles.empty}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-                <View style={inpageStyle.profile}>
-                    <Image style={styles.avatar} source={avatars[avatar].source}/>
-                    <View style={{height: height * 0.1, marginLeft: width * 0.02}}>
-                        <Text style={styles.font}>{firstName + ' ' + lastName}</Text>
-                        <Text style={styles.font}>{email}</Text>
+                <View style={{
+                    flex:1,
+                    flexDirection:"column",
+                }}>
+                    <View style={{
+                        height: height * 0.1,
+                        width: width,
+                        flex: 2,
+                        flexDirection: 'row',
+                        alignItems:"center"
+                    }}>
+                        <View style={{
+                            flex:3,
+                            alignItems:"center"
+                        }}>
+                            <Image style={{
+                                height: height*0.12,
+                                width: height * 0.12,
+                                borderRadius: height * 0.12/ 2,
+                                marginBottom:height * 0.02
+                            }} source={avatars[avatar].source}/>
+                            <Text style={{
+                                fontFamily: 'timeburner',
+                                fontSize: 30,
+                                color: "white",
+                                fontWeight: "500"
+                            }}>{firstName + ' ' + lastName}</Text>
+                        </View>
                     </View>
+                    <View style={{
+                        flex:5
+                    }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                signOutSubmit(props).then()
+                            }}
+                            style={styles.Button}>
+                            <Text style={styles.font}>Sign Out</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                props.navigation.navigate({
+                                    routeName: 'ResetPassword'
+                                })
+                            }}
+                            style={styles.Button}>
+                            <Text style={styles.font}>Reset Password</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                props.navigation.navigate({
+                                    routeName: 'ChangeAvatar'
+                                })
+                            }}
+                            style={styles.Button}>
+                            <Text style={styles.font}>Change Avatar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                props.navigation.navigate({
+                                    routeName: 'Demographics'
+                                })
+                            }}
+                            style={styles.Button}>
+                            <Text style={styles.font}>Preferences</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                deleteButton(props).then()
+                            }}
+                            style={styles.Button}>
+                            <Text style={{
+                                fontFamily: 'timeburner',
+                                fontSize: 18,
+                                color: "red",
+                                fontWeight: "500"
+                            }}>Delete Account</Text>
+                        </TouchableOpacity>
 
-                </View>
-                <View style={{marginTop: 0}}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            signOutSubmit(props).then()
-                        }}
-                        style={styles.Button}>
-                        <Text style={styles.font}>{texts.Screens.Settings.SignOut}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => {
-                            props.navigation.navigate({
-                                routeName: 'ResetPassword'
-                            })
-                        }}
-                        style={styles.Button}>
-                        <Text style={styles.font}>{texts.Screens.ResetPassword.ResetPassword}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => {
-                            props.navigation.navigate({
-                                routeName: 'ChangeAvatar'
-                            })
-                        }}
-                        style={styles.Button}>
-                        <Text style={styles.font}>{texts.Screens.Avatar.ChangeAvatar}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => {
-                            deleteButton(props).then()
-                        }}
-                        style={styles.Button}>
-                        <Text style={styles.font}>{texts.Screens.Settings.Delete}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => {
-                            props.navigation.navigate({
-                                routeName: 'Demographics'
-                            })
-                        }}
-                        style={styles.Button}>
-                        <Text style={styles.font}>Change preference</Text>
-                    </TouchableOpacity>
+                    </View>
                 </View>
                 <Footer navigation={props.navigation}/>
             </ImageBackground>
@@ -148,12 +178,7 @@ const SettingScreen = props => {
 
 const inpageStyle = StyleSheet.create({
     profile: {
-        position: "absolute",
-        height: height * 0.1,
-        width: width,
-        top: 0,
-        backgroundColor: "white",
-        flexDirection: 'row'
+
     },
 })
 export default SettingScreen;
