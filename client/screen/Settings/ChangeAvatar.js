@@ -82,7 +82,13 @@ const ChangeAvatarScreen = props => {
                 <TouchableOpacity onPress={() => {
                     selectAvatar(item.id)
                 }}>
-                    <Image key={item.id} source={item.source} style={styles.changeAvatar}/>
+                    <Image key={item.id} source={item.source} style={{
+                        marginTop: height*0.01,
+                        marginLeft: width*0.01,
+                        height: width*0.3,
+                        width: width*0.3,
+                        borderRadius: width*0.3/ 2,
+                    }}/>
                 </TouchableOpacity>
             )
         }
@@ -99,26 +105,13 @@ const ChangeAvatarScreen = props => {
             </View>
             <View style={inpageStyle.quizeFooter}>
                 <TouchableOpacity
-                    style={styles.quizLeftButton}
-                    onPress={()=>{
-                        const resetAction = StackActions.reset({
-                            index: 0,
-                            actions: [NavigationActions.navigate({ routeName: 'Setting' })],
-                        });
-                        props.navigation.dispatch(resetAction)
-                    }}
-                >
-                    <Text style={styles.quizFont}>Back</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
                     style={styles.quizRightButton}
                     onPress={()=>{save()}}
                 >
                     <Text style={styles.quizFont}>{texts.Screens.Demographics.Buttons.Save}</Text>
                 </TouchableOpacity>
             </View>
-            
-                
+
             {renderLoadingIcon()}
         </View>
     );
@@ -127,15 +120,19 @@ const inpageStyle = StyleSheet.create({
     selectedAvatar: {
         marginTop: height*0.01,
         marginLeft: width*0.01,
-        height: height*0.15,
+        height: width*0.3,
         width: width*0.3,
-        borderRadius: 400/ 2,
+        borderRadius: width*0.3/ 2,
         borderWidth:6,
         borderColor:"green"
     },
     quizeFooter: {
         marginTop: height*0.03,
-        flexDirection:"row"
+        flexDirection:"row",
+        alignSelf:"center",
+        position: "absolute",
+        bottom: 0,
+        marginBottom: height * 0.02
     }
 });
 export default ChangeAvatarScreen;

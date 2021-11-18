@@ -3,7 +3,7 @@ import LoginScreen from "./screen/Authentication/Login";
 import SignupScreen from "./screen/Authentication/Signup";
 import HomeScreen from "./screen/Home/Home";
 import ChatScreen from "./screen/Chat/Chat";
-import {createAppContainer} from "react-navigation";
+import {createAppContainer, NavigationActions, StackActions} from "react-navigation";
 import ChatListScreen from "./screen/Chat/ChatList";
 import Splash from './screen/Landing/Splash';
 import ResetPasswordScreen from './screen/Authentication/ResetPassword';
@@ -118,18 +118,31 @@ const Navigator = createStackNavigator({
     },
     ChangeAvatar: {
         screen:ChangeAvatarScreen,
-        navigationOptions:{
-            title:"Change Avatar",
-            headerStyle: {
-                backgroundColor: '#3590F2',
-            },
-            headerLeft: ()=> null,
-            headerTintColor: '#ffff',
-            headerTitleStyle: {
-                fontFamily: "timeburner",
-                fontSize: 30,
-                marginLeft: width * 0.01
-            },
+        navigationOptions: (screenProps) => {
+            return {
+                title:"Change Avatar",
+                headerStyle: {
+                    backgroundColor: 'rgb(0,41,93)'
+                },
+                headerTintColor: '#ffff',
+                headerTitleStyle: {
+                    fontFamily: "timeburner",
+                    fontSize: 30,
+                    marginLeft: width * 0.01
+                },
+                headerLeft: () => (
+                    <Icon name="chevron-left" size={35} color="white" type="fontawesome5" style={{
+                    }}
+                          onPress={()=>{
+                              const resetAction = StackActions.reset({
+                                  index: 0,
+                                  actions: [NavigationActions.navigate({ routeName: 'Setting' })],
+                              });
+                              screenProps.navigation.dispatch(resetAction)
+                          }}
+                    />
+                )
+            }
         }
     },
     ResetPassword: {

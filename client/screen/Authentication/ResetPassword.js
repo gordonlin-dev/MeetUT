@@ -82,8 +82,8 @@ const ResetPasswordScreen = props => {
             <ImageBackground source={image} defaultSource={image} resizeMode="cover" style={styles.image}>
 
                 <View>
-                    <Text style={[styles.header, {fontSize: 41, marginLeft: width*0.1}]}>
-                        {texts.Screens.ResetPassword.ResetPassword}
+                    <Text style={[styles.header, {fontSize: 41, marginLeft: width*0.12}]}>
+                        Reset Password
                     </Text>
                     <View>
                         <TextInput
