@@ -13,18 +13,19 @@ import socketClient  from "socket.io-client";
 import {Bubble, GiftedChat, Message, MessageText, Time} from 'react-native-gifted-chat';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {provisioningProfileSchema} from "expo-cli/build/credentials/credentials";
+import avatars from "../../Avatars";
 const texts = require("../../assets/Texts.json");
 const handler = require('../Handler')
 const endpoints = require('../../API_endpoints.json')
 
 let socket;
 const {height, width} = Dimensions.get('window');
-const example_profilepic =  require('../../assets/logo.png')
 
 const ChatScreen = props => {
 
     const [messages, setMessages] = useState([]);
     const [forceUpdate, setForceUpdate] = useState(false);
+    const [avatar, setAvatar] = useState(0);
     const roomID = props.navigation.state.params.chatRoom;
 
     const sendMessage = async (message) => {
@@ -46,8 +47,8 @@ const ChatScreen = props => {
         )
         if(response.ok){
             const responseJson = await response.json();
-            console.log(responseJson.avatar)
             const messages = responseJson.messages
+            setAvatar(responseJson.displayAvatar)
             setMessages(previousMessages => GiftedChat.append(previousMessages, messages, false))
             //setMessages(messages)
         }
@@ -124,7 +125,7 @@ const ChatScreen = props => {
             <GiftedChat
                 renderAvatar={() => {
                     return (
-                        <Image source={example_profilepic} style={styles.tinyLogo}/>
+                        <Image source={avatars[avatar].source} style={styles.tinyLogo}/>
                     )
                 }}
                 messages={messages}

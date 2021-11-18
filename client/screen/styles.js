@@ -196,9 +196,9 @@ const styles = StyleSheet.create({
         fontWeight: "500"
     },
     logo: {
-        width: width * 0.2,
+        width: width * 0.25,
         height: height * 0.15,
-        marginLeft: width * 0.39,
+        marginLeft: width * 0.35,
         marginBottom: height * 0.03
     },
     avatar: {
