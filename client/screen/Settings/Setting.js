@@ -85,7 +85,7 @@ const SettingScreen = props => {
 
     return (
         <View style={styles.empty}>
-            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+            <ImageBackground source={image} defaultSource={image} resizeMode="cover" style={styles.image}>
                 <View style={{
                     flex:1,
                     flexDirection:"column",

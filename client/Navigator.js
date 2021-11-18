@@ -135,7 +135,8 @@ const Navigator = createStackNavigator({
     ResetPassword: {
         screen:ResetPasswordScreen,
         navigationOptions:{
-            title:""
+            title:"",
+            headerShown:false
         }
     },
     Home:{

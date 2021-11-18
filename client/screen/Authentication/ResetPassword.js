@@ -12,6 +12,7 @@ import {
 import {styles} from '../styles';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {NavigationActions, StackActions} from "react-navigation";
+import {Icon} from "react-native-elements";
 const {height, width} = Dimensions.get('window');
 const image = require('../../assets/bg.png');
 const texts = require("../../assets/Texts.json");
@@ -63,7 +64,23 @@ const ResetPasswordScreen = props => {
     }
     return (
         <View style={styles.empty}>
-            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+            <View style={{
+                alignItems:"flex-start",
+                paddingTop: height * 0.04,
+                backgroundColor:"rgb(60,116,185)"
+            }}>
+                <Icon name="chevron-left" size={35} color="white" type="fontawesome5" style={{
+                    marginLeft:width*0.02
+                }}
+                      onPress={()=>{
+                          props.navigation.navigate({
+                              routeName: 'Setting'
+                          })
+                      }}
+                />
+            </View>
+            <ImageBackground source={image} defaultSource={image} resizeMode="cover" style={styles.image}>
+
                 <View>
                     <Text style={[styles.header, {fontSize: 41, marginLeft: width*0.1}]}>
                         {texts.Screens.ResetPassword.ResetPassword}
@@ -93,7 +110,7 @@ const ResetPasswordScreen = props => {
                                 resetSubmit(password, confirm, props).then()
                             }}
                             style={styles.Button}>
-                            <Text style={styles.font}>{texts.Screens.ResetPassword.ResetPassword}</Text>
+                            <Text style={styles.font}>Reset</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
