@@ -105,7 +105,9 @@ const SettingScreen = props => {
                                 height: height*0.12,
                                 width: height * 0.12,
                                 borderRadius: height * 0.12/ 2,
-                                marginBottom:height * 0.02
+                                marginBottom:height * 0.02,
+                                borderColor:'white',
+                                borderWidth:2
                             }} source={avatars[avatar].source}/>
                             <Text style={{
                                 fontFamily: 'timeburner',
@@ -118,22 +120,6 @@ const SettingScreen = props => {
                     <View style={{
                         flex:5
                     }}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                signOutSubmit(props).then()
-                            }}
-                            style={styles.Button}>
-                            <Text style={styles.font}>Sign Out</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => {
-                                props.navigation.navigate({
-                                    routeName: 'ResetPassword'
-                                })
-                            }}
-                            style={styles.Button}>
-                            <Text style={styles.font}>Reset Password</Text>
-                        </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => {
                                 props.navigation.navigate({
@@ -154,7 +140,33 @@ const SettingScreen = props => {
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => {
-                                deleteButton(props).then()
+                                props.navigation.navigate({
+                                    routeName: 'ResetPassword'
+                                })
+                            }}
+                            style={styles.Button}>
+                            <Text style={styles.font}>Reset Password</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                Alert.alert("Sign Out",
+                                    "Are you sure you want to sign out?",
+                                    [{text: "Confirm", onPress: () => {
+                                            signOutSubmit(props)
+                                        }},{text: "Cancel"}
+                                    ])
+                            }}
+                            style={styles.Button}>
+                            <Text style={styles.font}>Sign Out</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                Alert.alert("Delete Account",
+                                    "Are you sure you want to delete this account?",
+                                    [{text: "Confirm", onPress: () => {
+                                            deleteButton(props)
+                                        }},{text: "Cancel"}
+                                    ])
                             }}
                             style={styles.Button}>
                             <Text style={{

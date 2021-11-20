@@ -472,9 +472,27 @@ const HomeScreen = props => {
             )
         }
     }
+    const generateEmptyMessage = () => {
+        if(recommendations.length == 0){
+            return (
+                <View style={{
+                    flex:9,
+                    justifyContent:"center"
+                }}>
+                    <Text style={{
+                        alignSelf:"center",
+                        color:'black',
+                        fontSize: 30,
+                        fontWeight:"500"
+                    }}>No more users</Text>
+                </View>
+            )
+        }
+    }
     return(
         <SafeAreaView style={inpageStyle.container}>
             <View style={inpageStyle.flex9}>
+                {generateEmptyMessage()}
                 <Swiper style={{}} loop={false}
                         key={recommendations.length}
                         showsPagination={false}
