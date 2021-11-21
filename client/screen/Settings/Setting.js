@@ -132,7 +132,10 @@ const SettingScreen = props => {
                         <TouchableOpacity
                             onPress={() => {
                                 props.navigation.navigate({
-                                    routeName: 'Demographics'
+                                    routeName: 'Demographics',
+                                    params: {
+                                        backToSettings : true
+                                    }
                                 })
                             }}
                             style={styles.Button}>

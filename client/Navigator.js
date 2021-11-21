@@ -31,33 +31,47 @@ const Navigator = createStackNavigator({
         screen:Splash,
         navigationOptions:{
             title:"",
-            headerShown: false
+            headerShown: false,
+            gestureEnabled:false
         }
     },
 
     Demographics:{
         screen: DemographicsScreen,
-        navigationOptions:{
-            title:"Onboarding",
-            headerStyle: {
-                backgroundColor: '#3590F2',
-            },
-            headerLeft: ()=> null,
-            headerTintColor: '#ffff',
-            headerTitleStyle: {
-                fontFamily: "timeburner",
-                fontSize: 30,
-                marginLeft: width * 0.03
-            },
+        navigationOptions: (screenProps) => {
+            return {
+                title:"Setup",
+                headerStyle: {
+                    backgroundColor: 'rgb(0,41,93)'
+                },
+                headerTintColor: '#ffff',
+                headerTitleAlign:"center",
+                headerTitleStyle: {
+                    fontFamily: "timeburner",
+                    fontSize: 30,
+                },
+                headerLeft: () => {
+                    if(screenProps.navigation.state.params && screenProps.navigation.state.params.backToSettings){return(
+                    <Icon name="chevron-left" size={35} color="white" type="fontawesome5" style={{
+                    }}
+                          onPress={()=>{
+                              screenProps.navigation.navigate({
+                                  routeName: 'Setting'
+                              })
+                          }}
+                    />
+                )}},
+                gestureEnabled:false
+            }
         }
 
     },
     Personal:{
         screen: PersonalScreen,
         navigationOptions:{
-            title:"Onboarding",
+            title:"Setup",
             headerStyle: {
-                backgroundColor: '#3590F2',
+                backgroundColor: 'rgb(0,41,93)'
             },
             headerLeft: ()=> null,
             headerTintColor: '#ffff',
@@ -66,15 +80,16 @@ const Navigator = createStackNavigator({
                 fontSize: 30,
                 marginLeft: width * 0.03
             },
+            gestureEnabled:false
         }
 
     },
     Academic:{
         screen: AcademicScreen,
         navigationOptions:{
-            title:"Onboarding",
+            title:"Setup",
             headerStyle: {
-                backgroundColor: '#3590F2',
+                backgroundColor: 'rgb(0,41,93)'
             },
             headerLeft: ()=> null,
             headerTintColor: '#ffff',
@@ -83,6 +98,7 @@ const Navigator = createStackNavigator({
                 fontSize: 30,
                 marginLeft: width * 0.03
             },
+            gestureEnabled:false
         }
 
     },
@@ -90,14 +106,16 @@ const Navigator = createStackNavigator({
         screen: LoginScreen,
         navigationOptions:{
             title:"",
-            headerShown:false
+            headerShown:false,
+            gestureEnabled:false
         }
     },
     Signup: {
         screen:SignupScreen,
         navigationOptions:{
             title:"",
-            headerShown:false
+            headerShown:false,
+            gestureEnabled:false
         }
     },
     Setting: {
@@ -114,6 +132,7 @@ const Navigator = createStackNavigator({
                 fontFamily: "timeburner",
                 fontSize: 30,
             },
+            gestureEnabled:false
         }
     },
     ChangeAvatar: {
@@ -141,7 +160,8 @@ const Navigator = createStackNavigator({
                               screenProps.navigation.dispatch(resetAction)
                           }}
                     />
-                )
+                ),
+                gestureEnabled:false
             }
         }
     },
@@ -149,7 +169,8 @@ const Navigator = createStackNavigator({
         screen:ResetPasswordScreen,
         navigationOptions:{
             title:"",
-            headerShown:false
+            headerShown:false,
+            gestureEnabled:false
         }
     },
     Home:{
@@ -166,6 +187,7 @@ const Navigator = createStackNavigator({
                 fontFamily: "timeburner",
                 fontSize: 30,
             },
+            gestureEnabled:false
         }
     },
     Chat:{
@@ -191,7 +213,8 @@ const Navigator = createStackNavigator({
                               })
                           }}
                     />
-                )
+                ),
+                gestureEnabled:false
             }
         },
     },
@@ -209,25 +232,29 @@ const Navigator = createStackNavigator({
                 fontSize: 30,
                 alignSelf: 'center',
             },
+            gestureEnabled:false
         }
     },
     Verification: {
         screen: VerificationScreen,
         navigationOptions:{
             title:"",
-            headerShown:false
+            headerShown:false,
+            gestureEnabled:false
         }
     },
     ForgotPassword: {
         screen: ForgotPasswordScreen,
         navigationOptions:{
             title:"",
+            gestureEnabled:false
         }
     },
     GetEmail: {
         screen: GetEmailScreen,
         navigationOptions:{
             title:"",
+            gestureEnabled:false
         }
     }
 
