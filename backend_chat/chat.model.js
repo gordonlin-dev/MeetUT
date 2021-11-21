@@ -127,7 +127,10 @@ exports.getChatRoomById = async (userID, chatRoomID) => {
     }
     delete room.messages
     let otherUser = await User.findById(chatRoomID.split(" ").filter(x => x !== userID))
-    room.displayAvatar = otherUser.avatar
+    room.displayAvatar = 0
+    if(otherUser){
+        room.displayAvatar = otherUser.avatar? otherUser.avatar : 0
+    }
     return room
 }
 
