@@ -14,6 +14,11 @@ exports.createUser = async (req,res)=>{
     await ChatModel.createUser(userObj)
     res.status(200).send()
 }
+
+exports.deleteUser = async (req, res) => {
+    await ChatModel.deleteUser(req.body._id)
+    return res.status(200).send()
+}
 exports.getChatRooms = async (req, res) => {
     const chatRooms = await ChatModel.getChatRooms(req.body._id)
     res.status(200).send(chatRooms)

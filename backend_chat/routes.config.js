@@ -9,4 +9,5 @@ exports.routesConfig = function(app){
     app.post('/chat/user/avatar', [AuthValidation.jwtValid, ChatController.updateAvatar])
     app.delete('/chat/room', [AuthValidation.jwtValid, ChatController.deleteChatRoom])
     app.post('/chat/user/name', [AuthValidation.jwtValid, ChatController.updateUserName])
+    app.delete('/chat/user/:userId', [AuthValidation.jwtValid, ChatController.deleteUser])
 }
