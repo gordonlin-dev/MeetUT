@@ -241,7 +241,10 @@ const Academic = (props) => {
 
 
     return (
-        <SafeAreaView style={styles.quizContainer} >
+        <SafeAreaView style={{
+            flex: 1,
+            backgroundColor: "#d2d2d2"
+        }} >
             {renderBody()}
 
             <View style={inpageStyle.quizeFooter}>

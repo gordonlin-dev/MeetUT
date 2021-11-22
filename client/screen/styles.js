@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     },
     inputHeader: {
         left: width*0.16,
-        marginTop: height * 0.01,
+        marginTop: height * 0.02,
     },
     onboardInput: {
         left: width*0.16,

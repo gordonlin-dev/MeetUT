@@ -24,16 +24,11 @@ const endpoints = require('../../API_endpoints.json')
 const Demographics = props => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [genderValue, setGenderValue] = useState("");
-    const [genderOtherValue, setGenderOtherValue] = useState("");
-    const [religionValue, setReligionValue] = useState("");
-    const [religionOtherValue, setReligionOtherValue] = useState("");
     const [languageValues, setLanguageValues] = useState([]);
     const [languageOptions, setLanguageOptions] = useState([]);
     const [age, setAge] = useState("")
     const [forceUpdate, setForceUpdate] = useState(true);
     const [isLoading, setIsLoading] = useState(false)
-    const [renderStage, setRenderStage] = useState(0);
 
     const renderLoadingIcon = () => {
         if(isLoading){
@@ -75,53 +70,6 @@ const Demographics = props => {
         }
     }
 
-    const generateGenderPicker = () => {
-        let items = []
-        const options = texts.Screens.Demographics.Gender
-        items.push(<Picker.Item key= {""} value={""} label={""} />)
-        for (const option in options) {
-            const value = options[option]
-            items.push(<Picker.Item key ={value} value={value} label={value} />)
-        }
-        return items
-    }
-    const generateReligionPicker = () => {
-        let items = []
-        const options = texts.Screens.Demographics.Religions
-        items.push(<Picker.Item key ={""} value={""} label={""} />)
-        for (const option in options) {
-            const value = options[option]
-            items.push(<Picker.Item key ={value} value={value} label={value} />)
-        }
-        return items
-    }
-    const renderGenderOtherInput = () => {
-        if(genderValue === texts.Screens.Demographics.Gender.Other){
-            return (
-                <View style={styles.pickerHeader}>
-                    <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Specify}</Text>
-                    <TextInput
-                        style={styles.picker}
-                        onChangeText={setGenderOtherValue}
-                    />
-                </View>
-            )
-        }
-    }
-    const renderReligionOtherInput = () => {
-        if(religionValue === texts.Screens.Demographics.Religions.Other){
-            return (
-                <View style={styles.pickerHeader}>
-                    <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Specify}</Text>
-                    <TextInput
-                        style={styles.picker}
-                        onChangeText={setReligionOtherValue}
-                    />
-                </View>
-            )
-        }
-    }
-
     const save = async () => {
         setIsLoading(true)
         const languages = []
@@ -130,23 +78,11 @@ const Demographics = props => {
                 languages.push(languageValues[i].id)
             }
         }
-        let genderSubmitValue
-        if(genderValue === texts.Screens.Demographics.Gender.Other){
-            genderSubmitValue = genderOtherValue
-        }else{
-            genderSubmitValue = genderValue
-        }
-        let religionSubmitValue
-        if(religionValue === texts.Screens.Demographics.Religions.Other){
-            religionSubmitValue = religionOtherValue
-        }else{
-            religionSubmitValue = religionValue
-        }
         const body = {
             FirstName : firstName,
             LastName : lastName,
-            Gender : genderSubmitValue,
-            Religion: religionSubmitValue,
+            Gender : "",
+            Religion: "",
             Languages : languages,
             DateOfBirth : new Date(new Date().getFullYear() - age, 0,1)
         }
@@ -185,10 +121,14 @@ const Demographics = props => {
     }, []);
 
     const renderBody = () => {
-        if (renderStage == 0) {
-            return (
-                <View style={styles.onboardContainer}>
-                    <ScrollView>
+        return (
+            <View style={{
+                flex: 1,
+                paddingTop: height * 0.02
+            }}>
+                <View style={{
+                    flex:2
+                }}>
                     <View style={styles.inputHeader}>
                         <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Firstname}</Text>
                     </View>
@@ -203,11 +143,11 @@ const Demographics = props => {
                         <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Lastname}</Text>
                     </View>
                     <TextInput
-                    style={styles.onboardInput}
-                    onChangeText={setLastName}
-                    value={lastName}
-                    placeholder={texts.Global.Common.Lastname}
-                    placeholderTextColor="black"
+                        style={styles.onboardInput}
+                        onChangeText={setLastName}
+                        value={lastName}
+                        placeholder={texts.Global.Common.Lastname}
+                        placeholderTextColor="black"
                     />
                     <View style={styles.inputHeader}>
                         <Text style={styles.onboardHeaderFont}>Age</Text>
@@ -220,37 +160,11 @@ const Demographics = props => {
                         placeholderTextColor="black"
                         keyboardType ="numeric"
                     />
-                    
-                        <View style={styles.pickerHeader}>
-                            <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Gender}</Text>
-                        </View>
-                        <View>
-                        <Picker
-                                selectedValue={genderValue}
-                                onValueChange={(itemValue, itemIndex) => setGenderValue(itemValue)}>
-                                {generateGenderPicker()}
-                            </Picker>
-                        </View>
-                        {renderGenderOtherInput()}
-                        <View style={styles.pickerHeader}>
-                            <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Religion}</Text>
-                        </View>
-                        <View>
-                        <Picker
-                                selectedValue={religionValue}
-                                ColorValue="black"
-                                onValueChange={(itemValue, itemIndex) => setReligionValue(itemValue)}>
-                                {generateReligionPicker()}
-                            </Picker>
-                        </View>
-                        {renderReligionOtherInput()}
-                    </ScrollView>
 
                 </View>
-            );}
-            else {
-                return (
-                    <SafeAreaView>
+                <View style={{
+                    flex:2
+                }}>
                     <View style={styles.inputHeader}>
                         <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Languages}</Text>
                     </View>
@@ -298,51 +212,47 @@ const Demographics = props => {
                             }
                         }
                     />
+                </View>
 
-                    </SafeAreaView>
-                )
-            }
-    }
-    
-    const renderFooter = () => {
-        if (renderStage == 0) {
-            return(
-                <View style={inpageStyle.quizeFooter}>
-                <View style={inpageStyle.leftButtonHolder}>
+                <View style={{
+                    flex:1,
+                    flexDirection:"row",
+                    alignSelf:"flex-end"
+                }}>
+                    <View style={{
+                        alignSelf:"flex-end",
+                        marginBottom:height * 0.02,
+                        marginRight: width * 0.03
+                    }}>
+                        <TouchableOpacity
+                            style={{
+                                width: width * 0.40,
+                                height: height * 0.06,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 15,
+                                borderColor: "black",
+                                backgroundColor: 'white'
+                            }}
+                            onPress={() => {save()}}>
+                            <Text style={styles.quizFont}>Next</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <TouchableOpacity
-                    style={styles.quizRightButton}
-                    onPress={() => {setRenderStage(renderStage + 1)}}>
-                    <Text style={styles.quizFont}>Next</Text>
-                </TouchableOpacity>
-                </View>
-            )
-        } if (renderStage === 1) {
-            return(
-                <View style={inpageStyle.quizeFooter}>
-                <TouchableOpacity
-                    style={styles.quizLeftButton}
-                    onPress={() => {setRenderStage(renderStage - 1)}}>
-                    <Text style={styles.quizFont}>Back</Text>
-                </TouchableOpacity>
 
-                <TouchableOpacity
-                    style={styles.quizRightButton}
-                    onPress={() => {save()}}>
-                    <Text style={styles.quizFont}>Next</Text>
-                </TouchableOpacity>
-                </View>
-            )
-        }
+            </View>
+        )
     }
+
     return (
-        <SafeAreaView style={styles.quizContainer} >
-
+        <SafeAreaView style={{
+            flex: 1,
+            backgroundColor: "#d2d2d2"
+        }} >
             {renderBody()}
-            {renderFooter()}
             {renderLoadingIcon()}
         </SafeAreaView>
-            
+
     );
 
 };
@@ -380,4 +290,3 @@ const inpageStyle = StyleSheet.create ({
 })
 
 export default Demographics;
- 

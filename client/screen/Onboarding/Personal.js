@@ -427,7 +427,10 @@ const Personal = props => {
 
     }
     return (
-        <SafeAreaView style={styles.onboardContainer}>
+        <SafeAreaView style={{
+            flex: 1,
+            backgroundColor: "#d2d2d2"
+        }}>
             {renderBody()}
             <View style={inpageStyle.quizeFooter}>
                 <TouchableOpacity
