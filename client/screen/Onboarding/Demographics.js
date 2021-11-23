@@ -9,7 +9,7 @@ import {
     SafeAreaView,
     Dimensions,
     ActivityIndicator,
-    StyleSheet
+    StyleSheet, SectionList
 } from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import SearchableDropdown from 'react-native-searchable-dropdown';
@@ -24,12 +24,12 @@ const endpoints = require('../../API_endpoints.json')
 const Demographics = props => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [languageValues, setLanguageValues] = useState([]);
-    const [languageOptions, setLanguageOptions] = useState([]);
     const [age, setAge] = useState("")
     const [forceUpdate, setForceUpdate] = useState(true);
     const [isLoading, setIsLoading] = useState(false)
-
+    const [languages, setLanguages] = useState([])
+    const [selectedLanguages, setSelectedLanguages] = useState([])
+    const [languageFilter, setLanguageFilter] = useState("")
     const renderLoadingIcon = () => {
         if(isLoading){
             return(
@@ -48,12 +48,8 @@ const Demographics = props => {
         )
         if (languageResponse.ok){
             const languageJson = await languageResponse.json()
-            const languages = []
-            for (let i = 0; i < languageJson.length; i++){
-                const languageObject = languageJson[i]
-                languages.push({id: languageObject.id, name: languageObject.value})
-            }
-            setLanguageOptions(languages)
+            setLanguages(languageJson)
+            console.log(languageJson)
         }
         const response = await handler.sendRequest(
             endpoints.Server.Onboarding.User.baseURL,
@@ -73,11 +69,7 @@ const Demographics = props => {
     const save = async () => {
         setIsLoading(true)
         const languages = []
-        for (let i = 0; i < languageValues.length; i ++){
-            if(languages.indexOf(languageValues[i].id) === -1){
-                languages.push(languageValues[i].id)
-            }
-        }
+
         const body = {
             FirstName : firstName,
             LastName : lastName,
@@ -120,6 +112,37 @@ const Demographics = props => {
         loadUser()
     }, []);
 
+    const generateLanguageSelection = () => {
+        const notSelected = languages.filter(x =>
+            (selectedLanguages.indexOf(x) === -1) &&
+            (x.value.includes(languageFilter))
+        )
+        let selectedSection = {
+            title:"",
+            data:selectedLanguages.sort((a,b) => {return a.value > b.value})
+        }
+        let section = {
+            title:"",
+            data:notSelected.sort((a,b) => {return a.value > b.value})
+        }
+        return [selectedSection,section]
+    }
+    const getLanguageItemStyle = (item) => {
+        if(selectedLanguages.filter(x => x.id === item.id).length === 0){
+            return inpageStyle.item
+        }else{
+            return inpageStyle.itemSelected
+        }
+    }
+    const languageSelectPress = (item) => {
+        if(selectedLanguages.filter(x => x.id === item.id).length === 0){
+            selectedLanguages.push(item)
+            setSelectedLanguages(selectedLanguages)
+        }else{
+            setSelectedLanguages(selectedLanguages.filter(x => x.id !== item.id))
+        }
+        setForceUpdate(!forceUpdate)
+    }
     const renderBody = () => {
         return (
             <View style={{
@@ -163,55 +186,34 @@ const Demographics = props => {
 
                 </View>
                 <View style={{
-                    flex:2
+                    flex:2,
+                    left: width*0.17,
+                    width: width * 0.7
                 }}>
-                    <View style={styles.inputHeader}>
-                        <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Languages}</Text>
-                    </View>
-                    <SearchableDropdown
-                        multi={true}
-                        chip={true}
-                        selectedItems={languageValues}
-                        onItemSelect={(item) => {
-                            languageValues.push(item)
-                            setLanguageValues(languageValues)
-                            setForceUpdate(!forceUpdate)
+                    <Text style={styles.headerFont}>Languages</Text>
+                    <TextInput
+                        style={{
+                            fontSize: 18,
+                            color: 'black',
+                            marginBottom: 10,
+                            borderBottomColor: 'black',
+                            borderBottomWidth: 2,
                         }}
-                        onRemoveItem={(item, index) => {
-                            setLanguageValues(languageValues.filter(x => x.id !== item.id))
-                        }}
-                        items={languageOptions}
-                        itemStyle={{
-                            padding: 10,
-                            marginTop: height * 0.01,
-                            backgroundColor: '#ddd',
-                            borderColor: '#bbb',
-                            borderWidth: 1,
-                            borderRadius: 5,
-
-                        }}
-                        containerStyle={{ padding: 5, width: width*0.73, marginLeft: width*0.145}}
-                        itemTextStyle={{ color: '#222' }}
-                        itemsContainerStyle={{ maxHeight: 140 }}
-                        textInputProps={
-                            {
-                                underlineColorAndroid: "transparent",
-                                style: {
-                                    padding: 12,
-                                    height: height * 0.06,
-                                    borderWidth: 2,
-                                    borderColor: 'black',
-                                    borderRadius: 5,
-                                },
-                                onTextChange: {}
-                            }
-                        }
-                        listProps={
-                            {
-                                nestedScrollEnabled: true,
-                            }
-                        }
+                        onChangeText={setLanguageFilter}
+                        placeholder={"Search here"}
+                        placeholderTextColor="grey"
                     />
+                    <SectionList
+                        style={{
+                            height: height * 0.3
+                        }}
+                        sections={generateLanguageSelection()}
+                        renderItem={({item}) => <Text style={getLanguageItemStyle(item)} onPress={() => {
+                            languageSelectPress(item)
+                        }}>{item.value}</Text>}
+                        keyExtractor={(item, index) => index}
+                    >
+                    </SectionList>
                 </View>
 
                 <View style={{
@@ -287,6 +289,14 @@ const inpageStyle = StyleSheet.create ({
         fontSize: 18,
         height: 44,
     },
+    itemSelected:{
+        padding: 10,
+        fontSize: 18,
+        height: 44,
+        color: 'rgba(0,0,0,1.0)',
+        borderColor:"#3590F2",
+        borderWidth:2
+    }
 })
 
 export default Demographics;
