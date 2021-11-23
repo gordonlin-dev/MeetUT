@@ -139,7 +139,7 @@ const SettingScreen = props => {
                                 })
                             }}
                             style={styles.Button}>
-                            <Text style={styles.font}>Preferences</Text>
+                            <Text style={styles.font}>Edit Profile</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => {
