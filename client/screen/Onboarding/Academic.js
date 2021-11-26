@@ -6,11 +6,12 @@ import {
     Text,
     StyleSheet,
     Dimensions,
-    SectionList, ScrollView, ActivityIndicator
+    SectionList, ScrollView, ActivityIndicator, TextInput
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker'
 import RNPickerSelect from 'react-native-picker-select';
 import { styles } from '../styles';
+import {Card} from "react-native-elements";
 const {height, width} = Dimensions.get('window');
 
 const texts = require("../../assets/Texts.json");
@@ -27,6 +28,7 @@ const Academic = (props) => {
     const [yearOfStudy, setYearOfStudy] = useState(0)
     const [college, setCollege] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
+    const [programFilter, setProgramFilter] = useState("")
     const colorLevels = {
         [0]: '#d0d0d9',
         [1]: '#abe1f5',
@@ -88,7 +90,10 @@ const Academic = (props) => {
                 title:programs[i].categoryValue,
                 data:programs[i].content.sort((a,b) => {return a.programId - b.programId})
             }
-            sections.push(section)
+            section.data = section.data.filter(x => x.value.includes(programFilter))
+            if(section.data.length > 0){
+                sections.push(section)
+            }
         }
         return sections
     }
@@ -244,38 +249,106 @@ const Academic = (props) => {
         }else if(renderStage === 1){
             //render programs
             return (
-                <Fragment>
+                <View
+                    style={{
+                        flex : 11,
+                    }}
+                >
                     <View style={{
-                        position: 'absolute',
-                        height: height*0.45,
-                        width: width,
-                        paddingTop: height*0.05,
-                        paddingLeft: width*0.05,
-                        paddingRight: width*0.05,
+                        flex:1,
+                        marginTop: height * 0.04,
+                        marginBottom:height * 0.15
                     }} >
-                        <Text style={styles.headerFont}>Programs</Text>
-                        <SectionList sections={generateProgramSection()}
-                                     renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
-                                         programsListPress(item)
-                                     }}>{item.value}</Text>}
-                                     renderSectionHeader={({section}) => <Text style={inpageStyle.sectionHeader}>{section.title}</Text>}
-                                     keyExtractor={(item, index) => index}
-                        >
+                        <View style={{
+                            left: width*0.10,
 
-                        </SectionList>
-                    </View>
-                    <View style={styles.selectedContainer}>
-                        <Text style={styles.headerFont}>Chosen Programs ({chosen.length})</Text>
-                        <SectionList sections={generateChosenSection()}
-                                     renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
-                                         chosenListPress(item)
-                                     }}>{item.value}</Text>}
-                                     keyExtractor={(item, index) => index}
-                        >
+                        }}>
+                            <Text style={styles.onboardHeaderFont}>Programs</Text>
+                        </View>
+                        <TextInput
+                            style={{
+                                left: width*0.10,
+                                marginTop: height * 0.02,
+                                width: width * 0.8,
+                                fontSize: 18,
+                                color: 'black',
+                                marginBottom: 10,
+                                borderBottomColor: 'black',
+                                borderBottomWidth: 2,
+                            }}
+                            onChangeText={setProgramFilter}
+                            placeholder={"Search here"}
+                            placeholderTextColor="grey"
+                        />
+                        <View style={{
+                            left: width*0.10,
+                            width: width * 0.8,
+                        }}>
+                            <SectionList sections={generateProgramSection()}
+                                         style={{
+                                             width: width * 0.8,
+                                         }}
 
-                        </SectionList>
+                                         renderItem={({item}) =>
+                                             <View
+                                                 style={{
+                                                     width: width * 0.8,
+                                                 }}
+                                             >
+                                                 <Text
+                                                     style={inpageStyle.item} onPress={() => {
+                                                     programsListPress(item)
+                                                 }}>{item.value}</Text>
+                                             </View>
+                                             }
+                                         renderSectionHeader={({section}) => <Text style={inpageStyle.sectionHeader}>{section.title}</Text>}
+                                         keyExtractor={(item, index) => index}
+                            >
+
+                            </SectionList>
+                        </View>
+
                     </View>
-                </Fragment>
+                    <View style={{
+                        flex:2
+                    }}>
+                        <Card containerStyle={{
+                            borderRadius:10,
+                            left: width*0.06,
+                            width: width * 0.8,
+                        }}>
+                            <Card.Title style={{
+                                fontFamily: 'timeburner',
+                                fontSize:17,
+                                color: "black",
+                                marginBottom: height * 0.01,
+                                marginTop: height*0.01
+                            }}>Chosen Programs ({chosen.length}/3)</Card.Title>
+                            <Card.Divider/>
+                            <View style={{
+                            }}>
+                                <SectionList sections={generateChosenSection()}
+                                             renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
+                                                 chosenListPress(item)
+                                             }}>{item.value}</Text>}
+                                             keyExtractor={(item, index) => index}
+                                >
+
+                                </SectionList>
+                            </View>
+                        </Card>
+                        <Text style={styles.headerFont}></Text>
+                        <View style={{
+                            left: width*0.10,
+                            marginTop: height * 0.1,
+                            marginBottom:height * 0.01
+                        }}>
+                            <Text style={styles.onboardHeaderFont}></Text>
+                        </View>
+
+
+                    </View>
+                </View>
             )
         }
     }
@@ -343,12 +416,13 @@ const inpageStyle = StyleSheet.create ({
         paddingLeft: 10,
         paddingRight: 10,
         paddingBottom: 2,
-        fontSize: 14,
+        fontSize: 19,
         fontWeight: 'bold',
         backgroundColor: 'rgba(247,247,247,1.0)',
     },
     item: {
-        padding: 10,
+        marginLeft:10,
+        marginBottom:10,
         fontSize: 18,
         height: 44,
     },
