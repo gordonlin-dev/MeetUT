@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     inputHeader: {
         left: width*0.16,
         marginTop: height * 0.02,
+        marginBottom:height * 0.01
     },
     onboardInput: {
         left: width*0.16,
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     },
     onboardHeaderFont: {
         fontFamily: 'timeburner',
-        fontSize:17,
+        fontSize:20,
         color: "black"
     },
     container:{

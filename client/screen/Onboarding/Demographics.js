@@ -49,7 +49,6 @@ const Demographics = props => {
         if (languageResponse.ok){
             const languageJson = await languageResponse.json()
             setLanguages(languageJson)
-            console.log(languageJson)
         }
         const response = await handler.sendRequest(
             endpoints.Server.Onboarding.User.baseURL,
@@ -150,7 +149,7 @@ const Demographics = props => {
                 paddingTop: height * 0.02
             }}>
                 <View style={{
-                    flex:2
+                    flex:3
                 }}>
                     <View style={styles.inputHeader}>
                         <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Firstname}</Text>
@@ -186,11 +185,17 @@ const Demographics = props => {
 
                 </View>
                 <View style={{
-                    flex:2,
+                    flex:3,
                     left: width*0.17,
-                    width: width * 0.7
+                    width: width * 0.7,
+                    marginTop: height * 0.05
                 }}>
-                    <Text style={styles.headerFont}>Languages</Text>
+                    <Text style={{
+                        fontFamily: 'timeburner',
+                        fontSize:20,
+                        color: "black",
+                        marginBottom:height * 0.01
+                    }}>Languages</Text>
                     <TextInput
                         style={{
                             fontSize: 18,
