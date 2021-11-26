@@ -9,6 +9,7 @@ import {
     SectionList, ScrollView, ActivityIndicator
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker'
+import RNPickerSelect from 'react-native-picker-select';
 import { styles } from '../styles';
 const {height, width} = Dimensions.get('window');
 
@@ -167,47 +168,91 @@ const Academic = (props) => {
         if(renderStage === 0) {
             //render degree type, year of study, college
             return(
-                <ScrollView>
-                    <View style={styles.pickerHeader}>
-                        <Text style={styles.onboardHeaderFont}>Degree</Text>
+                <Fragment>
+                    <View style={{
+                        flex: 12
+                    }}>
+                        <View style={styles.inputHeader}>
+                            <Text style={styles.onboardHeaderFont}>Degree</Text>
+                        </View>
+                        <View style={{
+                            left: width*0.17,
+
+                        }}>
+                            <Picker
+                                style={{
+                                    height : height * 0.20,
+                                    width: width * 0.7,
+                                }}
+                                itemStyle={{
+                                    height : height * 0.20,
+                                    width: width * 0.7,
+                                }}
+                                selectedValue={degreeType}
+                                ColorValue="black"
+                                onValueChange={(itemValue, itemIndex) => setDegreeType(itemValue)}>
+                                {generateDegreePicker()}
+                            </Picker>
+                        </View>
+                        <View style={styles.inputHeader}>
+                            <Text style={styles.onboardHeaderFont}>Year</Text>
+                        </View>
+                        <View style={{
+                            left: width*0.17,
+
+                        }}>
+                            <Picker
+                                style={{
+                                    height : height * 0.20,
+                                    width: width * 0.7,
+                                }}
+                                itemStyle={{
+                                    height : height * 0.20,
+                                    width: width * 0.7,
+                                }}
+                                selectedValue={yearOfStudy}
+                                ColorValue="black"
+                                onValueChange={(itemValue, itemIndex) => setYearOfStudy(itemValue)}>
+                                {generateYearPicker()}
+                            </Picker>
+                        </View>
+                        <View style={styles.inputHeader}>
+                            <Text style={styles.onboardHeaderFont}>College</Text>
+                        </View>
+                        <View style={{
+                            left: width*0.17,
+
+                        }}>
+                            <Picker
+                                style={{
+                                    height : height * 0.20,
+                                    width: width * 0.7,
+                                }}
+                                itemStyle={{
+                                    height : height * 0.20,
+                                    width: width * 0.7,
+                                }}
+                                selectedValue={college}
+                                ColorValue="black"
+                                onValueChange={(itemValue, itemIndex) => setCollege(itemValue)}>
+                                {generateCollegePicker()}
+                            </Picker>
+                        </View>
                     </View>
-                    <View>
-                        <Picker
-                            selectedValue={degreeType}
-                            ColorValue="black"
-                            onValueChange={(itemValue, itemIndex) => setDegreeType(itemValue)}>
-                            {generateDegreePicker()}
-                        </Picker>
-                    </View>
-                    <View style={styles.pickerHeader}>
-                        <Text style={styles.onboardHeaderFont}>Year</Text>
-                    </View>
-                    <View>
-                        <Picker
-                            selectedValue={yearOfStudy}
-                            ColorValue="black"
-                            onValueChange={(itemValue, itemIndex) => setYearOfStudy(itemValue)}>
-                            {generateYearPicker()}
-                        </Picker>
-                    </View>
-                    <View style={styles.pickerHeader}>
-                        <Text style={styles.onboardHeaderFont}>College</Text>
-                    </View>
-                    <View>
-                        <Picker
-                            selectedValue={college}
-                            ColorValue="black"
-                            onValueChange={(itemValue, itemIndex) => setCollege(itemValue)}>
-                            {generateCollegePicker()}
-                        </Picker>
-                    </View>
-                </ScrollView>
+                </Fragment>
             )
         }else if(renderStage === 1){
             //render programs
             return (
                 <Fragment>
-                    <View style={styles.scrollContainer} >
+                    <View style={{
+                        position: 'absolute',
+                        height: height*0.45,
+                        width: width,
+                        paddingTop: height*0.05,
+                        paddingLeft: width*0.05,
+                        paddingRight: width*0.05,
+                    }} >
                         <Text style={styles.headerFont}>Programs</Text>
                         <SectionList sections={generateProgramSection()}
                                      renderItem={({item}) => <Text style={inpageStyle.item} onPress={() => {
@@ -245,37 +290,42 @@ const Academic = (props) => {
             flex: 1,
             backgroundColor: "#d2d2d2"
         }} >
-            {renderBody()}
-
-            <View style={inpageStyle.quizeFooter}>
-                <TouchableOpacity
-                    style={styles.quizLeftButton}
-                    onPress={() => {
-                        if(renderStage == 0){
-                            props.navigation.navigate({
-                                routeName: 'Demographics'
-                            })
-                        }else{
-
-                            setRenderStage(renderStage - 1)
-                        }
-                    }}>
-                    <Text style={styles.quizFont}>Back</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.quizRightButton}
-                    onPress={() => {
-                        if(renderStage === 1){
-                            save()
-                        }else{
-                            setRenderStage(renderStage + 1)
-                        }
-                    }}>
-                    <Text style={styles.quizFont}>Next</Text>
-                </TouchableOpacity>
-            </View>
             {renderLoadingIcon()}
+            {renderBody()}
+            <View style={{
+                flex:1,
+                alignSelf:"flex-end"
+            }}>
+                <View style={inpageStyle.quizeFooter}>
+                    <TouchableOpacity
+                        style={styles.quizLeftButton}
+                        onPress={() => {
+                            if(renderStage == 0){
+                                props.navigation.navigate({
+                                    routeName: 'Demographics'
+                                })
+                            }else{
+
+                                setRenderStage(renderStage - 1)
+                            }
+                        }}>
+                        <Text style={styles.quizFont}>Back</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.quizRightButton}
+                        onPress={() => {
+                            if(renderStage === 1){
+                                save()
+                            }else{
+                                setRenderStage(renderStage + 1)
+                            }
+                        }}>
+                        <Text style={styles.quizFont}>Next</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+
         </SafeAreaView>
     );
 
@@ -283,12 +333,10 @@ const Academic = (props) => {
 
 const inpageStyle = StyleSheet.create ({
     quizeFooter: {
-        position: "absolute",
         flexDirection:"row",
-        backgroundColor: '#e1e1ea',
-        height: height * 0.1,
+        backgroundColor: '#d2d2d2',
         width: width,
-        top: height*0.82
+        marginBottom:height * 0.02
     },
     sectionHeader: {
         paddingTop: 2,
