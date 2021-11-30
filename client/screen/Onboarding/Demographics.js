@@ -149,7 +149,7 @@ const Demographics = props => {
                 paddingTop: height * 0.02
             }}>
                 <View style={{
-                    flex:3
+                    flex:4
                 }}>
                     <View style={styles.inputHeader}>
                         <Text style={styles.onboardHeaderFont}>{texts.Global.Common.Firstname}</Text>
@@ -171,24 +171,24 @@ const Demographics = props => {
                         placeholder={texts.Global.Common.Lastname}
                         placeholderTextColor="black"
                     />
-                    <View style={styles.inputHeader}>
-                        <Text style={styles.onboardHeaderFont}>Age</Text>
-                    </View>
-                    <TextInput
-                        style={styles.onboardInput}
-                        onChangeText={setAge}
-                        value={age}
-                        placeholder={"Age"}
-                        placeholderTextColor="black"
-                        keyboardType ="numeric"
-                    />
-
+                    <ScrollView scrollEnabled={false}>
+                        <View style={styles.inputHeader}>
+                            <Text style={styles.onboardHeaderFont}>Age</Text>
+                        </View>
+                        <TextInput
+                            style={styles.onboardInput}
+                            onChangeText={setAge}
+                            value={age}
+                            placeholder={"Age"}
+                            placeholderTextColor="black"
+                            keyboardType ="numeric"
+                        />
+                    </ScrollView>
                 </View>
                 <View style={{
                     flex:3,
                     left: width*0.17,
                     width: width * 0.7,
-                    marginTop: height * 0.05
                 }}>
                     <Text style={{
                         fontFamily: 'timeburner',

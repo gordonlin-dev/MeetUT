@@ -190,7 +190,8 @@ const HomeScreen = props => {
                                 <Text style={{
                                     color: '#000',
                                     fontSize: 16,
-                                    marginBottom:height * 0.02
+                                    marginBottom:height * 0.02,
+                                    alignSelf:"center"
                                 }} key={program.id}>
                                     {" " + program.value}
                                 </Text>

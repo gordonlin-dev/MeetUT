@@ -125,7 +125,7 @@ const ChatScreen = props => {
             <GiftedChat
                 renderAvatar={() => {
                     return (
-                        <Image source={avatars[avatar].source} style={styles.tinyLogo}/>
+                        <Image source={avatars[avatar].source} defaultSource={avatars[avatar].source} style={styles.tinyLogo}/>
                     )
                 }}
                 messages={messages}

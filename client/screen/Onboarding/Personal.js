@@ -257,15 +257,12 @@ const Personal = props => {
             }
         }else{
             return {
-                paddingLeft:12,
-                paddingRight:12,
                 marginBottom:3,
                 fontSize: 18,
                 height: 44,
                 color: 'rgba(0,0,0,1.0)',
                 borderColor:"rgb(0,41,93)",
                 borderWidth:2,
-                borderRadius:20,
             }
         }
     }
@@ -293,7 +290,7 @@ const Personal = props => {
                         flex: 11
                     }}>
                         <View style={{
-                            left: width*0.13,
+                            left: width*0.10,
                             width: width * 0.8,
                             marginTop: height * 0.02,
                             marginBottom:height * 0.01
@@ -328,7 +325,7 @@ const Personal = props => {
                         </View>
 
                         <View style={{
-                            left: width*0.13,
+                            left: width*0.10,
                             width: width * 0.8,
                             marginTop: height * 0.02,
                             marginBottom:height * 0.01
@@ -342,7 +339,7 @@ const Personal = props => {
                         <SectionList sections={generateProjectSelection()}
                                      style={{
                                          width: width * 0.8,
-                                         left: width*0.11,
+                                         left: width*0.10,
                                      }}
                                      renderItem={({item}) => <Text style={getProjectItemStyle(item)} onPress={() => {
                                          projectSelectPress(item)
@@ -458,7 +455,7 @@ const Personal = props => {
                         marginBottom:height * 0.15
                     }} >
                         <View style={{
-                            left: width*0.13,
+                            left: width*0.10,
                             width: width * 0.8,
                             marginTop: height * 0.02,
                             marginBottom:height * 0.01
@@ -662,15 +659,12 @@ const inpageStyle = StyleSheet.create ({
         color: 'rgba(0,0,0,1.0)',
     },
     itemSelected:{
-        paddingLeft:12,
-        paddingRight:12,
         marginBottom:3,
         fontSize: 18,
         height: 44,
         color: 'rgba(0,0,0,1.0)',
         borderColor:"rgb(0,41,93)",
         borderWidth:2,
-        borderRadius:20,
     },
 })
 export default Personal;
