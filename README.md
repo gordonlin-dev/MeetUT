@@ -9,3 +9,15 @@ This mobile app is is designed to help students at the same university to connec
 ![Alt Text](https://github.com/gordonlin-dev/SocialNetworkingApp/blob/master/resources/Profiles.gif)
 ### Chat with your connections
 ![Alt Text](https://github.com/gordonlin-dev/SocialNetworkingApp/blob/master/resources/Chat.gif)
+
+## Technology Stack
+### Frontend
+#### Framework
+- React Native
+### Backend
+#### Frameworks
+- Express.js
+- ASP.NET Core
+### Database
+- MongoDB
+- Postgresql
