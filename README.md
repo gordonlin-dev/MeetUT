@@ -1,5 +1,5 @@
 # MeetUT
-This mobile app is is designed to help students at the same university to connect with other students based on profile.
+This mobile app is is designed to help students at the same university to connect with other students based on their profiles.
 ## Demo
 ### Signing up
 ![Alt Text](https://github.com/gordonlin-dev/MeetUT/blob/master/resources/Signup.gif)
